@@ -1,7 +1,6 @@
 package nl.didactor.functions;
 
 import org.mmbase.bridge.*;
-import org.mmbase.bridge.util.*;
 import org.mmbase.storage.search.*;
 import org.mmbase.bridge.util.Queries;
 import org.mmbase.util.logging.*;
@@ -10,30 +9,17 @@ import java.util.*;
 /**
  * Some didactor specific Node functions (implemented as 'bean')
  * @author Michiel Meeuwissen
- * @version $Id: Functions.java,v 1.10 2009-01-08 13:45:59 michiel Exp $
+ * @version $Id: Functions.java,v 1.3 2007-06-21 13:11:30 michiel Exp $
  */
 public class Functions {
     protected final static Logger log = Logging.getLoggerInstance(Functions.class);
-
+    
     private Node node;
 
     public void setNode(Node n) {
         node = n;
     }
-
-
-    public  List<Node> learnblocks() {
-        Cloud cloud = node.getCloud();
-        NodeQuery q = Queries.createRelatedNodesQuery(node,
-                                                      cloud.getNodeManager("learnblocks"),
-                                                      "posrel",
-                                                      "destination");
-        Queries.addSortOrders(q, "posrel.pos", "UP");
-        return q.getNodeManager().getList(q);
-    }
-
-
-
+    
     /**
      * Returns the locale assciated with this education.
      * Works on education nodes.
@@ -44,8 +30,8 @@ public class Functions {
         String providerPath = provider.getStringValue("path");
         String educationPath = node.getStringValue("path");
         Locale language = org.mmbase.util.LocalizedString.getLocale(provider.getStringValue("locale"));
-
-        return new Locale(language.getLanguage(), language.getCountry(),
+        
+        return new Locale(language.getLanguage(), language.getCountry(), 
                           providerPath + ("".equals(providerPath) || "".equals(educationPath) ? "" : "_") + educationPath);
 
     }
@@ -69,7 +55,7 @@ public class Functions {
         return false;
     }
 
-
+    
     /**
      * Generate a 8-character base username, consisting of the first
      * character of the firstname, and the entire lastname. Strip out
@@ -78,16 +64,13 @@ public class Functions {
      * Works on people nodes only.
      */
     public String peopleGenerateUserName() {
-        String firstName = node.getStringValue("firstname").replaceAll("\\s", "").toLowerCase();
+        String firstName = node.getStringValue("firstname");
         if (firstName.length() > 0) {
             firstName = firstName.substring(0, 1);
         }
-        String uname = firstName + node.getStringValue("lastname").replaceAll("\\s", "").toLowerCase();
+        String uname = firstName + node.getStringValue("lastname");
         if (uname.length() > 8) {
             uname = uname.substring(0, 8);
-        }
-        if (uname.length() < 5) {
-            uname += "00000".substring(0, 5 - uname.length());
         }
         int seq = 0;
         String value = uname;
@@ -106,36 +89,4 @@ public class Functions {
             return uname + System.currentTimeMillis();
         }
     }
-
-    public Node workgroupCoach() {
-        NodeList people = node.getRelatedNodes("people");
-        NodeIterator ni = people.nodeIterator();
-        while (ni.hasNext()) {
-            Node person = ni.nextNode();
-            NodeList roles = person.getRelatedNodes("roles");
-            NodeIterator ni2 = roles.nodeIterator();
-            while (ni.hasNext()) {
-                Node role = ni2.nextNode();
-                if (role.getStringValue("name").equals("coach")) {
-                    return person;
-                }
-            }
-        }
-        return null;
-
-    }
-
-
-    /**
-     * Tree of learnobject. Most logically used by education objects.
-     */
-    public NodeList tree() {
-        NodeManager learnobjects = node.getCloud().getNodeManager("learnobjects");
-        NodeQuery q = Queries.createRelatedNodesQuery(node, learnobjects, "posrel", "destination");
-        Queries.addSortOrders(q, "posrel.pos", "up");
-        GrowingTreeList tree = new GrowingTreeList(q, 10, learnobjects, "posrel", "destination");
-        Queries.addSortOrders(tree.getTemplate(), "posrel.pos", "up");
-        return tree;
-    }
-
 }

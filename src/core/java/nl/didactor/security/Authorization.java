@@ -12,7 +12,7 @@ import org.mmbase.module.core.*;
 
 /**
  * @javadoc
- * @version $Id: Authorization.java,v 1.6 2007-07-17 14:36:46 michiel Exp $
+ * @version $Id: Authorization.java,v 1.3 2007-06-14 12:50:40 michiel Exp $
  */
 public class Authorization extends org.mmbase.security.Authorization {
 
@@ -47,6 +47,8 @@ public class Authorization extends org.mmbase.security.Authorization {
         } else {
             // This is in no way an elaborate implementation
 
+            // Currently it only forbids deleting yourself, and admin.
+
             nl.didactor.security.UserContext uc = (nl.didactor.security.UserContext) user;
             if (operation.equals(Operation.DELETE)) {
                 if (uc.getUserNumber() == nodeid) {
@@ -55,22 +57,8 @@ public class Authorization extends org.mmbase.security.Authorization {
                 } 
                 MMObjectBuilder objectBuilder = MMBase.getMMBase().getBuilder("object");
                 MMObjectNode node = objectBuilder.getNode(nodeid);
-                if (node == null) {
-                    return true;
-                }
                 if (node.getBuilder().getTableName().equals("people")) {
-                    try {
-                        UserContext otherUser = new UserContext(node, "check");
-                        if (uc.getRank().getInt() < Rank.ADMIN.getInt() && otherUser.getRank().getInt() > uc.getRank().getInt()) {
-                            // you may not delete user with equal/higher rank (unless, you are
-                            // administrator, then you may delete other administrators)
-                            return false;
-                        }
-                    } catch (Exception e) {
-                        // if exception from new UserContext, (propably user withouth roles), then
-                        // you may delete correspoding node.
-                        return true;
-                    }
+                    if (node.getStringValue("username").equals("admin")) return false;
                 }
                 
             }
@@ -86,7 +74,6 @@ public class Authorization extends org.mmbase.security.Authorization {
         if (operation.equals(Operation.DELETE)) {
             MMObjectBuilder objectBuilder = MMBase.getMMBase().getBuilder("object");
             MMObjectNode node = objectBuilder.getNode(nodeid);
-            if (node == null) return;
             MMObjectBuilder builder = node.getBuilder();
             if (builder instanceof DidactorBuilder) {
                 DidactorBuilder dbuilder = (DidactorBuilder)builder;
@@ -106,23 +93,18 @@ public class Authorization extends org.mmbase.security.Authorization {
     }
 
     /**
-     * Checks that you don't link to roles you don't have yourself. All other relations are permitted.
+     * No authorization means that everyting is allowed
+     * @return true
      */
     public boolean check(org.mmbase.security.UserContext user, int nodeid, int srcNodeid, int dstNodeid, Operation operation) {
-        nl.didactor.security.UserContext uc = (nl.didactor.security.UserContext) user;
-        if (operation.equals(Operation.CREATE)) {
-            if (uc.getRank().getInt() < Rank.ADMIN.getInt()) {
-                // you may only give roles, which you have yourself (or, you are administrator)
-                MMObjectBuilder objectBuilder = MMBase.getMMBase().getBuilder("object");
-                MMObjectNode node = objectBuilder.getNode(dstNodeid);
-                if (node.getBuilder().getTableName().equals("roles")) {
-                    return uc.getRoles().contains(node.getStringValue("name"));
-                }
-            }
-        }
         return true;
     }
 
+    /**
+     * This method does nothing
+     */
+    public void verify(org.mmbase.security.UserContext user, int nodeid, int srcNodeid, int dstNodeid, Operation operation) throws SecurityException {
+    }
 
 
     /**

@@ -13,7 +13,6 @@ import org.mmbase.module.core.MMObjectNode;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 import org.mmbase.security.*;
-import org.mmbase.security.SecurityException;
 import nl.didactor.builders.PeopleBuilder;
 import nl.didactor.security.AuthenticationComponent;
 
@@ -22,14 +21,14 @@ import nl.didactor.security.UserContext;
 /**
  * Default AuthenticationComponent for Didactor.
  * @javadoc
- * @version $Id: PlainSecurityComponent.java,v 1.23 2008-03-20 19:56:49 michiel Exp $
+ * @version $Id: PlainSecurityComponent.java,v 1.16 2007-06-13 13:58:39 michiel Exp $
  */
 
 public class PlainSecurityComponent implements AuthenticationComponent {
     private static final Logger log = Logging.getLoggerInstance(PlainSecurityComponent.class);
 
     private PeopleBuilder users;
-    private final Map<String, String> properties = new HashMap<String, String>();
+    private final Map properties = new HashMap();
 
     private void checkBuilder() throws org.mmbase.security.SecurityException {
         if (users == null) {
@@ -62,64 +61,34 @@ public class PlainSecurityComponent implements AuthenticationComponent {
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
-        for (String prop : Collections.list((Enumeration<String>) props.propertyNames())) {
-            properties.put(prop, props.getProperty(prop));
-        }
+        properties.putAll(props);
 
-    }
-
-    protected String getUserName(HttpServletRequest request) {
-        String un = request == null ? null : request.getParameter("username");
-        if (un == null && request != null) un = (String) request.getAttribute("username");
-        return un;
-    }
-    protected String getPassword(HttpServletRequest request) {
-        String p = request == null ? null : request.getParameter("password");
-        if (p == null && request != null) p = (String) request.getAttribute("password");
-        return p;
     }
 
     public UserContext processLogin(HttpServletRequest request, HttpServletResponse response, String application) {
         checkBuilder();
 
-        String login    = getUserName(request);
-        String password = getPassword(request);
 
 
-        if (login == null || password == null) {
+        String sLogin = request == null ? null : request.getParameter("username");
+        String sPassword = request == null ? null : request.getParameter("password");
+
+        if (sLogin == null || sPassword == null) {
             log.debug("Did not find matching credentials");
             return null;
         }
-        login    = login.trim();
-        password = password.trim();
 
-        log.debug("Processing log in");
-        MMObjectNode user = users.getUser(login, password);
+        MMObjectNode user = users.getUser(sLogin, sPassword);
         if (user == null) {
-            log.debug("No user found for " + login);
-            user = users.getUser(login);
-            if (user == null) {
-                throw new SecurityException("No such user '" + login + "'");
-            } else {
-                throw new SecurityException("Wrong password");
-            }
-        }
-
-        if ("".equals(user.getStringValue("password"))) {
-            throw new SecurityException("User '" + login + "' has an empty password");
+            log.debug("Found credentials, but no matching user. Returning null");
+            return null;
         }
 
         log.debug("Found matching credentials, so user is now logged in.");
         HttpSession session = request.getSession(true);
         session.setAttribute("didactor-plainlogin-userid", "" + user.getNumber());
         session.setAttribute("didactor-plainlogin-application", application);
-        UserContext uc = new UserContext(user, application);
-        if (! uc.getRank().equals(Rank.ADMIN)) {
-            if (! user.getBooleanValue("person_status")) {
-                throw new SecurityException("User '" + login + "' is disabled");
-            }
-        }
-        return uc;
+        return new UserContext(user, application);
     }
 
     public UserContext isLoggedIn(HttpServletRequest request, HttpServletResponse response) {
@@ -160,7 +129,7 @@ public class PlainSecurityComponent implements AuthenticationComponent {
     }
 
     protected String getLoginPage(HttpServletRequest request) {
-
+        
         log.debug("Trying " + request.getServerName() + request.getContextPath() + ".plain.login_page property ");
         String page = request == null ? null : (String) properties.get(request.getServerName() + request.getContextPath() + ".plain.login_page");
         if (page == null) {
@@ -184,26 +153,26 @@ public class PlainSecurityComponent implements AuthenticationComponent {
                 page = "/portal";
             }
         }
-        return page == null ? "/login/" : page;
+        return page == null ? "/login_plain.jsp" : page;
     }
 
 
     public String getLoginPage(HttpServletRequest request, HttpServletResponse response) {
-        String login    = getUserName(request);
-        String password = getPassword(request);
-        if (login != null && password != null) {
+        String sLogin    = request == null ? null : request.getParameter("username");
+        String sPassword = request == null ? null : request.getParameter("password");
+        if (sLogin != null && sPassword != null) {
             return getLoginPage(request) + "?reason=failed";
         } else {
             return getLoginPage(request);
         }
     }
-
+    
     public String getName() {
         return "didactor-plainlogin";
     }
-
+    
     public void logout(HttpServletRequest request, HttpServletResponse respose) {
-        log.debug("logout called");
+        log.debug("logout() called");
         HttpSession session = request == null ? null : request.getSession(false);
         if (session != null) {
             session.removeAttribute("didactor-plainlogin-userid");

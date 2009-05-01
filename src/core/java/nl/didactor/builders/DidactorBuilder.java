@@ -5,7 +5,6 @@ import org.mmbase.module.core.MMObjectNode;
 import org.mmbase.module.core.MMBase;
 import org.mmbase.module.corebuilders.FieldDefs;
 import org.mmbase.module.corebuilders.InsRel;
-import org.mmbase.core.CoreField;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 import java.util.*;
@@ -17,16 +16,16 @@ import java.util.*;
  * @author Johannes Verelst &lt;johannes.verelst@eo.nl&gt;
  */
 public class DidactorBuilder extends MMObjectBuilder {
-
+    private org.mmbase.util.Encode encoder = null;
     private static final Logger log = Logging.getLoggerInstance(DidactorBuilder.class);
 
-    private SortedSet<EventInstance> preInsertComponents  = new TreeSet<EventInstance>();
-    private SortedSet<EventInstance> postInsertComponents = new TreeSet<EventInstance>();
+    private SortedSet preInsertComponents = new TreeSet();
+    private SortedSet postInsertComponents = new TreeSet();
 
-    private SortedSet<EventInstance> preCommitComponents  = new TreeSet<EventInstance>();
-    private SortedSet<EventInstance> postCommitComponents = new TreeSet<EventInstance>();
+    private SortedSet preCommitComponents = new TreeSet();
+    private SortedSet postCommitComponents = new TreeSet();
 
-    private SortedSet<EventInstance> preDeleteComponents  = new TreeSet<EventInstance>();
+    private SortedSet preDeleteComponents = new TreeSet();
 
     public boolean init() {
         checkAddTmpField("_justinserted");
@@ -64,38 +63,34 @@ public class DidactorBuilder extends MMObjectBuilder {
     }
 
     /**
-     * Overridden 'insert' from MMObjectBuilder. It will call the 'preInsert()'
+     * Overridden 'insert' from MMObjectBuilder. It will call the 'preInsert()' 
      * method for all registered components just before inserting the node. It
      * calls the 'postInsert()' for all registered components after inserting the node.
      */
     public int insert(String owner, MMObjectNode node) {
         node.setValue("_justinserted", "true");
-        for (EventInstance e : preInsertComponents) {
-            Component c = e.component;
-            if (log.isDebugEnabled()) {
-                log.debug("Firing " + c.getName() + ".preInsert() on object of type '" + node.getBuilder().getTableName() + "'");
-            }
+        Iterator i = preInsertComponents.iterator();
+        while (i.hasNext()) {
+            Component c = ((EventInstance)i.next()).component;
+            log.debug("Firing " + c.getName() + ".preInsert() on object of type '" + node.getBuilder().getTableName() + "'");
             c.preInsert(node);
         }
         int res = super.insert(owner, node);
 
-        for (CoreField fd : (Collection<CoreField>) getFields()) {
-            /*
+        Collection fields = getFields();
+        Iterator it = fields.iterator();
+        while (it.hasNext()) {
+            FieldDefs fd = (FieldDefs) it.next();
             if (fd.getDBState() == FieldDefs.DBSTATE_VIRTUAL && fd.getDBPos() == 300) {
-            // WTF?
-                if (log.isDebugEnabled()) {
-                    log.debug("Have to process set on field [" + fd.getName() + "] with value [" + node.getValues().get(fd.getName()) + "]");
-                }
-                setFieldValue(owner, node, fd.getName());
+                log.debug("Have to process set on field [" + fd.getDBName() + "] with value [" + node.getValues().get(fd.getDBName()) + "]");
+                setFieldValue(owner, node, fd.getDBName());
             }
-            */
         }
 
-        for (EventInstance e : postInsertComponents) {
-            Component c = e.component;
-            if (log.isDebugEnabled()) {
-                log.debug("Firing " + c.getName() + ".postInsert() on object of type '" + node.getBuilder().getTableName() + "'");
-            }
+        i = postInsertComponents.iterator();
+        while (i.hasNext()) {
+            Component c = ((EventInstance)i.next()).component;
+            log.debug("Firing " + c.getName() + ".postInsert() on object of type '" + node.getBuilder().getTableName() + "'");
             c.postInsert(node);
         }
         return res;
@@ -103,11 +98,12 @@ public class DidactorBuilder extends MMObjectBuilder {
 
 
     /**
-     * Overridden 'preCommit' from MMObjectBuilder. It will call the 'preCommit()'
+     * Overridden 'preCommit' from MMObjectBuilder. It will call the 'preCommit()' 
      * method for all registered components.
      */
     public MMObjectNode preCommit(MMObjectNode node) {
-        if (preCommitComponents.size() > 0) {
+        Iterator i = preCommitComponents.iterator();
+        if (i.hasNext()) {
             if (node.getValue("_justinserted") != null) {
                 // the preCommit() is called on the newly inserted node since the new storage layer.
                 // pre-insert behavior should be handled by preinsert handlers, and not by
@@ -115,8 +111,8 @@ public class DidactorBuilder extends MMObjectBuilder {
                 return node;
             }
         }
-        for (EventInstance e : preCommitComponents) {
-            Component c = e.component;
+        while (i.hasNext()) {
+            Component c = ((EventInstance)i.next()).component;
             log.info("Firing " + c.getName() + ".preCommit() on object of type '" + node.getBuilder().getTableName() + "'");
             c.preCommit(node);
         }
@@ -131,24 +127,25 @@ public class DidactorBuilder extends MMObjectBuilder {
     public boolean commit(MMObjectNode node) {
         boolean bSuperCommit = super.commit(node);
 
-        for (CoreField fd : (Collection<CoreField>) getFields()) {
-            /*
-              WTF ?
+        Collection fields = getFields();
+        Iterator it = fields.iterator();
+        while (it.hasNext()) {
+            FieldDefs fd = (FieldDefs)it.next();
             if (fd.getDBState() == FieldDefs.DBSTATE_VIRTUAL && fd.getDBPos() == 300) {
                 log.debug("Have to process set on field [" + fd.getDBName() + "] with value [" + node.getValues().get(fd.getDBName()) + "]");
                 setFieldValue(node.getStringValue("owner"), node, fd.getDBName());
             }
-            */
         }
 
-        for (EventInstance e : postCommitComponents) {
-            Component c = e.component;
+        Iterator i = postCommitComponents.iterator();
+        while (i.hasNext()) {
+            Component c = ((EventInstance)i.next()).component;
             log.debug("Firing " + c.getName() + ".postCommit() on object of type '" + node.getBuilder().getTableName() + "'");
             c.postCommit(node);
         }
         return bSuperCommit;
     }
-
+    
     /**
      * This method does NOT override any methods from MMObjectBuilder, but is triggered
      * by the authorization class. This is a rather ugly hack, which might not be supported
@@ -156,14 +153,15 @@ public class DidactorBuilder extends MMObjectBuilder {
      * delete events on nodes before the bridge complains.
      */
     public boolean preDelete(MMObjectNode node) {
-        for (EventInstance e : preDeleteComponents) {
-            Component c = e.component;
+        Iterator i = preDeleteComponents.iterator();
+        while (i.hasNext()) {
+            Component c = ((EventInstance)i.next()).component;
             log.info("Firing " + c.getName() + ".preDelete() on object of type '" + node.getBuilder().getTableName() + "'");
             c.preDelete(node);
         }
         return true;
     }
-
+    
     /**
      * Return the value for a field of the node. This method
      * is overridden from MMObjectBuilder, and will return a value
@@ -179,7 +177,7 @@ public class DidactorBuilder extends MMObjectBuilder {
             if (fd.getDBState() == FieldDefs.DBSTATE_VIRTUAL && node.getNumber() != -1 && fd.getDBPos() == 300) {
                 log.debug("Getting field [" + field + "] from db fields thingie");
                 // Special Didactor case: field was added by a component.xml file, we read it from a related fields node
-                List fieldNodes = node.getRelatedNodes("fields");
+                Vector fieldNodes = node.getRelatedNodes("fields");
                 for (int i=0; i<fieldNodes.size(); i++) {
                     MMObjectNode fieldNode = (MMObjectNode)fieldNodes.get(i);
                     if (field.equals(fieldNode.getStringValue("name"))) {
@@ -195,7 +193,7 @@ public class DidactorBuilder extends MMObjectBuilder {
     }
 
     private void setFieldValue(String owner, MMObjectNode node, String field) {
-        List fieldNodes = node.getRelatedNodes("fields");
+        Vector fieldNodes = node.getRelatedNodes("fields");
         for (int i=0; i<fieldNodes.size(); i++) {
             MMObjectNode fieldNode = (MMObjectNode)fieldNodes.get(i);
             if (field.equals(fieldNode.getStringValue("name"))) {
@@ -217,7 +215,7 @@ public class DidactorBuilder extends MMObjectBuilder {
         InsRel insrel = (InsRel)MMBase.getMMBase().getBuilder("authrel");
         insrel.insert(owner, node.getNumber(), fieldId, authrel);
     }
-
+        
     /**
      * This small innerclass represents an event-instance. It mainly is just a wrapper
      * around the component, but also has a priority that allows the components to be
@@ -226,7 +224,7 @@ public class DidactorBuilder extends MMObjectBuilder {
     private class EventInstance implements Comparable {
         protected Component component;
         protected int priority;
-
+      
         /**
          * Public constructor
          */

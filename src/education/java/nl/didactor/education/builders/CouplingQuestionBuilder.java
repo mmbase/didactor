@@ -5,19 +5,14 @@ import org.mmbase.storage.search.*;
 import org.mmbase.storage.search.implementation.*;
 import java.util.*;
 
-import org.mmbase.util.logging.Logger;
-import org.mmbase.util.logging.Logging;
-
 /**
- * This builder class can score the answer given to a Coupling
+ * This builder class can score the answer given to a Coupling 
  * question.
- * @version $Id: CouplingQuestionBuilder.java,v 1.3 2008-06-20 12:43:45 michiel Exp $
  */
 public class CouplingQuestionBuilder extends QuestionBuilder {
 
-    private static final Logger log = Logging.getLoggerInstance(CouplingQuestionBuilder.class);
     /**
-     * Get the score for the given answer to a question.
+     * Get the score for the given answer to a question. 
      */
     public int getScore(MMObjectNode questionNode, MMObjectNode givenAnswer) {
         int score = givenAnswer.getIntValue("score");
@@ -42,7 +37,7 @@ public class CouplingQuestionBuilder extends QuestionBuilder {
         BasicRelationStep bsr;
         BasicStep nodeStep;
         BasicStepField posfield;
-
+                
 
         // Builde the query for the left answers
         int leftanswer = rdef.getNumberByName("leftanswer");
@@ -97,7 +92,7 @@ public class CouplingQuestionBuilder extends QuestionBuilder {
                 if (leftNode.getIntValue("couplinganswers.number") == -1)
                     return 0;
             }
-
+                
             // All the possible answers must be given
             Vector allAnswers = questionNode.getRelatedNodes("couplinganswers");
             if (allAnswers.size() != leftAnswers.size())
@@ -120,9 +115,11 @@ public class CouplingQuestionBuilder extends QuestionBuilder {
 
             // All tests OK: this is a correct answer
             return 1;
-
-        } catch (Throwable e) { // only needed in mmbase 1.8
-            log.error(e.getMessage(), e);
+            
+        } catch (SearchQueryException e) {
+            System.err.println("Oopsie!");
+            System.err.println(e);
+            e.printStackTrace(System.err);
         }
         return 1;
     }

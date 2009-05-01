@@ -1,6 +1,7 @@
 package nl.didactor.builders;
 import nl.didactor.component.Component;
 import nl.didactor.events.Event;
+import nl.didactor.events.EventDispatcher;
 
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
@@ -10,7 +11,9 @@ import org.mmbase.module.corebuilders.FieldDefs;
 import org.mmbase.storage.search.*;
 import org.mmbase.storage.search.implementation.*;
 import org.mmbase.bridge.*;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Vector;
 import nl.didactor.events.*;
 
 /**
@@ -20,9 +23,8 @@ import nl.didactor.events.*;
  * @author Johannes Verelst &lt;johannes.verelst@eo.nl&gt;
  */
 public class PeopleBuilder extends DidactorBuilder {
-    private final org.mmbase.util.Encode MD5 = new org.mmbase.util.Encode("MD5");
-
-    private static final Logger log = Logging.getLoggerInstance(PeopleBuilder.class);
+    private org.mmbase.util.Encode encoder = null;
+    private static Logger log=Logging.getLoggerInstance(PeopleBuilder.class.getName());
 
     /**
      * Return a user node (bridge) based on the given username and password.
@@ -35,41 +37,37 @@ public class PeopleBuilder extends DidactorBuilder {
             NodeSearchQuery query = new NodeSearchQuery(this);
             StepField usernameField = query.getField(getField("username"));
             query.setConstraint(new BasicFieldValueConstraint(usernameField, username));
-            SearchQueryHandler handler = MMBase.getMMBase().getSearchQueryHandler();
-            if (log.isDebugEnabled()) {
-                log.debug("Using query " + query + " --> " + handler.createSqlString(query));
-            }
-
             //StepField passwordField = query.getField(getField("password"));
             //query.setConstraint(new BasicFieldValueConstraint(passwordField, "{md5}" + encoder.encode(password)));
-
+    
             List nodelist = getNodes(query);
             if (nodelist.size() == 0) {
-                log.debug("No users with the name '" + username + "'");
+                log.service("No users with the name '" + username + "'");
                 return null;
                 // fail silently
             } else if (nodelist.size() > 1) {
                 log.error("Too many users with username '" + username + "': " + nodelist.size());
-                MMObjectNode n = (MMObjectNode)nodelist.get(0);
-                log.error(n.getStringValue("lastname") + ""+ n.getStringValue("username"));
+                for ( int i=0;i <nodelist.size() ;i++) {
+                    MMObjectNode n = (MMObjectNode)nodelist.get(0);
+                    log.error(n.getStringValue("lastname") + ""+ n.getStringValue("username"));
+                }
                 return null;
             } else {
-                log.debug("1 user found: " + username + " " + password);
+                log.debug( "1 user found: " + username + " " + password);
                 MMObjectNode node = (MMObjectNode)nodelist.get(0);
-                String storedPassword = node.getStringValue("password");
-                String md5 = "{md5}" + MD5.encode(password);
-                if (storedPassword == null || ! storedPassword.equals(md5)) {
-                    log.debug("Invalid password " + storedPassword + " != " + md5);
+                String storedpassword = node.getStringValue("password");
+                if (storedpassword == null || !storedpassword.equals("{md5}" + encoder.encode(password))) {
+                    log.debug("Invalid password");
                     return null;
                 }
                 return node;
             }
         } catch (SearchQueryException e) {
-            log.error(e.toString(), e);
+            log.error(e.toString());
             return null;
         }
     }
-
+ 
     public MMObjectNode getUser(final String username) {
         try {
             NodeSearchQuery query = new NodeSearchQuery(this);
@@ -103,6 +101,7 @@ public class PeopleBuilder extends DidactorBuilder {
      * Initialize this builder
      */
     public boolean init() {
+        encoder = new org.mmbase.util.Encode("MD5");
         return super.init();
     }
 
@@ -114,7 +113,7 @@ public class PeopleBuilder extends DidactorBuilder {
      * @param originalValue The original value of the field.
      * @return boolean indicating this set was allowed
      */
-    @Override public boolean setValue(MMObjectNode node, String fieldname, Object originalValue) {
+    public boolean setValue(MMObjectNode node, String fieldname, Object originalValue) {
         if (fieldname.equals("username")) {
             Object newValue = node.getValues().get(fieldname);
 
@@ -133,7 +132,14 @@ public class PeopleBuilder extends DidactorBuilder {
                 }
             }
         }
-
+        if (fieldname.equals("password")) {
+            Object newValue = node.getValues().get(fieldname);
+            if (((String)newValue).startsWith("{md5}")) {
+                node.storeValue(fieldname, (String)newValue);
+            } else if (originalValue != null && !originalValue.equals(newValue)) {
+                node.storeValue(fieldname, "{md5}" + encoder.encode((String)newValue));
+            }
+        }
         return true;
     }
 
@@ -145,23 +151,25 @@ public class PeopleBuilder extends DidactorBuilder {
      * @param field Name of the field.
      * @return an object containing the value.
      */
-    @Override public Object getValue(MMObjectNode node, String field) {
+    public Object getValue(MMObjectNode node, String field) {
         FieldDefs fd = getField(field);
         if (fd != null) {
             return super.getValue(node, field);
         }
 
         if ("isonline".equals(field)) {
-            int now = (int)(System.currentTimeMillis() / 1000);
+            int now = (int)(System.currentTimeMillis() / 1000);    
             int oldtime = node.getIntValue("lastactivity");
             if (now - oldtime > 60 * 5) {
-                return Boolean.FALSE;
+                return Integer.valueOf(0);
             } else {
-                return node.getIntValue("islogged") == 0 ? Boolean.FALSE : Boolean.TRUE;
+                int islogged = node.getIntValue("islogged");
+                if (islogged == 0) {
+                    return Integer.valueOf(0);
+                }
+                return Integer.valueOf(1);
             }
         }
-
-        // Oh no!
 
         // No fielddefs, so it is definately a virtual field. Is it a component setting?
         if (field.indexOf("-") > 0) {
@@ -185,7 +193,7 @@ public class PeopleBuilder extends DidactorBuilder {
         return super.getValue(node, field);
     }
 
-    @Override public int insert(String owner, MMObjectNode node) {
+    public int insert(String owner, MMObjectNode node) {
         // forbid setting a username to an existing one
 
         String newValue = (String) node.getValues().get("username");
@@ -197,14 +205,14 @@ public class PeopleBuilder extends DidactorBuilder {
             }
         }
         int number = super.insert(owner, node);
-        Event event = new Event((String) node.getValues().get("username"), null, null, null, null,
-                                "peopleaccountcreated", "" + number, "accountcreated");
-        org.mmbase.core.event.EventManager.getInstance().propagateEvent(event);
+        Event event = new Event((String) node.getValues().get("username"), null, null, null, null, 
+                                "peopleaccountcreated", (new Integer(number)).toString(), "accountcreated");
+        EventDispatcher.report(event, null, null);
         log.info("insert people node");
         return number;
     }
 
-
+    
     private int countUsernamesInCloud(String username) {
         try {
             NodeSearchQuery nsq = new NodeSearchQuery(this);
