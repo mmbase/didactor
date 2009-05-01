@@ -39,9 +39,8 @@
                 </mm:createnode>
 
 
-                <!-- send the email node (Didactor way) -->
-                <mm:node referid="mail1">
-                   <mm:setfield name="type">1</mm:setfield>
+                <!-- send the email node -->                    <mm:node referid="mail1">
+                        <mm:field name="mail(oneshot)" />
                 </mm:node>
         <mm:import id="mailed">true</mm:import>
                 </mm:relatednodes>

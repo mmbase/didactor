@@ -1,9 +1,8 @@
 <%-- !DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml/DTD/transitional.dtd" --%>
-<%@ page contentType="text/html; charset=utf-8" language="java" 
-%><%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" 
-%><%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"
-%><%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" 
-%><mm:cloud method="delegate" jspvar="cloud">
+<%@ page contentType="text/html; charset=utf-8" language="java" %>
+<%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.0" prefix="mm" %>
+<mm:cloud method="delegate" jspvar="cloud">
 <%@include file="/shared/setImports.jsp" %>
 <%@ include file="thememanager/loadvars.jsp" %>
 <html>
@@ -87,7 +86,7 @@
     <td width="50%">
         <br />
         <di:translate key="mmbob.subject" /> : <mm:field name="subject" /><br />
-        <di:translate key="mmbob.date" /> : <mm:field name="createtime"><mm:time format="${timeFormat}" /></mm:field><br />
+        <di:translate key="mmbob.date" /> : <mm:field name="createtime"><mm:time format="<%= timeFormat %>" /></mm:field><br />
         <di:translate key="mmbob.from" /> : <mm:field name="poster" /> (<mm:field name="fullname" />)<br />
         <di:translate key="mmbob.mailbox" /> : <mm:node referid="mailboxid"><mm:field name="name" /></mm:node><br />
         <br />
@@ -99,7 +98,7 @@
                         <mm:field name="avatar"><mm:compare value="" inverse="true">
                          <img align="left" width="50" border="0" src="../img.db?<mm:field name="avatar" />" style="margin-top: 5px; margin-right: 10px;">
                         </mm:compare></mm:field>
-            <mm:field name="account" /> (<di:person />)<br />
+            <mm:field name="account" /> (<mm:field name="firstname" /> <mm:field name="lastname" />)<br />
 <%-- hh           Level : <mm:field name="level" /> <br /> --%>
             <di:translate key="mmbob.numberofposts" /> : <mm:field name="accountpostcount" /><br />
 <%--            Geslacht : <mm:field name="gender" /><br />

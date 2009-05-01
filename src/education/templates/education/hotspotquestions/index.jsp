@@ -1,4 +1,4 @@
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm"%>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.1" prefix="mm"%>
 <%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
 <mm:content postprocessor="reducespace">
 <mm:cloud method="delegate" jspvar="cloud">
@@ -38,6 +38,7 @@
   <mm:field name="text" escape="none"/>
   <p/>
 
+  <mm:import id="questiontype"><mm:field name="type"/></mm:import>
   <mm:import id="questionlayout"><mm:field name="layout"/></mm:import>
 
     <div class="images">

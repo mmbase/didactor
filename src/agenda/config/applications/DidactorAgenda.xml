@@ -4,7 +4,7 @@
     <requirements>
         <requires name="DidactorCore" maintainer="didactor.nl" version="8" />
         <requires name="DidactorComponent" maintainer="didactor.nl" version="2" />
-        <requires name="DidactorResources" maintainer="didactor.nl" version="2" />
+        <requires name="Resources" maintainer="didactor.nl" version="2" />
     </requirements>  
 
     <neededbuilderlist>
@@ -27,7 +27,6 @@
         <relation from="classes" to="agendas" type="related" />
         <relation from="workgroups" to="agendas" type="related" />
         <relation from="agendas" to="items" type="eventrel" />
-        <relation from="agendas" to="items" type="related" />
 	<relation from="people" to="items" type="invitationrel" />
     </allowedrelationlist>
 

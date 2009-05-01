@@ -1,11 +1,7 @@
 <%
-   int iCounter = 0;
-   boolean bEmpty = true;
+int iCounter = 0;
+boolean bEmpty = true;
 %>
-
-<mm:import id="meta_handler" reset="true"><mm:field name="handler"/></mm:import>
-
-
 <mm:relatednodes type="metadata" jspvar="mNode">
       <%
          if(nlRelatedNodes.contains(mNode))
@@ -19,13 +15,8 @@
                               <table border="0" cellpadding="0" cellspacing="0">
                                  <tr>
                                     <td>
-                                       <select name="m<%= sMetaDefinitionID %>"
-                                          <mm:compare referid="meta_handler" value="" inverse="true">
-                                             disabled="disabled"
-                                          </mm:compare>
-
-                                       >
-                                          <option style="width:20px"><%= MetaDataHelper.EMPTY_VALUE %></option>
+                                       <select name="m<%= sMetaDefinitionID %>">
+                                          <option style="width:20px"><%= mdh.EMPTY_VALUE %></option>
                                              <%
                                                 for(NodeIterator it = nlLangCodes.nodeIterator(); it.hasNext();)
                                                 {
@@ -47,19 +38,13 @@
                                        </select>
                                     </td>
                                     <td>
-                                       <input name="m<%= sMetaDefinitionID %>" type="text" value="<%= sValue %>" style="width:150px"
-                                          <mm:compare referid="meta_handler" value="" inverse="true">
-                                             disabled="disabled"
-                                          </mm:compare>
-                                       />
+                                       <input name="m<%= sMetaDefinitionID %>" type="text" value="<%= sValue %>" style="width:150px"/>
                                     </td>
                                     <td>
                                        &nbsp;
                                     </td>
                                     <td>
-                                       <mm:compare referid="meta_handler" value="">
-                                          <input type="image" src="gfx/minus.gif" onClick="meta_form.action='#m<%= sMetaDefinitionID %>'; submitted.value='remove'; add.value='<%= sMetaDefinitionID %>,<%= iCounter %>'">
-                                       </mm:compare>
+                                       <input type="image" src="gfx/minus.gif" onClick="meta_form.action='#m<%= sMetaDefinitionID %>'; submitted.value='remove'; add.value='<%= sMetaDefinitionID %>,<%= iCounter %>'">
                                     </td>
                                  </tr>
                               </table>
@@ -82,12 +67,8 @@
          <table border="0" cellpadding="0" cellspacing="0">
             <tr>
                <td>
-                  <select name="m<%= sMetaDefinitionID %>"
-                     <mm:compare referid="meta_handler" value="" inverse="true">
-                        disabled="disabled"
-                     </mm:compare>
-                  >
-                     <option style="width:20px"><%= MetaDataHelper.EMPTY_VALUE %></option>
+                  <select name="m<%= sMetaDefinitionID %>">
+                     <option style="width:20px"><%= mdh.EMPTY_VALUE %></option>
                         <%
                            boolean bFirst = true;
                            for(NodeIterator it = nlLangCodes.nodeIterator(); it.hasNext();)
@@ -112,11 +93,7 @@
                   </select>
                </td>
                <td>
-                  <input name="m<%= sMetaDefinitionID %>" type="text" value="" style="width:150px"
-                     <mm:compare referid="meta_handler" value="" inverse="true">
-                        disabled="disabled"
-                     </mm:compare>
-                  />
+                  <input name="m<%= sMetaDefinitionID %>" type="text" value="" style="width:150px"/>
                </td>
             </tr>
          </table>
@@ -124,6 +101,4 @@
       <%
    }
 %>
-<mm:compare referid="meta_handler" value="">
-   <input type="image" src="gfx/plus.gif" onClick="meta_form.action='#m<%= sMetaDefinitionID %>'; submitted.value='add'; add.value='<%= sMetaDefinitionID %>'"> <di:translate key="metadata.add_more_langstrings" />
-</mm:compare>
+<input type="image" src="gfx/plus.gif" onClick="meta_form.action='#m<%= sMetaDefinitionID %>'; submitted.value='add'; add.value='<%= sMetaDefinitionID %>'"> <di:translate key="metadata.add_more_langstrings" />

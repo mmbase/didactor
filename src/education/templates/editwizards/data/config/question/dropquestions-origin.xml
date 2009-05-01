@@ -2,10 +2,11 @@
 <!DOCTYPE wizard-schema PUBLIC "-//MMBase/DTD editwizard 1.0//EN" "http://www.mmbase.org/dtd/wizard-schema_1_0.dtd"
 [
   <!ENTITY extra_loads SYSTEM "extra_loads.xml">
+  <!ENTITY extra_steps SYSTEM "extra_steps.xml">
   <!ENTITY extra_schemas SYSTEM "extra_schemas.xml">
 ]>
 <wizard-schema id="empty">
-  <title xml:lang="nl">Sleepvraag Editor</title>
+  <title xml:lang="nl">Drag en drop vraag Editor</title>
   <title xml:lang="en">Drag and drop question Editor</title>
 
   <action type="create">
@@ -26,14 +27,27 @@
 
   <action type="delete" />
 
+  <lists>
+    <optionlist include="config/option_list/boolean.xml" />
+  </lists>
+
+  <steps>
+    <step form-schema="step1" />
+    &extra_steps;
+  </steps>
+
   <form-schema id="step1">
-    <title xml:lang="nl">Sleepvraag invoeren</title>
+    <title xml:lang="nl">Drag en drop vraag invoeren</title>
     <title xml:lang="en">Enter drag and drop question</title>
     <field name="title" >
       <prompt xml:lang="nl">Titel</prompt>
       <prompt xml:lang="en">Title</prompt>
     </field>
-    <field name="showtitle" ftype="enum" />
+    <field name="showtitle" ftype="enum">
+      <prompt xml:lang="nl">Titel laten zien</prompt>
+      <prompt xml:lang="en">Show title</prompt>
+      <optionlist select="boolean" />
+    </field> 
     <field name="text" ftype="html" dtminlength="0">
       <prompt xml:lang="nl">Tekst</prompt>
       <prompt xml:lang="en">Text</prompt>
@@ -66,12 +80,13 @@
         </field>
       </item>
 
-
       <action type="create">
         <relation role="related" destinationtype="dropanswers"/>
       </action>
 
       <command name="startwizard" inline="true" wizardname="config/answer/dropanswers" objectnumber="new">
+        <prompt xml:lang="nl">Nieuwe combinatie</prompt>
+        <prompt xml:lang="en">New combination</prompt>
       </command>
     </list>
 

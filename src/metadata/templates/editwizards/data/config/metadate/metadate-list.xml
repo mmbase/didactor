@@ -1,11 +1,9 @@
 <!DOCTYPE list PUBLIC "-//MMBase/DTD editwizard 1.0//EN" "http://www.mmbase.org/dtd/wizard-schema_1_0.dtd">
 <list fdatapath="relation[@role='posrel']/object[@type='metadate']/../../relation[@role='posrel']/object[@type='metadate']" fparentdatapath="../object[@type='metadata']" minoccurs="0" maxoccurs="*" hidecommand="delete-item">
-  <title xml:lang="nl">Bijbehorende DatumTijd/Duur</title>
-  <title xml:lang="en">Associated Date/Duration</title>
+  <title>Bijbehorende DatumTijd/Duur</title>
   <item>
     <field fdatapath="field[@name='value']" ftype="data">
-      <prompt xml:lang="nl">Waarde</prompt>
-      <prompt xml:lang="en">Value</prompt>
+      <prompt>Waarde</prompt>
     </field>
     <field wizardname="config/metadate/metadate" ftype="startwizard" objectnumber="{field[@name='number']}"/>
   </item>
@@ -26,11 +24,9 @@
   <command name="startwizard" inline="true" wizardname="config/metadate/metadate" objectnumber="new" />
 
   <command name="search" nodepath="metadate" fields="value" age="-1" orderby="number" directions="down" >
-    <prompt xml:lang="nl">Zoeken naar tekenreeksen</prompt>
-    <prompt xml:lang="en">Search in range</prompt>
+    <prompt>Zoeken naar tekenreeksen</prompt>
     <search-filter>
-      <name xml:lang="nl">Waarde bevat</name>
-      <name xml:lang="en">Value contains</name>
+      <name>Waarde bevat</name>
       <search-fields>value</search-fields>
     </search-filter>
   </command>

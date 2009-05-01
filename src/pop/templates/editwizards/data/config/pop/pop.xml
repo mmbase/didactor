@@ -59,6 +59,8 @@
         </search-filter>
       </command>
       <command name="startwizard" inline="true" wizardname="config/people/people" objectnumber="new">
+         <prompt xml:lang="nl">Nieuw</prompt>
+         <prompt xml:lang="en">New</prompt>
       </command>
       <action type="create">
          <relation destinationtype="people" role="related">
@@ -81,6 +83,8 @@
          </search-filter>
       </command>
       <command name="startwizard" inline="true" wizardname="config/profile/profiles" objectnumber="new">
+         <prompt xml:lang="nl">Nieuw</prompt>
+         <prompt xml:lang="en">New</prompt>
       </command>
       <action type="create">
          <relation destinationtype="profiles" role="related">

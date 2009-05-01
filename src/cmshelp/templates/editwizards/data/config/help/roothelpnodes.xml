@@ -51,9 +51,9 @@
 											<prompt>Titel</prompt>
 											<description></description>
 										</field>
-										<field wizardname="config/help/simplecontents" ftype="startwizard" />
+										<field wizardname="config/portalpages/simplecontents" ftype="startwizard" />
 									</item>	
-									<command name="startwizard" inline="true" wizardname="config/help/simplecontents" objectnumber="new" />
+									<command name="startwizard" inline="true" wizardname="config/portalpages/simplecontents" objectnumber="new" />
 									<command name="search" nodepath="simplecontents" fields="title" age="-1">
 										<prompt>Search Content</prompt>
 										<search-filter>
@@ -71,7 +71,7 @@
 									</action>																	
 				</list>  
         <list role="childhnn" destination="helpnodes" minoccurs="0" maxoccurs="*">
-									<title>Bijbehorende map</title>
+									<title>Bijbehorende Map</title>
 									<!-- Show the 'item' in a list (the object) -->
 									<item>
 										<field name="name">
@@ -80,7 +80,7 @@
 										</field>
 										<field wizardname="config/help/helpnodes" ftype="startwizard" />
 									</item>	
-									<command name="startwizard" inline="true" wizardname="config/help/leafhelpnodes-origin" objectnumber="new" />
+									<command name="startwizard" inline="true" wizardname="config/help/helpnodes" objectnumber="new" />
 									<action type="create">
 										<relation destinationtype="helpnodes" role="childhnn" >
     										<object type="helpnodes"/>
@@ -88,7 +88,7 @@
 									</action>																		
 				</list> 				
         <list role="related" destination="educations" minoccurs="0" maxoccurs="*">
-									<title>Bijbehorende opleidingen</title>
+									<title>Bijbehorende Opleidingen</title>
 									<!-- Show the 'item' in a list (the object) -->
 									<item>
 										<field name="name">
@@ -99,7 +99,7 @@
 									</item>	
 									<command name="startwizard" inline="true" wizardname="config/education/educations" objectnumber="new" />
 									<command name="search" nodepath="educations" fields="name" age="-1">
-										<prompt>Search opleidingen</prompt>
+										<prompt>Search Opleidingen</prompt>
 										<search-filter>
 											<name>naam bevat</name>
 											<search-fields>name</search-fields>
@@ -115,7 +115,7 @@
 									</action>																	
 				</list> 		
         <list role="related" destination="roles" minoccurs="0" maxoccurs="*">
-									<title>Bijbehorende rol</title>
+									<title>Bijbehorende Rol</title>
 									<!-- Show the 'item' in a list (the object) -->
 									<item>
 										<field name="name">
@@ -126,7 +126,7 @@
 									</item>	
 									<command name="startwizard" inline="true" wizardname="config/role/roles" objectnumber="new" />
 									<command name="search" nodepath="roles" fields="name" age="-1">
-										<prompt>Search rol</prompt>
+										<prompt>Search Rol</prompt>
 										<search-filter>
 											<name>naam bevat</name>
 											<search-fields>name</search-fields>

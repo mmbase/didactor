@@ -1,44 +1,46 @@
 package nl.didactor.builders;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
-import org.mmbase.util.ResourceLoader;
-import org.mmbase.storage.implementation.database.DatabaseStorageManagerFactory;
 import org.mmbase.module.core.*;
 import org.mmbase.module.corebuilders.*;
 import org.mmbase.module.database.MultiConnection;
 import org.mmbase.bridge.*;
 import org.mmbase.storage.search.*;
 import org.mmbase.storage.search.implementation.*;
-import org.mmbase.util.xml.applicationdata.ApplicationReader;
+import org.mmbase.util.XMLApplicationReader;
 import org.mmbase.util.xml.BuilderReader;
 
-import java.util.*;
+import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Iterator;
+import java.util.Vector;
 import java.io.File;
 
-import java.sql.*;
-import java.lang.reflect.*;
+import java.sql.Statement;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import nl.didactor.component.Component;
 import nl.didactor.component.BasicComponent;
-
 /**
- *
+ * This class provides extra functionality for the People builder. It
+ * can encrypt the password of a user, and return a bridge.Node for
+ * a given username/password combination
  * @author Johannes Verelst &lt;johannes.verelst@eo.nl&gt;
- * @version $Id: ComponentBuilder.java,v 1.15 2008-09-04 09:49:14 michiel Exp $
  */
-public class ComponentBuilder extends DidactorBuilder {
-
-    private static final Logger log = Logging.getLoggerInstance(ComponentBuilder.class);
+public class ComponentBuilder extends AbstractSmartpathBuilder {
+    private org.mmbase.util.Encode encoder = null;
+    private static Logger log = Logging.getLoggerInstance(ComponentBuilder.class.getName());
 
     /**
      * Initialize this builder
      */
     public boolean init() {
         super.init();
-
-        log.info("Registering didactor components");
         NodeSearchQuery query = new NodeSearchQuery(this);
-        List<Component> v = new ArrayList<Component>();
+        Vector v = new Vector();
 
         //register all components
         try {
@@ -46,7 +48,7 @@ public class ComponentBuilder extends DidactorBuilder {
             while (i.hasNext()) {
                 Component c = registerComponent((MMObjectNode)i.next());
                 if (c != null) {
-                    v.add(c);
+                    v.add(c); 
                 }
             }
         } catch (Exception e) {
@@ -54,18 +56,15 @@ public class ComponentBuilder extends DidactorBuilder {
         }
 
         // Make sure that all builders are correct.
-        // initBuilders(); // i
+        initBuilders();
 
         // Make sure that all applications are correct.
         initApplications();
 
         // Initialize all the components
-        for (Component c : v) {
-            try {
-                c.init();
-            } catch (Exception e) {
-                log.error(e.getMessage(), e);
-            }
+        for (int i=0; i<v.size(); i++) {
+            Component c = (Component)v.get(i);
+            c.init();
         }
         return true;
     }
@@ -88,20 +87,22 @@ public class ComponentBuilder extends DidactorBuilder {
         }
         log.info("Registering component " + componentname + " with class '" + classname + "'");
         Component comp = null;
-
+       
         if (classname == null || "".equals(classname)) {
             comp = new BasicComponent(componentname);
         } else {
             try {
-                Class clazz  = Class.forName(classname);
-                try {
-                    Constructor c = clazz.getConstructor(MMObjectNode.class);
-                    comp = (Component) c.newInstance(component);
-                } catch (NoSuchMethodException  nsme) {
-                    comp = (Component) clazz.newInstance();
+                Class c = Class.forName(classname);
+                if (c == null) {
+                    comp = new BasicComponent(componentname);
+                } else {
+                    comp = (Component)c.newInstance();
+                    if (comp == null) {
+                        comp = new BasicComponent(componentname);
+                    }
                 }
             } catch (ClassNotFoundException e) {
-                log.info("Class not found: " + classname);
+                log.error("Class not found: " + classname);
             } catch (Exception e) {
                 log.error("Exception while initializing (" + component + "): " + e);
             }
@@ -118,18 +119,28 @@ public class ComponentBuilder extends DidactorBuilder {
      * This method will do a sanity check between the XML files that define the builders,
      * and the tables in the database. If fields are missing on database level, they will be added.
      * Note: inheritance will make this a little hard!.
-     * @todo currently unused
      */
     private void initBuilders() {
-        Iterator i = MMBase.getMMBase().getBuilderLoader().getResourcePaths(ResourceLoader.XML_PATTERN, true).iterator();
-        while (i.hasNext()) {
-            try {
-                String builder = (String) i.next();
-                String path = ResourceLoader.getDirectory(builder);
-                String bname = ResourceLoader.getName(builder);
-                initBuilder(path, bname);
-            } catch (Exception e) {
-                log.error(e);
+        initBuilders(MMBaseContext.getConfigPath() + File.separator + "builders" + File.separator);    
+    }
+
+    private void initBuilders(String path) {
+        File bdir = new File(path);
+        if (bdir.isDirectory() && bdir.canRead()) {
+            log.service("Reading all builders of directory " + bdir);
+            String files[] = bdir.list();
+            if (files != null) {
+                for (int i = 0; i < files.length; i++) {
+                    String bname = files[i];
+                    if (bname.endsWith(".xml")) {
+                        bname = bname.substring(0, bname.length() - 4);
+                        initBuilder(path, bname);
+                    } else if (bdir.isDirectory()) {
+                        initBuilders(path + bname + File.separator);
+                    }
+                }
+            } else {
+                log.error("Cannot find builders in " + path);
             }
         }
     }
@@ -137,35 +148,29 @@ public class ComponentBuilder extends DidactorBuilder {
     /**
      * This method will verify that all the fields specified in the builder XML
      * are also in the database. If not, the field will be created in the database.
-     * @todo currently unused
      */
-    private void initBuilder(String path, String builderName) throws java.io.IOException {
+    private void initBuilder(String path, String builderName) {
         if (!getMMBase().getBuilder(builderName).created()) {
             // Builder is not yet created in database, so there is no work for us
             return;
         }
-        BuilderReader parser;
-        try {
-            parser = new BuilderReader(getMMBase().getBuilderLoader().getDocument(path + "/" + builderName + ".xml", false,  BuilderReader.class), getMMBase());
-        } catch (Exception sax) {
-            log.warn("Could not read " + path + "/" + builderName + ".xml: " + sax.getMessage() + " skipping");
-            return;
-        }
+
+        BuilderReader parser = new BuilderReader(path + builderName + ".xml", getMMBase());
         String status = parser.getStatus();
         if (status.equals("active")) {
             HashMap columns = new HashMap();
-            Connection con = null;
+            MultiConnection con = null;
             Statement stmt = null;
             MMObjectBuilder builder = getMMBase().getBuilder(builderName);
             try {
-                con = ((DatabaseStorageManagerFactory) getMMBase().getStorageManagerFactory()).getDataSource().getConnection();
+                con = getMMBase().getConnection();
                 DatabaseMetaData meta = con.getMetaData();
 
                 String tableName = getMMBase().getBaseName() + "_" + builder.getTableName();
 
                 // If we use the new storage, we do it the 'cleaner' way
                 if (getMMBase().getStorageManagerFactory() != null) {
-                    tableName = (String) getMMBase().getStorageManagerFactory().getStorageIdentifier(builder);
+                    tableName = (String)getMMBase().getStorageManagerFactory().getStorageIdentifier(builder);
                 }
 
                 tableName = tableName.toUpperCase();
@@ -188,14 +193,12 @@ public class ComponentBuilder extends DidactorBuilder {
             } catch (SQLException e) {
                 log.error(e);
             } finally {
-                try {if (con != null) con.close(); } catch (Exception e) {}
-                try {if (stmt != null) stmt.close();} catch (Exception e) {}
+                getMMBase().closeConnection(con, stmt);
             }
 
-            Collection fields = parser.getFields();
-            Iterator it = fields.iterator();
-            while (it.hasNext()) {
-                FieldDefs fdef = (FieldDefs) it.next();
+            Vector fields = parser.getFieldDefs();
+            for (int i=0; i<fields.size(); i++) {
+                FieldDefs fdef = (FieldDefs)fields.get(i);
                 if (fdef.getDBState() == FieldDefs.DBSTATE_VIRTUAL) {
                     continue;
                 }
@@ -208,29 +211,23 @@ public class ComponentBuilder extends DidactorBuilder {
                     }
                     id = ((String)fdef.getStorageIdentifier()).toUpperCase();
                 } else {
-                    id = ("" + mmb.getStorageManagerFactory().getStorageIdentifier(id)).toUpperCase();
+                    id = mmb.getDatabase().getAllowedField(id).toUpperCase();
                 }
 
-                if (false && !columns.containsKey(id)) { // switched off, because it doesn't work well
-                    log.info("Builder '" + builderName + "' does not have field '" + id + "' in the database, creating it");
+                if (!columns.containsKey(id)) {
+                    log.error("Builder '" + builderName + "' does not have field '" + id + "' in the database, creating it");
                     try {
                         if (getMMBase().getStorageManagerFactory() != null) {
                             getMMBase().getStorageManagerFactory().getStorageManager().create(fdef);
                             // The verify() method of the database storage manager just made this field nonpersistent,
                             // we undo that damage here.
-                            FieldDefs cf = builder.getField(fdef.getName());
-                            if (cf != null) {
-                                cf.setDBState(FieldDefs.DBSTATE_PERSISTENT);
-                            } else {
-                                log.error("No such field " + fdef.getName());
-                            }
+                            builder.getField(fdef.getDBName()).setDBState(FieldDefs.DBSTATE_PERSISTENT);
                         } else {
                             // Old storage ... call is not implemented unfortunately
-                            builder.addField(fdef);
-                            //getMMBase().getDatabase().addField(builder, fdef.getDBName());
+                            getMMBase().getDatabase().addField(builder, fdef.getDBName());
                         }
                     } catch (Exception e) {
-                        log.error(e.getMessage(), e);
+                        log.error(e);
                     }
                 }
             }
@@ -261,16 +258,16 @@ public class ComponentBuilder extends DidactorBuilder {
             while (it.hasNext()) {
                 MMObjectNode appNode = (MMObjectNode)it.next();
                 String appname = appNode.getStringValue("name");
-                String path = "applications/";
-                if (! ResourceLoader.getConfigurationRoot().getResource(path + appname + ".xml").openConnection().getDoInput()) {
-                    log.warn("Application '" +  appname + "' is in the Versions table, but application XML file cannot be loaded.");
+                String path = MMBaseContext.getConfigPath() + File.separator + "applications" + File.separator;
+                if (!new File(path + appname + ".xml").exists()) {
+                    log.warn("Application '" + appname + "' is in the Versions table, but application XML file cannot be loaded.");
                     continue;
                 }
-                ApplicationReader app = new ApplicationReader(ResourceLoader.getConfigurationRoot().getInputSource(path + appname + ".xml"));
+                XMLApplicationReader app = new XMLApplicationReader(path + appname + ".xml");
 
-                List neededRelDefs = app.getNeededRelDefs();
+                Vector neededRelDefs = app.getNeededRelDefs();
                 for (int i=0; i<neededRelDefs.size(); i++) {
-                    Map rd = (Map)neededRelDefs.get(i);
+                    Hashtable rd = (Hashtable)neededRelDefs.get(i);
                     String sname = (String)rd.get("source");
                     String dname = (String)rd.get("target");
                     String direction = (String)rd.get("direction");
@@ -282,7 +279,7 @@ public class ComponentBuilder extends DidactorBuilder {
                         builder = getMMBase().getTypeDef().getIntValue(buildername);
                     }
                     if (builder <= 0) {
-                        builder = getMMBase().getInsRel().getObjectType();
+                        builder = getMMBase().getInsRel().oType;
                     }
 
                     int dir = 0;
@@ -309,10 +306,10 @@ public class ComponentBuilder extends DidactorBuilder {
                     }
                 }
 
-                List allowedRelations = app.getAllowedRelations();
+                Vector allowedRelations = app.getAllowedRelations();
                 for (int i=0; i<allowedRelations.size(); i++) {
                     boolean error = false;
-                    Map tr = (Map)allowedRelations.get(i);
+                    Hashtable tr = (Hashtable)allowedRelations.get(i);
                     String sname = (String)tr.get("from");
                     String dname = (String)tr.get("to");
                     String rname = (String)tr.get("type");
@@ -347,7 +344,7 @@ public class ComponentBuilder extends DidactorBuilder {
                 }
             }
         } catch (Exception e) {
-            log.error(e.getMessage(), e);
+            e.printStackTrace();
         }
     }
 }

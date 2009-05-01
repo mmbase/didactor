@@ -4,23 +4,19 @@
     <requirements>
         <requires name="DidactorCore" maintainer="didactor.nl" version="8" />
         <requires name="DidactorComponent" maintainer="didactor.nl" version="2" />
-        <requires name="DidactorEducation" maintainer="didactor.nl" version="20" />
+        <requires name="DidactorEducation" maintainer="didactor.nl" version="19" />
     </requirements>
 
     <neededbuilderlist>
-      <builder maintainer="didactor.nl" version="1">packages</builder>
    </neededbuilderlist>
 
-    <neededreldeflist>
-      <reldef source="related" target="related" direction="bidirectional" guisourcename="Related" guitargetname="Related" builder="insrel" />
-    </neededreldeflist>
+    <neededreldeflist />
 
     <allowedrelationlist>
-      <relation from="packages" to="educations" type="related" />
     </allowedrelationlist>
 
     <datasourcelist>
-      <datasource builder="components" path="DidactorScorm/components.xml" />
+        <datasource builder="components" path="DidactorScorm/components.xml" />
     </datasourcelist>
 
     <relationsourcelist />

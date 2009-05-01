@@ -5,7 +5,7 @@ import java.io.Writer;
 
 import javax.swing.tree.TreeModel;
 
-/**
+/** 
  * Class reponsible for rendering the HTML tree (+/-, lines, scripts etc.)
  * The HTML uses a number of gif's that are located using the ImgBaseUrl.
  * Gifs needed:<UL>
@@ -18,7 +18,7 @@ import javax.swing.tree.TreeModel;
  * <LI>vertline.gif</LI>
  * <LI>spacer.gif</LI>
  * </UL>
- *
+ * 
  */
 public class HTMLTree {
    private TreeCellRenderer cellRenderer = new DefaultCellRenderer();
@@ -36,7 +36,7 @@ public class HTMLTree {
    public HTMLTree(TreeModel model) {
       this.model = model;
    }
-
+   
    public HTMLTree(TreeModel model, String treeId) {
       this.model = model;
       this.treeId = treeId;
@@ -179,13 +179,10 @@ public class HTMLTree {
          out.print("/>");
       }
       getCellRenderer().render(node, level, imgBaseUrl, out);
-      out.print("</nobr><br/>");
+      out.println("<br>");
       if (!model.isLeaf(node)) {
          String style = expandAll ? "block" : "none";
          out.println("<div id='" + nodeName + "' style='display: " + style + "'>");
-         if(level==0) { // will be closed before <br/> (in the above statement)
-            preHtml += "<nobr>";
-         }
          // Render childs .....
          if (isLast) {
             preHtml += "<img src='" + buildImgUrl("tree_spacer.gif") + "' align='center' valign='middle' border='0'/>";
@@ -221,7 +218,7 @@ public class HTMLTree {
          out.print("<img src='"+buildImgUrl(imgName)+"' border='0' align='center' valign='middle' alt='" + altText + "'/>");
       }
       getCellRenderer().renderCreateNew(node, level, imgBaseUrl, createNewNumber, out);
-      out.println("</nobr><br/>");
+      out.println("<br>");
    }
    public void setCellRenderer(TreeCellRenderer cellRenderer) {
       this.cellRenderer = cellRenderer;

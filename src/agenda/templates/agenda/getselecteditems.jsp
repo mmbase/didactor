@@ -1,9 +1,8 @@
-<%-- what's wrong with using mm:related? --%>
-<mm:list nodes="$_node" path="agendas,eventrel,items" constraints="eventrel.stop > $startseconds AND eventrel.start < $endseconds">
-   <mm:import jspvar="itemNumber"><mm:field name="items.number"/></mm:import>
+<mm:list nodes="$agenda" path="agendas,eventrel,items" constraints="eventrel.stop > $startseconds AND eventrel.start < $endseconds">
+   <mm:field name="items.number" jspvar="itemNumber" vartype="String" write="false">
    <%
       linkedlist.add( itemNumber );
-      typeoflinked.put( itemNumber, typeof );
    %>
+   </mm:field>
 </mm:list>
 

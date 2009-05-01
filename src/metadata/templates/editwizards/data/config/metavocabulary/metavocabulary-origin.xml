@@ -1,19 +1,18 @@
 <?xml version="1.0"?>
 <!DOCTYPE wizard-schema PUBLIC "-//MMBase/DTD editwizard 1.0//EN" "http://www.mmbase.org/dtd/wizard-schema_1_0.dtd">
 <wizard-schema id="empty">
-  <title xml:lang="en">Metavocabulary Editor</title>
-  <title xml:lang="nl">Metadatawaarde Editor</title>
+  <title>Metavocabulary Editor</title>
 
   <action type="load">
     <field name="value" />
+    <relation destinationtype="metavocabulary" role="related" />
     <relation destinationtype="metavocabulary" role="posrel" />
-    <relation destinationtype="metavocabulary" role="constraints" />
-    <relation destinationtype="metadefinition" role="posrel" />
+    <relation destinationtype="metadefinition" role="related" />
   </action>
 
   <action type="create">
     <object type="metavocabulary">
-      <relation destination="{$origin}" role="posrel" createdir="source" />
+      <relation destination="{$origin}" role="related" createdir="source" />
     </object>
   </action>
 
@@ -28,13 +27,12 @@
   </steps>
 
   <form-schema id="step1">
-    <title xml:lang="nl">Metadatawaarde Invoeren</title>
-    <title xml:lang="en">Edit Metavocabulary</title>
+    <title>Metavocabulary Invoeren</title>
     <field name="value" />
-    <list extends="config/metavocabulary/metavocabulary-posrel-list.xml"/>
+    <list extends="config/metavocabulary/metavocabulary-related-list.xml"/>
     <list extends="config/metadefinition/metadefinition-inmetavocabulary.xml"/>
-    <list extends="config/metavocabulary/metavocabulary-constraint-list-source.xml"/>
-    <list extends="config/metavocabulary/metavocabulary-constraint-list-destination.xml"/>
+    <list extends="config/metavocabulary/metavocabulary-posrel-list-source.xml"/>
+    <list extends="config/metavocabulary/metavocabulary-posrel-list-destination.xml"/>
   </form-schema>
 
 </wizard-schema>

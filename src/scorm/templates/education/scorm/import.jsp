@@ -11,10 +11,10 @@
 <%@page import="uk.ac.reload.scormplayer.client.generic.contentpackaging.ScormPackageHandler"%>
 
 
-    <mm:log jspvar="log">
+
 <%
-   fileStoreDir = new File(directory, requestImportPackageID);
-   fileTempDir  = new File(directory, requestImportPackageID + "_");
+   fileStoreDir = new File(CommonUtils.fixPath(directory + File.separator + requestImportPackageID));
+   fileTempDir  = new File(CommonUtils.fixPath(directory + File.separator + requestImportPackageID + "_"));
    fileTempDir.mkdirs();
 
    String[] arrstrFiles = fileStoreDir.list();
@@ -25,7 +25,7 @@
    {// This is a check for internal server error during unpacking .zip because of
     // the archive already has been tested during upload
     // and it seems the archive should be ok
-      Unpack.unzipFileToFolder(new File(fileStoreDir, sFileName), fileTempDir.getAbsolutePath());
+      Unpack.unzipFileToFolder(CommonUtils.fixPath(fileStoreDir.getAbsolutePath() + File.separator + sFileName), CommonUtils.fixPath(fileTempDir.getAbsolutePath()));
    }
    catch(Exception e)
    {
@@ -34,35 +34,39 @@
 */
 
 
-   try {//Importing the package
-       log.info("Importing");
-       File fileManifest = new File(fileTempDir, CP_Core.MANIFEST_NAME);
-       XMLDocument xmlDocument = new XMLDocument();
-       xmlDocument.loadDocument(fileManifest);
-       
-       ScormPackageHandler test = new ScormPackageHandler(fileManifest, requestImportPackageID);
-       test.buildSettings();
-       
+   try
+   {//Importing the package
+      File fileManifest = new File(CommonUtils.fixPath(fileTempDir.getAbsolutePath()  + File.separator + CP_Core.MANIFEST_NAME));
+      XMLDocument xmlDocument = new XMLDocument();
+      xmlDocument.loadDocument(fileManifest);
+
+      ScormPackageHandler test = new ScormPackageHandler(fileManifest, requestImportPackageID);
+      test.buildSettings();
 
 
-       packageNode = cloud.getNode(requestImportPackageID);
-       packageNode.setValue("importdate", "" + ((new Date()).getTime() / 1000));
-       packageNode.commit();
-       
-       
-       msg = "Import successful";
 
-   } catch(Exception e) {
+      nodePackage = cloud.getNode(requestImportPackageID);
+      nodePackage.setValue("importdate", "" + ((new Date()).getTime() / 1000));
+      nodePackage.commit();
+
+
+      msg = "Import successful";
+
+   }
+   catch(Exception e)
+   {
       msg = "An Error during import: <br/>" + e.toString();
    }
 
 
 
-   try {//removing all temporal files
-       //  Unpack.deleteFolderIncludeSubfolders(fileTempDir.getAbsolutePath(), false);
-       //      Unpack.deleteFolderIncludeSubfolders(fileTempDir.getAbsolutePath(), true);
-   } catch(Exception e)     {//internal server error
+   try
+   {//removing all temporal files
+//      Unpack.deleteFolderIncludeSubfolders(fileTempDir.getAbsolutePath(), false);
+//      Unpack.deleteFolderIncludeSubfolders(fileTempDir.getAbsolutePath(), true);
+   }
+   catch(Exception e)
+   {//internal server error
    }
 
 %>
-       </mm:log>

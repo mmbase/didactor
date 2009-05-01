@@ -1,5 +1,5 @@
 <%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.1" prefix="mm" %>
 <%-- expires is set so renaming a folder does not show the old name --%>
 <mm:content postprocessor="none" expires="0">
 <mm:cloud jspvar="cloud" method="delegate" authenticate="asis">
@@ -94,7 +94,7 @@
       </di:hasrole>
 
       <%-- user may edit if he's the owner and this is not the assessment portfolio --%>
-      <mm:list nodes="$user" path="people,portfolios,folders" constraints="folders.number=$currentfolder and [portfolios.type] != 1" max="1">
+      <mm:list nodes="$user" path="people,portfolios,folders" constraints="folders.number=$currentfolder and portfolios.m_type != 1" max="1">
         <mm:import id="mayeditthis" reset="true">true</mm:import>
       </mm:list>
 
@@ -129,7 +129,7 @@
       <mm:import externid="title" reset="true"/>
       <mm:import externid="body" reset="true"/>
       <mm:isnotempty referid="title"><mm:isnotempty referid="body">
-        <mm:createnode type="postings" id="newmessage">
+        <mm:createnode type="forummessages" id="newmessage">
           <mm:setfield name="title"><mm:write referid="title"/></mm:setfield>
           <mm:setfield name="body"><mm:write referid="body"/></mm:setfield>
           <mm:setfield name="date"><%= System.currentTimeMillis()/1000 %></mm:setfield>
@@ -302,7 +302,7 @@
                 <tr>
                   <td></td>
                   <td>
-                    <mm:relatednodes type="postings" orderby="number" directions="UP">
+                    <mm:relatednodes type="forummessages" orderby="number" directions="UP">
                       <div style="border: solid black 1px; width: 500px; margin-bottom: 0.5em; padding: 0.25em 0.5em 0.25em 0.5em">
                         <b><mm:field name="title"/> (<mm:field name="date"><mm:time format="d/M/yyyy"/></mm:field>)</b>
                         <br />
