@@ -1,30 +1,42 @@
-<jsp:root version="2.0"
-          xmlns:jsp="http://java.sun.com/JSP/Page"
-          xmlns:mm="http://www.mmbase.org/mmbase-taglib-2.0"
-          xmlns:di="http://www.didactor.nl/ditaglib_1.0">
-  <jsp:directive.page session="false" />
-  <!--
-      Show all components that are related to the current provider.
-      There are several 'default' components that will be shown in the
-      standard layout: as hyperlinks from left to right. All other
-      components that are directly related to the provider object will
-      be placed in a dropdown box.
+<%--
+  Show all components that are related to the current provider. 
+  There are several 'default' components that will be shown in the
+  standard layout: as hyperlinks from left to right. All other
+  components that are directly related to the provider object will
+  be placed in a dropdown box.
 
-  -->
-  <mm:cloud method="asis">
+--%>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.0" prefix="mm" %>
+<mm:cloud jspvar="cloud" method="asis">
+<%@include file="/shared/setImports.jsp" %>
 
-    <div class="providerMenubar">
-      <mm:hasrank minvalue="didactor user">
-        <mm:node referid="provider">
-          <mm:functioncontainer>
-            <mm:param name="bar">provider</mm:param>
-            <mm:listfunction name="components">
+<div style="display:none;">
+    <mm:treeinclude write="true" page="/shared/onlineReporter.jsp" objectlist="$includePath" referids="$referids" />
+</div>
+ 
 
-            </mm:listfunction>
-          </mm:functioncontainer>
-        </mm:node>
-      </mm:hasrank>
-
-    </div>
-  </mm:cloud>
-</jsp:root>
+<div class="providerMenubar" style="white-space: nowrap">
+<mm:isgreaterthan referid="user" value="0">
+  <mm:import id="providerbaritems" vartype="list">search,pop,address,agenda,portfolio,email,workspace,education</mm:import>
+  
+  <%-- first show all the items in a predefined order --%>
+  <mm:stringlist referid="providerbaritems">
+    <mm:import id="pname"><mm:write /></mm:import>
+    <mm:node number="$provider">
+      <mm:relatedcontainer path="settingrel,components">
+        <mm:constraint field="components.name" referid="pname" />
+        <mm:related>
+          <mm:treeinclude page="/$pname/cockpit/menuitem.jsp" objectlist="$includePath" referids="$referids">
+            <mm:param name="name"><mm:write referid="pname" /></mm:param>
+            <mm:param name="number"><mm:field name="number" /></mm:param>
+            <mm:param name="type">div</mm:param>
+            <mm:param name="scope">provider</mm:param>
+          </mm:treeinclude>
+        </mm:related>
+      </mm:relatedcontainer>
+    </mm:node>
+    <mm:remove referid="pname" />
+  </mm:stringlist>
+</mm:isgreaterthan>
+</div>
+</mm:cloud>

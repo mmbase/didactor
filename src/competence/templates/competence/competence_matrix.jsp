@@ -3,17 +3,27 @@
 <%@ page import = "java.util.HashSet" %>
 <%@ page import = "java.util.TreeMap" %>
 
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" %>
-<%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.0" prefix="mm" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
-<mm:cloud method="delegate" jspvar="cloud">
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
 <%@include file="/shared/setImports.jsp"%>
 
 <mm:import id="wizardjsp"><mm:treefile write="true" page="/editwizards/jsp/wizard.jsp" objectlist="$includePath" /></mm:import>
+<mm:import id="listjsp"><mm:treefile write="true" page="/editwizards/jsp/list.jsp" objectlist="$includePath" /></mm:import>
 
 <%
    String sProfileID = request.getParameter("profile");
+   String bundleCompetence = null;
 %>
+<mm:write referid="lang_code" jspvar="sLangCode" vartype="String" write="false">
+   <%
+      bundleCompetence = "nl.didactor.component.competence.CompetenceMessageBundle_" + sLangCode;
+   %>
+</mm:write>
+
+
+<fmt:bundle basename="<%= bundleCompetence %>">
 <html>
 <head>
    <link rel="stylesheet" type="text/css" href='<mm:treefile page="/css/base.css" objectlist="$includePath" referids="$referids" />' />
@@ -84,18 +94,18 @@
    <table border="1" cellpadding="0" cellspacing="0" style="border:0px" class="titlefield2">
       <% // Let's paint the header of the table %>
       <tr>
-         <td colspan="2" style="border-color:#000000; background:#BDBDBD"><di:translate key="competence.competencematrixcompetences" /></td>
+         <td colspan="2" style="border-color:#000000; background:#BDBDBD"><fmt:message key="CompetenceMatrixCompetences"/></td>
          <td style="border:0px;">&nbsp;&nbsp;&nbsp;</td>
-         <td colspan="<%= hsetCoreTasks.size() %>" style="border-color:#000000; border-right:0px">&nbsp;<di:translate key="competence.competencematrixcoretasks" />&nbsp;</td>
+         <td colspan="<%= hsetCoreTasks.size() %>" style="border-color:#000000; border-right:0px">&nbsp;<fmt:message key="CompetenceMatrixCoreTasks"/>&nbsp;</td>
          <td style="border-color:#000000;border-top:0px; border-right:0px;">&nbsp;&nbsp;&nbsp;</td>
-         <td colspan="<%= hsetCoreAssignments.size() %>" style="border-color:#000000;border-right:0px">&nbsp;<di:translate key="competence.competencematrixcoreassignments" />&nbsp;</td>
-         <td style="border-color:#000000">&nbsp;<di:translate key="competence.competencematrixratings" />&nbsp;</td>
+         <td colspan="<%= hsetCoreAssignments.size() %>" style="border-color:#000000;border-right:0px">&nbsp;<fmt:message key="CompetenceMatrixCoreAssignments"/>&nbsp;</td>
+         <td style="border-color:#000000">&nbsp;<fmt:message key="CompetenceMatrixRatings"/>&nbsp;</td>
       </tr>
       <tr>
          <%
             String sProfileName = "";
          %>
-         <mm:import id="profile_name_template"><di:translate key="competence.competencematrixprofile" /></mm:import>
+         <mm:import id="profile_name_template"><fmt:message key="CompetenceMatrixProfile"/></mm:import>
          <mm:write referid="profile_name_template" write="false" jspvar="sTemplate" vartype="String">
             <mm:field name="name" jspvar="sProfile" vartype="String">
                <%
@@ -103,7 +113,7 @@
                %>
             </mm:field>
          </mm:write>
-         <td colspan="2" valign="top" style="border-color:#000000; border-top:0px; background:#BDBDBD"><a href="<mm:write referid="wizardjsp"/>?wizard=config/profile/profiles&objectnumber=<mm:field name="number"/>" style="text-decoration:none;" class="titlefield2"><%= sProfileName %></a></td>
+         <td colspan="2" valign="top" style="border-color:#000000; border-top:0px; background:#BDBDBD"><a href="<mm:write referid="wizardjsp"/>?wizard=profiles&objectnumber=<mm:field name="number"/>" style="text-decoration:none;" class="titlefield2"><%= sProfileName %></a></td>
          <td style="border-top:0px; border-left:0px; border-right:0px">&nbsp;</td>
          <%// Core tasks header
             if(hsetCoreTasks.size() > 0)
@@ -116,7 +126,7 @@
                         <mm:field name="name" jspvar="sName" vartype="String">
                            <mm:node number="progresstextbackground">
                               <mm:import id="template" reset="true">font(mm:fonts/didactor.ttf)+fill(000000)+pointsize(12)+gravity(NorthEast)+text(20,20,<%= sName.replaceAll("\\s+","_").replaceAll("\"","''") %>)+rotate(270)</mm:import>
-                              <td style="border-color:#000000;border-right:0px;border-top:0px"><a href="<mm:write referid="wizardjsp"/>?wizard=config/core/coretasks&objectnumber=<%= sCoreTaskID %>"><img border="0" src="<mm:image template="$template" />"/></a></td>
+                              <td style="border-color:#000000;border-right:0px;border-top:0px"><a href="<mm:write referid="wizardjsp"/>?wizard=coretasks&objectnumber=<%= sCoreTaskID %>"><img border="0" src="<mm:image template="$template" />"/></a></td>
                            </mm:node>
                         </mm:field>
                      </mm:node>
@@ -126,7 +136,7 @@
             else
             {//Header: click here to create a new one
                %>
-                     <td align="center" style="border-color:#000000; border-top:0px; border-right:0px"><di:translate key="competence.competencematrixaddnewcoretask" /></td>
+                     <td align="center" style="border-color:#000000; border-top:0px; border-right:0px"><fmt:message key="CompetenceMatrixAddNewCoreTask"/></td>
                <%
             }
          %>
@@ -142,7 +152,7 @@
                         <mm:field name="name" jspvar="sName" vartype="String">
                            <mm:node number="progresstextbackground">
                               <mm:import id="template" reset="true">font(mm:fonts/didactor.ttf)+fill(000000)+pointsize(12)+gravity(NorthEast)+text(20,20,<%= sName.replaceAll("\\s+","_").replaceAll("\"","''") %>)+rotate(270)</mm:import>
-                              <td style="border-color:#000000; border-right:0px; border-top:0px"><a href="<mm:write referid="wizardjsp"/>?wizard=config/core/coreassignments&objectnumber=<%= sCoreAssignmentID %>"><img border="0" src="<mm:image template="$template" />"/></a></td>
+                              <td style="border-color:#000000; border-right:0px; border-top:0px"><a href="<mm:write referid="wizardjsp"/>?wizard=coreassignments&objectnumber=<%= sCoreAssignmentID %>"><img border="0" src="<mm:image template="$template" />"/></a></td>
                            </mm:node>
                         </mm:field>
                      </mm:node>
@@ -152,7 +162,7 @@
             else
             {//Header: click here to create a new one
                %>
-                     <td align="center" style="border-color:#000000;border-top:0px;border-right:0px"><di:translate key="competence.competencematrixaddnewcoreassignment" /></td>
+                     <td align="center" style="border-color:#000000;border-top:0px;border-right:0px"><fmt:message key="CompetenceMatrixAddNewCoreAssignment"/></td>
                <%
             }
          %>
@@ -184,14 +194,11 @@
             </mm:field>
          </mm:node>
 
-         <mm:import jspvar="sCompetenceName"><mm:field name="competencies.name"/></mm:import>
-
 
          <tr>
             <td style="border-color:#000000; border-top:0px; border-right:0px"><%= iNumber %>.</td>
-            <td style="border-color:#000000; border-top:0px;"><a href="<mm:write referid="wizardjsp"/>?wizard=config/competency/competencies&objectnumber=<mm:field name="competencies.number"/>" style="text-decoration:none;" title="<di:translate key="competence.competencematrix_edit_competence_help" arg0="<%= sCompetenceName %>" />"><%= sCompetenceName %></a></td>
+            <td style="border-color:#000000; border-top:0px;"><a href="<mm:write referid="wizardjsp"/>?wizard=competencies&objectnumber=<mm:field name="competencies.number"/>" style="text-decoration:none;"><mm:field name="competencies.name"/></a></td>
             <td style="border-top:0px; border-left:0px; border-right:0px">&nbsp;</td>
-            <mm:node element="competencies" jspvar="nodeCompetence">
             <%
                if(hsetCoreTasks.size() > 0)
                {
@@ -199,7 +206,7 @@
                   {
                      String sCoreTaskID = (String) it.next();
 
-                     %><td align="center" style="border-color:#000000;border-right:0px;border-top:0px"><a href="<mm:write referid="wizardjsp"/>?wizard=config/insrel/insrel&objectnumber=<%=sInsrelID %>" title="<di:translate key="competence.competencematrix_edit_coretask_help" arg0="<%= sCompetenceName %>" />" style="text-decoration:none; width:100%"><%
+                     %><td align="center" style="border-color:#000000;border-right:0px;border-top:0px"><a href="<mm:write referid="wizardjsp"/>?wizard=insrel&objectnumber=<%=sInsrelID %>" style="text-decoration:none; width:100%"><%
 
                      if ((mapCoreTasks.get(sCoreTaskID) != null) && (((ArrayList) mapCoreTasks.get(sCoreTaskID)).contains(sCompetenceID)))
                      {
@@ -207,7 +214,7 @@
                      }
                      else
                      {
-                        %>&nbsp;&mdash;&nbsp;<%
+                        %>&nbsp;<%
                      }
 
                      %><a></td><%
@@ -215,7 +222,7 @@
                }
                else
                {//click here to create a new one
-                  %><td align="center" style="border-color:#000000; border-top:0px; border-right:0px"><a href="<mm:write referid="wizardjsp"/>?wizard=config/insrel/insrel&objectnumber=<%=sInsrelID %>" style="text-decoration:none; width:100%">&nbsp;</a></td><%
+                  %><td align="center" style="border-color:#000000; border-top:0px; border-right:0px"><a href="<mm:write referid="wizardjsp"/>?wizard=insrel&objectnumber=<%=sInsrelID %>" style="text-decoration:none; width:100%">&nbsp;</a></td><%
                }
                %>
                   <mm:last inverse="true">
@@ -231,7 +238,7 @@
                   {
                      String sCoreAssignmentID = (String) it.next();
 
-                     %><td align="center" style="border-color:#000000;border-right:0px;border-top:0px"><a href="<mm:write referid="wizardjsp"/>?wizard=config/insrel/insrel&objectnumber=<%=sInsrelID %>" title="<di:translate key="competence.competencematrix_edit_coreassignment_help" arg0="<%= sCompetenceName %>"/>" style="text-decoration:none; width:100%"><%
+                     %><td align="center" style="border-color:#000000;border-right:0px;border-top:0px"><a href="<mm:write referid="wizardjsp"/>?wizard=insrel&objectnumber=<%=sInsrelID %>" style="text-decoration:none; width:100%"><%
 
                      if ((mapCoreAssignments.get(sCoreAssignmentID) != null) && (((ArrayList) mapCoreAssignments.get(sCoreAssignmentID)).contains(sCompetenceID)))
                      {
@@ -239,7 +246,7 @@
                      }
                      else
                      {
-                        %>&nbsp;&mdash;&nbsp;<%
+                        %>&nbsp;<%
                      }
 
                      %><a></td><%
@@ -247,26 +254,20 @@
                }
                else
                {//click here to create a new one
-                  %><td align="center" style="border-color:#000000;border-top:0px;border-right:0px"><a href="<mm:write referid="wizardjsp"/>?wizard=config/insrel/insrel&objectnumber=<%=sInsrelID %>" style="text-decoration:none; width:100%">&nbsp;</a></td><%
+                  %><td align="center" style="border-color:#000000;border-top:0px;border-right:0px"><a href="<mm:write referid="wizardjsp"/>?wizard=insrel&objectnumber=<%=sInsrelID %>" style="text-decoration:none; width:100%">&nbsp;</a></td><%
                }
             %>
-            </mm:node>
             <td style="border-color:#000000;border-top:0px">
                <mm:node element="insrel">
                   <mm:import id="rating_is_empty" reset="true">true</mm:import>
 
-
-                  <nobr>
-                     <mm:relatednodes type="ratings" orderby="ratings.pos" directions="down">
-                        <mm:import id="rating_is_empty" reset="true">false</mm:import>
-                        <mm:import jspvar="sRatingName"><mm:field name="name"/></mm:import>
-                        <mm:first inverse="true">,</mm:first>
-                        <a href="<mm:write referid="wizardjsp"/>?wizard=config/rating/ratings&objectnumber=<mm:field name="number"/>" style="text-decoration:none;" title="<di:translate key="competence.competencematrix_edit_success_criteria_help" arg0="<%= sRatingName %>"/>"><mm:field name="name"/></a>
-                     </mm:relatednodes>
-                  </nobr>
+                  <mm:relatednodes type="ratings" orderby="ratings.pos" directions="down">
+                     <mm:import id="rating_is_empty" reset="true">false</mm:import>
+                     <a href="<mm:write referid="wizardjsp"/>?wizard=ratings&objectnumber=<mm:field name="number"/>" style="text-decoration:none; width:100%"><mm:field name="name"/></a>
+                  </mm:relatednodes>
 
                   <mm:compare referid="rating_is_empty" value="true">
-                     <a href="<mm:write referid="wizardjsp"/>?wizard=config/insrel/insrel&objectnumber=<%=sInsrelID %>" style="text-decoration:none; width:100%">&nbsp;</a>
+                     <a href="<mm:write referid="wizardjsp"/>?wizard=insrel&objectnumber=<%=sInsrelID %>" style="text-decoration:none; width:100%">&nbsp;</a>
                   </mm:compare>
                </mm:node>
             </td>
@@ -277,9 +278,10 @@
       </mm:list>
    </table>
 
-   <di:translate key="competence.competencematrixaddnewexplanation" />
+   <fmt:message key="CompetenceMatrixAddNewExplanation"/>
 
 </mm:node>
 </body>
 </html>
+</fmt:bundle>
 </mm:cloud>
