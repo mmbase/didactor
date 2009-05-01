@@ -1,45 +1,81 @@
 <%-- report either the current user's progress, or the one given by "student" argument --%>
+
 <mm:import externid="student" id="student" reset="true"><mm:write referid="user"/></mm:import>
 
+<%-- find user's copybook --%>
+
+<mm:import id="copybookNo" reset="true" />
 
 <mm:node number="$student" notfound="skip">
 
-   <%-- find user's copybook --%>
-   <mm:notpresent referid="copybookNo">
-      <%@include file="find_copybook.jsp"%>
-   </mm:notpresent>
+  <mm:relatedcontainer path="classrel,classes">
 
-   <%
-      int nof_tests= 0;
-      int nof_tests_passed= 0;
-   %>
+    <mm:related>
 
-   <mm:node number="$education" notfound="skip">
+      <mm:node element="classrel">
 
-      <mm:relatednodescontainer type="learnobjects" role="posrel">
-         <mm:sortorder field="posrel.pos" direction="up"/>
+        <mm:relatednodes type="copybooks">
 
-         <mm:tree type="learnobjects" role="posrel" searchdir="destination" orderby="posrel.pos" directions="up">
-            <mm:import id="nodetype" reset="true"><mm:nodeinfo type="type" /></mm:import>
+          <mm:remove referid="copybookNo"/>
 
-            <mm:compare referid="nodetype" value="tests">
+          <mm:field id="copybookNo" name="number" write="false"/>
+
+        </mm:relatednodes>
+
+      </mm:node>
+
+    </mm:related>  
+
+  </mm:relatedcontainer>
+
+
+<% int nof_tests= 0;
+
+   int nof_tests_passed= 0;
+
+%>
+
+<mm:node number="$education" notfound="skip">
+
+  <mm:relatednodescontainer type="learnobjects" role="posrel">
+
+    <mm:sortorder field="posrel.pos" direction="up"/>
+
+    <mm:tree type="learnobjects" role="posrel" searchdir="destination" orderby="posrel.pos" direction="up">
+
+
+
+      <mm:import id="nodetype" reset="true"><mm:nodeinfo type="type" /></mm:import>
+
+      <mm:compare referid="nodetype" value="tests">
+
+
+
             <% nof_tests++; %>
 
-               <mm:import id="testNo" reset="true"><mm:field name="number"/></mm:import>
+            <mm:import id="testNo" reset="true"><mm:field name="number"/></mm:import>
 
-               <%@include file="teststatus.jsp"%>
+            <%@include file="teststatus.jsp"%>
 
-               <mm:compare referid="teststatus" value="passed">
-                  <% nof_tests_passed++; %>
-               </mm:compare>
+            <mm:compare referid="teststatus" value="passed">
+
+                <% nof_tests_passed++; %>
+
             </mm:compare>
-         </mm:tree>
-      </mm:relatednodescontainer>
 
-      <%
-         double progress= (double)nof_tests_passed / (double)nof_tests;
-         if (nof_tests==0) progress=0;
-      %>
+      </mm:compare>
+
+    </mm:tree>
+
+  </mm:relatednodescontainer>
+
+<%
+
+  double progress= (double)nof_tests_passed / (double)nof_tests;
+  if (nof_tests==0) progress=0;
+//  System.err.println("tests_passed="+nof_tests_passed+", nof_tests="+nof_tests+", progress =" +progress);
+
+%>
 
 <mm:import id="progress" reset="true"><%=progress%></mm:import>
 <mm:import id="startflag" reset="true"><% if (nof_tests>0) { %>1<% } else {%>0<% } %></mm:import>
@@ -66,7 +102,7 @@
     <mm:import id="intake" reset="true">1</mm:import>
     <mm:relatednodescontainer type="learnobjects" role="posrel">
       <mm:sortorder field="posrel.pos" direction="up"/>
-      <mm:tree type="learnobjects" role="posrel" searchdir="destination" orderby="posrel.pos" directions="up">
+      <mm:tree type="learnobjects" role="posrel" searchdir="destination" orderby="posrel.pos" direction="up">
         <mm:related path="developcomp,competencies">
           <mm:field name="competencies.number" jspvar="thisCompetencie" vartype="String">
             <% neededCompetencies += thisCompetencie + ","; %>
@@ -102,3 +138,4 @@
 <% } %>
 </mm:compare>
 </mm:node>
+

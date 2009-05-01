@@ -34,39 +34,28 @@
   <mm:import id="inviteefname"><mm:field name="firstname"/> <mm:field name="lastname"/></mm:import>
   <mm:import id="to"><mm:field name="email"/></mm:import>
 </mm:node>
-<mm:node number="$student">
+<mm:node number="$user">
   <mm:import id="userfname"><mm:field name="firstname"/> <mm:field name="lastname"/></mm:import>
   <mm:import id="from"><mm:field name="email"/></mm:import>
 </mm:node>
 
 <mm:import id="link" jspvar="linktofeedback"><%= request.getRequestURL() 
-    %>?provider=<mm:write referid="provider"/>&popcmd=getinvite&nfeedback=<mm:write referid="newfeedback"/></mm:import>
+    %>?provider=<mm:write referid="provider"/>&command=getinvite&nfeedback=<mm:write referid="newfeedback"/></mm:import>
 
 <mm:node number="$currentcomp">
   <mm:import id="compname"><mm:field name="name"/></mm:import>
 </mm:node>
 
 <%-- some sending email code--%>
-<mm:import id="subject"><di:translate key="pop.sendinvitesubject" /></mm:import>
-<mm:import id="htmlbody"><HTML>
-<di:translate key="pop.sendinvitepart1" /> <mm:write referid="inviteefname"/><br/>
+<mm:import id="subject">Uitnodiging om feedback te geven.</mm:import>
+<mm:import id="body"><HTML>
+Beste <mm:write referid="inviteefname"/><br/>
 <br/>
-<b><mm:write referid="userfname"/></b> <di:translate key="pop.sendinvitepart2" /> <b><mm:write referid="compname"/></b> <di:translate key="pop.sendinvitepart3" /><br/>
+<b><mm:write referid="userfname"/></b> heeft je uitgenodigd om zijn competentie <b><mm:write referid="compname"/></b> te beoordelen.<br/>
 <br/>
-<%= querytext.replaceAll("\\n", "<br/>\n") %><br/>
+<%= querytext.replaceAll("\\n", "<br/>") %><br/>
 <br/>
-<di:translate key="pop.sendinvitepart4" /> <a href="<%= linktofeedback %>"><di:translate key="pop.sendinvitepart5" /></a><di:translate key="pop.sendinvitepart6" /><br/>
+Je kunt je beoordeling geven op <a href="<%= linktofeedback %>">link</a>.<br/>
 <br/>
-<di:translate key="pop.sendinvitepart7" /></HTML>
-</mm:import>
-<mm:import id="body">
-<di:translate key="pop.sendinvitepart1" /> <mm:write referid="inviteefname"/>
-
-<mm:write referid="userfname"/> <di:translate key="pop.sendinvitepart2" /> <mm:write referid="compname"/> <di:translate key="pop.sendinvitepart3" />
-<%= querytext %>
-
-<di:translate key="pop.sendinvitepart4" /> <%= linktofeedback %> <di:translate key="pop.sendinvitepart5" /><di:translate key="pop.sendinvitepart6" />
-
-<di:translate key="pop.sendinvitepart7" />
-</mm:import>
+Bij voorbaat dank.</HTML></mm:import>
 <%@include file="sendmail.jsp" %>

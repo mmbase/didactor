@@ -1,17 +1,16 @@
-  <mm:compare referid="popcmd" value="adddoc">
+  <mm:compare referid="command" value="adddoc">
     <%@ include file="adddoc.jsp" %>
-    <mm:remove referid="popcmd"/>
-    <mm:import id="popcmd">-1</mm:import>
+    <mm:remove referid="command"/>
+    <mm:import id="command">-1</mm:import>
   </mm:compare>
-  <mm:compare referid="popcmd" value="savedoc">
+  <mm:compare referid="command" value="savedoc">
     <%@ include file="savedoc.jsp" %>
-    <mm:remove referid="popcmd"/>
-    <mm:import id="popcmd"><mm:write referid="returnto"/></mm:import>
+    <mm:remove referid="command"/>
+    <mm:import id="command"><mm:write referid="returnto"/></mm:import>
   </mm:compare>
-  <mm:compare referid="popcmd" value="deldocs">
+  <mm:compare referid="command" value="deldocs">
     <%@ include file="deldocs.jsp" %>
-    <mm:import id="dummy" jspvar="dummy" vartype="String" reset="true"><di:translate key="pop.msgdelselecteddocdone" /></mm:import>
-    <% msgString = dummy; %>
-    <mm:remove referid="popcmd"/>
-    <mm:import id="popcmd">continue</mm:import>
+    <% msgString = "De geselecteerde documenten zijn verwijdert"; %>
+    <mm:remove referid="command"/>
+    <mm:import id="command">continue</mm:import>
   </mm:compare>

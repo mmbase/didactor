@@ -1,7 +1,6 @@
 <mm:import externid="addnode"/>
 <mm:node number="$addnode" notfound="skip">
-<mm:import id="dummy" jspvar="dummy" vartype="String" reset="true"><di:translate key="pop.msgitemadded" /></mm:import>
-<% msgString = dummy; %>
+<% msgString = "Item is toegevoegd"; %>
 <%@ include file="getmyfeedback.jsp" %>
 <% if (isEmpty) { %>
   <mm:remove referid="thisfeedback"/>
@@ -9,7 +8,7 @@
     <mm:createnode type="popfeedback" id="thisfeedback"/>
   </mm:maycreate>
   <mm:createrelation role="related" source="currentpop" destination="thisfeedback" />
-  <mm:createrelation role="related" source="thisfeedback" destination="student" />
+  <mm:createrelation role="related" source="thisfeedback" destination="user" />
   <mm:createrelation role="related" source="currentcomp" destination="thisfeedback" />
 <% } %>
 <mm:remove referid="isrelated"/>
