@@ -9,7 +9,6 @@
 <html>
 <head>
    <link rel="stylesheet" type="text/css" href="<mm:write referid="style_default" />" />
-   <link rel="stylesheet" type="text/css" href="<mm:treefile page="/css/base.css" objectlist="$includePath" referids="$referids" />" />
    <title>MMBob</title>
 </HEAD>
 <mm:import externid="forumid" />
@@ -27,7 +26,7 @@
 <table cellpadding="0" cellspacing="0" class="list" style="margin-top : 50px;" width="80%">
   <tr><th colspan="3" align="left" ><di:translate key="mmbob.wantdeletemessage1" />: <p />
     <mm:node referid="postingid">
-    <mm:field name="subject" /> <di:translate key="mmbob.wantdeletemessage2" /> <mm:field name="c_poster" /><p />
+    <mm:field name="subject" /> <di:translate key="mmbob.wantdeletemessage2" /> <mm:field name="poster" /><p />
     <mm:field name="html(body)" />
     </mm:node><p /><p />?</th></tr>
   <tr><td>

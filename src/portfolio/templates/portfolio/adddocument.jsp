@@ -1,9 +1,10 @@
 <%--
   This template adds a document to a folder.
---%><%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" 
-%><%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" 
-%><%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" 
-%><%-- expires is set so renaming a folder does not show the old name --%>
+--%>
+<%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.1" prefix="mm" %>
+
+<%-- expires is set so renaming a folder does not show the old name --%>
 <mm:content postprocessor="reducespace" expires="0">
 <mm:import externid="processupload">false</mm:import>
 <mm:cloud method="delegate" jspvar="cloud">
@@ -115,7 +116,9 @@
   <mm:compare referid="processupload" value="true">
 
     <%-- Get fields from multipart form --%>
-    <mm:import externid="_handle" from="multipart"/>
+    <mm:import externid="_handle_name" from="multipart"/>
+    <mm:import externid="_handle_type" from="multipart"/>
+    <mm:import externid="_handle_size" from="multipart"/>
     <mm:import externid="_title" from="multipart"/>
     <mm:import externid="_description" from="multipart"/>
     <mm:import externid="action1" from="multipart"/>
@@ -148,14 +151,18 @@
     <mm:createnode type="attachments" id="currentitem">
       <mm:setfield name="title"><mm:write referid="_title"/></mm:setfield>
       <mm:setfield name="description"><mm:write referid="_description"/></mm:setfield>
+      <mm:setfield name="filename"><mm:write referid="_handle_name"/></mm:setfield>
+      <mm:setfield name="mimetype"><mm:write referid="_handle_type"/></mm:setfield>
+      <mm:setfield name="size"><mm:write referid="_handle_size"/></mm:setfield>
       <mm:fieldlist fields="handle">
         <mm:fieldinfo type="useinput" />
       </mm:fieldlist>
+
+      <%-- set upload time --%>
+      <% long currentDate = System.currentTimeMillis() / 1000; %>
+      <mm:setfield name="date"><%=currentDate%></mm:setfield>
     </mm:createnode>
-    
-    <mm:import id="docId" jspvar="docId"><mm:write referid="currentitem" /></mm:import>    
-    <di:event eventtype="add_document" eventvalue="<%= docId %>" note="add document" />
-    
+
     <%-- create permissions --%>
     <mm:createnode type="portfoliopermissions" id="permissions">
          <%@include file="notifyteachers.jsp"%>

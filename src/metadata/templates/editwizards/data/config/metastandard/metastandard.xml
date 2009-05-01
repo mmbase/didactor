@@ -1,8 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE wizard-schema PUBLIC "-//MMBase/DTD editwizard 1.0//EN" "http://www.mmbase.org/dtd/wizard-schema_1_0.dtd">
 <wizard-schema id="empty">
-  <title xml:lang="nl">Metadatastandaard Editor</title>
-  <title xml:lang="en">Metadata standard Editor</title>
+  <title>Metadata-standaard Editor</title>
 
   <action type="create">
     <object type="metastandard" />
@@ -12,9 +11,9 @@
     <field name="name"/>
     <field name="description"/>
     <field name="isused"/>
+    <relation destinationtype="metadefinition" role="related" />
     <relation destinationtype="metadefinition" role="posrel" />
     <relation destinationtype="metastandard" role="posrel" />
-    <relation destinationtype="group_constraints" role="related" />
     <relation destinationtype="metadefinition" role="constraints" />
     <relation destinationtype="metavocabulary" role="include" />
     <relation destinationtype="metavocabulary" role="exclude" />
@@ -33,34 +32,30 @@
   </steps>
 
   <form-schema id="step1">
-    <title xml:lang="nl">Metastandaard invoeren</title>
-    <title xml:lang="en">Insert metastandard</title>
+    <title>Metastandaard invoeren</title>
 
     <field name="name" dtminlength="1">
-      <prompt xml:lang="nl">Metadatastandaard naam</prompt>
-      <prompt xml:lang="en">Metadata standard name</prompt>
+      <prompt>Metadata standaard naam</prompt>
     </field>
 
     <field name="description" dtminlength="0" dttype="text">
-      <prompt xml:lang="nl">Omschrijving van de metadatastandaard</prompt>
-      <prompt xml:lang="en">Description of the metadata standard</prompt>
+      <prompt>Omschrijving van de metadata standaard</prompt>
     </field>
 
     <field name="isused" ftype="enum">
       <prompt xml:lang="nl">Wordt gebruikt in metadataeditor?</prompt>
-      <prompt xml:lang="en">Is in use for metadata form?</prompt>
+      <prompt xml:lang="en">Is in use for metadateform</prompt>
       <optionlist select="boolean"></optionlist>
     </field>
 
 
-    <list destination="metadefinition"    role="posrel"        extends="config/metadefinition/metadefinition-posrel-list.xml" />
-    <list destination="metastandard"      role="posrel"        extends="config/metastandard/metastandard-posrel-destination-list.xml" />
-    <list destination="metadefinition"    role="constraints"   extends="config/metadefinition/metadefinition-specify-list.xml" />
-    <list destination="group_constraints" role="related"       extends="config/group_constraints/group_constraints-list.xml" />
+    <list destination="metadefinition" role="posrel"        extends="config/metadefinition/metadefinition-posrel-list.xml" />
+    <list destination="metastandard"   role="posrel"        extends="config/metastandard/metastandard-posrel-list.xml" />
+    <list destination="metadefinition" role="constraints"   extends="config/metadefinition/metadefinition-specify-list.xml" />
 
-    <list destination="metavocabulary"    role="include"       extends="config/metavocabulary/metavocabulary-include-list.xml" />
-    <list destination="metavocabulary"    role="exclude"       extends="config/metavocabulary/metavocabulary-exclude-list.xml" />
-    <list destination="synonym"           role="related"       extends="config/synonym/synonym-list.xml" />
+    <list destination="metavocabulary" role="include"       extends="config/metavocabulary/metavocabulary-include-list.xml" />
+    <list destination="metavocabulary" role="exclude"       extends="config/metavocabulary/metavocabulary-exclude-list.xml" />
+    <list destination="synonym"        role="related"       extends="config/synonym/synonym-list.xml" />
 
 
   </form-schema>

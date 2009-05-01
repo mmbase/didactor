@@ -1,19 +1,16 @@
 <!-- used in config/metadefinition/metadefinition.xml -->
 <!DOCTYPE list PUBLIC "-//MMBase/DTD editwizard 1.0//EN" "http://www.mmbase.org/dtd/wizard-schema_1_0.dtd">
-<list role="related" destination="metavocabulary" minoccurs="0" maxoccurs="*"
-   orderby="value" hidecommand="move-up|move-down">
-  <title xml:lang="nl">Metadata waarden die horen bij deze metadatadefinitie</title>
-  <title xml:lang="en">Metavocabulary that are related to this metadefinition</title>
+<list role="related" destination="metavocabulary" minoccurs="0" maxoccurs="*" orderby="value" hidecommand="move-up|move-down">
+  <title>Metavocabulary die horen bij deze metadatadefinitie</title>
   <item>
     <field name="value" ftype="data">
-      <prompt xml:lang="nl">Waarde</prompt>
-      <prompt xml:lang="en">Value</prompt>
+      <prompt>Waarde</prompt>
     </field>
     <field ftype="startwizard" wizardname="config/metavocabulary/metavocabulary" />
   </item>
   
   <action type="create">
-    <relation role="related">
+    <relation destinationtype="metavocabulary" role="related">
       <object type="metavocabulary" />
     </relation>
   </action>
@@ -21,13 +18,10 @@
   <command name="startwizard" inline="true" wizardname="config/metavocabulary/metavocabulary" objectnumber="new" />
 
   <command name="search" nodepath="metavocabulary" fields="value" age="-1" orderby="number" directions="down" >
-    <prompt xml:lang="nl">Zoeken naar metadatawaarden</prompt>
-    <prompt xml:lang="en">Search on metavocabularies</prompt>
+    <prompt>Zoeken naar tekenreeksen</prompt>
     <search-filter>
-      <name xml:lang="nl">Waarde bevat</name>
-      <name xml:lang="en">Value contains</name>
+      <name>Waarde bevat</name>
       <search-fields>value</search-fields>
     </search-filter>
   </command>
-
 </list>

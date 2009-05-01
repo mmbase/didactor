@@ -1,4 +1,4 @@
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm"%>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.1" prefix="mm"%>
 
 <%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
 
@@ -204,6 +204,7 @@ dropnumbers['<mm:write referid="question"/>'] = new Array();
 
   <p/>
 
+  <mm:import id="questiontype"><mm:field name="type"/></mm:import>
 
   <mm:import id="numdragquestions" jspvar="numDragQuestions" vartype="Integer"><mm:countrelations role="dragimagerel"/></mm:import>
 

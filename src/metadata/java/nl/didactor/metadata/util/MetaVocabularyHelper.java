@@ -6,9 +6,6 @@ import org.mmbase.bridge.*;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
-import nl.didactor.component.metadata.constraints.Constraint;
-import nl.didactor.component.metadata.constraints.Error;
-
 public class MetaVocabularyHelper extends MetaHelper {
 
    private static Logger log = Logging.getLoggerInstance(MetaVocabularyHelper.class);
@@ -18,178 +15,42 @@ public class MetaVocabularyHelper extends MetaHelper {
    }
 
    public MetaVocabularyHelper() {
+      setReason("number_of_vocabularies_should_match_min_max");
    }
 
-
-
-   public ArrayList check(Node nodeMetaDefinition, Constraint constraint, Node nodeMetaData){
-
-       ArrayList arliResult = new ArrayList();
-
-       int iRelatedMetaValues = nodeMetaData.getRelatedNodes("metavocabulary").size();
-
-       if(constraint.getEvent() == constraint.EVENT_VOCABULARY_TO_VOCABULARY_RELATION){
-           arliResult.addAll(vocabularyToVocabulary_ConstraintProcessor(nodeMetaDefinition, nodeMetaData, constraint));
-       }
-       else{
-
-           if(constraint.getType() == constraint.FORBIDDEN){
-               if(iRelatedMetaValues > 0){
-                   Error error = new Error(nodeMetaDefinition, Error.FORBIDDEN, constraint);
-                   arliResult.add(error);
-               }
-           }
-
-           if(constraint.getType() == constraint.MANDATORY){
-               if(iRelatedMetaValues == 0){
-                   Error error = new Error(nodeMetaDefinition, Error.MANDATORY, constraint);
-                   arliResult.add(error);
-               }
-           }
-
-           if(constraint.getType() == constraint.LIMITED){
-               if((iRelatedMetaValues < constraint.getMin()) || (iRelatedMetaValues > constraint.getMax())){
-                   Error error = new Error(nodeMetaDefinition, Error.LIMITED, constraint);
-                   arliResult.add(error);
-               }
-           }
-       }
-
-
-       if(constraint.getConstraintsChain() != null){
-           ArrayList arliConstraintsChain = constraint.getConstraintsChain();
-           for(Iterator it = arliConstraintsChain.iterator(); it.hasNext(); ){
-               Constraint chainConstraint = (Constraint) it.next();
-               arliResult.addAll(check(nodeMetaDefinition, chainConstraint, nodeMetaData));
-           }
-       }
-
-       return arliResult;
+   public boolean check(Cloud cloud, String sCurrentNode, String sMetadefNode, boolean isRequired) {
+      Node metadefNode =  cloud.getNode(sMetadefNode);
+      int iMin = getMin(metadefNode, isRequired);
+      int iMax = getMax(metadefNode);
+      int iCounter = sizeOfRelatedMetaValue(cloud,sCurrentNode,sMetadefNode);
+      boolean bValid = (iCounter >= iMin) && (iCounter <= iMax);
+      if(!bValid) {
+         log.debug(sCurrentNode + " has range ["  + iMin + "," + iMax + "] but " + iCounter + " metavocabularies for metadefinition " + sMetadefNode);
+      }
+      return bValid;
    }
 
+   public boolean check(Cloud cloud, String[] arrstrParameters, Node metadefNode, boolean isRequired, ArrayList arliSizeErrors) {
+      boolean bValid = true;
+      int iMin = getMin(metadefNode,isRequired);
+      int iMax = getMax(metadefNode);
+      if ((arrstrParameters.length > 1) || (!arrstrParameters[0].equals(MetaDataHelper.EMPTY_VALUE))) {
 
+         if( (iMax < arrstrParameters.length) || (iMin > arrstrParameters.length)) {
 
+            bValid = false;
+         }
+      } else if(iMin>0) {
 
-
-
-   public ArrayList check(Node nodeMetaDefinition, Constraint constraint, String[] arrstrParameters){
-       ArrayList arliResult = new ArrayList();
-
-       if(constraint.getEvent() == constraint.EVENT_VOCABULARY_TO_VOCABULARY_RELATION){
-           arliResult.addAll(vocabularyToVocabulary_ConstraintProcessor(nodeMetaDefinition, constraint, arrstrParameters));
-       }
-       else{
-           if(constraint.getType() == constraint.FORBIDDEN){
-               if((arrstrParameters.length != 0) && (!arrstrParameters[0].equals(MetaDataHelper.EMPTY_VALUE))){
-                   Error error = new Error(nodeMetaDefinition, Error.FORBIDDEN, constraint);
-                   arliResult.add(error);
-               }
-           }
-
-           if(constraint.getType() == constraint.MANDATORY){
-               if((arrstrParameters.length == 0) || (arrstrParameters[0].equals(MetaDataHelper.EMPTY_VALUE))){
-                   Error error = new Error(nodeMetaDefinition, Error.MANDATORY, constraint);
-                   arliResult.add(error);
-               }
-           }
-
-           if(constraint.getType() == constraint.LIMITED){
-               if((arrstrParameters.length < constraint.getMin()) || (arrstrParameters.length > constraint.getMax())){
-                   Error error = new Error(nodeMetaDefinition, Error.LIMITED, constraint);
-                   arliResult.add(error);
-               }
-           }
-       }
-
-       if(constraint.getConstraintsChain() != null){
-           ArrayList arliConstraintsChain = constraint.getConstraintsChain();
-           for(Iterator it = arliConstraintsChain.iterator(); it.hasNext(); ){
-               Constraint chainConstraint = (Constraint) it.next();
-               arliResult.addAll(check(nodeMetaDefinition, chainConstraint, arrstrParameters));
-           }
-       }
-
-       return arliResult;
+         bValid = false;
+      }
+      if(!bValid) {
+         arliSizeErrors.add(metadefNode.getStringValue("number"));
+         log.debug("For " + metadefNode.getStringValue("name") + " at least "
+            + iMin + " and at most " + iMax + " values have to be selected.");
+      }
+      return bValid;
    }
-
-
-
-
-
-   /**
-    * Do all job about vocabulary - vocabulary constraint
-    * @param nodeMetaDefinition Node
-    * @param constraint Constraint
-    * @param arrstrParameters String[]
-    * @return ArrayList
-    */
-   private ArrayList vocabularyToVocabulary_ConstraintProcessor(Node nodeMetaDefinition, Constraint constraint, String[] arrstrParameters){
-       ArrayList arliResult = new ArrayList();
-
-       Node[] value = (Node[]) constraint.getEventObject();
-
-       if(constraint.getType() == Constraint.FORBIDDEN){
-           if(isParametersContainNode(arrstrParameters, (Node) value[0])){
-               Error error = new Error(nodeMetaDefinition, Error.FORBIDDEN, constraint);
-               arliResult.add(error);
-           }
-       }
-       if((constraint.getType() == Constraint.MANDATORY) || (constraint.getType() == Constraint.LIMITED)){
-           if(!isParametersContainNode(arrstrParameters, (Node) value[0])){
-               Error error = new Error(nodeMetaDefinition, Error.MANDATORY, constraint);
-               arliResult.add(error);
-           }
-       }
-
-       return arliResult;
-   }
-
-
-   private ArrayList vocabularyToVocabulary_ConstraintProcessor(Node nodeMetaDefinition, Node nodeMetaData, Constraint constraint){
-       ArrayList arliResult = new ArrayList();
-
-       Node[] value = (Node[]) constraint.getEventObject();
-
-       if(constraint.getType() == Constraint.FORBIDDEN){
-           if(isVocabularyLinked(nodeMetaData, (Node) value[0])){
-               Error error = new Error(nodeMetaDefinition, Error.FORBIDDEN, constraint);
-               arliResult.add(error);
-           }
-       }
-       if((constraint.getType() == Constraint.MANDATORY) || (constraint.getType() == Constraint.LIMITED)){
-           if(!isVocabularyLinked(nodeMetaData, (Node) value[0])){
-               Error error = new Error(nodeMetaDefinition, Error.MANDATORY, constraint);
-               arliResult.add(error);
-           }
-       }
-
-       return arliResult;
-   }
-
-
-
-
-   /**
-    * Looks for the specific node in the parameters list
-    * @param arrstrParameters String[]
-    * @param node Node
-    * @return boolean
-    */
-   private boolean isParametersContainNode(String[] arrstrParameters, Node node){
-       for(int f = 0; f < arrstrParameters.length; f++){
-           if (arrstrParameters[f].equals("" + node.getNumber())){
-               return true;
-           }
-       }
-       return false;
-   }
-
-   private boolean isVocabularyLinked(Node nodeMetaData, Node nodeMetaVocabulary){
-      return nodeMetaData.getRelatedNodes("metavocabulary").contains(nodeMetaVocabulary);
-   }
-
-
-
 
    public void copy(Cloud cloud, Node metaDataNode, Node defaultNode) {
 
@@ -234,29 +95,4 @@ public class MetaVocabularyHelper extends MetaHelper {
       }
    }
 
-
-
-
-   /**
-    * Return false if there are any selected metavocabularies
-    *
-    * Don't pay attention to any other constraints
-    * @param nodeMetaDefinition Node
-    * @param nodeObject Node
-    * @return boolean
-    */
-
-   public boolean isEmpty(Node nodeMetaDefinition, Node nodeObject){
-       log.debug("isEmpty() for MetaDefinition=" + nodeMetaDefinition.getNumber() + ", Object=" + nodeObject.getNumber());
-       Cloud cloud = nodeMetaDefinition.getCloud();
-
-       NodeList nl = cloud.getList("" + nodeMetaDefinition.getNumber(),
-                          "metadefinition,metavocabulary,metadata,object",
-                          "metadefinition.number",
-                          "object.number=" + nodeObject.getNumber(),
-                          null, null, null, true);
-
-
-       return !(nl.size() > 0);
-   }
 }

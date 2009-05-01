@@ -36,8 +36,8 @@
 
 <form-schema id="edit_competencies">
    <field name="name" dtminlength="0" dtmaxlength="255">
-      <prompt xml:lang="nl">Competentie titel</prompt>
-      <prompt xml:lang="en">Competencie name</prompt>
+      <prompt xml:lang="nl">naam</prompt>
+      <prompt xml:lang="en">name</prompt>
    </field>
 
    <field name="description" ftype="text" rows="8">
@@ -59,7 +59,9 @@
             <search-fields>name</search-fields>
          </search-filter>
       </command>
-      <command name="startwizard" inline="true" wizardname="config/tests/tests" objectnumber="new">        
+      <command name="startwizard" inline="true" wizardname="config/tests/tests" objectnumber="new">
+         <prompt xml:lang="nl">Nieuw</prompt>
+         <prompt xml:lang="en">New</prompt>        
       </command>
 
       <action type="create">
@@ -84,6 +86,8 @@
          </search-filter>
       </command>
       <command name="startwizard" inline="true" wizardname="config/competency/competencetypes" objectnumber="new">
+         <prompt xml:lang="nl">Nieuw</prompt>
+         <prompt xml:lang="en">New</prompt>
       </command>
 
       <action type="create">

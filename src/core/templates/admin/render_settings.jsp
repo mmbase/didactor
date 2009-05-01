@@ -1,6 +1,6 @@
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.1" prefix="mm" %>
 <%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
-<%@page import="nl.didactor.component.Component,java.util.List" %>
+<%@page import="nl.didactor.component.Component,java.util.Vector" %>
 <%-- expires is 0; show always new content --%>
 <mm:content postprocessor="reducespace" expires="0">
 <mm:cloud method="delegate" jspvar="cloud">
@@ -9,7 +9,7 @@
   <%
     Component[] comps = Component.getComponents();
     for (int i=0; i<comps.length; i++) {
-      List settings = comps[i].getSettings("people");
+      Vector settings = comps[i].getSettings("people");
       for (int j=0; j<settings.size(); j++) {
         Component.Setting setting = (Component.Setting)settings.get(j);
         if (setting.getType() == Component.Setting.TYPE_BOOLEAN) {
@@ -17,8 +17,8 @@
           <tr>
             <td/>
             <td>
-              <input type="checkbox" name="<%=comps[i].getName()%>-<%=setting.getName()%>"
-                <di:ifsetting component="<%=comps[i].getName()%>" setting="<%=setting.getName()%>">checked="checked"</di:ifsetting>
+              <input type="checkbox" name="<%=comps[i].getName()%>-<%=setting.getName()%>" 
+                <di:ifsetting component="<%=comps[i].getName()%>" setting="<%=setting.getName()%>">checked</di:ifsetting>
               />
               <di:translate key="<%=setting.getPrompt()%>" />
             </td>
