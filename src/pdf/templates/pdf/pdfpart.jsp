@@ -1,14 +1,7 @@
-<%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm"%>
-
-<%@page import="java.io.UnsupportedEncodingException" %>
-<%@page import="java.io.StringBufferInputStream" %>
-<%@page import="java.io.ByteArrayOutputStream" %>
-<%@page import="java.io.PrintWriter" %>
-<%@page import="org.w3c.tidy.Tidy" %>
-
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.0" prefix="mm"%>
 <mm:content postprocessor="reducespace" expires="0">
-<%--
+<%-- 
     we need to get the parameters from the request by hand
     for some reason mmbase keeps the old versions if we use
     referid (even with from="parameters" !)
@@ -47,191 +40,49 @@
 
 <mm:present referid="display">
 
-   <%// Here we are makeing a whole text part %>
-   <mm:import jspvar="text" reset="true">
-      <%// The title of page %>
-      <mm:field name="showtitle">
-         <mm:compare value="1">
-            <mm:field name="name" jspvar="sTitle" vartype="String" write="false">
-               <%= "<h"+level.toString()+" style=\"font-size: "+((5-level.intValue())*2+11)+"px\">" %><mm:field name="title"/><mm:field name="name"/><%= "</h"+level.toString()+">" %>
-               <br/>
-            </mm:field>
-         </mm:compare>
-      </mm:field>
+    <%= "<h"+level.toString()+">" %><mm:field name="title"/><mm:field name="name"/><%= "</h"+level.toString()+">" %>
+    <br/>
+    <mm:import jspvar="text" reset="true"><mm:field name="intro" escape="none"/><mm:field name="text" escape="none"/></mm:import>
+ <%
+//    System.err.println("Cleaning up '"+text+"'");
+        //
+        // remove some of the annoying html that messes up the PDFs
+        // 
+        text = text.replaceAll("</?(font|style)[^>]*>","");
+        text = text.replaceAll("(?<=[^>]\\s)+(width|height|style|align)=\\s*(\"[^\"]*\"|'[^']*'|\\S+)","");
+        text = text.replaceAll("<(t[dh][^>]*)>","<$1 width=\"100%\">");
+        text = text.replaceAll("<br>","<br/>");
+        
+/*        if (nodeType.equals("pages") && "2".equals(layout)) {
+            text = text.replaceAll("<table[^>]*>","<table border='1' cellpadding='4' width='50%' align='left'>");
+        }
+        else if (nodeType.equals("pages") && "3".equals(layout)) {
+            text = text.replaceAll("<table[^>]*>","<table border='1' cellpadding='4' width='50%' align='right'>");
+        }
+        else { */
+            text = text.replaceAll("<table[^>]*>","<table border='1' cellpadding='4' width='100%'>");
+//        }
+        text = text.replaceAll("<p\\s*/>","");
+        text = text.replaceAll("<p\\s*>\\s*</p>\\s*","");
+        text = text.replaceFirst("\\A\\s*","");
+        text = text.replaceFirst("\\s*\\z","");
+        if (!text.startsWith("<p>")) {
+            text = "<p>"+text;
+        }
+        if (!text.endsWith("</p>")) {
+            text = text+"</p>";
+        }
 
-      <mm:field name="intro" escape="none" jspvar="sRawIntro" vartype="String">
-         <%= doCleaning(sRawIntro) %>
-      </mm:field>
-      <mm:field name="text" escape="none" jspvar="sRawText" vartype="String">
-         <%= doCleaning(sRawText) %>
-      </mm:field>
-      
-     <%
-         String baseUrl = getServletContext().getInitParameter("internalUrl");
-         if (baseUrl == null)
-         {
-            throw new ServletException("Please set 'internalUrl' in the web.xml!");
-         }
-      %>
-      <%// Go through all paragraphs %>
-         <mm:related path="posrel,paragraphs" orderby="posrel.pos" directions="UP">
-            <mm:first>
-               <table  border="0" cellpadding="0" cellspacing="0" width="100%">
-            </mm:first>
-            <mm:first inverse="true">
-               <% //This is a padding for the next paragraph %>
-            </mm:first>
-            <mm:node element="paragraphs">
-               <tr>
-                  <td>
-                     <mm:field name="showtitle">
-                        <mm:compare value="1">
-                           <%= "<h"+level.toString()+" style=\"font-size: "+((5-level.intValue())*2+11)+"px\">" %><mm:field name="title"/><mm:field name="name"/><%= "</h"+level.toString()+">" %>
-                        </mm:compare>
-                     </mm:field>
-                     <mm:field name="body" escape="none" jspvar="sRawHTML" vartype="String">
-                        <%= doCleaning(sRawHTML) %>
-                     </mm:field>
+        text = text.replaceAll("<p>\\s*<table","<table");
+        text = text.replaceAll("</table>\\s*</p>","</table>");
+//    System.err.println("Result: '"+text+"'");
 
+%>  
+    <mm:compare referid="node_type" value="learnblocks">
+       <%= text %>
+    </mm:compare>
 
-                     <% // see the types/images_position at the editwizards
-                           // <option id="1">rechts (oorspronkelijk formaat)</option>
-                           // <option id="2">links (oorspronkelijk formaat)</option>
-                           // <option id="3">rechts klein</option>
-                           // <option id="4">links klein</option>
-                           // <option id="5">rechts medium</option>
-                           // <option id="6">links medium</option>
-                           // <option id="7">volle breedte</option>
-                     %>
-                     <mm:related path="pos2rel,images"  max="1">
-                        <mm:field name="pos2rel.pos1" jspvar="posrel_pos" vartype="Integer" write="false">
-                              <mm:node element="images">
-                                 <%
-                                 int image_position = 3;
-                                 try
-                                 {
-                                    image_position = posrel_pos.intValue();
-                                 }
-                                 catch (Exception e)
-                                 {
-                                 }
-
-                                 if (image_position == 7)
-                                 {
-                                    %><img src="<%= baseUrl %>/img.db?<mm:field name="number"/>" border="0"/><%
-                                 }
-                                 else
-                                 {
-                                    String sImageTemplate = "";
-                                    // *** medium or small image ****
-                                    if((2 < image_position) && (image_position < 5))
-                                    {
-                                       sImageTemplate = "+s(60)";
-                                    }
-                                    if((4 < image_position) && (image_position<7))
-                                    {
-                                       sImageTemplate = "+s(180)";
-                                    }
-                                    String sAlign = "";
-                                    if((image_position % 2) == 1)
-                                    {
-                                       sAlign += " align=\"right\" ";
-                                    }
-                                    %>
-                                       <mm:import jspvar="imageUrl" reset="true"><mm:image template="<%= sImageTemplate %>"/></mm:import>
-                                    <%
-                                    imageUrl = baseUrl + imageUrl.substring(imageUrl.indexOf("/img.db"));
-                                    %><img src="<%= imageUrl %>" border="0" <%= sAlign %> /><%
-                                 }
-                              %>
-
-                           </mm:node>
-                        </mm:field>
-                     </mm:related>
-                  </td>
-               </tr>
-               <tr>
-                  <td>
-                     <mm:import id="there_is_additional_information" reset="true">false</mm:import>
-                     <mm:related path="posrel,attachments">
-                        <mm:import id="there_is_additional_information" reset="true">true</mm:import>
-                     </mm:related>
-                     <mm:related path="posrel,urls">
-                        <mm:import id="there_is_additional_information" reset="true">true</mm:import>
-                     </mm:related>
-
-                     <mm:compare referid="there_is_additional_information" value="true">
-                        <br/>
-                        Meer informatie
-
-                        <table border="0" align="left" width="100%" cellpadding="0" cellspacing="0">
-                           <mm:related path="posrel,urls" orderby="posrel.pos">
-                              <tr>
-                                 <td></td>
-
-                                 <%
-                                    String link ="";
-                                 %>
-                                 <mm:node element="urls">
-                                    <mm:field name="url" jspvar="url" vartype="String" write="false">
-                                       <%
-                                          if(url.indexOf("http://") > -1)
-                                          {
-                                             link = url;
-                                             %>
-                                                <td><img src="<%= baseUrl %>/education/gfx/http_url.gif" align="right" title="" alt=""/></td>
-                                                <td width="60%">&nbsp;websites:</td>
-                                                <td width="100%"><%= url %></td>
-                                             <%
-                                          }
-                                          if(url.indexOf("mailto:") > -1)
-                                          {
-                                             link = url;
-                                             %>
-                                                <mm:field name="name" jspvar="name" vartype="String" write="false">
-                                                   <mm:isnotempty>
-                                                   <%
-                                                      link += "?subject=" + name;
-                                                   %>
-                                                   </mm:isnotempty>
-                                                </mm:field>
-                                                <td><img src="<%= baseUrl %>/education/gfx/email_url.gif" align="right" title="" alt=""/></td>
-                                                <td width="60%">&nbsp;email:</td>
-                                                <td width="100%"><%= url %></td>
-                                             <%
-                                          }
-                                       %>
-                                    </mm:field>
-                                 </mm:node>
-
-                              </tr>
-                           </mm:related>
-
-
-                           <mm:related path="posrel,attachments" orderby="posrel.pos">
-                              <tr>
-                                 <td></td>
-                                 <td><img src="<%= baseUrl %>/education/gfx/http_url.gif" align="right" title="" alt=""/></td>
-                                 <td width="60%">&nbsp;download:</td>
-                                 <td width="100%">
-                                    <mm:node element="attachments">
-                                       <mm:field name="filename" />
-                                    </mm:node>
-                                 </td>
-                              </tr>
-                           </mm:related>
-                        </table>
-                     </mm:compare>
-                  </td>
-               </tr>
-            </mm:node>
-            <mm:last>
-                </table>
-            </mm:last>
-         </mm:related>
-   </mm:import>
-
-
+    <mm:compare referid="node_type" value="pages">
 
         <mm:countrelations type="images">
             <mm:isgreaterthan value="0">
@@ -265,80 +116,93 @@
             </mm:islessthan>
         </mm:countrelations>
 
-
-        <mm:relatednodes type="attachments" role="posrel" orderby="posrel.pos">
-          <p>
-            <mm:field name="showtitle">
-              <mm:compare value="1">
-                <b><mm:field name="title"/></b><br>
-              </mm:compare>
-            </mm:field>
-            <i><mm:field name="description" escape="inline"/></i>
-            <br>
+       
+        <mm:relatednodes type="attachments">
+            <br/>
+            <p>
+            <mm:field name="title"/>
+            <br/>
+            <mm:field name="description"/>
+            <br/>
             http://<mm:write referid="providerurl"/>/attachment.db?<mm:field name="number"/>
-          </p>
-          <br>
+            </p>
         </mm:relatednodes>
 
-        <mm:relatednodes type="audiotapes" role="posrel" orderby="posrel.pos">
-          <p>
-            <mm:field name="showtitle">
-              <mm:compare value="1">
-                <b><mm:field name="title"/></b><br>
-              </mm:compare>
-            </mm:field>
-            <i><mm:field name="subtitle"/></i><br>
-            <mm:field name="intro" escape="inline"/>
-          </p>
-          <mm:field name="body" escape="p"/>
-          <p>
-            <mm:field name="url" />
-          </p>
-          <br>
+        <mm:relatednodes type="audiotapes">
+        <br/>
+        <p>
+        <mm:field name="title"/>
+        <br/>
+        <mm:field name="subtitle"/>
+        <br/>
+        <mm:field name="playtime"/>
+        <br/>
+        <mm:field name="intro"/>
+        <br/>
+        <mm:field name="body"/>
+        <br/>
+        <mm:field name="url" />
+        </p>
         </mm:relatednodes>
 
-        <mm:relatednodes type="videotapes" role="posrel" orderby="posrel.pos">
-          <p>
-            <mm:field name="showtitle">
-              <mm:compare value="1">
-                <b><mm:field name="title"/></b><br>
-              </mm:compare>
-            </mm:field>
-            <i><mm:field name="subtitle"/></i><br>
-            <mm:field name="intro" escape="inline"/>
-          </p>
-          <mm:field name="body" escape="p"/>
-          <p>
-            <mm:field name="url" />
-          </p>
-        </mm:relatednodes>
-
-        <mm:relatednodes type="urls" role="posrel" orderby="posrel.pos">
-          <br/>
-          <mm:field name="showtitle">
-            <mm:compare value="1">
-              <b><mm:field name="name"/></b><br>
-            </mm:compare>
-          </mm:field>
-          <p>
-            <i><mm:field name="description" escape="inline"/></i>
+        <mm:relatednodes type="videotapes">
+        <br/>
+        <p>
+            <mm:field name="title"/>
+            <br/>
+            <mm:field name="subtitle"/>
+            <br/>
+            <mm:field name="playtime"/>
+            <br/>
+            <mm:field name="intro"/>
+            <br/>
+            <mm:field name="body"/>
             <br/>
             <mm:field name="url" />
-          </p>
-          <br>
+        </p>
         </mm:relatednodes>
 
+        <mm:relatednodes type="urls">
+        <br/>
+        <p>
+            <mm:field name="name"/>
+            <br/>
+            <mm:field name="description"/>
+            <br/>
+            <mm:field name="url" />
+        </p>
+        </mm:relatednodes>
+
+        
+        </mm:compare>
         <br/>
 
     <% if (level.intValue() < 20) { %>
-        <mm:related path="posrel,learnobjects" fields="learnobjects.number" orderby="posrel.pos" searchdir="destination">
-            <mm:field name="learnobjects.number" jspvar="partnumber">
-                <mm:include page="pdfpart.jsp">
-                    <mm:param name="partnumber"><%= partnumber %></mm:param>
-                    <mm:param name="level"><%= (level.intValue()+1) %></mm:param>
-                </mm:include>
-            </mm:field>
-        </mm:related>
+        <mm:compare referid="node_type" value="educations">
+    <mm:list nodes="$number" path="educations,posrel,learnobjects" orderby="posrel.pos" fields="learnobjects.number" searchdir="destination" distinct="true">
+        <mm:remove referid="number"/>
+        <mm:remove referid="level"/>
+        <mm:field name="learnobjects.number" jspvar="partnumber">
+            <mm:include page="pdfpart.jsp">
+                <mm:param name="partnumber"><%= partnumber %></mm:param>
+                <mm:param name="level"><%= (level.intValue()+1) %></mm:param>
+            </mm:include>
+        </mm:field>
+    </mm:list>
+        </mm:compare>
+
+        <mm:compare referid="node_type" value="educations" inverse="true">
+    <mm:list  path="learnobjects1,posrel,learnobjects2" orderby="posrel.pos" fields="learnobjects2.number" searchdir="destination" distinct="true" constraints="learnobjects1.number = $number">
+        <mm:remove referid="number"/>
+        <mm:remove referid="level"/>
+        <mm:field name="learnobjects2.number" jspvar="partnumber">
+            <mm:include page="pdfpart.jsp">
+                <mm:param name="partnumber"><%= partnumber %></mm:param>
+                <mm:param name="level"><%= (level.intValue()+1) %></mm:param>
+            </mm:include>
+        </mm:field>
+    </mm:list>
+        </mm:compare>
     <% } %>
 
 </mm:present>
@@ -346,34 +210,3 @@
 </mm:node>
 </mm:cloud>
 </mm:content>
-
-
-
-<%!
-   private String doCleaning(String text)
-   {
-      if(text==null) { text =  ""; }
-
-      StringBufferInputStream in;
-      ByteArrayOutputStream out;
-      ByteArrayOutputStream err;
-      String sOut = "";
-
-      Tidy tidy = new Tidy();
-
-      out = new ByteArrayOutputStream();
-      err = new ByteArrayOutputStream();
-
-      tidy.setXmlOut(true);
-      try {
-          in = new StringBufferInputStream(text);
-          tidy.setErrout(new PrintWriter(err));
-          tidy.parse(in, out);
-          sOut = out.toString("UTF-8");
-      }
-      catch ( UnsupportedEncodingException e ) {
-          System.out.println( "Error in Tidy parsing: " + this.toString() + e.toString() );
-      }
-      return sOut;
-   }
-%>
