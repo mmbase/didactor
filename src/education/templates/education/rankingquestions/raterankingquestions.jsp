@@ -1,7 +1,6 @@
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm"%>
-<%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.0" prefix="mm"%>
 <mm:content postprocessor="reducespace">
-<mm:cloud method="delegate" jspvar="cloud">
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
 
 <mm:import externid="question" required="true"/>
 <mm:import externid="madetest" required="true"/>
@@ -28,11 +27,11 @@
     <mm:field id="answer" name="number" write="false"/>
 
     <mm:import id="givenrankId"><mm:write referid="question"/>_<mm:write referid="answer"/></mm:import>
-    <mm:import id="givenrank" externid="$givenrankId"/>
-    <mm:compare referid="givenrank" value="<%= ""+pos %>" inverse="true">
+    <mm:import jspvar="givenrank" id="givenrank" externid="$givenrankId" vartype="Integer"/>
+    <% if (pos != givenrank.intValue()) { %>
        <mm:remove referid="correct"/>
        <mm:import id="correct">0</mm:import>
-    </mm:compare>
+    <% } %>
 
     <mm:createrelation role="posrel" source="givenanswer" destination="answer">
       <mm:setfield name="pos"><mm:write referid="givenrank"/></mm:setfield>

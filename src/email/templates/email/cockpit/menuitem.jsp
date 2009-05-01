@@ -1,25 +1,23 @@
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" 
-%><%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" 
-%><mm:import externid="type" />
-<mm:cloud method="asis">
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.0" prefix="mm" %>
+<%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
+<mm:import externid="type" />
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
+<%@include file="/shared/setImports.jsp" %>
+<fmt:bundle basename="nl.didactor.component.email.EmailMessageBundle">
+<mm:compare referid="type" value="div">
+  <div class="menuSeperator"> </div>
+  <div class="menuItem" id="menuEmail">
+    <a href="<mm:treefile page="/email/index.jsp" objectlist="$includePath" referids="$referids" />" class="menubar">
+</mm:compare>
 
-  <mm:compare referid="type" value="div">
-    <div class="menuSeparator"> </div>
-    <div class="menuItem" id="menuEmail">
-      <mm:treefile page="/email/index.jsp" objectlist="$includePath" referids="$referids" write="false">
-        <mm:param name="so">down</mm:param>
-        <a href="${_}" class="menubar">
-        </mm:treefile>
-    </mm:compare>
-
-    <mm:compare referid="type" value="option">
-      <option value="<mm:treefile page="/email/index.jsp" objectlist="$includePath" referids="$referids" />" class="menubar">
-    </mm:compare>
+<mm:compare referid="type" value="option">
+  <option value="<mm:treefile page="/email/index.jsp" objectlist="$includePath" referids="$referids" />" class="menubar">
+</mm:compare>
     <% int total = 0; %>
-    <di:translate key="email.emailtitle" />
+    <fmt:message key="EMAILTITLE" />
     <mm:node number="$user">
       <mm:relatednodescontainer type="mailboxes">
-        <mm:constraint field="type" value="2" inverse="true" /> <!-- don't count removed items -->
         <mm:relatednodes>
           <mm:relatednodescontainer type="emails">
             <mm:constraint field="type" value="2" operator="=" /> <%-- find new mails --%>
@@ -30,11 +28,12 @@
       </mm:relatednodescontainer>  
     </mm:node>
     (<%= total %>)
-    <mm:compare referid="type" value="div">
+<mm:compare referid="type" value="div">
     </a>
   </div>
 </mm:compare>
 <mm:compare referid="type" value="option">
-</option>
+  </option>
 </mm:compare>
+</fmt:bundle>
 </mm:cloud>
