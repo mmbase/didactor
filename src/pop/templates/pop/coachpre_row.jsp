@@ -1,4 +1,4 @@
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.0" prefix="mm" %>
 
 <%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
 
@@ -6,7 +6,7 @@
 
 <mm:content postprocessor="reducespace" expires="0">
 
-<mm:cloud method="delegate" jspvar="cloud">
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
 
 
 
@@ -71,13 +71,13 @@
     while (statusIterator.hasNext()) {
       String sStatus = (String) statusIterator.next();
       if (sStatus.equals("1")) { %>
-        <td class="td_test_tbs"><img src="<mm:treefile page="/progress/gfx/checked.gif" objectlist="$includePath" referids="$referids"/>" title="Ok" alt="Ok" border="0"></td>
+        <td class="td_test_tbs"><img src="<mm:treefile page="/progress/gfx/checked.gif" objectlist="$includePath" referids="$referids"/>" alt="Ok" border="0"></td>
       <% }
       if (sStatus.equals("0")) { %>
-        <td class="td_test_tbs"><img src="<mm:treefile page="/progress/gfx/box.gif" objectlist="$includePath" referids="$referids"/>" title="Ok" alt="Ok" border="0"></td>
+        <td class="td_test_tbs"><img src="<mm:treefile page="/progress/gfx/box.gif" objectlist="$includePath" referids="$referids"/>" alt="Ok" border="0"></td>
       <% }
       if (sStatus.equals("-1")) { %>
-        <td class="td_test_failed"><img src="<mm:treefile page="/pop/gfx/present.gif" objectlist="$includePath" referids="$referids"/>" title="Ok" alt="Ok" border="0"></td>
+        <td class="td_test_failed"><img src="<mm:treefile page="/pop/gfx/present.gif" objectlist="$includePath" referids="$referids"/>" alt="Ok" border="0"></td>
       <% } 
     } %>
   </tr>
