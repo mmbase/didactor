@@ -8,14 +8,13 @@ import javax.servlet.jsp.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import org.mmbase.bridge.jsp.taglib.*;
-import org.mmbase.util.ResourceLoader;
 import org.mmbase.module.core.*;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
 /**
  * @javadoc
- * @version $Id: Util.java,v 1.3 2007-06-27 09:11:16 michiel Exp $
+ * @version $Id: Util.java,v 1.2 2006-12-28 00:08:48 mmeeuwissen Exp $
  */
 
 class Util {
@@ -52,15 +51,12 @@ class Util {
         defaultHtml.setProperty("sorting.none.label", "[none]");
     }
 
-    public static Map getHtmlLabels(String configPath) {
+    public static Hashtable getHtmlLabels(String configpath) {
         Properties retval = (Properties) defaultHtml.clone();
         try {
-            retval.load(ResourceLoader.getConfigurationRoot().getResourceAsStream(configPath));
+            retval.load(new FileInputStream(new File(configpath)));
         } catch (IOException e) {
-            log.warn(e);
-        }
-        if (log.isDebugEnabled()) {
-            log.debug("Loaded html labels " + retval + " from " + configPath);
+
         }
         return retval;
     }

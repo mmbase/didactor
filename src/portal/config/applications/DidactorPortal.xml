@@ -4,9 +4,8 @@
   <requirements>
     <requires name="DidactorCore"      maintainer="didactor.nl" version="8" />
     <requires name="DidactorComponent" maintainer="didactor.nl" version="2" />
-    <requires name="DidactorResources" maintainer="didactor.nl" version="2" />
-    <requires name="ExtendedText"      maintainer="didactor.nl" version="4" />
-    <requires name="DidactorRichText"  maintainer="mmbase.org"  version="1" />
+    <requires name="Resources"         maintainer="didactor.nl" version="2" />
+    <requires name="ExtendedText"      maintainer="didactor.nl" version="3" />
   </requirements>
 
   <neededbuilderlist>
@@ -30,9 +29,6 @@
 
     <!-- banner -->
     <relation from="urls"       to="images"      type="related" />
-
-    <relation from="webblocks"  to="xmlcontent"        type="posrel" />
-    <relation from="webblocks"  to="xmlcontent"        type="related" />
   </allowedrelationlist>
   <datasourcelist>
     <datasource builder="components" path="DidactorPortal/components.xml" />
