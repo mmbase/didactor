@@ -1,7 +1,7 @@
               <td class="listItem">
                 <a href="<mm:treefile page="/pop/index.jsp" objectlist="$includePath" referids="$popreferids,currentprofile">
                     <mm:param name="currentcomp"><%= thisCompetencie %></mm:param>
-                    <mm:param name="popcmd">editcomp</mm:param>
+                    <mm:param name="command">editcomp</mm:param>
                    </mm:treefile>"><mm:field name="name"/>
                 </a>
               </td>
@@ -14,7 +14,7 @@
                     <% isEmpty = false; %>
                     <mm:import id="thisfeedback" reset="true"><%= thisFeedback %></mm:import>
                     <td class="listItem"><mm:field name="popfeedback.rank"/></td>
-                    <td class="listItem"><mm:field name="popfeedback.text" escape="pp"/></td>
+                    <td class="listItem"><mm:field name="popfeedback.text"/></td>
                   </mm:list>
                 </mm:field>
               </mm:list>
@@ -50,9 +50,9 @@
                     <mm:field name="ratings.pos" jspvar="dummy" vartype="String">
                       <% int compRating = (new Integer(dummy)).intValue();
                          if (averageRating < compRating) { %>
-                           <mm:import id="thisrating" reset="true"><di:translate key="pop.comptablegoodrating" /></mm:import>
+                           <mm:import id="thisrating" reset="true"><fmt:message key="CompTableGoodRating"/></mm:import>
                          <% } else { %>
-                           <mm:import id="thisrating" reset="true"><di:translate key="pop.comptablenotgoodrating" /></mm:import>
+                           <mm:import id="thisrating" reset="true"><fmt:message key="CompTableNotGoodRating"/></mm:import>
                          <% }
                       %>
                     </mm:field>
@@ -68,7 +68,7 @@
                              referids="$popreferids,currentfolder,currentprofile">
                            <mm:param name="currentcomp"><%= thisCompetencie %></mm:param>
                            <mm:param name="todonumber"><mm:field name="todoitems.number"/></mm:param>
-                           <mm:param name="popcmd">addtodo</mm:param>
+                           <mm:param name="command">addtodo</mm:param>
                            <mm:param name="returnto">no</mm:param>
                          </mm:treefile>"><mm:field name="todoitems.name" jspvar="todoName" vartype="String"
                          ><% if (todoName.length()>0) { %><%= todoName %><% } else { %>...<% } %></mm:field></a><br/>

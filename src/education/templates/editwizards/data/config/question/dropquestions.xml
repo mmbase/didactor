@@ -1,83 +1,115 @@
 <?xml version="1.0"?>
-<!DOCTYPE wizard-schema PUBLIC "-//MMBase/DTD editwizard 1.0//EN" "http://www.mmbase.org/dtd/wizard-schema_1_0.dtd"
-[
-  <!ENTITY extra_loads SYSTEM "extra_loads.xml">
-<!ENTITY extra_schemas SYSTEM "extra_schemas.xml">
-]>
+<!DOCTYPE wizard-schema PUBLIC "-//MMBase/DTD editwizard 1.0//EN" "http://www.mmbase.org/dtd/wizard-schema_1_0.dtd">
 <wizard-schema id="empty">
-  <title xml:lang="nl">Sleepvraag Editor</title>
-  <title xml:lang="en">Drag and drop question Editor</title>
+    <title>Drag en drop vraag Editor</title>
 
-  <action type="create">
-    <object type="dropquestions">
-      <field name="showtitle">1</field>
-      <field name="layout">0</field>
-    </object>
-  </action>
+    <action type="create">
+       <object type="dropquestions">
+          <field name="showtitle">1</field>
+          <field name="layout">0</field>
+       </object>
+    </action>
 
-  <action type="load">
-    <relation destination="images" role="dragimagerel" />
-    <relation destination="images" role="dropimagerel" />
-    <relation destination="feedback" role="related" />
-    <relation destination="dropanswers" role="related" />
-    &extra_loads;
-  </action>
+    <action type="load">
+      <relation destination="images" role="dragimagerel" />
+      <relation destination="images" role="dropimagerel" />
+      <relation destination="feedback" role="related" />
+      <relation destination="dropanswers" role="related" />
+      <relation destination="metadata" role="related">
+          <object type="metadata">
+           <relation destination="metalangstring" role="posrel">
+              <object type="metalangstring">
+                <field name="number"/>
+                <field name="language"/>
+                <field name="value"/>
+              </object>
+            </relation>
+           <relation destination="metadate" role="posrel">
+              <object type="metadate">
+                <field name="number"/>
+                <field name="value"/>
+              </object>
+            </relation>
+           <relation destination="metavocabulary" role="posrel">
+              <object type="metavocabulary">
+                <field name="number"/>
+                <field name="value"/>
+              </object>
+            </relation>
+            <relation destination="metadefinition" role="related">
+              <object type="metadefinition">
+                <relation destination="metavocabulary" role="related"/>
+              </object>
+            </relation>
+            </object>
+        </relation>
+    </action>
 
-  <action type="delete" />
+    <action type="delete" />
 
-  <form-schema id="step1">
-    <title xml:lang="nl">Sleepvraag invoeren</title>
-    <title xml:lang="en">Enter drag and drop question</title>
-    <field name="title" >
-      <prompt xml:lang="nl">Titel</prompt>
-      <prompt xml:lang="en">Title</prompt>
-    </field>
-    <field name="showtitle" />
-    <field name="text" ftype="html" dtminlength="0">
-      <prompt xml:lang="nl">Tekst</prompt>
-      <prompt xml:lang="en">Text</prompt>
-    </field>
+    <lists>
+       <optionlist include="config/option_list/boolean.xml" />
+    </lists>
 
-    <title xml:lang="nl">Sleep afbeeldingen</title>
-    <title xml:lang="en">Drag images</title>
-    <list role="dragimagerel" extends="config/image/dragimages.xml"/>
+    <steps>
+        <step form-schema="step1" />
+        <!-- step form-schema="step2" / -->
+    </steps>
 
-    <title xml:lang="nl">Doel afbeeldingen</title>
-    <title xml:lang="en">Drop images</title>
-    <list role="dropimagerel" extends="config/image/dropimages.xml"/>
-
-    <list minoccurs="0" maxoccurs="*" ordertype="number" orderby="field[@name='dragnumber']" role="related" destination="dropanswers">
-      <title xml:lang="nl">Goede combinaties sleep- en doelafbeeldingen
-      </title>
-      <title xml:lang="en">Good combinations of drag and drop pictures</title>
-      <item>
-        <field name="dragnumber" ftype="line">
-          <prompt xml:lang="nl">Sleepafbeelding op positie:</prompt>
-          <prompt xml:lang="en">Drag image position:</prompt>
-          <description xml:lang="nl">Geef hier het volgordenummer van de sleepafbeelding</description>
-          <description xml:lang="en">Enter the sequencenumber of the drag image</description>
+    <form-schema id="step1">
+        <title>Drag en drop vraag invoeren</title>
+        <field name="title" >
+            <prompt>Titel</prompt>
         </field>
-        <field name="dropnumber" ftype="line">
-          <prompt xml:lang="nl">Doelafbeelding op positie:</prompt>
-          <prompt xml:lang="en">Drop image position:</prompt>
-          <description xml:lang="nl">Geef hier het volgordenummer van de doelafbeelding</description>
-          <description xml:lang="en">Enter the sequencenumber of the drop image</description>
+        <field name="showtitle" ftype="enum">
+           <prompt xml:lang="nl">Titel laten zien</prompt>
+           <prompt xml:lang="en">Show title</prompt>
+           <optionlist select="boolean" />
+        </field> 
+        <field name="text" ftype="html" dtminlength="0">
+            <prompt>Tekst</prompt>
         </field>
-      </item>
+   <title>Sleep afbeeldingen</title>
+   <list role="dragimagerel" extends="config/image/dragimages.xml"/>
+   <title>Doel afbeeldingen</title>
+   <list role="dropimagerel" extends="config/image/dropimages.xml"/>
+
+   <list minoccurs="0" maxoccurs="*" ordertype="number" orderby="field[@name='dragnumber']" role="related" destination="dropanswers">
+   <title>Goede combinaties</title>
+            <item>
+                <field name="dragnumber" ftype="line">
+                    <prompt>Sleepafbeelding</prompt>
+                    <description>Geef hier het volgordenummer van de sleepafbeelding</description>
+                </field>
+                <field name="dropnumber" ftype="line">
+                    <prompt>Doelafbeelding</prompt>
+          <description>Geef hier het volgordenummer van de doelafbeelding</description>
+                </field>
+            </item>
+
+            <action type="create">
+                <relation role="related" destinationtype="dropanswers"/>
+            </action>
+
+            <command name="startwizard" inline="true" wizardname="config/answer/dropanswers" objectnumber="new">
+                <prompt>Nieuwe combinatie</prompt>
+            </command>
+
+        </list>
 
 
-      <action type="create">
-        <relation role="related" destinationtype="dropanswers"/>
-      </action>
+        <list role="related" extends="config/feedback/feedback-list.xml" />
 
-      <command name="startwizard" inline="true" wizardname="config/answer/dropanswers" objectnumber="new">
-      </command>
-    </list>
 
-    <list role="related" extends="config/feedback/feedback-list.xml" />
-  </form-schema>
 
-  &extra_schemas;
+</form-schema>
+
+    <form-schema id="step2">
+        <title>Metadata invoeren</title>
+        <list extends="config/metadata/metadatalangstring.xml"/>
+        <list extends="config/metadata/metadatadate.xml"/>
+        <list extends="config/metadata/metadatavocabulary.xml"/>
+    </form-schema>
 
 </wizard-schema>
 

@@ -1,16 +1,35 @@
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.0" prefix="mm" %>
 <%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
 <%@page import="java.util.*" %>
-<mm:content postprocessor="reducespace" escaper="none">
-<mm:cloud method="delegate" jspvar="cloud">
+<mm:content postprocessor="reducespace">
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
 <%@include file="/shared/setImports.jsp" %>
 <%@ include file="getids.jsp" %>
 <% boolean isEmpty = true; %>
 <mm:import externid="msg">-1</mm:import>
+   <%
+
+      String bundlePOP = null;
+
+   %>
+
+   <mm:write referid="lang_code" jspvar="sLangCode" vartype="String" write="false">
+
+      <%
+
+         bundlePOP = "nl.didactor.component.pop.PopMessageBundle_" + sLangCode;
+
+      %>
+
+   </mm:write>
+
+<fmt:bundle basename="<%= bundlePOP %>">
+<%= bundlePOP %>
 <div class="contentBody">
   <%@ include file="getmyfeedback.jsp" %>
     <mm:compare referid="msg" value="-1" inverse="true">
-      <mm:write referid="msg" escape="text/plain"/>
+      <mm:write referid="msg"/>
     </mm:compare>
 
   <mm:node number="$currentcomp">
@@ -18,31 +37,31 @@
           referids="$popreferids,currentprofile,currentcomp">
         </mm:treefile>" method="post">
     <table class="font" width="70%">
-    <input type="hidden" name="popcmd" value="savecomp">
+    <input type="hidden" name="command" value="savecomp">
     <input type="hidden" name="returnto" value="editcomp">
     <input type="hidden" name="todonumber" value="-1">
       <tr style="vertical-align:top;">
-        <td width="100" style="vertical-align:top;"><di:translate key="pop.competence" /></td>
+        <td width="100" style="vertical-align:top;"><fmt:message key="Competence"/></td>
         <td><b><mm:field name="name"/></b></td>
       </tr>
       <tr style="vertical-align:top;">
-        <td width="100" style="vertical-align:top;"><di:translate key="pop.description" /></td>
-        <td><b><mm:field name="description" escape="pp"/></b></td>
+        <td width="100" style="vertical-align:top;"><fmt:message key="Description"/></td>
+        <td><b><mm:field name="description"/></b></td>
       </tr>
       <tr style="vertical-align:top;">
-        <td nowrap><di:translate key="pop.compeditfeedback1" /></td>
+        <td nowrap><fmt:message key="CompEditFeedback1"/></td>
         <td><input name="myfeedback1" class="popFormInput" type="text" size="50" maxlength="255" value="<mm:write referid="myfeedback1"/>"></td>
       </tr>
       <tr style="vertical-align:top;">
-        <td><di:translate key="pop.compeditfeedback2" /></td>
+        <td><fmt:message key="CompEditFeedback2"/></td>
         <td><textarea name="myfeedback2" class="popFormInput" cols="50" rows="5"><mm:write referid="myfeedback2"/></textarea></td>
       </tr>
   </table>
   <table class="font" width="80%">
     <tr>
       <td>
-        <input type="button" class="formbutton" onClick="editcompform.submit()" value="<di:translate key="pop.savebutton" />">
-        <input type="button" class="formbutton" onClick="editcompform.popcmd.value='no';editcompform.submit()" value="<di:translate key="pop.backbuttonlc" />">
+        <input type="button" class="formbutton" onClick="editcompform.submit()" value="<fmt:message key="SaveButton"/>">
+        <input type="button" class="formbutton" onClick="editcompform.command.value='no';editcompform.submit()" value="<fmt:message key="BackButtonLC"/>">
       </td>
 
     </tr>
@@ -50,76 +69,78 @@
 <br/>
   <table width="80%" border="0" class="popGreyTableHeader">
     <tr>
-      <td colspan="3"><di:translate key="pop.todoitems" /></td>
+      <td colspan="3"><fmt:message key="TodoItems"/></td>
     </tr>
   </table>
           <mm:list nodes="$currentpop" path="pop,todoitems,competencies" orderby="todoitems.number" directions="UP"
               constraints="competencies.number='$currentcomp'">
             <input type="checkbox" name="ids" value="<mm:field name="todoitems.number"/>"><a href="#1"
-                onclick="editcompform.popcmd.value='addtodo';editcompform.todonumber.value='<mm:field name="todoitems.number"/>';editcompform.submit();return false;"
+                onclick="editcompform.command.value='addtodo';editcompform.todonumber.value='<mm:field name="todoitems.number"/>';editcompform.submit();return false;"
               ><mm:field name="todoitems.name" jspvar="todoName" vartype="String"
               ><% if (todoName.length()>0) { %><%= todoName %><% } else { %>...<% } %></mm:field></a><br/>
           </mm:list>
           <br/>
-          <a href="#1" onclick="editcompform.popcmd.value='addtodo';editcompform.submit();return false;"
+          <a href="#1" onclick="editcompform.command.value='addtodo';editcompform.submit();return false;"
             ><img src="<mm:treefile page="/pop/gfx/icon_add_todo.gif" objectlist="$includePath" referids="$popreferids"/>"
-                border="0" title="<di:translate key="pop.compeditmakenewtodo"/>" alt="<di:translate key="pop.compeditmakenewtodo"/>" /></a>
-          <a href="#1" onclick="if (!window.confirm('<di:translate key="pop.areyousuredeltodo" />'))
-                return false;editcompform.popcmd.value='deltodo';editcompform.submit();return false;">
+                border="0" alt="<fmt:message key="CompEditMakeNewTodo"/>"/></a>
+          <a href="#1" onclick="if (!window.confirm('<fmt:message key="AreYouSureDelTodo"/>'))
+                return false;editcompform.command.value='deltodo';editcompform.submit();return false;">
             <img src="<mm:treefile page="/pop/gfx/afspraak verwijderen.gif" objectlist="$includePath" referids="$popreferids"/>"
-                border="0" title="<di:translate key="pop.compeditremoveselectedtodo"/>" alt="<di:translate key="pop.compeditremoveselectedtodo"/>" /></a>
+                border="0" alt="<fmt:message key="CompEditRemoveSelectedTodo"/>"/></a>
 <br/>
 <br/>
     <mm:relatedcontainer path="popfeedback,pop">
       <mm:constraint field="pop.number" referid="currentpop" operator="EQUAL"/>
       <table width="80%" border="0" class="popSpecialTableHeader">
         <tr>
-          <td colspan="3"><di:translate key="pop.compeditgrades" /></td>
+          <td colspan="3"><fmt:message key="CompEditGrades"/></td>
         </tr>
       </table>
       <div><table class="poplistTable">
         <tr>
-          <th class="listHeader"><di:translate key="pop.compeditby" /></th>
-          <th class="listHeader"><di:translate key="pop.compeditworktogetheretc" /></th>
-          <th class="listHeader"><di:translate key="pop.score" /></th>
-          <th class="listHeader"><di:translate key="pop.compeditgrade" /></th>
+          <th class="listHeader"><fmt:message key="CompEditBy"/></th>
+          <th class="listHeader"><fmt:message key="CompEditWorkTogetherEtc"/></th>
+          <th class="listHeader"><fmt:message key="Score"/></th>
+          <th class="listHeader"><fmt:message key="CompEditGrade"/></th>
         </tr>
         <mm:related>
           <mm:node element="popfeedback">
-            <tr>
-              <mm:relatedcontainer path="people">
-                <mm:constraint field="people.number" referid="student" operator="EQUAL" inverse="true"/>
-                <mm:related>
+            <mm:relatedcontainer path="people">
+              <mm:constraint field="people.number" referid="student" operator="EQUAL" inverse="true"/>
+              <mm:related>
+                <tr>
                   <td class="listItem"><mm:field name="people.firstname"/> <mm:field name="people.lastname"/></td>
-                </mm:related>
-              </mm:relatedcontainer>
-              <mm:field name="status" jspvar="isAnswered" vartype="String">
-                <% if (!isAnswered.equals("0")) { %>
-                  <td class="listItem"><mm:field name="rank"/></td>
-                  <td class="listItem">
-                    <mm:related path="ratings">
-                      <mm:field name="ratings.name" id="rating" write="true"/>
-                    </mm:related>
-                  </td>
-                  <td class="listItem"><mm:field name="text" escape="p"/></td>
-                <% } else { %>
-                  <td class="listItem"><i><di:translate key="pop.notanswered" /></i></td>
-                  <td class="listItem">&nbsp;</td>
-                  <td class="listItem">&nbsp;</td>
-                <% } %>
-              </mm:field>
-            </tr>
+                  <mm:node element="popfeedback">
+                    <mm:field name="status" jspvar="isAnswered" vartype="String">
+                      <% if (!isAnswered.equals("0")) { %>
+                        <td class="listItem"><mm:field name="rank"/></td>
+                        <td class="listItem">
+                          <mm:related path="ratings">
+                            <mm:field name="ratings.name" id="rating" write="true"/>
+                          </mm:related>
+                        </td>
+                        <td class="listItem"><mm:field name="text"/></td>
+                      <% } else { %>
+                        <td class="listItem"><i><fmt:message key="NotAnswered"/></i></td>
+                        <td class="listItem">&nbsp;</td>
+                        <td class="listItem">&nbsp;</td>
+                      <% } %>
+                    </mm:field>
+                  </mm:node>
+                </tr>
+              </mm:related>
+            </mm:relatedcontainer>
           </mm:node>
         </mm:related>
       </table></div>
     </mm:relatedcontainer>
-        <a href="#1" onclick="editcompform.popcmd.value='invite';editcompform.submit();return false;">
+        <a href="#1" onclick="editcompform.command.value='invite';editcompform.submit();return false;">
           <img src="<mm:treefile page="/pop/gfx/icon_invitation.gif" objectlist="$includePath" referids="$popreferids"/>"
-            border="0" title="<di:translate key="pop.compeditinvitecolleague"/>" alt="<di:translate key="pop.compeditinvitecolleague"/>" /></a>
+            border="0" alt="<fmt:message key="CompEditInviteColleague"/>"/></a>
     <br/><br/><br/>
     <table width="80%" border="0" class="popGreyTableHeader">
       <tr>
-        <td colspan="3"><di:translate key="pop.portfolio" /></td>
+        <td colspan="3"><fmt:message key="Portfolio" /></td>
       </tr>
     </table>
     <mm:compare referid="thisfeedback" value="-1" inverse="true">
@@ -178,15 +199,16 @@
       </mm:node>
     </mm:compare>
     <br/>
-    <a href="#1" onclick="editcompform.popcmd.value='adddoc';editcompform.submit();return false;">
-      <img src="<mm:treefile page="/portfolio/gfx/document plaatsen.gif" objectlist="$includePath" referids="$popreferids"/>" 
-        border="0" alt="<di:translate key="pop.portfolioadddoc"/>" /></a>
-     <a href="#1" onclick="if (!window.confirm('<di:translate key="pop.areyousuredeldoc" />'))
-        return false;editcompform.popcmd.value='deldocs';editcompform.submit();return false;">
+    <a href="#1" onclick="if (!window.confirm('<fmt:message key="AreYouSureDelDoc"/>'))
+        return false;editcompform.command.value='deldocs';editcompform.submit();return false;">
       <img src="<mm:treefile page="/pop/gfx/afspraak verwijderen.gif" objectlist="$includePath" referids="$popreferids"/>"
-        border="0" alt="<di:translate key="pop.compeditremoveselecteddoc"/>" /></a>
+        border="0" alt="<fmt:message key="CompEditRemoveSelectedDoc"/>"/></a>
+    <a href="#1" onclick="editcompform.command.value='adddoc';editcompform.submit();return false;">
+      <img src="<mm:treefile page="/portfolio/gfx/document plaatsen.gif" objectlist="$includePath" referids="$popreferids"/>" 
+        border="0" alt="<fmt:message key="PortfolioAddDoc"/>"/></a>
   </form>
   </mm:node>
 </div>
+</fmt:bundle>
 </mm:cloud>
 </mm:content>

@@ -1,55 +1,88 @@
 <?xml version="1.0"?>
-<!DOCTYPE wizard-schema PUBLIC "-//MMBase/DTD editwizard 1.0//EN" "http://www.mmbase.org/dtd/wizard-schema_1_0.dtd"
-[
-   <!ENTITY extra_loads SYSTEM "extra_loads.xml">
-   <!ENTITY extra_schemas SYSTEM "extra_schemas.xml">
-]>
+<!DOCTYPE wizard-schema PUBLIC "-//MMBase/DTD editwizard 1.0//EN" "http://www.mmbase.org/dtd/wizard-schema_1_0.dtd">
 <wizard-schema id="empty">
-    <title xml:lang="nl">Videofragment editor</title>
-    <title xml:lang="en">Videofragment editor</title>
+    <title>Videofragment editor</title>
 
     <action type="create">
         <object type="videotapes">
             <field name="showtitle">1</field>
         </object>
     </action>
-
+    
     <action type="load">
-      &extra_loads;
+        <relation destination="metadata" role="related">
+          <object type="metadata">
+           <relation destination="metalangstring" role="posrel">
+              <object type="metalangstring">
+                <field name="number"/>
+                <field name="language"/>
+                <field name="value"/>
+              </object>
+            </relation>
+           <relation destination="metadate" role="posrel">
+              <object type="metadate">
+                <field name="number"/>
+                <field name="value"/>
+              </object>
+            </relation>
+           <relation destination="metavocabulary" role="posrel">
+              <object type="metavocabulary">
+                <field name="number"/>
+                <field name="value"/>
+              </object>
+            </relation>
+            <relation destination="metadefinition" role="related">
+              <object type="metadefinition">
+                <relation destination="metavocabulary" role="related"/>
+              </object>
+            </relation>
+            </object>
+        </relation>
     </action>
 
     <action type="delete"/>
 
+    <lists>
+       <optionlist include="config/option_list/boolean.xml" />
+    </lists>
+
+    <steps>
+        <step form-schema="step1" />
+        <!-- step form-schema="step2" / -->
+    </steps>
 
     <form-schema id="step1">
-        <title xml:lang="nl">Invoeren videofragment</title>
-        <title xml:lang="en">Enter videofragment</title>
+        <title>Invoeren videofragment</title>
         <field name="title" dttype="string" dtminlength="2" >
-            <prompt xml:lang="nl">Video titel</prompt>
-            <prompt xml:lang="en">Video title</prompt>
+            <prompt>Titel</prompt>
         </field>
-        <field name="showtitle" />
+        <field name="showtitle" ftype="enum">
+           <prompt xml:lang="nl">Titel laten zien</prompt>
+           <prompt xml:lang="en">Show title</prompt>
+           <optionlist select="boolean" />
+        </field>
+
         <field name="subtitle" dttype="string">
-            <prompt xml:lang="nl">Subtitel</prompt>
-            <prompt xml:lang="en">Subtitle</prompt>
+            <prompt>Subtitel</prompt>
         </field>
 
         <field name="intro" ftype="text" rows="4" >
-            <prompt xml:lang="nl">Intro</prompt>
-            <prompt xml:lang="en">Intro</prompt>
+            <prompt>Intro</prompt>
         </field>
-
+        
         <field name="body" ftype="text" rows="8" >
-            <prompt xml:lang="nl">Tekst videofragment</prompt>
-            <prompt xml:lang="en">Text</prompt>
+            <prompt>Tekst</prompt>
         </field>
 
         <field name="url" ftype="line" dttype="string" dtminlength="2">
-            <prompt xml:lang="nl">URL videofragment</prompt>
-            <prompt xml:lang="en">URL videofragment</prompt>
-            <description xml:lang="nl">URL die verwijst naar een video-fragment</description>
-            <description xml:lang="en">URL that points to a video-fragment</description>
+            <prompt>URL</prompt>
+            <description>Verwijst naar een video-fragment</description>
         </field>
     </form-schema>
-    &extra_schemas;
+    <form-schema id="step2">
+        <title>Metadata invoeren</title>
+        <list extends="config/metadata/metadatalangstring.xml"/>
+        <list extends="config/metadata/metadatadate.xml"/>
+        <list extends="config/metadata/metadatavocabulary.xml"/>
+    </form-schema>
 </wizard-schema>
