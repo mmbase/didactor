@@ -2,21 +2,41 @@
 
 <mm:import externid="student" id="student" reset="true"><mm:write referid="user"/></mm:import>
 
-<%-- find student's copybook --%>
+<%-- find user's copybook --%>
+
+<mm:import id="copybookNo" reset="true" />
+
 <mm:node number="$student" notfound="skip">
-   <%@include file="find_copybook.jsp"%>
+
+  <mm:relatedcontainer path="classrel,classes">
+
+    <mm:related>
+
+      <mm:node element="classrel">
+
+        <mm:relatednodes type="copybooks">
+
+          <mm:remove referid="copybookNo"/>
+
+          <mm:field id="copybookNo" name="number" write="false"/>
+
+        </mm:relatednodes>
+
+      </mm:node>
+
+    </mm:related>  
+
+  </mm:relatedcontainer>
 
 
-<%	
-// get the needed competencies related to this education tree
-String neededCompetencies = "";
-String intakeCompetencies = ""; 
+<%	String neededCompetencies = "";
+	String intakeCompetencies = ""; 
 %>
 <mm:node number="$education">
   <mm:relatednodescontainer type="learnobjects" role="posrel">
     <mm:sortorder field="posrel.pos" direction="up"/>
-    <mm:tree type="learnobjects" role="posrel" searchdir="destination" orderby="posrel.pos" directions="up">
-      <mm:related path="developcomp,competencies">
+    <mm:tree type="learnobjects" role="posrel" searchdir="destination" orderby="posrel.pos" direction="up">
+      <mm:related path="needcomp,competencies">
         <mm:field name="competencies.number" jspvar="thisCompetencie" vartype="String">
           <% neededCompetencies += thisCompetencie + ","; %>
         </mm:field>
@@ -24,15 +44,13 @@ String intakeCompetencies = "";
     </mm:tree> 
   </mm:relatednodescontainer> 
 </mm:node>
-<%
-// for all needed competencies: if the intake test related to the competence is passed, set the havecomp relation to the current pop
-if (neededCompetencies.length() != 0) { %>
+<% if (neededCompetencies.length() != 0) { %>
   <mm:list nodes="<%= neededCompetencies %>" path="competencies">
     <% boolean needIntake = true;
        boolean passed = true; 
     %>
     <mm:node element="competencies" id="thiscompetency">
-      <mm:related path="havecomp,pop" constraints="pop.number='$currentpop'">
+      <mm:related path="havecomp,pop" constraints="pop.number LIKE $currentpop">
         <% needIntake = false; %>
       </mm:related>
       <% if (needIntake) { 

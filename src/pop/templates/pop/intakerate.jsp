@@ -1,52 +1,71 @@
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.0" prefix="mm" %>
 <%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
 <%@page import="java.util.*" %>
 <mm:content postprocessor="reducespace" expires="0">
-<mm:cloud method="delegate" jspvar="cloud">
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
 
 <mm:import externid="intakes" jspvar="intakes" required="true"/>
 
 
 <%@include file="/shared/setImports.jsp" %>
+
 <%@include file="/education/tests/definitions.jsp" %>
-<%@include file="/education/wizards/roles_defs.jsp" %>
-<mm:import id="editcontextname" reset="true">docent schermen</mm:import>
-<%@include file="/education/wizards/roles_chk.jsp" %>
 
-<mm:import externid="student" reset="true"><mm:write referid="user"/></mm:import>
-  <mm:treeinclude page="/cockpit/cockpit_header.jsp" objectlist="$includePath" referids="$referids">
-    <mm:param name="extraheader">
-      <title>POP</title>
-      <link rel="stylesheet" type="text/css" href="css/pop.css" />
-    </mm:param>
-  </mm:treeinclude>
+<fmt:bundle basename="nl.didactor.component.workspace.WorkspaceMessageBundle">
 
-  <% boolean isEmpty = true; 
-     String msgString = "";
-  %>
+<mm:treeinclude page="/cockpit/cockpit_header.jsp" objectlist="$includePath" referids="$referids">
+  <mm:param name="extraheader">
+    <title>POP</title>
+    <link rel="stylesheet" type="text/css" href="css/pop.css" />
+  </mm:param>
+</mm:treeinclude>
 
-  <%@ include file="getids.jsp" %>
+<!-- TODO where are the different roles described -->
+<!-- TODO different things to do with different roles? -->
 
-  <div class="rows">
-    <div class="navigationbar">
-      <div class="titlebar">
-        <img src="<mm:treefile write="true" page="/gfx/icon_pop.gif" objectlist="$includePath" />" 
-            width="25" height="13" border="0" title="<di:translate key="pop.popfull" />" alt="<di:translate key="pop.popfull" />" /> <di:translate key="pop.popfull" />
-      </div>		
-    </div>
-    <%@include file="leftpanel.jsp" %> 
+<% boolean isEmpty = true; 
+   String msgString = "";
+%>
 
-<%-- find student's copybook --%>
-<mm:node number="$student">
-   <%@include file="find_copybook.jsp" %>
-</mm:node>
+<%@ include file="getids.jsp" %>
+
+<%@ include file="leftpanel.jsp" %>
+
+<%-- find user's copybook --%>
+
+<mm:import id="copybookNo"/>
+
+<mm:node number="$user">
+
+  <mm:relatedcontainer path="classrel,classes">
+
+    <mm:constraint field="classes.number" value="$class"/>
+
+    <mm:related>
+
+      <mm:node element="classrel">
+
+        <mm:relatednodes type="copybooks">
+
+          <mm:remove referid="copybookNo"/>
+
+          <mm:field id="copybookNo" name="number" write="false"/>
+
+        </mm:relatednodes>
+
+      </mm:node>
+
+    </mm:related>  
+
+  </mm:relatedcontainer>
+
+</mm:node> 
 
 
-    <%-- right section --%>
-    <div class="mainContent">
-<div class="contentHeader"><di:translate key="pop.progressmonitor" />
-  <%@include file="nameintitle.jsp" %>
-</div>
+<%-- right section --%>
+<div class="mainContent"> 
+<div class="contentHeader">Voortgangsmonitor</div>
   <div class="contentBody">
 
 
@@ -97,7 +116,7 @@
       <mm:node number="<%= shownQuestion %>">
         <mm:import id="page" reset="true">/education/<mm:nodeinfo type="type"/>/rate<mm:nodeinfo type="type"/>.jsp</mm:import>
 
-        <mm:treeinclude page="$page" objectlist="$includePath" referids="$popreferids">
+        <mm:treeinclude page="$page" objectlist="$includePath" referids="$referids">
           <mm:param name="question"><mm:write referid="shownquestion"/></mm:param>
           <mm:param name="madetest"><mm:write referid="madetest"/></mm:param>
         </mm:treeinclude>
@@ -114,7 +133,7 @@
         <mm:relatedcontainer path="givenanswers,madetests">
           <mm:constraint field="madetests.number" value="$madetest"/>
           <mm:related>
-            <mm:field name="givenanswers.score" id="givenanswerscore" write="false" />
+            <mm:field name="givenanswers.score" id="givenanswerscore"/>
             <mm:node referid="intakeresult">
               <mm:compare referid="givenanswerscore" value="0">
                 <mm:setfield name="score">0</mm:setfield>
@@ -145,11 +164,12 @@
 
   <%@ include file="intakecheck.jsp" %>
 
-  <p><di:translate key="pop.intakemsgyouready" /></p>
-  <input type="button" class="formbutton" onClick="top.location.href='<mm:treefile page="/education/index.jsp" objectlist="$includePath" referids="$popreferids">
-      </mm:treefile>'" value="start" title="<di:translate key="pop.begincoursebutton" />">
+  <p>Je bent klaar met de preassesment voor deze opleiding en kunt nu aan de opleiding beginnen</p>
+  <input type="button" class="formbutton" onClick="top.location.href='<mm:treefile page="/education/index.jsp" objectlist="$includePath" referids="$referids">
+      </mm:treefile>'" value="start" title="Begin met deze cursus">
   </div>
 </div>
-  <mm:treeinclude page="/cockpit/cockpit_footer.jsp" objectlist="$includePath" referids="$popreferids" />
+<mm:treeinclude page="/cockpit/cockpit_footer.jsp" objectlist="$includePath" referids="$referids" />
+</fmt:bundle>
 </mm:cloud>
 </mm:content>

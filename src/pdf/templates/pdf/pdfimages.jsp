@@ -18,11 +18,9 @@
       <td valign="top" width="100%">
       <table>
         <tr><td>
-         <mm:field name="showtitle">
-        <mm:compare value="1">
-          <h3> <mm:field name="title"/></h3>
-        </mm:compare>
-        </mm:field>
+      <mm:field name="title"/>
+        </td></tr>
+        <tr><td>
        <mm:isgreaterthan referid="imwidth" value="0">
           <mm:isgreaterthan referid="imheight" value="0">
             <mm:import id="template" reset="true">s(<mm:write referid="imwidth"/>x<mm:write referid="imheight"/>)</mm:import>
@@ -64,12 +62,11 @@
    <mm:node number="$imnum">
         <tr>
        <td valign="top" width="100%">
-          <mm:field name="showtitle">
-        <mm:compare value="1">
-          <h3> <mm:field name="title"/></h3>
-        </mm:compare>
-        </mm:field>
  
+      <mm:field name="title"/>
+      </td>
+      </tr>
+      <tr><td width="100%">
        <mm:isgreaterthan referid="imwidth" value="0">
        <mm:isgreaterthan referid="imheight" value="0">
        <mm:import id="template" reset="true">s(<mm:write referid="imwidth"/>x<mm:write referid="imheight"/>)</mm:import>
