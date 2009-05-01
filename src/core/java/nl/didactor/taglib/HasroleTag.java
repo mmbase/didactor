@@ -21,7 +21,7 @@ import nl.didactor.util.ClassRoom;
 /**
  * HasroleTag: retrieve a setting for a component
  * @author Johannes Verelst &lt;johannes.verelst@eo.nl&gt;
- * @version $Id: HasroleTag.java,v 1.10 2008-11-13 16:57:25 michiel Exp $
+ * @version $Id: HasroleTag.java,v 1.6 2007-04-11 14:56:57 michiel Exp $
  */
 public class HasroleTag extends CloudReferrerTag {
     private final static Logger log = Logging.getLoggerInstance(HasroleTag.class);
@@ -48,6 +48,8 @@ public class HasroleTag extends CloudReferrerTag {
         this.inverse = inverse;
     }
     /**
+     * Set the value for the 'inverse' argument of the Hasrole tag
+     * @param inverse whether or not we need to inverse the result
      */
 
     public void setReferid(String referid) {
@@ -71,15 +73,12 @@ public class HasroleTag extends CloudReferrerTag {
         // default: logged in user
         String userid= referid;
         if (userid == null) {
-            userid = "user";
+            userid= "user";
         }
         Object user = getContextProvider().getContextContainer().get(userid);
         if (user == null) {
             throw new JspTagException("Context variable with id '" + userid + "' not found");
         }
-
-        log.debug("Using id " + userid);
-
 
 
         boolean inv = false;
@@ -87,7 +86,6 @@ public class HasroleTag extends CloudReferrerTag {
             inv = "true".equalsIgnoreCase(inverse);
         }
         String number = "" + org.mmbase.util.Casting.toInt(user);
-        log.debug("Casted " + user + " to " + number);
         if ("0".equals(number)) return inv ? EVAL_BODY : SKIP_BODY;
 
         MMObjectNode usernode = MMBase.getMMBase().getBuilder("people").getNode(number);
@@ -95,23 +93,17 @@ public class HasroleTag extends CloudReferrerTag {
             throw new JspTagException("User with number '" + number + "' not found");
         }
         // Get Education no
-
-        /// WTF you must specifiy the _name_ of the variable there?
-        // Would simply a node number not be much more convenient?
-
        int educationno= 0;
-       String educationStr = education;
+       String educationStr= education;
        if ((educationStr == null) || "".equals( educationStr) ) {
            // if education in tag
            educationStr= "education";
        }
        // obtain education via context
-       Object in_education= pageContext.getRequest().getAttribute(educationStr);
+       Object in_education= getContextProvider().getContextContainer().get( educationStr);
        if (in_education != null) {
            if (in_education instanceof Integer) {
                educationno= ((Integer) in_education).intValue();
-           } else if (in_education instanceof Node) {
-               educationno= ((Node) in_education).getNumber();
            } else if (in_education instanceof String) {
                educationno= Integer.parseInt( (String) in_education);
            } else {
@@ -122,14 +114,16 @@ public class HasroleTag extends CloudReferrerTag {
             throw new JspTagException( "No role defined");
         }
 
+        Iterator roles = StringSplitter.split(role).iterator();
         Cloud cloud = getCloudVar();
         boolean hasRole = false;
-        for (String r : role.split(",")) {
+        while (roles.hasNext()) {
+            String r = (String) roles.next();
             try {
-                if (ClassRoom.hasRole(usernode, r.trim(), educationno, getCloudVar())) {
-                    hasRole = true;
+                if (ClassRoom.hasRole( usernode, r, educationno, getCloudVar())) {
+                    hasRole = true; 
                     break;
-                }
+                } 
             } catch (JspTagException e) {
                 log.error("hasrole: " + e.getMessage(), e);
             }

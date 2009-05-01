@@ -36,9 +36,12 @@ public class DidactorAssessment extends Component{
         return new Component[] {Component.getComponent("education")};
     }
 
-    @Override
+    public boolean[] may (String operation, Cloud cloud, Map context, String[] arguments) {
+        return new boolean[]{true, true};
+    }
+
     public String getValue(String setting, Cloud cloud, Map context, String[] arguments) {
-        if ("showlo".equals(setting)) { // is this used somewhere?
+        if ("showlo".equals(setting)) {
             return "2";
         }
         return "";

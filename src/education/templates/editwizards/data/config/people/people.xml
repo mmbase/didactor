@@ -22,8 +22,11 @@
     &extra_loads;
   </action>
 
-  <action type="delete" />
+  <action type="delete"/>
 
+  <lists>
+    <optionlist include="config/option_list/enabled.xml" />
+  </lists>
 
   <form-schema id="step1">
     <title xml:lang="nl">Persoon invoeren</title>
@@ -32,7 +35,6 @@
     <field name="initials" />
     <field name="suffix" ftype="line" />
     <field name="lastname" />
-    <field name="gender" />
     <field name="address" />
     <field name="zipcode" />
     <field name="city" />
@@ -46,7 +48,9 @@
     <field name="password" />
     <field name="remarks" ftype="line" />
     <field name="description" rows="8" ftype="text" />
-    <field name="person_status" />
+    <field name="person_status" ftype="enum">
+      <optionlist select="enabled" />        
+    </field>
 
     <list extends="config/role/roles-list.xml" />
     <list extends="config/workgroup/workgroups-list.xml" />

@@ -11,11 +11,8 @@
     <param name="File"   value="&logdir;/&logfile;.log" />
     <param name="DatePattern" value="'.'yyyy-MM-dd" />
     <param name="Append" value="true" />
-    <layout class="org.mmbase.util.logging.log4j.MMPatternLayout">
-      <!--
-      <param name="ConversionPattern" value="%d %q %c{4} %M.%L %x - %m%n" />
-      -->
-      <param name="ConversionPattern" value="%N %d %q %c{4} - %m%n" />
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="%d %-5p %c{4} %M.%L %x - %m%n" />
     </layout>
   </appender>
 
@@ -25,8 +22,8 @@
     <param name="DatePattern" value="'.'yyyy-MM-dd" />
     <param name="Append" value="true" />
     <layout class="org.apache.log4j.PatternLayout">
-      <param name="ConversionPattern" value="%N %d - %m%n" />
-    </layout>
+      <param name="ConversionPattern" value="%d %-5p %c{4} %M.%L %x - %m%n" />
+     </layout>
   </appender>
 
 

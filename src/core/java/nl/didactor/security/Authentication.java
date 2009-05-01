@@ -6,10 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.mmbase.bridge.*;
-import org.mmbase.bridge.util.Queries;
-import org.mmbase.storage.search.FieldCompareConstraint;
 import org.mmbase.bridge.implementation.BasicCloudContext;
-import org.mmbase.bridge.jsp.taglib.pageflow.TreeHelper;
 import org.mmbase.module.core.MMObjectNode;
 import org.mmbase.security.Rank;
 import org.mmbase.security.SecurityException;
@@ -18,12 +15,8 @@ import org.mmbase.security.classsecurity.*;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 import org.mmbase.util.functions.*;
-import org.mmbase.util.transformers.*;
-import org.mmbase.util.Casting;
-
 
 import java.util.concurrent.CopyOnWriteArrayList;
-
 
 import nl.didactor.events.*;
 import nl.didactor.builders.*;
@@ -39,9 +32,7 @@ import nl.didactor.security.plain.*;
 public class Authentication extends org.mmbase.security.Authentication {
     private static final Logger log = Logging.getLoggerInstance(Authentication.class);
 
-    public static String REASON_KEY = "nl.didactor.security.reason";
-
-    final List<AuthenticationComponent> securityComponents = new CopyOnWriteArrayList<AuthenticationComponent>();
+    final List securityComponents = new CopyOnWriteArrayList();
 
     /**
      * The method is called during loading of the security layer. It contains a
@@ -51,28 +42,25 @@ public class Authentication extends org.mmbase.security.Authentication {
      */
     protected void load() {
         String[] securityClasses = {
-            PropertiesSecurityComponent.class.getName(),
-            "nl.didactor.security.aselect.ASelectSecurityComponent", // if available, use aselect first
-            PlainSecurityComponent.class.getName()      // always fall back on plain
+                "nl.didactor.security.aselect.ASelectSecurityComponent", // if available, use aselect first
+                PlainSecurityComponent.class.getName()      // always fall back on plain
         };
-        for (String className : securityClasses) {
+        for (int i=0; i < securityClasses.length; i++) {
             try {
-                Class cls = Class.forName(className);
-                securityComponents.add((AuthenticationComponent)cls.newInstance());
+                Class cls = Class.forName(securityClasses[i]);
+                securityComponents.add(cls.newInstance());
             } catch (ClassNotFoundException cnfe) {
-                log.service("Cannot initialize security class [" + className + "], will not use it.");
+                log.service("Cannot initialize security class [" + securityClasses[i] + "], will not use it.");
             } catch (Exception e) {
-                log.warn("Cannot initialize security class [" + className + "]");
+                log.warn("Cannot initialize security class [" + securityClasses[i] + "]");
             }
         }
     }
     static final UserContext ANONYMOUS;
     static {
-        ANONYMOUS  = new UserContext("anonymous", "anonymous", Rank.ANONYMOUS, "anonymous");
-        Rank.createRank(20,  "unparticipant");
-        Rank.createRank(50,  "didactor user"); // lower than 'basic' user, because normally didactor
-                                               // users may not enter generic editors.
-        Rank.createRank(200, "editor");
+        Rank.createRank(0, "didactor-anonymous");
+        ANONYMOUS  = new UserContext("anonymous", "anonymous", Rank.getRank("didactor-anonymous"), "anonymous");
+        Rank.createRank(200, "people");
     }
 
     private PeopleBuilder users;
@@ -87,64 +75,10 @@ public class Authentication extends org.mmbase.security.Authentication {
         }
     }
 
-
-
-    /**
-     * Decorates the request with attributes related to current user, as expected by Didactor
-     * templates.
-     * @since Didactor-2.3
-     */
-    protected org.mmbase.security.UserContext request(org.mmbase.security.UserContext uc, HttpServletRequest req) {
-        Node n = getUserNode(ContextProvider.getDefaultCloudContext().getCloud("mmbase"), uc.getIdentifier());
-        req.setAttribute("user", n == null ? "0" : n.getNumber());
-        log.debug("Found user " + (n == null ? "NULL" :  n.getNumber()) + " " + uc);
-        Object education = req.getAttribute("education");
-        if (education != null && n != null) {
-            Function fun = n.getFunction("class");
-            Parameters params = fun.createParameters();
-            params.set("education", Casting.toInt(education));
-            Node claz = (Node) fun.getFunctionValue(params);
-            req.setAttribute("class", claz);
-        }
-
-        return uc;
-    }
-    /**
-     * @since Didactor-2.3
-     */
-    protected void logout(HttpServletRequest request, HttpServletResponse response) {
-        log.debug("Processing didactor logout because ", new Exception());
-        HttpSession session = request == null ? null : request.getSession(false);
-        if (session != null) {
-            session.removeAttribute(nl.didactor.filter.ProviderFilter.USER_KEY);
-            session.removeAttribute(nl.didactor.filter.ProviderFilter.EDUCATION_KEY);
-            String loginComponent = (String)session.getAttribute("didactor-logincomponent");
-            if (loginComponent != null) {
-                for (AuthenticationComponent ac : securityComponents) {
-                    if (ac != null && loginComponent.equals(ac.getName())) {
-                        log.debug("Sending logout command to component '" + loginComponent + "'");
-                        UserContext uc = ac.isLoggedIn(request, response);
-                        if (uc == null) {
-                            log.warn("Logging out a user who is not logged in! This cannot be reported!");
-                        } else {
-                            Event event = new Event(uc.getIdentifier(), request,
-                                                    null, null, null, "LOGOUT", null, "logout");
-                            org.mmbase.core.event.EventManager.getInstance().propagateEvent(event);
-                        }
-                        ac.logout(request, response);
-                    }
-                }
-            }
-        } else {
-            log.warn("Cannot log out a user whose session is null");
-        }
-    }
-
-    private static final CharTransformer PARAM_ESCAPER= new Url(Url.ESCAPE);
     /**
      * Login method: it tests the given credentials against MMBase.
      * The flow is as following:
-     * - test to see if any of thee
+     * - test to see if any of the
      *
      * @param application
      *            The application identifier
@@ -153,17 +87,11 @@ public class Authentication extends org.mmbase.security.Authentication {
      * @param parameters
      *            A list of optional parameters
      */
-    @Override
     public org.mmbase.security.UserContext login(String application, Map loginInfo, Object[] parameters) throws org.mmbase.security.SecurityException {
 
         // Always allow anonymous access instantly
         if ("anonymous".equals(application)) {
-            log.trace("Anonymous application: returning anonymous cloud ");
-            if (loginInfo != null && Boolean.TRUE.equals(loginInfo.get("logout"))) {
-                logout((HttpServletRequest) loginInfo.get(Parameter.REQUEST.getName()),
-                       (HttpServletResponse) loginInfo.get(Parameter.RESPONSE.getName())
-                       );
-            }
+            log.debug("Anonymous application: returning anonymous cloud");
             return ANONYMOUS;
         }
         if (log.isDebugEnabled()) {
@@ -171,7 +99,6 @@ public class Authentication extends org.mmbase.security.Authentication {
         }
 
         if ("class".equals(application)) {
-            checkBuilder();
             ClassAuthentication.Login li = ClassAuthentication.classCheck("class");
             if (li == null) {
                 throw new org.mmbase.security.SecurityException("Class authentication failed  '" + application + "' (class not authorized)");
@@ -193,30 +120,6 @@ public class Authentication extends org.mmbase.security.Authentication {
                 return uc;
             }
         }
-        if ("reincarnate".equals(application)) {
-            checkBuilder();
-            Cloud cloud = (Cloud) loginInfo.get(Parameter.CLOUD.getName());
-            if (cloud == null) {
-                throw new org.mmbase.security.SecurityException("Cannot reincarnate to other user, if not currently logged in.");
-            }
-            String userName = (String) loginInfo.get(PARAMETER_USERNAME.getName());
-            if (userName == null) {
-                throw new org.mmbase.security.SecurityException("Cannot reincarnate to other user without specifying username.");
-            }
-            MMObjectNode user = users.getUser(userName);
-            if (user == null) {
-                throw new org.mmbase.security.SecurityException("No such user '" + userName + "'");
-            }
-            UserContext uc = new UserContext(user, "reincarnate");
-            org.mmbase.security.UserContext current = cloud.getUser();
-            if (current.getRank().getInt() <= uc.getRank().getInt()) {
-                throw new org.mmbase.security.SecurityException("Cannot reincarnate to user with higer or equal rank then yourself ('" + current+ "' -> '" + uc + "'");
-            }
-            log.info("Reincarnated " + current + " as " + uc);
-            return uc;
-
-
-        }
 
         HttpServletRequest request = null;
         HttpServletResponse response = null;
@@ -227,69 +130,81 @@ public class Authentication extends org.mmbase.security.Authentication {
             desiredRank = (Rank) loginInfo.get("rank");
         }
 
+        // Always allow system access instantly
         if ("login".equals(application) && ((request == null) || (response == null))) {
-            throw new org.mmbase.security.SecurityException("Cannot login withouth request and/or response objects");
+            // so if you do _not_ provide any credentials you get admin!?
+            // MM: I think this is silly, it must go, we have class-authentication
+            log.service("No request/response; returning system login ", new Exception());
+            return this.doSystemLogin("login");
         }
 
         // If the action is logging-out, try to find the component on which the
         // user logged in, and let that component process the logout.
-        if ("logout".equals(application)) {
-            logout(request, response);
+        if ("didactor-logout".equals(application)) {
+            log.debug("Processing didactor logout");
+            HttpSession session = request.getSession(false);
+            if (session != null) {
+                String loginComponent = (String)session.getAttribute("didactor-logincomponent");
+                if (loginComponent != null) {
+                    for (int i=0; i<securityComponents.size(); i++) {
+                        AuthenticationComponent ac = (AuthenticationComponent) securityComponents.get(i);
+                        if (ac != null && loginComponent.equals(ac.getName())) {
+                            log.debug("Sending logout command to component '" + loginComponent + "'");
+                            UserContext uc = ac.isLoggedIn(request, response);
+                            if (uc == null) {
+                                log.warn("Logging out a user who is not logged in! This cannot be reported!");
+                            } else {
+                                Event event = new Event(uc.getIdentifier(), request.getSession(true).getId(), 
+                                                        null, null, null, "LOGOUT", null, "logout");
+                                EventDispatcher.report(event, request, response);
+                            }
+                            ac.logout(request, response);
+                        }
+                    }
+                }
+            } else {
+                log.warn("Cannot log out a user whose session is null");
+            }
+
             return null;
         }
 
         // First see if we can determine if the user is already logged in previously
-        for (AuthenticationComponent ac : securityComponents) {
+        for (int i = 0; i < securityComponents.size(); i++) {
+            AuthenticationComponent ac = (AuthenticationComponent)securityComponents.get(i);
             UserContext uc = ac.isLoggedIn(request, response);
             if (log.isDebugEnabled()) {
                 log.debug("" + ac + ".isLoggedIn() -> " + uc);
             }
             if (uc != null) {
                 if (! uc.getAuthenticationType().equals(application)) {
-                    return request(new UserContext(uc, application), request);
+                    return new UserContext(uc, application);
                 } else {
-                    return request(uc, request);
+                    return uc;
                 }
             }
         }
 
-        log.debug("Apparently not logged in yet, try to do that now: " + application);
-
-
-        if ("name/password".equals(application)) {
-            log.debug("Found 'name/password' application. Decorating request with name/password.");
-            request.setAttribute("username", loginInfo.get("username"));
-            request.setAttribute("password", loginInfo.get("password"));
-            application = "login";
-        }
-
         // Apparently not, so we ask the components if they can process the login,
         // maybe there was a post to the current page?
-        for (AuthenticationComponent ac : securityComponents) {
-            try {
-                UserContext uc = ac.processLogin(request, response, application);
-                if (log.isDebugEnabled()) {
-                    log.debug("" + ac + ".processLogin() -> " + uc);
+        for (int i = 0; i < securityComponents.size(); i++) {
+            AuthenticationComponent ac = (AuthenticationComponent)securityComponents.get(i);
+            UserContext uc = ac.processLogin(request, response, application);
+            if (log.isDebugEnabled()) {
+                log.debug("" + ac + ".processLogin() -> " + uc);
+            }
+            if (uc != null) {
+                request.getSession(true).setAttribute("didactor-logincomponent", ac.getName());
+                Integer usernumber = uc.getUserNumber();
+                Event event = new Event(uc.getIdentifier(), request.getSession(true).getId(), null, null, null,
+                        "LOGIN", usernumber != null ? usernumber.toString() : null, 
+                        "login");
+                EventDispatcher.report(event, request, response);
+                if (! uc.getAuthenticationType().equals(application)) {
+                    return new UserContext(uc, application);
+                } else {
+                    return uc;
                 }
-                if (uc != null) {
-                    HttpSession session = request.getSession(true);
-                    session.setAttribute(REASON_KEY, null);
-                    request.getSession(true).setAttribute("didactor-logincomponent", ac.getName());
-                    Integer usernumber = uc.getUserNumber();
-                    Event event = new Event(uc.getIdentifier(), request, null, null, null,
-                                            "LOGIN", usernumber != null ? usernumber.toString() : null,
-                                            "login");
-                    org.mmbase.core.event.EventManager.getInstance().propagateEvent(event);
-                    if (! uc.getAuthenticationType().equals(application)) {
-                        return request(new UserContext(uc, application), request);
-                    } else {
-                        return request(uc, request);
-                    }
-                }
-            } catch (SecurityException se) {
-                HttpSession session = request.getSession(true);
-                session.setAttribute(REASON_KEY, se.getMessage());
-                log.service("For ac " + se.getMessage());
             }
         }
 
@@ -299,11 +214,8 @@ public class Authentication extends org.mmbase.security.Authentication {
         if ("asis".equals(application)  && (desiredRank == null || desiredRank.getInt() == Rank.ANONYMOUS.getInt())) {
             log.debug("Asis application and not logged in: returning anonymous cloud");
             // wrapping in new user context because application should be correct.
-            return new UserContext("anonymous", "anonymous", Rank.ANONYMOUS, "asis");
+            return new UserContext("anonymous", "anonymous", Rank.getRank("didactor-anonymous"), "asis");
         }
-
-
-        assert  application.equals("login") : "Unknown security application " + application;
 
         // Still nothing, that means that we have to redirect to the loginpage
         // We iterate the components to see if there is one that knows where to
@@ -311,36 +223,29 @@ public class Authentication extends org.mmbase.security.Authentication {
         // TODO: maybe this should be configurable, so that you can specify which
         // security component should be used first by default. It will now automatically
         // go to the first one (aselect if that one is compiled in)
-        for (AuthenticationComponent ac : securityComponents) {
-            String loginPage = request != null ? ac.getLoginPage(request, response) : null;
-
-            // Could use a TreeHelper here to do didactor specific tree-includeing on the login page
-            // itself too.
-
+        for (int i = 0; i < securityComponents.size(); i++) {
+            AuthenticationComponent ac = (AuthenticationComponent)securityComponents.get(i);
+            String loginPage = ac.getLoginPage(request, response);
             if (log.isDebugEnabled()) {
                 log.debug("" + ac + ".getLoginPage() -> " + loginPage);
             }
             if (loginPage != null) {
                 try {
-                    StringBuilder referUrl = new StringBuilder(loginPage);
+                    String referUrl = loginPage;
                     if (referUrl.indexOf("?") > -1) {
-                        referUrl.append('&');
+                        referUrl += "&";
                     } else {
-                        referUrl.append('?');
+                        referUrl += "?";
                     }
-                    referUrl.append("referrer=");
-                    String q = request.getQueryString();
-                    String referrer = PARAM_ESCAPER.transform(request.getServletPath() + (q != null ? ("?" + q) : ""));
-                    referUrl.append(referrer);
-                    if (referUrl.toString().startsWith("/")) {
-                        referUrl.insert(0, request.getContextPath());
+                    referUrl += "referrer=" + request.getRequestURI(); 
+                    if (referUrl.startsWith("/")) {
+                        referUrl = request.getContextPath() + referUrl;
                     }
-                    // how about the paramters already present. This seems to be too simple. Escaping?
-                    String redirect = response.encodeRedirectURL(referUrl.toString());
-                    log.debug("Redirecting to " + redirect);
-                    response.sendRedirect(redirect);
+                    // how about the paramters alreayd present. This seems to be too simple. Escaping?
+                    String sRedirect = response.encodeRedirectURL(referUrl);
+                    response.sendRedirect(sRedirect);
                 } catch (Exception e) {
-                    throw new SecurityException("Can't redirect to login page(" + loginPage + ") because " + e.getClass() + ":" + e.getMessage(), e);
+                    throw new SecurityException("Can't redirect to login page(" + loginPage + ")", e);
                 }
                 return null;
             }
@@ -350,83 +255,59 @@ public class Authentication extends org.mmbase.security.Authentication {
         return null;
     }
 
-    public  boolean isValid(org.mmbase.security.UserContext userContext) throws org.mmbase.security.SecurityException {
-        if (userContext instanceof UserContext) {
-            UserContext uc = (UserContext) userContext;
-            log.debug("found " + uc);
-            if (uc.getRank().equals(Rank.ADMIN)) return true;
-            if (uc.getRank().equals(Rank.ANONYMOUS)) return true;
-            checkBuilder();
-            MMObjectNode user = users.getNode(uc.getUserNumber());
-            if (user == null) {
-                log.warn("No node found for node " + uc.getUserNumber());
-                return false;
-            }
-            return user.getBooleanValue("person_status");
-        } else {
-            log.service("" + userContext + " is not valid because not of this security implementation");
-            return false;
-        }
+    public boolean isValid(org.mmbase.security.UserContext usercontext) throws org.mmbase.security.SecurityException {
+        return true;
     }
 
     /**
-     * @deprecated
+     * Admin's backdoor for Cron &amp; etc Doesn't require password for login
+     *
+     * @todo this problable can be dropped in favour of a 'class security' implementation.
+     * @return UserContext
      */
-    protected static Node getUserNode(Cloud cloud, String id){
-        NodeManager people = cloud.getNodeManager("people");
-        NodeQuery nq = people.createQuery();
-        Queries.addConstraint(nq, Queries.createConstraint(nq, "username", FieldCompareConstraint.EQUAL, id, null, true));
-        NodeList l = people.getList(nq);
-        if (l.size() > 0) {
-            return l.getNode(0);
-        } else {
+    private UserContext doSystemLogin(String app) {
+        checkBuilder();
+        MMObjectNode user = users.getUser("admin");
+        if (user == null) {
             return null;
         }
+
+        return new UserContext(user, app);
     }
 
-    /**
-     * @deprecated
-     */
     public static Node getCurrentUserNode(Cloud cloud){
-        return getUserNode(cloud, cloud.getUser().getIdentifier());
-
+       try{
+           NodeList nlUsers = cloud.getList("",
+                                            "people",
+                                            "people.number",
+                                            "people.username='" + cloud.getUser().getIdentifier() + "'",
+                                            null, null, null, false);
+           if(nlUsers.size() == 1){
+               Node nodeUser = cloud.getNode(nlUsers.getNode(0).getStringValue("people.number"));
+               return nodeUser;
+           }
+       }
+       catch(Exception e){
+       }
+       return null;
     }
-    @Override public int getNode(org.mmbase.security.UserContext userContext) throws SecurityException {
-        String id = userContext.getIdentifier();
-        Node n = getUserNode(ContextProvider.getDefaultCloudContext().getCloud("mmbase", "class", null), id);
-        return n == null ? -1 : n.getNumber();
-    }
-
-
-    private static final Parameter[]  NAME_PASSWORD_PARAMS = new Parameter[] {PARAMETER_USERNAME,
-                                                                              PARAMETER_PASSWORD,
-                                                                              Parameter.REQUEST,
-                                                                              Parameter.RESPONSE};
-
-    private static final Parameter[]  REINCARNATE_PARAMS = new Parameter[] {PARAMETER_USERNAME,
-                                                                            Parameter.CLOUD};
-
-    private static final Parameter[]  DEFAULT_PARAMS = new Parameter[] { Parameter.REQUEST, Parameter.RESPONSE};
-
-    private static final Parameter[]  ANONYMOUS_PARAMS = new Parameter[] {new Parameter.Wrapper(PARAMETERS_ANONYMOUS),
-                                                                          new Parameter.Wrapper(DEFAULT_PARAMS)};
-
-
     public Parameters createParameters(String application) {
         application = application.toLowerCase();
         Parameters parameters;
         if ("anonymous".equals(application)) {
-            parameters =  new Parameters(ANONYMOUS_PARAMS);
+            parameters =  new Parameters(PARAMETERS_ANONYMOUS);
         } else if ("class".equals(application)) {
             parameters =  Parameters.VOID;
         } else if ("name/password".equals(application)) {
-            parameters = new Parameters(NAME_PASSWORD_PARAMS);
+            parameters = new Parameters(new Parameter[] {PARAMETER_USERNAME,
+                                                         PARAMETER_PASSWORD,
+                                                         Parameter.REQUEST, Parameter.RESPONSE});
         } else if ("login".equals(application)) {
-            parameters = new Parameters(DEFAULT_PARAMS);
-        } else if ("reincarnate".equals(application)) {
-            parameters = new Parameters(REINCARNATE_PARAMS);
+            parameters = new Parameters(new Parameter[] {new Parameter(PARAMETER_USERNAME, false), 
+                                                         new Parameter(PARAMETER_PASSWORD, false), 
+                                                         Parameter.REQUEST, Parameter.RESPONSE});
         } else {
-            parameters = new Parameters(DEFAULT_PARAMS);
+            parameters = new Parameters(new Parameter[] {Parameter.REQUEST, Parameter.RESPONSE});
         }
         if (log.isDebugEnabled()) {
             log.debug("Creating parameters for '" + application + "' -> " + parameters);
@@ -439,22 +320,16 @@ public class Authentication extends org.mmbase.security.Authentication {
      * @since MMBase-1.8
      */
     public int getDefaultMethod(String protocol) {
-        return METHOD_SESSIONDELEGATE;
+        return METHOD_DELEGATE;
     }
 
     public String[] getTypes(int method) {
-        switch(method) {
-        case METHOD_ASIS:
-            return new String[] {"anonymous", "login", "class"};
-        case METHOD_HTTP:
-            return new String[] {"name/password", "reincarnate"};
-        case METHOD_DELEGATE:
-        case METHOD_SESSIONDELEGATE:
-            return new String[] {"login", "name/password", "reincarnate"}; // redirect page
-        case METHOD_LOGINPAGE:
-            return new String[] {"name/password", "login", "reincarnate"};
-        default:
-            return new String[] {"name/password", "login", "class", "reincarnate"};
+        if (method == METHOD_ASIS) {
+            return new String[] {"asis", "anonymous", "login", "class", "didactor-logout"};
+        } else if (method == METHOD_DELEGATE) {
+            return new String[] {"login", "name/password", "asis", "class", "didactor-logout"};
+        } else {
+            return new String[] {"asis", "login", "name/password", "class", "didactor-logout"};
         }
     }
 

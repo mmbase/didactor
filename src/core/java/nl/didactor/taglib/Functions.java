@@ -11,34 +11,27 @@ import org.mmbase.util.logging.Logging;
 
 /**
  * Provide some Didactor specify functionality as EL-functions too.
- *
+ * 
  * @author Michiel Meeuwissen
- * @version $Id: Functions.java,v 1.7 2008-10-30 12:40:03 michiel Exp $
+ * @version $Id: Functions.java,v 1.2 2007-05-02 14:03:23 michiel Exp $
  * @since Didactor-2.3
  */
 public class Functions {
     private static final Logger log = Logging.getLoggerInstance(Functions.class);
 
 
-    public static String translate(String key) {
-        PageContext pageContext = ContextReferrerTag.getThreadPageContext();
-        TranslateTable.init();
+    public static String translate(PageContext pageContext, String key) {
+        TranslateTable.init(pageContext);
         Locale loc = (Locale) pageContext.getAttribute("javax.servlet.jsp.jstl.fmt.locale.request", PageContext.REQUEST_SCOPE);
-
-        TranslateTable tt = new TranslateTable(loc);
+        
+        TranslateTable tt = new TranslateTable(loc == null ? null : loc.toString());
         return tt.translate(key);
     }
-    public static Object setting(String component, String setting) throws JspTagException {
-        PageContext pageContext = ContextReferrerTag.getThreadPageContext();
+    public static Object setting(PageContext pageContext, String component, String setting) throws JspTagException {
         Component comp = Component.getComponent(component);
-        if (comp == null) throw new IllegalArgumentException("No such component '" + component + "'");
         Cloud cloud = (Cloud) pageContext.getAttribute(CloudTag.KEY, CloudTag.SCOPE);
         ContextTag pageContextTag = (ContextTag) pageContext.getAttribute(ContextTag.CONTEXTTAG_KEY);
         return comp.getSetting(setting, cloud, pageContextTag.getContextProvider().getContextContainer());
-    }
-
-    public static Component component(String component) throws JspTagException {
-        return Component.getComponent(component);
     }
 
 }
