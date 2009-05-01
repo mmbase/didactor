@@ -4,7 +4,7 @@ This jsp is used for changing the type of the forum.
 (open for students, or closed for students)
 After changes, forwards back to the forum.
 --%>
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.0" prefix="mm" %>
 <%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
 <mm:cloud jspvar="cloud" name="mmbase" loginpage="/login.jsp">
   <%@ include file="/shared/setImports.jsp"%>
@@ -25,7 +25,7 @@ After changes, forwards back to the forum.
     <title>Forum</title>
   </mm:param>
 </mm:treeinclude>
-   <di:translate key="forum.notallowed_to_remove" />
+   <di:translate id="notallowed_to_remove" >You are not allowed to remove this forum.</di:translate>
 <mm:treeinclude page="/cockpit/cockpit_footer.jsp" objectlist="$includePath" referids="$referids" />
 
   </mm:compare>

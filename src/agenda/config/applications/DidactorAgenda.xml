@@ -2,9 +2,9 @@
 <!DOCTYPE application PUBLIC "-//MMBase//DTD application config 1.1//EN" "http://www.mmbase.org/dtd/application_1_1.dtd">
 <application name="DidactorAgenda" maintainer="didactor.nl" version="5" auto-deploy="true">
     <requirements>
-        <requires name="DidactorCore" maintainer="didactor.nl" version="8" />
+        <requires name="DidactorCore" maintainer="didactor.nl" version="6" />
         <requires name="DidactorComponent" maintainer="didactor.nl" version="2" />
-        <requires name="DidactorResources" maintainer="didactor.nl" version="2" />
+        <requires name="Resources" maintainer="didactor.nl" version="2" />
     </requirements>  
 
     <neededbuilderlist>
@@ -27,7 +27,6 @@
         <relation from="classes" to="agendas" type="related" />
         <relation from="workgroups" to="agendas" type="related" />
         <relation from="agendas" to="items" type="eventrel" />
-        <relation from="agendas" to="items" type="related" />
 	<relation from="people" to="items" type="invitationrel" />
     </allowedrelationlist>
 

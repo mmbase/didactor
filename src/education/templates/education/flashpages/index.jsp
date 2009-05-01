@@ -1,7 +1,6 @@
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm"%>
-<%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.0" prefix="mm"%>
 <mm:content postprocessor="reducespace">
-<mm:cloud method="delegate" jspvar="cloud">
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
 
 
 <%@include file="/shared/setImports.jsp" %>
@@ -22,22 +21,9 @@
     <mm:param name="learnobjecttype">flashpages</mm:param>
 </mm:treeinclude>
 
-<mm:import externid="fb_madetest"/>
-<mm:present referid="fb_madetest">
-    <mm:node number="$fb_madetest" notfound="skip">
-        <mm:relatednodes type="tests">
-            <mm:import id="page">/education/tests/feedback.jsp</mm:import>
-            <a href="<mm:treefile page="$page" objectlist="$includePath" referids="$referids">
-                         <mm:param name="tests"><mm:field name="number"/></mm:param>
-                         <mm:param name="madetest"><mm:write referid="fb_madetest"/></mm:param>
-                     </mm:treefile>"><di:translate key="education.backtotestresults" /></a><br/>
-            <mm:remove referid="page"/>
-        </mm:relatednodes>
-    </mm:node>
-</mm:present>
 
 <mm:node number="$learnobject" jspvar="flash">
-    <%
+    <% 
         int layout = flash.getIntValue("layout");
         int width = 770;
         int height= 440;
@@ -50,7 +36,7 @@
             if (layout == 2 || layout == 0) {
                 %><mm:field name="text" escape="none"/><%
                 if (layout == 2) {
-                    %></td><td><%
+                    %></td><td><% 
                 }
             }
         }
@@ -60,7 +46,7 @@
               <param name="movie" value="<mm:attachment/>">
               <param name="quality" value="high">
               <embed src="<mm:attachment/>" quality="high" pluginspage="http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash" type="application/x-shockwave-flash" width="<%= width %>" height="<%= height %>" name="flashpage" swLiveConnect="true">
-              </embed>
+              </embed> 			  
           </object>
   </mm:relatednodes>
     <%
@@ -77,17 +63,11 @@
             %><mm:field name="text" escape="none"/><%
         }
     %>
-
+  
 </mm:node>
-
-
-<mm:node number="$learnobject" jspvar="nodeLearnObject">
-   <%@include file="../includes/component_link.jsp"%>
-</mm:node>
-
 </div>
 </body>
 </html>
 </mm:cloud>
 </mm:content>
-
+ 

@@ -2,9 +2,9 @@
 <!DOCTYPE application PUBLIC "-//MMBase//DTD application config 1.1//EN" "http://www.mmbase.org/dtd/application_1_1.dtd">
 <application name="DidactorProgress" maintainer="didactor.nl" version="8" auto-deploy="true">
     <requirements>
-        <requires name="DidactorEducation" maintainer="didactor.nl" version="20" />
-        <requires name="DidactorResources" maintainer="didactor.nl" version="2" />
-    </requirements>
+        <requires name="DidactorEducation" maintainer="didactor.nl" version="2" />
+        <requires name="Resources" maintainer="didactor.nl" version="2" />
+    </requirements>  
 
     <neededbuilderlist></neededbuilderlist>
 
@@ -15,7 +15,7 @@
     </allowedrelationlist>
 
     <datasourcelist>
-      <datasource builder="components" path="DidactorProgress/components.xml" />
+        <datasource builder="images" path="DidactorProgress/images.xml" />
     </datasourcelist>
 
     <relationsourcelist />

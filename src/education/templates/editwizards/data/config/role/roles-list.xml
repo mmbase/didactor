@@ -1,11 +1,9 @@
 <!DOCTYPE list PUBLIC "-//MMBase/DTD editwizard 1.0//EN" "http://www.mmbase.org/dtd/wizard-schema_1_0.dtd">
 <list destination="roles" role="related" minoccurs="0" maxoccurs="*">
-  <title xml:lang="nl">Bijbehorende rollen</title>
-  <title xml:lang="en">Related roles</title>
+  <title>Bijbehorende Rollen</title>
   <item>
     <field name="name" ftype="data">
-      <prompt xml:lang="nl">Rol naam</prompt>
-      <prompt xml:lang="en">Role names</prompt>
+      <prompt>Rol naam</prompt>
     </field>
   </item>
 
@@ -22,11 +20,9 @@
   </action>
 
   <command name="search" nodepath="roles" fields="name" age="-1" orderby="number" directions="down" >
-    <prompt xml:lang="nl">Zoeken naar Rollen</prompt>
-    <prompt xml:lang="en">Search roles</prompt>
+    <prompt>Zoeken naar Rollen</prompt>
     <search-filter>
-      <name xml:lang="nl">naam bevat</name>
-      <name xml:lang="en">name contains</name>
+      <name>naam bevat</name>
       <search-fields>name</search-fields>
     </search-filter>
   </command>

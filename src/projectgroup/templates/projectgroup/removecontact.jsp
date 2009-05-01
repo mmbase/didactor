@@ -1,15 +1,16 @@
 <%--
   This template delete existing items of a folder.
 --%>
-<%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.0" prefix="mm" %>
 <%-- expires is set so renaming a folder does not show the old name --%>
 <mm:content postprocessor="reducespace" expires="0">
-<mm:cloud method="delegate" jspvar="cloud">
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
 <%@include file="/shared/setImports.jsp" %>
+<fmt:bundle basename="nl.didactor.component.workspace.WorkspaceMessageBundle">
 <mm:treeinclude page="/cockpit/cockpit_header.jsp" objectlist="$includePath" referids="$referids">
   <mm:param name="extraheader">
-    <title><di:translate key="workspace.deletecontacts" /></title>
+    <title><fmt:message key="DELETECONTACTS" /></title>
   </mm:param>
 </mm:treeinclude>
 
@@ -24,7 +25,7 @@
 
 <%-- Check if the yes button is pressed --%>
 <mm:present referid="action1">
-  <mm:import id="action1text"><di:translate key="workspace.deleteyes" /></mm:import>
+  <mm:import id="action1text"><fmt:message key="DELETEYES" /></mm:import>
   <mm:compare referid="action1" referid2="action1text">
 
     <mm:node number="$workgroup">
@@ -52,7 +53,7 @@
 
 <%-- Check if the no button is pressed --%>
 <mm:present referid="action2">
-  <mm:import id="action2text"><di:translate key="workspace.deleteno" /></mm:import>
+  <mm:import id="action2text"><fmt:message key="DELETENO" /></mm:import>
   <mm:compare referid="action2" referid2="action2text">
     <mm:redirect referids="$referids" page="$callerpage"/>
   </mm:compare>
@@ -63,8 +64,8 @@
 
 <div class="navigationbar">
   <div class="titlebar">
-      <img src="<mm:treefile write="true" page="/gfx/icon_shareddocs.gif" objectlist="$includePath" referids="$referids"/>" width="25" height="13" border="0" title="<di:translate key="workspace.shareddocuments" />"  alt="<di:translate key="workspace.shareddocuments" />" />
-      <di:translate key="workspace.projectgroups" />
+      <img src="<mm:treefile write="true" page="/gfx/icon_shareddocs.gif" objectlist="$includePath" referids="$referids"/>" width="25" height="13" border="0" alt="<fmt:message key="SHAREDDOCUMENTS" />" />
+      <fmt:message key="PROJECTGROUPS" />
   </div>
 </div>
 
@@ -78,14 +79,14 @@
 <div class="mainContent">
 
   <div class="contentHeader">
-  	<di:translate key="workspace.deletecontacts" />
+  	<fmt:message key="DELETECONTACTS" />
   </div>
 
   <div class="contentBodywit">
 
     <%-- Show the form --%>
     <form name="deletefolderitems" method="post" action="<mm:treefile page="/projectgroup/removecontact.jsp" objectlist="$includePath" referids="$referids"/>">
-      <di:translate key="workspace.deletecontactsyesno" />
+      <fmt:message key="DELETECONTACTSYESNO" />
       <p/>
 
       <!-- TODO show data in near future -->
@@ -94,11 +95,12 @@
 
       <input type="hidden" name="callerpage" value="<mm:write referid="callerpage"/>"/>
       <input type="hidden" name="ids" value="<mm:write referid="ids"/>"/>
-      <input class="formbutton" type="submit" name="action1" value="<di:translate key="workspace.deleteyes" />" />
-      <input class="formbutton" type="submit" name="action2" value="<di:translate key="workspace.deleteno" />" />
+      <input class="formbutton" type="submit" name="action1" value="<fmt:message key="DELETEYES" />" />
+      <input class="formbutton" type="submit" name="action2" value="<fmt:message key="DELETENO" />" />
     </form>
   </div>
 </div>
 </div>
+</fmt:bundle>
 </mm:cloud>
 </mm:content>

@@ -1,53 +1,88 @@
 <?xml version="1.0"?>
-<!DOCTYPE wizard-schema PUBLIC "-//MMBase/DTD editwizard 1.0//EN" "http://www.mmbase.org/dtd/wizard-schema_1_0.dtd"
-[
-   <!ENTITY extra_loads SYSTEM "extra_loads.xml">
-   <!ENTITY extra_steps SYSTEM "extra_steps.xml">
-   <!ENTITY extra_schemas SYSTEM "extra_schemas.xml">
-]>
+<!DOCTYPE wizard-schema PUBLIC "-//MMBase/DTD editwizard 1.0//EN" "http://www.mmbase.org/dtd/wizard-schema_1_0.dtd">
 <wizard-schema id="empty">
-  <title xml:lang="nl">LINK EDITOR</title>
-  <title xml:lang="en">URL EDITOR</title>
+    <title>Link</title>
 
-  <action type="create">
-    <object type="urls">
-      <field name="showtitle">1</field>
-      <field name="url">http://</field>
-    </object>
-  </action>
+    <action type="create">
+        <object type="urls">
+            <field name="showtitle">1</field>
+            <field name="url">http://</field>
+        </object>
+    </action>
 
-  <action type="load">
-    &extra_loads;
-  </action>
+    <action type="load">
+        <relation destination="metadata" role="related">
+          <object type="metadata">
+           <relation destination="metalangstring" role="posrel">
+              <object type="metalangstring">
+                <field name="number"/>
+                <field name="language"/>
+                <field name="value"/>
+              </object>
+            </relation>
+           <relation destination="metadate" role="posrel">
+              <object type="metadate">
+                <field name="number"/>
+                <field name="value"/>
+              </object>
+            </relation>
+           <relation destination="metavocabulary" role="posrel">
+              <object type="metavocabulary">
+                <field name="number"/>
+                <field name="value"/>
+              </object>
+            </relation>
+            <relation destination="metadefinition" role="related">
+              <object type="metadefinition">
+                <relation destination="metavocabulary" role="related"/>
+              </object>
+            </relation>
+            </object>
+        </relation>
+    </action>
 
-  <action type="delete" />
+    <action type="delete" />
 
-  <lists>
-    <optionlist include="config/option_list/boolean.xml" />
-  </lists>
+    <lists>
+       <optionlist include="config/option_list/boolean.xml" />
+    </lists>
 
-  <form-schema id="step1">
-    <title xml:lang="nl">Link invoeren</title>
-    <title xml:lang="en">Enter URL</title>
+    <steps>
+        <step form-schema="step1" />
+        <!-- step form-schema="step2" / -->
+    </steps>
 
-    <field name="url" >
-      <description xml:lang="nl">Voer hier een nieuwe link (URL) in of wijzig een bestaande.</description>
-      <description xml:lang="en">Enter a new URL, or change an existing one.</description>
-    </field>
+    <form-schema id="step1">
+        <title>Link invoeren</title>
+        <!--
+        <description>Invoeren van links (URLs)</description>
+        -->
 
-    <field name="name" >
-      <description xml:lang="nl">Voer hier een naam in voor deze link of wijzig een bestaande. De naam wordt gebruikt om een link af te beelden.</description>
-      <description xml:lang="en">Enter the name for the URL or change an exising one. The name is used to display the URL.</description>
-    </field>
-    <field name="showtitle" ftype="enum">
-      <optionlist select="boolean" />
-    </field>
+        <field name="url" >
+            <prompt>Link</prompt>
+            <description>Voer hier een nieuwe link (URL) in of wijzig een bestaande.</description>
+        </field>
 
-    <field name="description" ftype="text" rows="4" >
-      <description xml:lang="nl">Geef een duidelijke omschrijving van de link</description>
-      <description xml:lang="en">Description of the URL</description>
-    </field>
-  </form-schema>
+        <field name="name" >
+            <prompt>Naam van de link</prompt>
+            <description>Voer hier een naam in voor deze link of wijzig een bestaande. De naam wordt gebruikt om een link af te beelden.</description>
+        </field>
+        <field name="showtitle" ftype="enum">
+           <prompt xml:lang="nl">Titel laten zien</prompt>
+           <prompt xml:lang="en">Show title</prompt>
+           <optionlist select="boolean" />
+        </field>
 
-  &extra_schemas;
+        <field name="description" ftype="text" rows="4" >
+            <prompt>Omschrijving</prompt>
+            <description>Geef een duidelijke omschrijving van de link</description>
+        </field>
+    </form-schema>
+    <form-schema id="step2">
+        <title>Metadata invoeren</title>
+        <list extends="config/metadata/metadatalangstring.xml"/>
+        <list extends="config/metadata/metadatadate.xml"/>
+        <list extends="config/metadata/metadatavocabulary.xml"/>
+    </form-schema>
+
 </wizard-schema>
