@@ -11,6 +11,6 @@ public class ChatStarter extends Thread {
     }
 
     public void run() {
-        nl.eo.chat.Server.main(args);
+        Server.main(args);
     }
 }

@@ -1,53 +1,80 @@
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.0" prefix="mm" %>
 <%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
-
 <mm:content postprocessor="reducespace">
-<mm:cloud method="delegate" jspvar="cloud">
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
 <%@include file="/shared/setImports.jsp" %>
-<%@include file="/education/wizards/roles_defs.jsp" %>
-<mm:import id="editcontextname" reset="true">docent schermen</mm:import>
-<%@include file="/education/wizards/roles_chk.jsp" %>
-  <mm:treeinclude page="/cockpit/cockpit_header.jsp" objectlist="$includePath" referids="$referids">
-    <mm:param name="extraheader">
-      <title>POP</title>
-      <link rel="stylesheet" type="text/css" href="css/pop.css" />
-    </mm:param>
-  </mm:treeinclude>
+<mm:treeinclude page="/cockpit/cockpit_header.jsp" objectlist="$includePath" referids="$referids">
+  <mm:param name="extraheader">
+    <title>POP</title>
+  </mm:param>
+</mm:treeinclude>
+<!-- TODO where are the different roles described -->
+<!-- TODO different things to do with different roles? -->
 
-  <%@include file="getids.jsp" %>
+<div class="rows">
 
-  <mm:islessthan referid="rights" referid2="RIGHTS_RW">
-    <mm:import id="t_mode" reset="true">-1</mm:import>
-    <mm:import id="whatselected" reset="true">student</mm:import>
-  </mm:islessthan>
+<div class="navigationbar">
+  <div class="titlebar">
+    <img src="<mm:treefile write="true" page="/gfx/icon_pop.gif" objectlist="$includePath" />" width="25" height="13" border="0" alt="persoonlijk ontwikkelings plan" /> Persoonlijk ontwikkelings plan
+  </div>		
+</div>
 
-  <div class="rows">
-
-    <div class="navigationbar">
-      <div class="titlebar">
-        <img src="<mm:treefile write="true" page="/gfx/icon_pop.gif" objectlist="$includePath" />" 
-            width="25" height="13" border="0" title="<di:translate key="pop.popfull" />" alt="<di:translate key="pop.popfull" />" /> <di:translate key="pop.popfull" />
-      </div>		
-    </div>
-
-    <%@include file="leftpanel.jsp" %> 
-
-    <%-- right section --%>
-    <mm:compare referid="whatselected" value="student">
-      <mm:treeinclude page="/pop/s_rightpanel.jsp" objectlist="$includePath" referids="$referids"/>
-    </mm:compare>
-    <mm:compare referid="whatselected" value="student" inverse="true">
-      <mm:compare referid="t_mode" value="true" inverse="true">
-        <mm:treeinclude page="/pop/s_rightpanel.jsp" objectlist="$includePath" referids="$referids"/>
-      </mm:compare>
-      <mm:compare referid="t_mode" value="true">
-        <mm:treeinclude page="/pop/t_rightpanel.jsp" objectlist="$includePath" referids="$referids">
-          <mm:param name="wgroup"><mm:write referid="wgroup"/></mm:param>
-          <mm:param name="whatselected"><mm:write referid="whatselected"/></mm:param>
-        </mm:treeinclude>
-      </mm:compare>
-    </mm:compare>
+<di:hasrole role="student">
+<div class="folders">
+  <div class="folderHeader">
+    P.O.P.
   </div>
-  <mm:treeinclude page="/cockpit/cockpit_footer.jsp" objectlist="$includePath" referids="$popreferids" />
+  <div class="folderBody">
+     <mm:node number="$user">
+     	<mm:relatedcontainer path="classrel,classes,educations">
+     	  <mm:related>
+            <div class="educationId">
+              <mm:field name="educations.name"/>
+            </div>
+          </mm:related>
+     	</mm:relatedcontainer>
+     </mm:node>
+
+  </div>
+</div>
+
+<div class="mainContent">
+  <div class="contentHeader">
+  </div>
+  <div class="contentBodywit">
+    <mm:node number="$user">
+      <mm:relatedcontainer path="classrel,classes,educations">
+        <di:table>
+          <di:row>
+            <di:headercell sortfield="educations.name" default="true">Titel opleiding</di:headercell>
+            <di:headercell>Intake</di:headercell>
+            <di:headercell>Gestart</di:headercell>
+            <di:headercell>Voortgang</di:headercell>
+            <di:headercell>&nbsp;</di:headercell>
+          </di:row>
+
+          <mm:related>
+            <di:row>
+              <di:cell>
+                <a href="<mm:treefile page="/education/index.jsp" objectlist="$includePath" referids="$referids">
+                           <mm:param name="education"><mm:field name="educations.number" /></mm:param>
+                         </mm:treefile>">
+                 <mm:field name="educations.name" />
+                </a>
+              </di:cell>
+              <di:cell>vinkje</di:cell>
+              <di:cell>vinkje</di:cell>
+              <di:cell>leafinclude progressbar</di:cell>
+              <di:cell>verder/start</di:cell>
+            </di:row>
+          </mm:related>
+        </di:table>
+      </mm:relatedcontainer>
+    </mm:node>
+  </div>
+</div>
+</div>
+</di:hasrole>
+<mm:treeinclude page="/cockpit/cockpit_footer.jsp" objectlist="$includePath" referids="$referids" />
 </mm:cloud>
 </mm:content>

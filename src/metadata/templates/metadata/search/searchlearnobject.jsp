@@ -1,7 +1,6 @@
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" %>
-<%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.0" prefix="mm" %>
 <mm:content postprocessor="reducespace">
-<mm:cloud method="delegate" jspvar="cloud">
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
 <%@include file="/shared/setImports.jsp" %>
 <%@page import="java.util.StringTokenizer"%>
 
@@ -17,9 +16,9 @@
 
 
 <% if (level.intValue() < 10) { %>
-<mm:list nodes="$learnobject" path="learnobjects,metadata,metavalue">
+<mm:list nodes="$learnobject" path="learnobjects,metadata">
 
-<mm:import jspvar="metaValue" reset="true" vartype="String"><mm:field name="metavalue.value"/></mm:import>
+<mm:import jspvar="metaValue" reset="true" vartype="String"><mm:field name="metadata.value"/></mm:import>
 <%
 
 metaValue=metaValue.toUpperCase();
@@ -52,7 +51,7 @@ try {
     if (hit) {
 	%>
 	    <tr>
-		<td class="listItem"><di:translate key="education.learnobject" /></td>
+		<td class="listItem"><di:translate id="learnobject">Leerobject</di:translate></td>
 		<td class="listItem">
 		    <mm:node number="$learnobject">
 			<mm:import id="learnobjecttype" reset="true"><mm:nodeinfo type="type"/></mm:import>
@@ -66,8 +65,7 @@ try {
 		    </mm:node>
 		    </td>
 	    </tr>
-<%       
-    } 
+<%   } 
 }
 catch (Exception e) {
     System.err.println(e);
