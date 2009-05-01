@@ -1,16 +1,17 @@
 <%--
   This template deletes a existing mailbox.
 --%>
-<%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.0" prefix="mm" %>
 
 <mm:content postprocessor="reducespace" expires="0">
-<mm:cloud method="delegate" jspvar="cloud">
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
 
 <%@include file="/shared/setImports.jsp" %>
+<fmt:bundle basename="nl.didactor.component.email.EmailMessageBundle">
 <mm:treeinclude page="/cockpit/cockpit_header.jsp" objectlist="$includePath" referids="$referids">
   <mm:param name="extraheader">
-    <title><di:translate key="email.deletefolder" /></title>
+    <title><fmt:message key="DELETEFOLDER" /></title>
   </mm:param>
 </mm:treeinclude>
 
@@ -20,7 +21,7 @@
 <mm:import externid="action2"/>
 
 <%-- Check if the yes button is pressed --%>
-<mm:import id="action1text"><di:translate key="email.deleteyes" /></mm:import>
+<mm:import id="action1text"><fmt:message key="DELETEYES" /></mm:import>
 <mm:compare referid="action1" referid2="action1text">
 
   <%-- Retrieve the mailbox, delete the node with relations and delete mailitems --%>
@@ -46,7 +47,7 @@
 
 
 <%-- Check if the no button is pressed --%>
-<mm:import id="action2text"><di:translate key="email.deleteno" /></mm:import>
+<mm:import id="action2text"><fmt:message key="DELETENO" /></mm:import>
 <mm:compare referid="action2" referid2="action2text">
   <mm:redirect referids="$referids,mailbox" page="$callerpage"/>
 </mm:compare>
@@ -55,8 +56,8 @@
 
 <div class="navigationbar">
   <div class="titlebar">
-    <img src="<mm:treefile write="true" page="/gfx/icon_email.gif" objectlist="$includePath" referids="$referids"/>" width="25" height="13" border="0" title="<di:translate key="email.email" />" alt="<di:translate key="email.email" />"/>
-    <di:translate key="email.email" />
+    <img src="<mm:treefile write="true" page="/gfx/icon_email.gif" objectlist="$includePath" referids="$referids"/>" width="25" height="13" border="0" alt="<fmt:message key="EMAIL" />"/>
+    <fmt:message key="EMAIL" />
   </div>
 </div>
 
@@ -70,7 +71,7 @@
 <div class="mainContent">
 
   <div class="contentHeader">
-    <di:translate key="email.deletefolder" />
+    <fmt:message key="DELETEFOLDER" />
   </div>
 
   <div class="contentBodywit">
@@ -78,7 +79,7 @@
     <%-- Show the form --%>
     <form name="deletemailboxform" method="post" action="<mm:treefile page="/email/deletemailbox.jsp" objectlist="$includePath" referids="$referids"/>">
 
-      <di:translate key="email.deletefolderyesno" />
+      <fmt:message key="DELETEFOLDERYESNO" />
       <p/>
 
       <table class="Font">
@@ -95,8 +96,8 @@
 
       <input type="hidden" name="mailbox" value="<mm:write referid="mailbox"/>"/>
       <input type="hidden" name="callerpage" value="<mm:write referid="callerpage"/>"/>
-      <input class="formbutton" type="submit" name="action1" value="<di:translate key="email.deleteyes" />"/>
-      <input class="formbutton" type="submit" name="action2" value="<di:translate key="email.deleteno" />"/>
+      <input class="formbutton" type="submit" name="action1" value="<fmt:message key="DELETEYES" />"/>
+      <input class="formbutton" type="submit" name="action2" value="<fmt:message key="DELETENO" />"/>
 
     </form>
 
@@ -105,5 +106,6 @@
 </div>
 <mm:treeinclude page="/cockpit/cockpit_footer.jsp" objectlist="$includePath" referids="$referids" />
 
+</fmt:bundle>
 </mm:cloud>
 </mm:content>
