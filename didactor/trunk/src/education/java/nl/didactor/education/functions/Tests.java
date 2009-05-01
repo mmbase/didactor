@@ -10,7 +10,7 @@ import java.util.*;
 /**
  * Returns all tests of a certain education.
  * @author Michiel Meeuwissen
- * @version $Id: Tests.java,v 1.1 2007-10-18 14:39:30 michiel Exp $
+ * @version $Id$
  */
 public class Tests {
     protected final static Logger log = Logging.getLoggerInstance(Tests.class);

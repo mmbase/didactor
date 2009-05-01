@@ -24,7 +24,7 @@ import org.mmbase.util.logging.Logging;
 
  *
  * @author Michiel Meeuwissen
- * @version $Id: DidactorFramework.java,v 1.6 2009-01-02 09:36:10 michiel Exp $
+ * @version $Id$
  * @since Didactor-2.3
  */
 public class DidactorFramework extends BasicFramework {

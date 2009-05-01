@@ -28,7 +28,7 @@ import org.mmbase.util.logging.Logging;
  * License.
  * </p>
  * @author Alex Zemskov
- * @version $Id: NOutOfM.java,v 1.2 2007-05-11 12:34:03 michiel Exp $
+ * @version $Id$
 */
 
 

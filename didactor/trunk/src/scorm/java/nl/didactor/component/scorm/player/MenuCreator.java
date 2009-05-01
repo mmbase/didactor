@@ -22,7 +22,7 @@ import org.mmbase.util.logging.Logging;
 
 /**
  * @javadoc
- * @version $Id: MenuCreator.java,v 1.11 2007-07-26 14:50:57 michiel Exp $
+ * @version $Id$
  */
 
 public class MenuCreator extends XMLDocument  {

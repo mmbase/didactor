@@ -22,7 +22,7 @@ import nl.didactor.security.UserContext;
 /**
  * Default AuthenticationComponent for Didactor.
  * @javadoc
- * @version $Id: PlainSecurityComponent.java,v 1.23 2008-03-20 19:56:49 michiel Exp $
+ * @version $Id$
  */
 
 public class PlainSecurityComponent implements AuthenticationComponent {

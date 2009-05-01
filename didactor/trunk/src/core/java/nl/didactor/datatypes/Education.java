@@ -13,7 +13,7 @@ import java.util.regex.*;
  * If you make an 'education' typed field, it will be autoamticly filled with the current user's education.
  *
  * @author Michiel Meeuwissen
- * @version $Id: Education.java,v 1.3 2008-06-20 10:09:50 michiel Exp $
+ * @version $Id$
  */
 public class Education extends NodeDataType  {
     private static final Logger log = Logging.getLoggerInstance(Education.class);

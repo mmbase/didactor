@@ -12,7 +12,7 @@ import org.mmbase.module.core.*;
 
 /**
  * @javadoc
- * @version $Id: Authorization.java,v 1.6 2007-07-17 14:36:46 michiel Exp $
+ * @version $Id$
  */
 public class Authorization extends org.mmbase.security.Authorization {
 

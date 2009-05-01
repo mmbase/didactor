@@ -24,7 +24,7 @@ import nl.didactor.metadata.handlers.*;
  * <li>Value returned by handler</li>
  * </ul>
  * @author Gerard van Enk <gvenk@millionpieces.nl>
- * @version $Id: Metadata.java,v 1.3 2005-03-14 20:35:48 azemskov Exp $
+ * @version $Id$
  */
 public class Metadata extends MMObjectBuilder {
 

@@ -20,7 +20,7 @@ import org.mmbase.util.logging.Logging;
  * learnblocks.  
  * 
  * @author Nico Klasens (Finalist IT Group), 10-feb-2004
- * @version $Id: LearnobjectsFilter.java,v 1.1 2004-11-01 12:52:42 jdiepenmaat Exp $
+ * @version $Id$
  */
 public class LearnobjectsFilter {
 

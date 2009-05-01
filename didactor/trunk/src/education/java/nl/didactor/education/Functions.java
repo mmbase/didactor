@@ -11,7 +11,7 @@ import java.util.*;
 /**
  * Several functions on mmbase nodes which are used by didactor.
  * @author Michiel Meeuwissen
- * @version $Id: Functions.java,v 1.11 2009-03-13 14:56:59 michiel Exp $
+ * @version $Id$
  */
 public class Functions {
     protected final static Logger log = Logging.getLoggerInstance(Functions.class);

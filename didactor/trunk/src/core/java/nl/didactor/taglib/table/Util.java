@@ -15,7 +15,7 @@ import org.mmbase.util.logging.Logging;
 
 /**
  * @javadoc
- * @version $Id: Util.java,v 1.3 2007-06-27 09:11:16 michiel Exp $
+ * @version $Id$
  */
 
 class Util {

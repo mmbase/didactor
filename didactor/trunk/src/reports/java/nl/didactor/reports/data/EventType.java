@@ -19,7 +19,7 @@ package nl.didactor.reports.data;
 /**
  * @javadoc
  * @author p.becic
- * @version $Id: EventType.java,v 1.3 2007-07-26 14:52:27 michiel Exp $
+ * @version $Id$
  */
 public class EventType {
 

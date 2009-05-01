@@ -48,7 +48,7 @@ import uk.ac.reload.jdom.XMLDocument;
  * Core IMS Metadata Methods and Functionality (none at the moment)
  *
  * @author Phillip Beauvoir
- * @version $Id: MD_Core.java,v 1.2 2005-08-29 00:06:51 azemskov Exp $
+ * @version $Id$
  */
 public class MD_Core {
 

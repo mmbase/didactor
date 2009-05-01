@@ -13,7 +13,7 @@ import org.mmbase.util.logging.Logging;
  * Provide some Didactor specify functionality as EL-functions too.
  *
  * @author Michiel Meeuwissen
- * @version $Id: Functions.java,v 1.7 2008-10-30 12:40:03 michiel Exp $
+ * @version $Id$
  * @since Didactor-2.3
  */
 public class Functions {

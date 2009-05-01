@@ -24,7 +24,7 @@ import java.util.*;
 
 /**
  * @javadoc
- * @version $Id: Component.java,v 1.32 2009-01-02 09:36:10 michiel Exp $
+ * @version $Id$
  */
 public abstract class Component {
     private static final Logger log = Logging.getLoggerInstance(Component.class);

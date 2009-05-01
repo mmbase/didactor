@@ -13,7 +13,7 @@ import org.mmbase.util.logging.Logging;
 
 /**
  * @javadoc
- * @version $Id: ClassRoom.java,v 1.10 2008-09-25 16:26:56 michiel Exp $
+ * @version $Id$
  */
 public class ClassRoom extends FunctionProvider {
     private static final Logger log = Logging.getLoggerInstance(ClassRoom.class);

@@ -10,7 +10,7 @@ import java.io.File;
 /**
  * Wrapper that allows the EO chat to be started as an MMBase module.
  * @author Johannes Verelst &lt;johannes.verelst@eo.nl&gt;
- * @version $Id: ChatModule.java,v 1.3 2008-02-29 12:49:29 michiel Exp $
+ * @version $Id$
  */
 public class ChatModule extends Module {
     private static final Logger log = Logging.getLoggerInstance(ChatModule.class);

@@ -24,7 +24,7 @@ import nl.didactor.component.BasicComponent;
 /**
  *
  * @author Johannes Verelst &lt;johannes.verelst@eo.nl&gt;
- * @version $Id: ComponentBuilder.java,v 1.15 2008-09-04 09:49:14 michiel Exp $
+ * @version $Id$
  */
 public class ComponentBuilder extends DidactorBuilder {
 

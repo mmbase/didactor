@@ -9,7 +9,7 @@ import java.util.*;
 /**
  * Determines the questions for a certains test.
  * @author Michiel Meeuwissen
- * @version $Id: Questions.java,v 1.2 2007-09-28 15:59:03 michiel Exp $
+ * @version $Id$
  */
 public class Questions {
     protected final static Logger log = Logging.getLoggerInstance(Questions.class);

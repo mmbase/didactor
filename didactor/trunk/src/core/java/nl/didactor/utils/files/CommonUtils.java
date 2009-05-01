@@ -4,7 +4,7 @@ import java.io.File;
 
 /**
  * @javadoc
- * @version $Id: CommonUtils.java,v 1.2 2007-04-24 16:09:01 michiel Exp $
+ * @version $Id$
  */
 public class CommonUtils {
     /**

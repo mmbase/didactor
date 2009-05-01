@@ -23,7 +23,7 @@ import nl.didactor.taglib.*;
  * License.
  * </p>
  * @author Alex Zemskov
- * @version $Id: Error.java,v 1.3 2007-05-11 12:34:03 michiel Exp $
+ * @version $Id$
  */
 
 

@@ -16,7 +16,7 @@ import java.util.*;
  * the roles based on a given context.
  * @author Johannes Verelst &lt;johannes.verelst@eo.nl&gt;
  * @author Michiel Meeuwissen
- * @version $Id: UserContext.java,v 1.13 2008-11-13 16:57:24 michiel Exp $
+ * @version $Id$
  */
 public class UserContext extends org.mmbase.security.BasicUser implements WeakNodeEventListener {
     private static final Logger log = Logging.getLoggerInstance(UserContext.class);

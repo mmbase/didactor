@@ -18,7 +18,7 @@ import nl.didactor.security.AuthenticationComponent;
 import nl.didactor.security.UserContext;
 
 /**
- * @version $Id: PropertiesSecurityComponent.java,v 1.2 2008-08-14 16:09:46 michiel Exp $
+ * @version $Id$
  */
 
 public class PropertiesSecurityComponent implements AuthenticationComponent {

@@ -10,7 +10,7 @@ import java.util.*;
 /**
  * Givenanswers for a certain question.
  * @author Michiel Meeuwissen
- * @version $Id: GivenAnswers.java,v 1.4 2008-11-20 16:57:44 michiel Exp $
+ * @version $Id$
  */
 public class GivenAnswers {
     protected final static Logger log = Logging.getLoggerInstance(GivenAnswers.class);

@@ -59,7 +59,7 @@ import org.jdom.output.XMLOutputter;
  * Some useful XML Utilities that leverage the JDOM Package<br>
  *
  * @author Phillip Beauvoir
- * @version $Id: XMLUtils.java,v 1.2 2005-08-29 00:06:51 azemskov Exp $
+ * @version $Id$
  */
 public final class XMLUtils {
 	

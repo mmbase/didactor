@@ -22,7 +22,7 @@ import nl.didactor.util.ClassRoom;
  *
  * @author UNKNOWN
  * @javadoc What kind of 'entities'?
- * @version $Id: EntityTag.java,v 1.4 2007-04-24 12:12:11 michiel Exp $
+ * @version $Id$
  */
 public class EntityTag extends CloudReferrerTag { 
     private static final Logger log = Logging.getLoggerInstance(EntityTag.class);

@@ -6,7 +6,7 @@ import org.mmbase.storage.search.implementation.*;
 
 /**
  * @javadoc
- * @version $Id: GetRelation.java,v 1.3 2009-01-02 09:36:10 michiel Exp $
+ * @version $Id$
  */
 public class GetRelation {
     /**
