@@ -1,59 +1,83 @@
 <?xml version="1.0"?>
-<!DOCTYPE wizard-schema PUBLIC "-//MMBase/DTD editwizard 1.0//EN" "http://www.mmbase.org/dtd/wizard-schema_1_0.dtd"
-[
-   <!ENTITY extra_loads SYSTEM "extra_loads.xml">
-   <!ENTITY extra_schemas SYSTEM "extra_schemas.xml">
-   <!ENTITY extra_lists SYSTEM "extra_lists.xml">
-]>
+<!DOCTYPE wizard-schema PUBLIC "-//MMBase/DTD editwizard 1.0//EN" "http://www.mmbase.org/dtd/wizard-schema_1_0.dtd">
 <wizard-schema id="empty">
-  <title xml:lang="nl">Personen editor</title>
-  <title xml:lang="en">People editor</title>
+    <title>Personen Editor</title>
 
-  <action type="create">
-    <object type="people"/>
-  </action>
+    <action type="create">
+        <object type="people"/>
+    </action>
 
-  <action type="load">
-    <object type="people"/>
-    <relation destinationtype="roles" role="related"/>
-    <relation destinationtype="classes" role="classrel"/>
-    <relation destinationtype="workgroups" role="related"/>
-    <relation destinationtype="educations" role="classrel"/>
-    &extra_loads;
-  </action>
+    <action type="load">
+        <object type="people"/>
+        <relation destinationtype="roles" role="related"/>
+        <relation destinationtype="classes" role="classrel"/> 
+        <relation destinationtype="workgroups" role="related"/> 
+        <relation destinationtype="educations" role="classrel"/> 
+    </action>
 
-  <action type="delete" />
+    <steps>
+        <step form-schema="step1" />
+    </steps>
 
+    <form-schema id="step1">
+      <title>Persoon invoeren</title>
+        <field name="firstname" >
+            <prompt>Voornaam</prompt>
+        </field>
+        <field name="initials" >
+            <prompt>Initialen</prompt>
+        </field>
+        <field name="suffix" ftype="line">
+            <prompt>Tussenvoegsel</prompt>
+        </field>
+        <field name="lastname" >
+            <prompt>Achternaam</prompt>
+        </field>
+        <field name="address" >
+            <prompt>Adres</prompt>
+        </field>
+        <field name="zipcode" >
+            <prompt>Postcode</prompt>
+        </field>
+        <field name="city" >
+            <prompt>Plaats</prompt>
+        </field>
+        <field name="country" ftype="line">
+            <prompt>Land</prompt>
+        </field>
+        <field name="telephone" >
+            <prompt>Telefoonnummer</prompt>
+        </field>
+        <field name="mobile" ftype="line">
+            <prompt>Mobiel</prompt>
+        </field>
+        <field name="email" >
+            <prompt>E-mail adres</prompt>
+        </field>
+        <field name="website" ftype="line">
+            <prompt>Website</prompt>
+        </field>
+        <field name="dayofbirth" >
+            <prompt>Geboortedatum</prompt>
+        </field>
+        <field name="username" >
+            <prompt>Gebruikersnaam</prompt>
+        </field>
+        <field name="password" >
+            <prompt>Wachtwoord</prompt>
+        </field>
+        <field name="remarks" ftype="line">
+            <prompt>Opmerkingen</prompt>
+        </field>
+        <field name="description" ftype="text" dtminlength="0">
+            <prompt>Omschrijving</prompt>
+        </field>
 
-  <form-schema id="step1">
-    <title xml:lang="nl">Persoon invoeren</title>
-    <title xml:lang="en">Enter person</title>
-    <field name="firstname" />
-    <field name="initials" />
-    <field name="suffix" ftype="line" />
-    <field name="lastname" />
-    <field name="gender" />
-    <field name="address" />
-    <field name="zipcode" />
-    <field name="city" />
-    <field name="country" ftype="line" />
-    <field name="telephone" />
-    <field name="mobile" ftype="line" />
-    <field name="email" />
-    <field name="website" ftype="line" />
-    <field name="dayofbirth" />
-    <field name="username" />
-    <field name="password" />
-    <field name="remarks" ftype="line" />
-    <field name="description" rows="8" ftype="text" />
-    <field name="person_status" />
+        <list extends="config/role/roles-list.xml" />
 
-    <list extends="config/role/roles-list.xml" />
-    <list extends="config/workgroup/workgroups-list.xml" />
-    <list extends="config/class/classes-classrelrelated.xml" />
-    <list extends="config/education/educations-classrelrelated.xml" />
-    &extra_lists;
-  </form-schema>
+        <list extends="config/workgroup/workgroups-list.xml" />
+        <list extends="config/class/classes-classrelrelated.xml" />
+        <list extends="config/education/educations-classrelrelated.xml" />
 
-  &extra_schemas;
+    </form-schema>
 </wizard-schema>

@@ -40,8 +40,6 @@
  *  e-mail:   p.sharples@bolton.ac.uk
  *
  *  Web:      http://www.reload.ac.uk
-
- * @version $Id: ScormPackageHandler.java,v 1.6 2007-03-14 13:56:46 michiel Exp $
  *
  */
 
@@ -49,10 +47,10 @@
 
 package uk.ac.reload.scormplayer.client.generic.contentpackaging;
 
-import java.io.*;
-import java.net.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.Iterator;
-
+import java.io.*;
 
 import org.jdom.Document;
 import org.jdom.Element;
@@ -64,18 +62,12 @@ import uk.ac.reload.moonunit.contentpackaging.CP_Core;
 import uk.ac.reload.moonunit.contentpackaging.SCORM12_Core;
 
 
+import net.sf.mmapps.modules.cloudprovider.CloudProvider;
+import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 import org.mmbase.bridge.*;
 
 
 import nl.didactor.utils.zip.Unpack;
-import nl.didactor.utils.files.CommonUtils;
-import nl.didactor.utils.http.FileDownloader;
-import nl.didactor.utils.http.exceptions.*;
-import nl.didactor.utils.debug.LogController;
-import nl.didactor.component.scorm.exceptions.*;
-import nl.didactor.component.scorm.metastandart.schema.Importer;
-import nl.didactor.component.scorm.metastandart.schema.Filter;
-import nl.didactor.component.scorm.metastandart.MetaDataImporter;
 
 
 /**
@@ -85,7 +77,7 @@ import nl.didactor.component.scorm.metastandart.MetaDataImporter;
  * a sco cmi data model.
  *
  * @author Paul Sharples
- * @version $Id: ScormPackageHandler.java,v 1.6 2007-03-14 13:56:46 michiel Exp $
+ * @version $Id: ScormPackageHandler.java,v 1.1 2005-08-04 16:57:45 azemskov Exp $
  */
 public class ScormPackageHandler extends XMLDocument {
 
@@ -114,22 +106,11 @@ public class ScormPackageHandler extends XMLDocument {
      * Default Constructor
      */
 
+   private CloudProvider cloudProvider;
    private Cloud cloud;
-   NodeManager nmMetaStandart;
-   NodeManager nmMetaDefinition;
-   NodeManager nmPosrel;
-
    private Node nodePackage;
    private Node nodeEducation;
    private int iCurrentLevel = 0;
-   private int iCounter = 0;
-
-   private Filter filter;
-
-
-   private boolean bDebugMode = LogController.showLogs("az");
-   private String  sDebugIndo = "Scorm Package Handler: ";
-
 
    public ScormPackageHandler(File manifest, String sNodePackageID) throws JDOMException, IOException
    {
@@ -137,12 +118,8 @@ public class ScormPackageHandler extends XMLDocument {
       loadDocument(manifest);
       _projectName = manifest.getParentFile().getName();
       _scormCore = new SCORM12_Core(this);
-      cloud = ContextProvider.getDefaultCloudContext().getCloud("mmbase", "class", null);
-      nmMetaStandart   = cloud.getNodeManager("metastandard");
-      nmMetaDefinition = cloud.getNodeManager("metadefinition");
-      nmPosrel         = cloud.getNodeManager("posrel");
-
-      filter = new Filter(cloud);
+      CloudProvider cloudProvider = CloudProviderFactory.getCloudProvider();
+      cloud = cloudProvider.getAdminCloud();
 
       nodePackage = cloud.getNode(sNodePackageID);
    }
@@ -181,8 +158,7 @@ public class ScormPackageHandler extends XMLDocument {
          iterateThruManifest(manifestRoot, nodeEducation);
       }
 
-       // *** FINISHED ***
-       //System.out.println("Finished");
+       System.out.println("Finished");
        //throw an exception if no items were found in the manifest
        if (!_hasItemsToPlay)
        {
@@ -240,7 +216,7 @@ public class ScormPackageHandler extends XMLDocument {
 
                  url = getAbsoluteURL(element);
                  // an item that references somthing has been found..
-//                 System.out.println("url=" + url);
+                 System.out.println("url=" + url);
 
                  _hasItemsToPlay = true;
                  if (url.startsWith("file:///"))
@@ -256,102 +232,20 @@ public class ScormPackageHandler extends XMLDocument {
                        tempHref = url.substring(8, url.length()); // windows
                     }
                     tempHref = tempHref.replaceAll("%20", " ");
-
-
-                    if(bDebugMode) System.out.println(sDebugIndo + "resource href=" + tempHref);
+                    System.out.println("href=" + tempHref);
 
 
                     //New htmlpage node
                     Node nodeHtmlPage = cloud.getNodeManager("htmlpages").createNode();
-                    nodeHtmlPage.setValue("path", tempHref);
-                    nodeHtmlPage.setValue("name", nodeParent.getValue("name"));
-                    nodeHtmlPage.commit();
-
-
-                    Element elemMetadata = null;
-                    Element elemMetadataLocation = null;
-                    elemMetadata = ref_element.getChild("metadata", SCORM12_DocumentHandler.IMSCP_NAMESPACE_112);
-                    if(elemMetadata != null)
-                    {
-                       elemMetadataLocation = elemMetadata.getChild("location", SCORM12_DocumentHandler.ADLCP_NAMESPACE_12);
-                    }
-
-
-
-                    if(bDebugMode) System.out.println(sDebugIndo +  "metadatalocation = " + elemMetadataLocation);
-
-
-
-                    if(elemMetadataLocation != null)
-                    {
-
-                       //Check if the metastandart with such name already exists
-                       XMLDocument xmlDocument = new XMLDocument();
-                       File fileMetaDataLocation = new File(CommonUtils.fixPath(this.getFile().getParentFile() + File.separator + elemMetadataLocation.getText()));
-                       xmlDocument.loadDocument(fileMetaDataLocation);
-                       Element elemDataRoot = xmlDocument.getRootElement();
-
-                       NodeList nlMetaStandartsWithSuchName = nmMetaStandart.getList("name='" + elemDataRoot.getName() + "'", null, null);
-  //                    System.out.println( ((Node) nlMetaStandartsWithSuchName.get(0)).getNumber());
-                       if (nlMetaStandartsWithSuchName.size() == 0)
-                       {
-                          try
-                          {
-                             //Getting schema from server
-                             String sSchemaContent = FileDownloader.getTextFile("http://www.imsglobal.org/xsd/imsmd_rootv1p2p1.xsd", 100);
-
-                             //Writing it to the temp file
-                             //Unfortunately XMLDocument doesn't understand String as input
-                             File fileScema = File.createTempFile("schema", null);
-                             RandomAccessFile rafileSchema = new RandomAccessFile(fileScema, "rw");
-                             rafileSchema.writeBytes(sSchemaContent);
-                             rafileSchema.close();
-
-                             //MetaStnadart parcer
-                             Importer importer = new Importer(cloud, fileScema);
-                             Node nodeRootMetastandart = importer.importScheme(elemDataRoot.getName());
-                             filter.process(nodeRootMetastandart);
-
-                             fileScema.delete();
-                          }
-                          catch (Exception e)
-                          {
-                             throw new ImportMetaStandartsException(e);
-                          }
-                       }
-
-                       try
-                       {
-                          //Get metadata and connect it to the page
-                          MetaDataImporter metaDataImporter = new MetaDataImporter(cloud, (Node) nlMetaStandartsWithSuchName.get(0));
-                          metaDataImporter.process(fileMetaDataLocation, nodeHtmlPage);
-                       }
-                       catch (Exception e)
-                       {
-                          throw new ImportMetaDataException(e);
-                       }
-                    }
-
-
-
+                    nodeHtmlPage.setValue("name", tempHref);
                     //read html from disk file
-                    RandomAccessFile fileHtmlPage = new RandomAccessFile(CommonUtils.fixPath(tempHref), "r");
-                    byte[] arrbytesHtmlPage = new byte[ (new Long(fileHtmlPage.length())).intValue() ];
-                    fileHtmlPage.readFully(arrbytesHtmlPage);
-                    fileHtmlPage.close();
-
-
-                    String sFileContent = new String(arrbytesHtmlPage);
-
-
-/*                 *** JS Script cleaner ***
-
-                    String sMarker = "";
-                    sFileContent = sFileContent.replaceAll("<[sS][cC][rR][iI][pP][tT][\\d\\D]*[sS][cC][rR][iI][pP][tT]\\s*>", sMarker);
-                    sFileContent = sFileContent.replaceAll("[oO][nN][cC][lL][iI][cC][kK]=\"[^\"]*\\)\"", sMarker);
-                    sFileContent = sFileContent.replaceAll("[oO][nN][lL][oO][aA][dD]=\"[^\"]*\\)\"", sMarker);
-                    sFileContent = sFileContent.replaceAll("[oO][nN][uU][nN][lL][oO][aA][dD]=\"[^\"]*\\)\"", sMarker);
-*/
+                    BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(Unpack.fixPath(tempHref))));
+                    String sFileContent = "";
+                    String sLine;
+                    while ((sLine = br.readLine()) != null)
+                    {
+                       sFileContent += sLine;
+                    }
 
                     nodeHtmlPage.setValue("content", sFileContent);
                     nodeHtmlPage.commit();
@@ -440,8 +334,6 @@ public class ScormPackageHandler extends XMLDocument {
            }
         }
         Iterator it = element.getChildren().iterator();
-
-        int iPosrelCounter = 0;
         while (it.hasNext())
         {
             Element child = (Element) it.next();
@@ -450,47 +342,23 @@ public class ScormPackageHandler extends XMLDocument {
 
             if (sChildName.equals(SCORM12_Core.ITEM) && isDocumentNamespace(element))
             {
-               //System.out.println("---Begin of level---");
+               System.out.println("---Begin of level---");
                iCurrentLevel++;
 
                //New learnblock node
                Node nodeLearnblock = cloud.getNodeManager("learnblocks").createNode();
                nodeLearnblock.setValue("name", "" + child.getChild("title", SCORM12_DocumentHandler.IMSCP_NAMESPACE_112).getText());
-               nodeLearnblock.setValue("path", "" + nodePackage.getNumber() + "-" + iPosrelCounter);
-//Deep level
-//               nodeLearnblock.setValue("intro", "deep level=" + iCurrentLevel);
+               nodeLearnblock.setValue("intro", "deep level=" + iCurrentLevel);
                nodeLearnblock.commit();
 
                //Relation to parent node (learnblok or education)
-               Relation relPosrel = nodeParent.createRelation(nodeLearnblock, cloud.getRelationManager("posrel"));
-               relPosrel.setValue("pos", "" + iPosrelCounter);
-               relPosrel.commit();
+               nodeParent.createRelation(nodeLearnblock, cloud.getRelationManager("posrel")).commit();
 
-               iPosrelCounter++;
 
-               //System.out.println(sChildName);
-               //System.out.println("now level is " + iCurrentLevel);
+               System.out.println(sChildName);
+               System.out.println("now level is " + iCurrentLevel);
 
                iterateThruManifest(child, nodeLearnblock);
-
-
-               if ((nodeParent.getNodeManager().getName().equals("learnblocks")) && (nodeLearnblock.countRelatedNodes(cloud.getNodeManager("learnblocks"), "posrel", "destination") == 0) && (nodeLearnblock.countRelatedNodes(cloud.getNodeManager("htmlpages"), "posrel", "destination") == 1))
-               {//There are no children learnblock's
-                //So removing our temporal learnblock
-
-                  NodeList nlHtmlPages = nodeLearnblock.getRelatedNodes (cloud.getNodeManager("htmlpages"), "posrel", "destination");
-                  Node nodeHtmlPage = (Node) nlHtmlPages.get(0);
-
-                  nodeHtmlPage.setValue("name", nodeLearnblock.getValue("name"));
-                  nodeHtmlPage.commit();
-                  Relation relation = nodeParent.createRelation(nodeHtmlPage, cloud.getRelationManager("posrel"));
-                  relation.setValue("pos", this.getPosrelNode(nodeParent.getNumber(), nodeLearnblock.getNumber()).getValue("pos"));
-                  relation.commit();
-
-
-                  nodeLearnblock.delete(true);
-               }
-
             }
             else
             {
@@ -500,12 +368,13 @@ public class ScormPackageHandler extends XMLDocument {
 
             if (sChildName.equals(SCORM12_Core.ITEM) && isDocumentNamespace(element))
             {
-               //System.out.println(sChildName);
-               //System.out.println("---End of level---");
+               System.out.println(sChildName);
+               System.out.println("---End of level---");
                iCurrentLevel--;
-               //System.out.println("now level is " + iCurrentLevel);
+               System.out.println("now level is " + iCurrentLevel);
             }
         }
+
     }
 
 
@@ -543,26 +412,5 @@ public class ScormPackageHandler extends XMLDocument {
       // Has to be a CP Package with a SCORM 1.2 Namespace in there
         return SCORM12_DocumentHandler.canHandle(getDocument());
     }
-
-
-
-
-   private Node getPosrelNode(String sSource, String sDestination)
-   {
-      NodeList nlPosrel = nmPosrel.getList("snumber='" + sSource + "' AND dnumber='" + sDestination + "'", null, null);
-      return (Node) nlPosrel.get(0);
-   }
-   private Node getPosrelNode(int sSource, int sDestination)
-   {
-      return this.getPosrelNode("" + sSource, "" + sDestination);
-   }
-
-
-
-   private boolean isMetaStandartAlreadyExists(File fileXML)
-   {
-      return true;
-   }
-
 
 }

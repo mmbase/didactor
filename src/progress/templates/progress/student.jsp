@@ -1,374 +1,326 @@
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm"
-%><%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di"
-%><%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"
-%><%@page import="java.util.*"
-%><mm:content postprocessor="reducespace" expires="0">
-  <mm:cloud rank="didactor user">
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.0" prefix="mm" %>
+<%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
 
-    <jsp:directive.include file="/education/tests/definitions.jsp" />
-    <jsp:directive.include file="/education/wizards/roles_defs.jsp" />
-    <mm:import id="editcontextname" reset="true">docent schermen</mm:import>
-    <jsp:directive.include file="/education/wizards/roles_chk.jsp" />
+<%@page import="java.util.*"%>
 
-    <mm:treeinclude page="/cockpit/cockpit_header.jsp" objectlist="$includePath" referids="$referids">
-      <mm:param name="extraheader"><title><di:translate key="progress.progresstitle" /></title></mm:param>
-    </mm:treeinclude>
+<mm:content postprocessor="reducespace" expires="0">
 
-    <div class="rows">
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
+
+   <%@include file="/shared/setImports.jsp" %>
+   <%@include file="/education/tests/definitions.jsp" %>
+   <%@include file="/education/wizards/roles_defs.jsp" %>
+   <mm:import id="editcontextname" reset="true">docent schermen</mm:import>
+   <%@include file="/education/wizards/roles_chk.jsp" %>
+
+   <mm:treeinclude page="/cockpit/cockpit_header.jsp" objectlist="$includePath" referids="$referids">
+      <mm:param name="extraheader">
+         <title>Voortgang</title>
+      </mm:param>
+   </mm:treeinclude>
+
+
+   <div class="rows">
       <div class="navigationbar">
-        <div class="titlebar"><di:translate key="progress.progresstitle" /></div>
+         <div class="titlebar">Voortgang</div>
       </div>
 
       <div class="folders">
-        <div class="folderHeader">&nbsp;</div>
-        <div class="folderBody">&nbsp;</div>
+         <div class="folderHeader">&nbsp;</div>
+         <div class="folderBody">&nbsp;</div>
       </div>
 
-      <!-- WTF is happening here?: -->
-      <mm:import id="student"><mm:write referid="user" /></mm:import>
+      <mm:import id="student" reset="true"><mm:write referid="user"/></mm:import>
 
       <mm:islessthan inverse="true" referid="rights" referid2="RIGHTS_RW">
-        <mm:import id="student" externid="student" reset="true" />
+         <mm:import id="student" externid="student" reset="true"/>
       </mm:islessthan>
-
       <mm:isempty referid="student">
-        <mm:import id="student" reset="true"><mm:write referid="user" /></mm:import>
+         <mm:import id="student" reset="true"><mm:write referid="user"/></mm:import>
       </mm:isempty>
-      <!-- /WTF -->
-
-      <di:copybook student="${student}">
-        <mm:node id="copybookNo" />
-      </di:copybook>
-
 
       <div class="mainContent">
-        <div class="contentHeader">
-          <mm:node referid="student">
-            <di:person />
-            <mm:field name="username" id="usern" />
-          </mm:node>
-        </div>
+         <div class="contentHeader">
+            <%--    Some buttons working on this folder--%>
+            <mm:node referid="student">
+               <mm:field name="firstname"/> <mm:field name="lastname"/>
+            </mm:node>
+         </div>
 
-        <div class="contentBodywit">
-          <mm:import externid="showfeedback" />
+         <div class="contentBodywit">
+            <mm:import externid="showfeedback"/>
 
-          <mm:present referid="showfeedback">
+            <mm:present referid="showfeedback">
+               <mm:import externid="madetest" required="true"/>
+               <mm:import externid="tests" required="true"/>
 
-            <mm:import externid="madetest" required="true" />
-            <mm:import externid="tests" required="true" />
-
-            <mm:node number="$tests">
-              <b><di:translate key="progress.scoretest" /> <mm:field name="name" /></b>
-              <br>
-                <mm:field id="mayview" name="mayview" write="false" />
-                <%-- <mm:field id="feedback" name="showfeedback" write="false" /> --%>
-
-                <mm:compare referid="showfeedback" value="true">
-                  <mm:treeinclude page="/education/tests/feedback.jsp" objectlist="$includePath"
-                                  referids="$referids,tests,madetest" />
-                </mm:compare>
-                <mm:compare referid="mayview" value="1">
-                  <mm:treeinclude page="/education/tests/viewanswers.jsp" objectlist="$includePath"
-                                  referids="$referids,tests@testNo,madetest@madetestNo,student@userNo" />
-                </mm:compare>
-              </mm:node>
+               <mm:node number="$tests">
+                  <b>Uitslag van test <mm:field name="name"/></b><br>
+               </mm:node>
+               <mm:treeinclude page="/education/tests/feedback.jsp" objectlist="$includePath" referids="$referids" >
+                  <mm:param name="madetes"><mm:write referid="madetest"/></mm:param>
+                  <mm:param name="tests"><mm:write referid="tests"/></mm:param>
+               </mm:treeinclude>
             </mm:present>
 
+
             <mm:notpresent referid="showfeedback">
-              <div style="float: right">
-                <mm:treefile page="/portfolio/index.jsp" objectlist="$includePath" referids="$referids,student@contact" write="false">
-                  <a href="${_}">
-                    <img src="${mm:treefile('/progress/gfx/portfolio.gif', pageContext, includePath)}"
-                         title="Portfolio" alt="Portfolio" border="0" />
+
+               <div style="float: right">
+                  <a href="<mm:treefile page="/portfolio/index.jsp" objectlist="$includePath" referids="$referids">
+                     <mm:param name="contact"><mm:write referid="student"/></mm:param>
+                     </mm:treefile>"><img src="<mm:treefile page="/progress/gfx/portfolio.gif"  objectlist="$includePath" referids="$referids"/>" alt="Portfolio" border="0"/>
                   </a>
-                </mm:treefile>
-                <mm:islessthan inverse="true" referid="rights" referid2="RIGHTS_RW">
-                  <mm:treefile page="/progress/index.jsp" objectlist="$includePath" referids="$referids" write="false">
-                    <a href="${_}">
-                      <img src="${mm:treefile('/progress/gfx/back.gif', pageContext, includePath)}"
-                           title="${di:translate('progress.backtooverview')}"
-                           alt="${di:translate('progress.backtooverview')}"  border="0" />
-                    </a>
-                  </mm:treefile>
-                </mm:islessthan>
-              </div>
+
+                  <mm:islessthan inverse="true" referid="rights" referid2="RIGHTS_RW">
+                     <a href="<mm:treefile page="/progress/index.jsp" objectlist="$includePath" referids="$referids"/>"><img src="<mm:treefile page="/progress/gfx/back.gif"  objectlist="$includePath" referids="$referids"/>" alt="Terug naar overzicht" border="0"/></a>
+                  </mm:islessthan>
+               </div>
 
 
-              <table class="Font">
-                <tr>
-                  <td><di:translate key="progress.perccompleted" /></td>
-                  <td>
-                    <mm:import id="progress" escape="trimmer"><mm:treeinclude page="/progress/getprogress.jsp" objectlist="$includePath" referids="$referids,student" /></mm:import>
-                    <fmt:formatNumber value="${progress}" type="percent" />
-                  </td>
-                </tr>
-                <mm:import externid="c">${class}</mm:import>
-
-                <mm:log>Using class: ${c}</mm:log>
-
-                <mm:node referid="student">
-                  <%-- direct relation people-classrel-educations --%>
-                  <mm:notpresent referid="c">
-                    <mm:relatednodescontainer path="classrel,educations" element="classrel">
-                      <mm:constraint field="educations.number" value="$education" />
-                      <mm:relatednodes>
-                        <mm:node id="classrel" />
-                      </mm:relatednodes>
-                    </mm:relatednodescontainer>
-                  </mm:notpresent>
-                  <%-- people-classrel-class-related-educations --%>
-                  <mm:present referid="c">
-                    <mm:relatednodescontainer path="classrel,classes" element="classrel">
-                      <mm:log>${c}</mm:log>
-                      <mm:constraint field="classes.number" value="${c}" />
-                      <mm:relatednodes>
-                        <mm:node id="classrel" />
-                      </mm:relatednodes>
-                    </mm:relatednodescontainer>
-                  </mm:present>
-                </mm:node>
-
-                <mm:present referid="classrel"> <!-- can be not present if e.g. admin -->
-                  <mm:node referid="classrel">
-                    <tr>
-                      <td><di:translate key="progress.logins" />:</td>
-                      <td><mm:field name="logincount" /></td>
-                    </tr>
-
-                    <tr>
-                      <td><di:translate key="progress.online" /></td>
-                      <td>
-                        <mm:field name="onlinetime">
-                          <mm:time format="HH:mm" />
-                        </mm:field>
-                      </td>
-                    </tr>
-                  </mm:node>
-                </mm:present>
-              </table>
-              <di:ifsetting component="progress" setting="showeducationplan">
-                <p><b><di:translate key="progress.educationplan" /></b></p>
-
-                <table class="Font">
-                  <mm:node number="$education">
-                    <%boolean first = true;%>
-                    <mm:relatednodescontainer type="learnblocks" role="posrel">
-                      <mm:sortorder field="posrel.pos" direction="up" />
-
-                      <mm:tree type="learnblocks" role="posrel" searchdir="destination" orderby="posrel.pos"
-                               directions="up">
-                        <mm:import jspvar="depth" vartype="Integer"><mm:depth /></mm:import>
-                        <%if (depth.intValue() == 2) { %>
-                        <mm:first inverse="true"></td></tr></mm:first>
-                        <tr>
-                          <td>
-                            <mm:field name="name" />
-                          </td>
-                          <td>
-                            <%first = true;
-                            } else if (depth.intValue() > 2) {
-                            if (!first) {
-                            %>, <%} else {
-                            first = false;
-                            }
-                            %>
-                            <mm:field name="name" />
-                            <%} %>
-                         <mm:last></td></tr></mm:last>
-                      </mm:tree>
-                    </mm:relatednodescontainer>
-                  </mm:node>
-                </table>
-              </di:ifsetting>
-
-              <mm:node referid="student">
-                <p><b><di:translate key="progress.testsof" /> <di:person /></b></p>
-
-                <table class="listTable">
+               <table class="Font">
                   <tr>
-                    <th class="listHeader"><di:translate key="progress.learnblock" /></th>
-                    <th class="listHeader"><di:translate key="progress.tests" /></th>
-                    <di:ifsetting component="progress" setting="showquestionamount">
-                      <th class="listHeader"><di:translate key="progress.questions" /></th>
-                    </di:ifsetting>
-                    <di:ifsetting component="progress" setting="showscore">
-                      <th class="listHeader"><di:translate key="progress.score" /></th>
-                    </di:ifsetting>
-                    <di:ifsetting component="progress" setting="showcorrect">
-                      <th class="listHeader"><di:translate key="progress.correct" /></th>
-                    </di:ifsetting>
-                    <di:ifsetting component="progress" setting="showneeded">
-                      <th class="listHeader"><di:translate key="progress.needed" /></th>
-                    </di:ifsetting>
-                    <di:ifsetting component="progress" setting="showsucceeded">
-                      <th class="listHeader"><di:translate key="progress.succeeded" /></th>
-                    </di:ifsetting>
+                     <td>Percentage doorlopen:</td>
+                     <td>
+                        <mm:import jspvar="progress" id="progress" vartype="Double"><mm:treeinclude page="/progress/getprogress.jsp" objectlist="$includePath" referids="$referids">
+                                                                                       <mm:param name="student"><mm:write referid="student"/></mm:param>
+
+                                                                                    </mm:treeinclude></mm:import>
+
+                        <%= (int)(progress.doubleValue()*100.0)%>%
+                     </td>
+
                   </tr>
 
+                  <% //direct relation people-classrel-educations %>
+                  <mm:compare referid="class" value="null">
+                     <mm:list fields="classrel.number" path="people,classrel,educations" constraints="people.number=$student and educations.number=$education">
+                        <mm:field name="classrel.number" id="classrel" write="false"/>
+                     </mm:list>
+                  </mm:compare>
+                  <% //people-classrel-class-related-educations %>
+                  <mm:compare referid="class" value="null" inverse="true">
+                     <mm:list fields="classrel.number" path="people,classrel,classes" constraints="people.number=$student and classes.number=$class">
+                        <mm:field name="classrel.number" id="classrel" write="false"/>
+                     </mm:list>
+                  </mm:compare>
 
+                  <mm:node referid="classrel">
+                     <tr>
+                        <td>Aantal maal ingelogd:</td>
+                        <td><mm:field name="logincount"/></td>
+                     </tr>
+
+                     <tr>
+                        <td>Duur inloggen</td>
+                        <td>
+                           <mm:field name="onlinetime" jspvar="onlinetime" vartype="Integer" write="false">
+                              <%
+                                 int hour = onlinetime.intValue() / 3600;
+                                 int min = (onlinetime.intValue() % 3600) / 60;
+                              %>
+                              <%=hour%>:<%=min%>
+                           </mm:field>
+                        </td>
+                     </tr>
+                  </mm:node>
+               </table>
+
+               <p>
+                  <b>Educatie traject:</b>
+               </p>
+
+               <table class="Font">
                   <mm:node number="$education">
-                    <%List blockName = new ArrayList(); %>
+                     <% boolean first = true; %>
 
-                    <mm:relatednodescontainer type="learnblocks" role="posrel">
-                      <mm:sortorder field="posrel.pos" direction="up" />
+                     <mm:relatednodescontainer type="learnblocks" role="posrel">
+                        <mm:sortorder field="posrel.pos" direction="up"/>
 
-                      <mm:tree type="learnblocks" role="posrel" searchdir="destination" orderby="posrel.pos" directions="up">
-                        <mm:import jspvar="depth" vartype="Integer"><mm:depth /></mm:import>
-                        <%for (int i = blockName.size() - 1; i < depth.intValue() - 1; i++) {
-                        blockName.add(null);
-                        }
-                        while (depth.intValue() - 1 < blockName.size()) {
-                        blockName.remove(blockName.size() - 1);
-                        }
+                        <mm:tree type="learnblocks" role="posrel" searchdir="destination" orderby="posrel.pos" direction="up">
+                           <mm:import jspvar="depth" vartype="Integer"><mm:depth/></mm:import>
+                              <%
+                                 if (depth.intValue() == 2)
+                                 {
+                                    %>
+                                       <mm:first inverse="true">
+                                          </td></tr>
+                                       </mm:first>
+                                       <tr>
+                                          <td><mm:field name="name"/></td>
+                                          <td>
+                                    <%
 
+                                    first = true;
+                                 }
+                                 else if (depth.intValue() > 2 )
+                                 {
+                                    if (!first)
+                                    {
+                                       %>, <%
+                                    }
+                                    else
+                                    {
+                                       first = false;
+                                    }
+
+                                    %><mm:field name="name"/><%
+                                 }
+                              %>
+                           <mm:last>
+                                 </td>
+                              </tr>
+                           </mm:last>
+                        </mm:tree>
+                     </mm:relatednodescontainer>
+                  </mm:node>
+               </table>
+
+
+               <mm:node referid="student">
+                  <p>
+                     <b>Toetsen van <mm:field name="firstname"/> <mm:field name="lastname"/></b>
+                  </p>
+
+
+                  <table class="listTable">
+                     <tr>
+                        <th class="listHeader">Leerblok</th>
+                        <th class="listHeader">Toets</th>
+                        <th class="listHeader">Vragen</th>
+                        <th class="listHeader">Score</th>
+                        <th class="listHeader">Nodig</th>
+                        <th class="listHeader">Geslaagd</th>
+                     </tr>
+
+                     <%-- find copybook --%>
+                     <%@include file="find_copybook.jsp"%>
+
+
+                     <mm:node number="$education">
+                        <%
+                           List blockName = new ArrayList();
                         %>
-                        <mm:field name="name" jspvar="thisBlockName" vartype="String">
-                          <% blockName.set(blockName.size() - 1, thisBlockName); %>
-                        </mm:field>
 
-                        <mm:relatednodescontainer type="tests" role="posrel">
-                          <mm:sortorder field="posrel.pos" direction="up" />
-                          <mm:relatednodes>
-                            <mm:import id="testNo" reset="true"><mm:field name="number" /></mm:import>
-                            <%int numberOfquestions = 0;%>
-                            <mm:field id="feedback" name="feedbackpage" write="false" />
+                        <mm:relatednodescontainer type="learnblocks" role="posrel">
+                           <mm:sortorder field="posrel.pos" direction="up"/>
 
-                            <tr>
-                              <mm:present referid="copybookNo">
-                                <mm:relatednodescontainer path="madetests,copybooks" element="madetests">
-                                  <mm:constraint field="copybooks.number" referid="copybookNo" />
-                                  <mm:relatednodes>
-                                    <mm:node id="madetestNo" />
-                                  </mm:relatednodes>
-                                </mm:relatednodescontainer>
-                              </mm:present>
+                           <mm:tree type="learnblocks" role="posrel" searchdir="destination" orderby="posrel.pos" direction="up">
+                              <mm:import jspvar="depth" vartype="Integer"><mm:depth/></mm:import>
+                              <%
+                                 for (int i = blockName.size() - 1; i < depth.intValue() -1; i++)
+                                 {
+                                    blockName.add(null);
+                                 }
+                                 while (depth.intValue() -1 < blockName.size())
+                                 {
+                                    blockName.remove( blockName.size() -1);
+                                 }
+                              %>
 
-                              <td class="listItem">
-                                <%for (int i = 0; i < blockName.size(); i++) {
-                                %><%=(String) blockName.get(i)%><%if (i < blockName.size() - 1) {
-                                %> &gt;
-                                <%} }%>
-                              </td>
+                              <mm:field name="name" jspvar="thisBlockName" vartype="String">
+                                 <%
+                                    blockName.set(blockName.size()-1,thisBlockName);
+                                 %>
+                              </mm:field>
 
-                              <jsp:directive.include file="teststatus.jspx" />
+                              <mm:relatednodescontainer type="tests" role="posrel">
+                                 <mm:sortorder field="posrel.pos" direction="up"/>
+                                 <mm:relatednodes>
+                                    <mm:import id="testNo" reset="true"><mm:field  name="number" /></mm:import>
+                                       <mm:field id="feedback" name="feedbackpage" write="false"/>
 
-                              <td class="listItem">
-                                <mm:compare referid="teststatus" value="incomplete">
-                                  <mm:field name="name" />
-                                </mm:compare>
-                                <mm:compare referid="teststatus" value="incomplete" inverse="true">
-                                  <a href="<mm:treefile page="/progress/student.jsp" objectlist="$includePath" referids="$referids,madetestNo?@madetest,testNo?@tests" ><mm:param name="showfeedback">true</mm:param></mm:treefile>" />
-                                  <mm:field name="name" />
-                                </a>
-                              </mm:compare>
-                            </td>
+                                       <tr>
 
-                            <di:ifsetting component="progress" setting="showquestionamount">
-                              <td class="listItem">
-                                <mm:field name="questionamount" write="false">
-                                  <mm:islessthan value="1">
-                                    <mm:countrelations type="questions" write="true" id="amount" jspvar="proba">
-                                      <mm:import jspvar="amount"><mm:write referid="amount" /></mm:import>
-                                <% numberOfquestions = proba.intValue(); %>
-                              </mm:countrelations>
-                            </mm:islessthan>
+                                          <mm:relatednodescontainer path="madetests,copybooks" element="madetests">
+                                             <mm:constraint field="copybooks.number" referid="copybookNo"/>
 
-                            <mm:isgreaterthan value="0">
-                              <mm:import id="amount"><mm:field name="questionamount" /></mm:import>
-                              <mm:write />
-                            </mm:isgreaterthan>
-                          </mm:field>
-                        </td>
-                        </di:ifsetting>
+                                             <mm:relatednodes>
+                                                <mm:field id="madetestNo" name="number" write="false"/>
+                                             </mm:relatednodes>
+                                          </mm:relatednodescontainer>
 
-                        <di:ifsetting component="progress" setting="showscore">
-                        <td class="listItem">
-                          <mm:write referid="save_madetestscore" />
-                        </td>
-                        </di:ifsetting>
 
-                        <di:ifsetting component="progress" setting="showcorrect">
-                        <% int sum = 0; %>
-                        <mm:relatednodes type="questions">
-                          <mm:relatednodes type="givenanswers">
-                            <mm:field name="owner">
-                              <mm:compare referid2="usern">
-                                <mm:field name="score">
-                                  <mm:compare value="1">
-                                    <%sum++;%>
-                                  </mm:compare>
-                                </mm:field>
-                              </mm:compare>
-                            </mm:field>
-                          </mm:relatednodes>
-                        </mm:relatednodes>
+                                          <td class="listItem">
+                                             <%
+                                                for (int i=0; i<blockName.size(); i++)
+                                                {
+                                                   %><%= (String) blockName.get(i) %><%
+                                                   if (i < blockName.size()-1 )
+                                                   {
+                                                      %> &gt; <%
+                                                   }
+                                                }
+                                             %>
+                                          </td>
 
-                        <td class="listItem">
-                          <mm:compare referid="amount" value="0" inverse="true">
-                            <%=((float) sum / numberOfquestions) * 100 %>
-                          </mm:compare>
-                          <mm:compare referid="amount" value="0">
-                            <di:translate key="progress.notQuestions" />
-                          </mm:compare>
-                        </td>
-                        </di:ifsetting>
+                                          <%@include file="teststatus.jsp"%>
 
-                        <di:ifsetting component="progress" setting="showneeded">
-                        <td class="listItem">
-                          <mm:write referid="requiredscore" />
-                        </td>
-                        </di:ifsetting>
+                                          <td class="listItem">
+                                             <mm:compare referid="teststatus" value="incomplete">
+                                                <mm:field name="name"/>
+                                             </mm:compare>
 
-                        <di:ifsetting component="progress" setting="showsucceeded">
-                        <mm:compare referid="teststatus" value="toberated">
-                          <td class="listItem"><di:translate key="progress.toberated" /></td>
-                        </mm:compare>
+                                             <mm:compare  referid="teststatus" value="incomplete" inverse="true">
+                                                <a href="<mm:treefile page="/progress/student.jsp" objectlist="$includePath" referids="$referids" >
+                                                            <mm:param name="madetest"><mm:write referid="madetestNo"/></mm:param>
+                                                            <mm:param name="tests"><mm:write referid="testNo"/></mm:param>
+                                                            <mm:param name="showfeedback">true</mm:param>
+                                                         </mm:treefile>"/><mm:field name="name"/></a>
 
-                        <mm:compare referid="teststatus" value="passed">
-                          <td class="listItem"><di:translate key="progress.yes" /></td>
-                        </mm:compare>
+                                             </mm:compare>
+                                          </td>
 
-                        <mm:compare referid="teststatus" value="failed">
-                          <td class="listItem"><di:translate key="progress.no" /></td>
-                        </mm:compare>
+                                          <td class="listItem">
+                                             <mm:field name="questionamount" write="false">
+                                                <mm:islessthan value="1">
+                                                   <mm:countrelations type="questions" write="true"/>
+                                                </mm:islessthan>
 
-                        <mm:compare referid="teststatus" value="incomplete">
-                          <td class="listItem"><di:translate key="progress.notcompleted" /></td>
-                        </mm:compare>
-                      </tr>
-                      </di:ifsetting>
+                                                <mm:isgreaterthan value="0">
+                                                   <mm:write/>
+                                                </mm:isgreaterthan>
+                                             </mm:field>
+                                          </td>
 
-                      <mm:remove referid="madetestscore" />
-                      <mm:remove referid="save_madetestscore" />
-                      <mm:remove referid="testNo" />
-                    </mm:relatednodes>
-                    <%-- tests --%>
-                  </mm:relatednodescontainer>
+                                          <td class="listItem"><mm:write referid="save_madetestscore"/></td>
+                                          <td class="listItem"><mm:write referid="requiredscore"/></td>
 
-                </mm:tree>
-              </mm:relatednodescontainer>
-              <%-- learnblocks --%>
-            </mm:node>
-            <%-- education --%>
+                                          <mm:compare referid="teststatus" value="toberated">
+                                             <td class="listItem">Nog niet nagekeken</td>
+                                          </mm:compare>
 
-            <mm:remove referid="copybookNo" />
-          </table>
-        </mm:node>
-      </mm:notpresent>
+                                          <mm:compare referid="teststatus" value="passed">
+                                             <td class="listItem">Ja</td>
+                                          </mm:compare>
 
-      <mm:import externid="reports" />
-      <mm:present referid="reports">
-        <br />
-        <form>
-           <input type="button" class="formbutton" id="goback" value="${di:translate('core.back')}"  onClick="history.back()"/><br/>
-        </form>
-      </mm:present>
+                                          <mm:compare referid="teststatus" value="failed">
+                                             <td class="listItem">Nee</td>
+                                          </mm:compare>
 
-    </div>
-  </div>
-</div>
+                                          <mm:compare referid="teststatus" value="incomplete" >
+                                             <td class="listItem">Niet afgemaakt</td>
+                                          </mm:compare>
+                                       </tr>
 
-<mm:treeinclude page="/cockpit/cockpit_footer.jsp" objectlist="$includePath" referids="$referids" />
+                                       <mm:remove referid="madetestscore"/>
+                                       <mm:remove referid="save_madetestscore"/>
+                                       <mm:remove referid="testNo"/>
+                                    </mm:relatednodes> <%-- tests --%>
+                                 </mm:relatednodescontainer>
+
+                           </mm:tree>
+                        </mm:relatednodescontainer> <%-- learnblocks --%>
+                     </mm:node> <%-- education --%>
+
+                     <mm:remove referid="copybookNo"/>
+                  </table>
+               </mm:node>
+            </mm:notpresent>
+         </div>
+      </div>
+   </div>
+   <mm:treeinclude page="/cockpit/cockpit_footer.jsp" objectlist="$includePath" referids="$referids" />
 
 </mm:cloud>
 </mm:content>

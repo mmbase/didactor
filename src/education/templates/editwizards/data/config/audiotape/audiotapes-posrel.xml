@@ -1,45 +1,29 @@
 <!DOCTYPE list PUBLIC "-//MMBase/DTD editwizard 1.0//EN" "http://www.mmbase.org/dtd/wizard-schema_1_0.dtd">
 <list destination="audiotapes" role="posrel" minoccurs="0" maxoccurs="*" ordertype="number" orderby="field[@name='pos']">
-    <title xml:lang="nl">Bijbehorende audio</title>
-    <title xml:lang="en">Related audio</title>
+    <title>Bijbehorende Audio</title>
 
     <item>
         <field name="title" ftype="data">
-            <prompt xml:lang="nl">Audiofragment titel</prompt>
-            <prompt xml:lang="en">Title</prompt>
+            <prompt>Titel</prompt>
         </field>
         <field ftype="data" name="intro">
-            <prompt xml:lang="nl">Omschrijving</prompt>
-            <prompt xml:lang="en">Description</prompt>
+            <prompt>Omschrijving</prompt>
         </field>
-        <field fdatapath="field[@name=&apos;pos&apos;]" ftype="line">
-          <prompt xml:lang="nl">Positie</prompt>
-          <prompt xml:lang="en">Position</prompt>
-        </field>
-        <field wizardname="config/audiotape/audiotapes" ftype="startwizard" />
+       <field wizardname="config/audiotape/audiotapes" ftype="startwizard" />
    </item>
 
     <command name="startwizard" inline="true" wizardname="config/audiotape/audiotapes" objectnumber="new" />
 
-    <command name="search" nodepath="audiotapes" fields="title,intro,url" age="-1" orderby="number" directions="down" >
-        <prompt xml:lang="nl">Zoeken naar audio</prompt>
-        <prompt xml:lang="en">Search audio</prompt>
+    <command name="search" nodepath="audiotapes" fields="title" age="-1" orderby="number" directions="down" >
+        <prompt>Zoeken naar audio</prompt>
         <search-filter>
-            <name xml:lang="nl">Titel bevat</name>
-            <name xml:lang="en">Title contains</name>
+            <name>Titel bevat</name>
             <search-fields>title</search-fields>
         </search-filter>
         <search-filter>
-            <name xml:lang="nl">Intro bevat</name>
-            <name xml:lang="en">Description contains</name>
+            <name>Omschrijving bevat</name>
             <search-fields>intro</search-fields>
         </search-filter>
-        <search-filter>
-            <name xml:lang="nl">Url bevat</name>
-            <name xml:lang="en">Url contains</name>
-            <search-fields>url</search-fields>
-        </search-filter>
-        
     </command>
 
     <action type="create">
