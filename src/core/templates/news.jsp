@@ -1,12 +1,26 @@
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm"
-%><%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di"
-%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.0" prefix="mm" %>
+
+<%@ page import = "java.util.ArrayList" %>
+<%@ page import = "java.util.Iterator" %>
+<%@ page import = "java.util.HashMap" %>
+<%@ page import = "java.util.HashSet" %>
+<%@ page import = "java.util.SortedMap" %>
+<%@ page import = "java.util.TreeMap" %>
+
+<%@ page import = "nl.didactor.component.education.utils.EducationPeopleConnector" %>
+
 <mm:content postprocessor="reducespace" expires="0">
-<mm:cloud method="delegate">
-<jsp:directive.include file="/shared/setImports.jsp" />
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
+<%@include file="/shared/setImports.jsp" %>
+
+<% //education-people connector
+   EducationPeopleConnector educationPeopleConnector = new EducationPeopleConnector(cloud);
+%>
 
 <mm:treeinclude page="/cockpit/cockpit_intro_header.jsp" objectlist="$includePath" referids="$referids">
   <mm:param name="extraheader">
+   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
    <meta http-equiv="Content-Style-Type" content="text/css" />
    <meta http-equiv="Content-Language" content="nl" />
    <meta name="description" content="Didactor is een open source E-learning omgeving, ontwikkeld door The Mediator Group. Deze elektronische leeromgeving is 100% webbased en gebaseerd op didactische principes. Didactor is ontwikkeld mbv MMbase, Java en XML en maakt blended learning mogelijk" />
@@ -22,14 +36,15 @@
 <div class="columns">
 
   <div class="columnLeft">
-    <img src="<mm:treefile write="true" page="/gfx/logo_didactor.gif" objectlist="$includePath" />" width="100%" height="106" border="0" title="Didactor logo " alt="Didactor logo" />
+
+    <img src="<mm:treefile write="true" page="/gfx/logo_didactor.gif" objectlist="$includePath" />" width="100%" height="106" border="0" alt="Didactor logo" />
 
     <div class="titlefield">
-      <di:translate key="core.followededucation" />
+      <fmt:message key="FOLLOWEDEDUCATION" />
     </div>
 
     <div class="ListLeft">
-      <jsp:directive.include file="cockpit/index/listleft.jsp" />
+       <%@include file="listleft.jsp"%>
     </div>
   </div>
 
@@ -51,11 +66,10 @@
   <div class="columnRight">
    <%-- list of all teachers that are online for a specific class --%>
     <div class="titlefield2">
-      <di:translate key="core.teacherheader" />
+      <fmt:message key="TEACHERHEADER" />
     </div>
     <div class="ListTeachers">
-      <mm:treeinclude write="true" page="/users/teach_sel.jsp" objectlist="$includePath"
-                      referids="$referids" notfound="skip" />
+      <mm:treeinclude write="true" page="/users/teach_sel.jsp" objectlist="$includePath" referids="$referids" />
 <%--
        <img src="<mm:treefile write="true" page="/gfx/icon_offline.gif" objectlist="$includePath" />" width="6" height="12" alt="offline" />
       <a href="" class="users">Beheerder (test)</a><br />
@@ -63,11 +77,10 @@
     </div>
    <%-- list of all students that are online for a specific class --%>
     <div class="titlefield">
-      <di:translate key="core.studentheader" />
+      <fmt:message key="STUDENTHEADER" />
     </div>
     <div class="ListStudents">
-      <mm:treeinclude write="true" page="/users/stud_sel.jsp" objectlist="$includePath"
-                      referids="$referids" notfound="skip" />
+      <mm:treeinclude write="true" page="/users/stud_sel.jsp" objectlist="$includePath" referids="$referids" />
     </div>
   </div>
 </div>

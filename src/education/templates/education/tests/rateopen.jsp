@@ -1,16 +1,13 @@
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm"%>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.0" prefix="mm"%>
 <%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
-
 <mm:content postprocessor="reducespace" expires="0">
-<mm:cloud method="delegate" jspvar="cloud">
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
 
 <mm:import externid="testNo" required="true"/>
 <mm:import externid="studentNo" required="true"/>
 
 <%@include file="/shared/setImports.jsp" %>
 <%@include file="/education/tests/definitions.jsp" %>
-
-
 <mm:treeinclude page="/cockpit/cockpit_header.jsp" objectlist="$includePath" referids="$referids">
   <mm:param name="extraheader">
     <title>Voortgang -> Correctie</title>
@@ -18,11 +15,11 @@
 </mm:treeinclude>
 
 <div class="rows">
+
 <div class="navigationbar">
   <div class="titlebar">
-    <!-- TODO, this is dutch -->
     Voortgang -&gt; Correctie
-  </div>
+  </div>		
 </div>
 
 <div class="folders">
@@ -34,33 +31,36 @@
   </div>
 </div>
 
-
-
 <div class="mainContent">
   <div class="contentHeader">
-
 <%--    Some buttons working on this folder--%>
   </div>
   <div class="contentBody">
-
-<di:may component="education" action="rate" referids="studentNo@subject">
+  
+<di:may component="education" action="isTeacherOf" arguments="studentNo">
 
 <%-- find user's copybook --%>
+<mm:import id="copybookNo"/>
 <mm:node number="$studentNo">
-   <%@include file="find_copybook.jsp"%>
+  <mm:relatedcontainer path="classrel,classes">
+    <mm:constraint field="classes.number" value="$class"/>
+    <mm:related>
+      <mm:node element="classrel">
+        <mm:relatednodes type="copybooks">
+          <mm:remove referid="copybookNo"/>
+          <mm:field id="copybookNo" name="number" write="false"/>
+        </mm:relatednodes>
+      </mm:node>
+    </mm:related>  
+  </mm:relatedcontainer>
 </mm:node>
 
 
 <%-- Take care: form name is used in JavaScript of the specific question jsp pages! --%>
 <form name="scoreform" action="<mm:treefile page="/education/tests/rateopen2.jsp" objectlist="$includePath" referids="$referids"/>" method="POST">
 
-
 <mm:node number="$testNo">
-  <mm:field name="showtitle">
-    <mm:compare value="1">
-      <h1><mm:field name="name"/></h1>
-    </mm:compare>
-  </mm:field>
+  <h1><mm:field name="name"/></h1>
 <%-- Get all the questions of the test --%>
   <mm:relatednodescontainer path="madetests,copybooks" element="madetests">
     <mm:constraint field="madetests.score" referid="TESTSCORE_TBS"/>
@@ -74,17 +74,17 @@
         </mm:relatednodes>
         <mm:compare referid="questiontype" value="openquestions">
           <mm:field id="score" name="score" write="false"/>
-          <%-- THIS IS IN DUTCH --%>
           <mm:compare referid="score" referid2="TESTSCORE_TBS">
             <mm:field id="givenanswerNo" name="number" write="false"/>
             Vraag: <mm:write referid="questiontext" escape="none"/><br/>
             Gegeven antwoord: <mm:field name="text"/><br/>
+
             <input type="radio" name="<mm:write referid="givenanswerNo"/>" value="1"/>Goed
             <br/>
             <input type="radio" name="<mm:write referid="givenanswerNo"/>" value="0"/>Fout
             <br/>
             <input type="text" size="100" name="feedback<mm:write referid="givenanswerNo"/>"/>
-            <p/> <%-- WTF --%>
+            <p/>
             <mm:remove referid="givenanswerNo"/>
           </mm:compare>
           <mm:remove referid="score"/>
@@ -98,17 +98,16 @@
 
 <input type="hidden" name="testNo" value="<mm:write referid="testNo"/>"/>
 <input type="hidden" name="studentNo" value="<mm:write referid="studentNo"/>"/>
-<input type="submit" value="<di:translate key="education.ok" />"/>
-
+<input type="submit" value="<di:translate id="ok">OK</di:translate>"/>
 <%--
 TODO: make this operate
 <div class="button1">
-<a href="javascript:submitForm();"><di:translate key="education.ok" /></a>
+<a href="javascript:submitForm();"><di:translate id="ok">OK</di:translate></a>
 </div>
 --%>
 
-
 </form>
+
  </div>
 </div>
 </di:may>
@@ -117,4 +116,3 @@ TODO: make this operate
 
 </mm:cloud>
 </mm:content>
-

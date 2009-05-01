@@ -9,24 +9,16 @@ import javax.servlet.jsp.*;
 import javax.servlet.Servlet;
 import org.mmbase.bridge.jsp.taglib.*;
 import org.mmbase.module.core.*;
-import org.mmbase.util.logging.Logger;
-import org.mmbase.util.logging.Logging;
-import org.mmbase.util.StringSplitter;
-import org.mmbase.bridge.jsp.taglib.util.ContextContainer;
 import nl.didactor.component.Component;
 import nl.didactor.security.*;
 import nl.didactor.util.ClassRoom;
+import org.mmbase.util.StringSplitter;
+import org.mmbase.bridge.jsp.taglib.util.ContextContainer;
 /**
- * entityTag: retrieve entity data. 
- * 
- *
- * @author UNKNOWN
- * @javadoc What kind of 'entities'?
- * @version $Id: EntityTag.java,v 1.4 2007-04-24 12:12:11 michiel Exp $
+ * entityTag: retrieve entity data
+ * @author Johannes Verelst &lt;johannes.verelst@eo.nl&gt;
  */
 public class EntityTag extends CloudReferrerTag { 
-    private static final Logger log = Logging.getLoggerInstance(EntityTag.class);
-
     private String name;
     private String user;
     private String education;
@@ -140,7 +132,7 @@ public class EntityTag extends CloudReferrerTag {
         
         try {
             if (name.equals( "workgroupmembers")) {
-                List value= ClassRoom.getWorkgroupMembers( usernode, classno, educationno, role, getCloudVar());
+                List value= ClassRoom.getWorkgroupMembers( usernode, classno, educationno, role, getCloud());
                 it = value.iterator();
                 if (it.hasNext()) {
                     pageContext.setAttribute( var, it.next());
@@ -157,7 +149,7 @@ public class EntityTag extends CloudReferrerTag {
                     pageContext.getOut().print( object.toString());
                 }
             } else if (name.equals( "classmembers")) {
-                List value= ClassRoom.getWorkgroupMembers( usernode, classno, educationno, role, getCloudVar());
+                List value= ClassRoom.getWorkgroupMembers( usernode, classno, educationno, role, getCloud());
                 it = value.iterator();
                 if (it.hasNext()) {
                     pageContext.setAttribute( var, it.next());
@@ -168,11 +160,11 @@ public class EntityTag extends CloudReferrerTag {
                 pageContext.getOut().print( pageContext.getAttribute( var).toString());
             }
         } catch (JspTagException e) {
-            log.error( "di:entity: IO " + e.getMessage());
+            System.err.println( "di:entity: IO " + e.getMessage());
             return SKIP_BODY;
          }
         catch (java.io.IOException e) {
-            log.error( "di:entity: IO " + e.getMessage());
+            System.err.println( "di:entity: IO " + e.getMessage());
             return SKIP_BODY;
         }
         return ret_value;

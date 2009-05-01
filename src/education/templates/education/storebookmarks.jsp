@@ -1,8 +1,8 @@
-<%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.0" prefix="mm"%>
 <%@page import="java.util.HashMap"%>
 <mm:content postprocessor="reducespace" expires="0">
-<mm:cloud method="delegate" jspvar="cloud">
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
 <%@include file="/shared/setImports.jsp" %>
 <mm:import externid="learnobject" jspvar="learnObject"/>
 <mm:import externid="learnobjecttype" jspvar="learnObjectType"/>
@@ -19,15 +19,16 @@
         if (bookmarks== null) {
             bookmarks = new HashMap();
             session.setAttribute("educationBookmarks",bookmarks);
-            //System.err.println("made new bookmarks object");
+            System.err.println("made new bookmarks object");
         }
         if (learnObject != null && learnObject.length() != 0) {
             bookmarks.put(educationNumber+",learnobject",learnObject);
-            //System.err.println("stored "+educationNumber+",learnobject ="+learnObject);
+            System.err.println("stored "+educationNumber+",learnobject ="+learnObject);
         }
         if (learnObjectType != null && learnObject.length() != 0) {
             bookmarks.put(educationNumber+",learnobjecttype",learnObjectType);
-            //System.err.println("stored learnobjecttype ="+learnObjectType);
+            System.err.println("stored learnobjecttype ="+learnObjectType);
+
         }
     }
 %>
