@@ -54,7 +54,6 @@
                     </td>
                   </mm:notpresent>
                 </tr>
-                <!-- E.g. the forward option -->
                 <mm:treeinclude page="/admin/render_settings.jsp" objectlist="$includePath" referids="$referids" />
               </mm:node>
             </table>
@@ -86,8 +85,6 @@
               </mm:node>
             </c:if>
           </mm:present>
-          <!--  handle the forward option -->
-          <mm:treeinclude page="/admin/handle_settings.jsp" objectlist="$includePath" referids="$referids" />
           <mm:commit />
           <p>Saved.</p>
         </mm:valid>
@@ -96,7 +93,7 @@
         </mm:valid>
       </mm:present>
 
-      <input class="formbutton" type="submit" name="change" value="${di:translate('portfolio.save')}" />
+      <input class="formbutton" type="submit" name="change" value="${di:translate(pageContext, 'portfolio.save')}" />
     </mm:form>
   </mm:cloud>
 </div>

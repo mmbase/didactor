@@ -4,48 +4,32 @@ import org.mmbase.bridge.*;
 import org.mmbase.storage.search.*;
 import org.mmbase.bridge.util.Queries;
 import org.mmbase.util.logging.*;
-import org.mmbase.util.Casting;
 import java.util.*;
 import java.lang.reflect.*;
-import javax.servlet.http.*;
 
 /**
  * Some didactor specific Node functions (implemented as 'bean')
  * @author Michiel Meeuwissen
- * @version $Id: PeopleClassFunction.java,v 1.10 2008-12-04 15:25:11 michiel Exp $
+ * @version $Id: PeopleClassFunction.java,v 1.4 2007-08-03 18:31:47 michiel Exp $
  */
 public class PeopleClassFunction {
     protected final static Logger log = Logging.getLoggerInstance(PeopleClassFunction.class);
-
+    
     private Node node;
 
     public void setNode(Node n) {
         node = n;
     }
 
-    private int e = -1;
+    private int e;
 
     public void setEducation(int e) {
         this.e = e;
     }
 
 
-    /**
-     * Returns all classes asociated with a certain user.
-     */
-    public NodeList peopleClasses() {
+    public Node peopleClass() {
         Cloud cloud = node.getCloud();
-        if (e == -1) {
-            HttpServletRequest req = (HttpServletRequest) cloud.getProperty(Cloud.PROP_REQUEST);
-            e = Casting.toInt(req.getAttribute("education"));
-            if (! cloud.hasNode(e)) {
-                throw new IllegalStateException("No such education '" + e + "' (as found in request attribute 'education')");
-            }
-        } else {
-            if (! cloud.hasNode(e)) {
-                throw new IllegalStateException("No such education '" + e + "' (as found set with parameter)");
-            }
-        }
         Node education = cloud.getNode(e);
         NodeManager classes = cloud.getNodeManager("classes");
         NodeQuery query = Queries.createRelatedNodesQuery(node, classes, null, null);
@@ -53,37 +37,11 @@ public class PeopleClassFunction {
         RelationStep step = query.addRelationStep(cloud.getNodeManager("educations"), null, null);
         Queries.addConstraint(query, query.createConstraint(query.createStepField(step.getNext(),"number"), education.getNumber()));
         NodeList foundClasses = classes.getList(query);
-        log.debug("Classes " + foundClasses + " found with " + query.toSql());
-        return foundClasses;
-    }
-
-    public Node peopleClass() {
-        NodeList foundClasses = peopleClasses();
         Node claz;
         if (foundClasses.size() > 1) {
-            log.debug("more classes related! for node " + node.getNumber());
-            claz = null;
-            Date now = org.mmbase.util.DynamicDate.eval("tohour");
-            NodeIterator ni = foundClasses.nodeIterator();
-            CLASS:
-            while (ni.hasNext()) {
-                claz = ni.nextNode();
-                log.debug("considering " + claz);
-                NodeList mmevents = claz.getRelatedNodes("mmevents");
-                NodeIterator ei = mmevents.nodeIterator();
-                if (ei.hasNext()) {
-                    Node event = ei.nextNode();
-                    if (event.getDateValue("start").before(now) && event.getDateValue("stop").after(now)) {
-                        log.debug(" " + claz + " was started and not stopped so using this one");
-                        break CLASS;
-                    } else {
-                        log.debug(event.getDateValue("start") + " is after " + now);
-                    }
-                } else {
-                    log.debug("No mmevents coupled to " + claz);
-                        // what does that mean?
-                }
-            }
+            // select the class which is online.
+            log.warn("more classes related! for node " + node.getNumber());
+            claz = foundClasses.getNode(0);
         } else if (foundClasses.size() == 1) {
             claz = foundClasses.getNode(0);
         } else {
@@ -92,6 +50,19 @@ public class PeopleClassFunction {
         return claz;
     }
 
+
+    public Set<Node> blockedLearnBlocks() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException{
+        // A user can have access to only "opened" top learnblocks (lession)
+        try {
+            Class classLessonChecker = Class.forName("nl.didactor.component.assessment.education_menu.utils.LessonChecker");            
+            Method method = classLessonChecker.getMethod("getBlockedLearnblocksForThisUser", Node.class, Node.class);
+            return (Set<Node>) method.invoke(null, node.getCloud().getNode(e), node);
+        } catch (ClassNotFoundException cnfe) {
+            log.debug(cnfe);
+            // if assessment not installed, then no learnblocks are blocked.
+            return new HashSet<Node>();
+        }
+    }
 
 
 

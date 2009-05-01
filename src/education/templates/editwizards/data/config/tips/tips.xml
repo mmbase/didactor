@@ -2,6 +2,7 @@
 <!DOCTYPE wizard-schema PUBLIC "-//MMBase/DTD editwizard 1.0//EN" "http://www.mmbase.org/dtd/wizard-schema_1_0.dtd"
 [
    <!ENTITY extra_loads SYSTEM "extra_loads.xml">
+   <!ENTITY extra_steps SYSTEM "extra_steps.xml">
    <!ENTITY extra_schemas SYSTEM "extra_schemas.xml">
 ]>
 <wizard-schema id="empty">
@@ -16,7 +17,7 @@
 
     <action type="load">
         <relation destination="mmevents" role="related" />
-
+        
         &extra_loads;
     </action>
 
@@ -27,6 +28,11 @@
       <optionlist include="config/option_list/layout_ext.xml" />
       <optionlist include="config/option_list/boolean.xml" />
     </lists>
+
+    <steps>
+        <step form-schema="step1" />
+        &extra_steps;
+    </steps>
 
     <form-schema id="step1">
         <title>Tips invoeren</title>
@@ -39,18 +45,18 @@
          <prompt xml:lang="en">Show title</prompt>
          <optionlist select="boolean" />
       </field>
+ 
 
-
-        <field name="text" ftype="html" dtminlength="0">
+        <field name="text" ftype="${wizards.pages.text.ftype}" dtminlength="0">
             <prompt>Tekst</prompt>
         </field>
 
-
-
-<!-- INSERT Bijbehorende afbeelding-->
+        
+        
+<!-- INSERT Bijbehorende afbeelding-->        
         <list role="related" extends="config/image/images.xml" />
  <!--END Bijbehorende afbeelding -->
-
+        
 <!-- INSERT ONLINE/OFFLINE -->
         <list role="related" extends="config/online/online-list.xml" />
 <!--END INSERT ONLINE/OFFLINE -->

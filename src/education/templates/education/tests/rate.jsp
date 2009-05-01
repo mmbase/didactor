@@ -1,86 +1,67 @@
-<jsp:root
-    version="2.0"
-    xmlns:jsp="http://java.sun.com/JSP/Page"
-    xmlns:mm="http://www.mmbase.org/mmbase-taglib-2.0"
-    xmlns:c="http://java.sun.com/jsp/jstl/core"
-    xmlns:di="http://www.didactor.nl/ditaglib_1.0" >
-  <mm:content type="application/xml" postprocessor="none" expires="0">
-    <mm:cloud rank="didactor user">
+<%@page contentType="application/xml;charset=utf8"
+%><%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm"
+%><%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di"
+%><%@page import="java.util.Iterator"
+%><mm:content type="application/xml" postprocessor="reducespace" expires="0">
+  <mm:cloud rank="didactor user">
 
-      <mm:import externid="learnobject"  required="true"/>
-      <mm:import externid="my_questions"  from="session" vartype="list" />
+    <mm:import externid="learnobject"  required="true"/>
+    <mm:import externid="my_questions"  from="session" vartype="list" />
 
-      <mm:import externid="command">next</mm:import>
+    <mm:import externid="command">next</mm:import>
 
-      <mm:node referid="learnobject" id="my_tests">
+    <jsp:directive.include file="/education/tests/definitions.jsp" />
 
-        <di:copybook>
-          <!--
-               update the 'testpath' field of the made test object
-          -->
-          <mm:node>
-            <mm:nodefunction id="madetest" name="madetest" referids="my_tests@test">
-              <mm:setfield name="testpath"><mm:field name="testpath"><mm:write /><mm:isnotempty>,</mm:isnotempty>${my_questions}</mm:field></mm:setfield>
-              <mm:import id="testpath" vartype="list"><mm:field name="testpath" /></mm:import>
-            </mm:nodefunction>
-          </mm:node>
-        </di:copybook>
+    <mm:node referid="learnobject" id="my_tests">
 
-        <mm:listnodes referid="my_questions">
-          <mm:import id="question">shown<mm:field name="number"/></mm:import>
-          <mm:import externid="$question" id="shownquestion" />
+      <di:copybook>
+        <mm:node id="copybookID">
+          <mm:nodefunction id="madetest" name="madetest" referids="my_tests@test">
+            <mm:setfield name="testpath"><mm:field name="testpath"><mm:write /><mm:isnotempty>,</mm:isnotempty>${my_questions}</mm:field></mm:setfield>
+            <mm:import id="testpath" vartype="list"><mm:field name="testpath" /></mm:import>
+          </mm:nodefunction>
+        </mm:node>
+      </di:copybook>
 
-          <!-- delete previously given answers -->
-          <mm:relatednodescontainer path="givenanswers,madetests" element="givenanswers">
-            <mm:constraint field="madetests.number" referid="madetest"/>
-            <mm:relatednodes>
-              <mm:deletenode deleterelations="true"/>
-            </mm:relatednodes>
-          </mm:relatednodescontainer>
+      <mm:listnodes referid="my_questions">
+        <mm:import id="question">shown<mm:field name="number"/></mm:import>
+        <mm:import externid="$question" id="shownquestion" />
 
-          <!-- rate the given answers, and lay (new) relations -->
-          <mm:import id="ratepage" reset="true">/education/<mm:nodeinfo type="type"/>/rate<mm:nodeinfo type="type"/>.jsp</mm:import>
+        <mm:relatednodescontainer path="givenanswers,madetests" element="givenanswers">
+          <mm:constraint field="madetests.number" referid="madetest"/>
+          <mm:relatednodes>
+            <mm:deletenode deleterelations="true"/>
+          </mm:relatednodes>
+        </mm:relatednodescontainer>
 
-          <mm:treeinclude page="$ratepage" objectlist="$includePath" referids="$referids,madetest,_node@question" />
-
-        </mm:listnodes>
-
-        <c:choose>
-          <c:when test="${command eq 'done'}">
-            <!--
-                 If "done" pressed then show the feedback
-            -->
-            <div>
+        <mm:import id="ratepage" reset="true">/education/<mm:nodeinfo type="type"/>/rate<mm:nodeinfo type="type"/>.jsp</mm:import>
+        <mm:treeinclude page="$ratepage" objectlist="$includePath" referids="$referids,madetest,_node@question" />
+      </mm:listnodes>
+      <mm:compare referid="command" value="done">
+        <!-- If "done" pressed then show the feedback else show next question set -->
+        <div>
+          <mm:field name="feedbackpage">
+            <mm:compare value="0">
               <mm:treeinclude page="/education/tests/totalscore.jsp"  objectlist="$includePath"
                               referids="$referids,madetest,_node@tests" />
+              <mm:treeinclude page="/education/tests/feedback.jsp" objectlist="$includePath"
+                              referids="$referids,madetest,_node@tests" />
+            </mm:compare>
 
-              <mm:field name="feedbackpage" write="false">
-                <c:choose>
-                  <c:when test="${_ eq 0}">
-                    <mm:treeinclude page="/education/tests/feedback.jsp" objectlist="$includePath"
-                                    referids="$referids,madetest,_node@tests" />
-                  </c:when>
-                  <c:otherwise>
-                    <mm:treeinclude page="/education/tests/viewanswersframe.jsp" objectlist="$includePath"
-                                  referids="$referids,_node@testNo,madetest@madetestNo,user@userNo" />
-                  </c:otherwise>
-                </c:choose>
-              </mm:field>
-            </div>
-          </c:when>
-          <c:otherwise>
-            <!--
-                 else show next question set
-            -->
-            <mm:import externid="page" required="true" vartype="integer" />
-            <mm:treeinclude page="/education/tests/buildtest.jsp"  objectlist="$includePath" referids="$referids,learnobject,madetest">
-              <mm:param name="page">${page + 1}</mm:param>
-            </mm:treeinclude>
-          </c:otherwise>
-        </c:choose>
+            <mm:compare value="0" inverse="true">
+              <mm:treeinclude page="/education/tests/viewanswersframe.jsp" objectlist="$includePath"
+                              referids="$referids,_node@testNo,madetest@madetestNo,user@userNo" />
+            </mm:compare>
 
-
-      </mm:node>
-    </mm:cloud>
-  </mm:content>
-</jsp:root>
+          </mm:field>
+        </div>
+      </mm:compare>
+      <mm:compare referid="command" value="done" inverse="true">
+        <mm:import externid="page" required="true" vartype="integer" />
+        <mm:treeinclude page="/education/tests/buildtest.jsp"  objectlist="$includePath" referids="$referids,learnobject,madetest">
+          <mm:param name="page">${page + 1}</mm:param>
+        </mm:treeinclude>
+      </mm:compare>
+    </mm:node>
+  </mm:cloud>
+</mm:content>
