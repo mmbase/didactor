@@ -1,50 +1,55 @@
-<jsp:root
-    version="2.0"
-    xmlns:jsp="http://java.sun.com/JSP/Page"
-    xmlns:fn="http://java.sun.com/jsp/jstl/functions"
-    xmlns:mm="http://www.mmbase.org/mmbase-taglib-2.0"
-    xmlns:c="http://java.sun.com/jsp/jstl/core"
-    xmlns:di="http://www.didactor.nl/ditaglib_1.0">
-  <jsp:output omit-xml-declaration="yes" />
-  <mm:import externid="startnode" required="true" />
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.0" prefix="mm" %>
+<mm:content postprocessor="reducespace">
+<mm:import externid="wizardjsp" required="true" jspvar="wizardjsp" />
 
-  <mm:content postprocessor="none">
-    <mm:cloud method="delegate">
-      <mm:node id="sn" number="${startnode}">
-        <mm:write request="b" value="" />
-        <mm:include page="newfromtree.jsp" />
+<%
+ int depth = Integer.parseInt(request.getParameterValues("depth")[0]);
+ String startnode = request.getParameterValues("startnode")[0];
+ String parenttree = request.getParameterValues("parenttree")[0];
+ System.err.println("Get request for depth " + depth);
 
-
-        <mm:relatednodescontainer
-            type="learnobjects"
-            role="posrel"
-            searchdirs="destination"
-            >
-          <mm:sortorder field="posrel.pos" direction="up" />
-          <mm:typeconstraint name="questions" inverse="true" />
-          <mm:relatednodes>
-            <li>
-              <mm:nodeinfo type="type">
-                <mm:treehaspage page="/education/wizards/show/${_}.jspx" objectlist="$includePath">
-                  <mm:treeinclude page="/education/wizards/show/${_}.jspx"
-                                  objectlist="$includePath"
-                                  debug="html"
-                                  />
-                </mm:treehaspage>
-                <mm:treehaspage page="/education/wizards/show/${_}.jspx"
-                                objectlist="$includePath"
-                                inverse="true">
-                  <mm:treeinclude page="/education/wizards/showlearnobject.jsp"
-                                  objectlist="$includePath"
-                                  debug="html"
-                                  >
-                  </mm:treeinclude>
-                </mm:treehaspage>
-              </mm:nodeinfo>
-            </li>
-          </mm:relatednodes>
-        </mm:relatednodescontainer>
-      </mm:node>
-    </mm:cloud>
-  </mm:content>
-</jsp:root>
+ depth--;
+ if (depth >= 0) {
+%>
+<%--// entering depth <%=depth%>--%>
+<%--// for node <%=startnode%>--%>
+<mm:cloud>
+<mm:node number="<%=startnode%>">
+  <mm:import id="treeName" jspvar="treeName">lbTree<mm:field name="number"/>z</mm:import>
+  <mm:related path="posrel,learnobjects" orderby="posrel.pos" directions="up" searchdir="destination">
+   <mm:first>
+    var <mm:write referid="treeName" /> = new MTMenu();
+<%--    <mm:write referid="treeName" /> = new MTMenu();--%>
+   </mm:first>  
+   <mm:node element="learnobjects"> 
+    <mm:import id="objecttype"><mm:nodeinfo type="type" /></mm:import>
+    <mm:write referid="treeName" />.addItem(
+        "<mm:field name="name"><mm:isempty><mm:field name="title"/></mm:isempty><mm:isnotempty><mm:write/></mm:isnotempty></mm:field>",
+        "<mm:write referid="wizardjsp"/>?wizard=<mm:write referid="objecttype" />&objectnumber=<mm:field name="number" />&origin=<mm:field name="number" />",
+        null,
+        "bewerk object",
+		"<mm:treefile write="true" page="/education/wizards/gfx/edit_learnobject.gif" objectlist="" />");
+<%--    <mm:compare referid="objecttype" value="learnobjects"> --%>
+      <% if (depth > 0) { %>
+        <mm:field jspvar="objectNumber" name="number">
+        <% System.err.println("Next request will have depth " + depth); %>
+        <mm:include page="learnobject.jsp" referids="wizardjsp">
+          <mm:param name="parenttree"><%=treeName%></mm:param>
+          <mm:param name="startnode"><%=objectNumber%></mm:param>
+          <mm:param name="depth"><%=depth%></mm:param>
+        </mm:include>
+        </mm:field>
+      <% } %>
+<%--    </mm:compare> --%>
+   </mm:node> 
+   <mm:last>
+    <%=parenttree%>.makeLastSubmenu(<mm:write referid="treeName" />, true);
+   </mm:last>
+  </mm:related>
+</mm:node>
+</mm:cloud>
+<%--// gone from depth <%=depth%>--%>
+<%
+ }
+%>
+</mm:content>

@@ -8,8 +8,7 @@ Parameters:
 'link' The onclick link of this image.
 
 --%>
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" %>
-<%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.0" prefix="mm" %>
 <mm:cloud jspvar="cloud" name="mmbase" loginpage="/login.jsp">
   <%@ include file="/shared/setImports.jsp"%>
 
@@ -34,7 +33,7 @@ Parameters:
       <tr>
         <td valign="top">
           <a href="<mm:write referid="link"/>" class="forumlist">
-            <img src="<mm:treefile write="true" page="/forum/gfx/${icon}.gif" objectlist="$includePath"/>" title="<mm:write referid="alt"/>" alt="<mm:write referid="alt"/>" width="18" height="17" border="0"></a>
+            <img src="<mm:treefile write="true" page="/forum/gfx/${icon}.gif" objectlist="$includePath"/>" alt="<mm:write referid="alt"/>" width="18" height="17" border="0"></a>
         </td>
         <td>&nbsp;</td>
         <td valign=center>
