@@ -4,6 +4,7 @@
 package nl.didactor.component;
 import org.mmbase.module.core.MMObjectNode;
 import org.mmbase.module.core.MMObjectBuilder;
+import org.mmbase.module.corebuilders.FieldDefs;
 import org.mmbase.module.core.MMBase;
 import org.mmbase.bridge.Cloud;
 import org.mmbase.security.Action;
@@ -24,7 +25,6 @@ import java.util.*;
 
 /**
  * @javadoc
- * @version $Id: Component.java,v 1.32 2009-01-02 09:36:10 michiel Exp $
  */
 public abstract class Component {
     private static final Logger log = Logging.getLoggerInstance(Component.class);
@@ -34,7 +34,7 @@ public abstract class Component {
     private final List<Component> interestedComponents = new ArrayList<Component>();
     private MMObjectNode node;
 
-    protected final Map<String, Setting> settings = new HashMap<String, Setting>();
+    private final Map<String, Setting> settings = new HashMap<String, Setting>();
     private final Map<String, String>  scopes   = new HashMap<String, String>();
 
     /** The string indicating the path for templates of this component */
@@ -90,17 +90,10 @@ public abstract class Component {
      * installation is restarted.
      */
     public void init() {
+        String configFile = "components/" + getName() + ".xml";
         try {
-            String xml = getName() + ".xml";
-            Document doc = null;
-            if (ResourceLoader.getConfigurationRoot().getResource("di_components/" + xml).openConnection().getDoInput()) {
-                doc = ResourceLoader.getConfigurationRoot().getDocument("di_components/" + xml, true, Component.class);
-            } else if (ResourceLoader.getConfigurationRoot().getResource("components/" + xml).openConnection().getDoInput()) {
-                // legacy support, didactor used to use that dir, but it is now resereved for mmbase components.
-                doc = ResourceLoader.getConfigurationRoot().getDocument("components/" + xml, true, Component.class);
-            }
-
-            if (doc != null) {
+            if (ResourceLoader.getConfigurationRoot().getResource(configFile).openConnection().getDoInput()) {
+                Document doc = ResourceLoader.getConfigurationRoot().getDocument(configFile, true, Component.class);
                 log.service("Reading component configuration from '" + doc.getDocumentURI() + "'");
                 Element componentNode = (Element) doc.getDocumentElement();
                 this.templatepath = getAttribute(componentNode, "templatepath");
@@ -164,6 +157,37 @@ public abstract class Component {
                     }
                 }
 
+                for (int i=0; i< childNodes.getLength(); i++) {
+                    if ("builder".equals(childNodes.item(i).getNodeName())) {
+                        Node builderNode = childNodes.item(i);
+                        String builderName = getAttribute(builderNode, "name");
+                        log.debug("Builder name: " + builderName);
+                        MMObjectBuilder builder = MMBase.getMMBase().getBuilder(builderName);
+                        if (builder == null) {
+                            log.warn("Cannot load builder '" + builderName + "' for component '" + getName() + "')");
+                        }
+
+                        NodeList childNodes2 = builderNode.getChildNodes();
+                        for (int j = 0; j< childNodes2.getLength(); j++) {
+                            if ("field".equals(childNodes2.item(j).getNodeName())) {
+                                Node fieldNode = childNodes2.item(j);
+                                String fieldName = getAttribute(fieldNode, "name");
+                                String fieldType = getAttribute(fieldNode, "type");
+                                int ftype = FieldDefs.TYPE_UNKNOWN;
+                                if ("string".equals(fieldType)) {
+                                    ftype = FieldDefs.TYPE_STRING;
+                                } else if ("integer".equals(fieldType)) {
+                                    ftype = FieldDefs.TYPE_INTEGER;
+                                }
+
+                                FieldDefs fd = new FieldDefs(fieldName, fieldType, -1, -1, fieldName, ftype, 200, FieldDefs.DBSTATE_VIRTUAL);
+                                // position 300: used later on internally to figure out which virtual fields are didactor-managed
+                                fd.setDBPos(300);
+                                builder.addField(fd);
+                            }
+                        }
+                    }
+                }
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -256,7 +280,7 @@ public abstract class Component {
      * @javadoc I'd say it may be somewhat necessary here. I don't for example really understand the
      * difference between this and {@link #getSetting}.
      */
-    public String getValue(String variablename, Cloud cloud, Map<String, ?> context, String[] arguments) {
+    public String getValue(String variablename, Cloud cloud, Map context, String[] arguments) {
         return "";
     }
 
@@ -271,7 +295,7 @@ public abstract class Component {
      * to retrieve the setting value. For instance the current username or
      * education node number.
      */
-    public Object getSetting(String settingName, Cloud cloud, Map<String, ?> context) {
+    public Object getSetting(String settingName, Cloud cloud, Map context) {
         if (log.isDebugEnabled()) {
             log.debug("Retrieving value for setting '" + settingName + "', with in context: " + context.keySet());
         }
@@ -283,7 +307,7 @@ public abstract class Component {
         Object retval = null;
 
         for (String scopeName : scope) {
-            String scopeReferId = getScopesMap().get(scopeName);
+            String scopeReferId = scopes.get(scopeName);
             if (log.isDebugEnabled()) {
                 log.debug("Trying on scope '" + scopeName + "' (" + scopeReferId + ")");
             }
@@ -334,7 +358,6 @@ public abstract class Component {
         if (setting == null) {
             throw new RuntimeException("Setting with name '" + settingName + "' is not defined for component '" + getName() + "'");
         }
-        if (cloud == null) cloud = org.mmbase.bridge.ContextProvider.getDefaultCloudContext().getCloud("mmbase", "class", null);
 
         org.mmbase.bridge.NodeList settingNodes;
         if (id == node.getNumber()) {
@@ -345,14 +368,13 @@ public abstract class Component {
             org.mmbase.bridge.NodeList settingrel = nl.didactor.util.GetRelation.getRelations(id, node.getNumber(), "settingrel", cloud);
 
             if (settingrel.size() == 0) {
-                // This is not a setting of this component itself, defaultValue is left to fall back.
+                // This is not a setting of this component itself, defaultVAlue is left to fall back.
                 return null;
             }
             if (settingrel.size() > 1) {
                 log.warn("Too many relations from " + id + " to " + node.getNumber() +" (" + settingrel.size() + "). Picking first one!");
             }
             org.mmbase.bridge.Node settingRelNode = settingrel.getNode(0);
-
             settingNodes = settingRelNode.getRelatedNodes("settings");
         }
 
@@ -532,12 +554,8 @@ public abstract class Component {
     /**
      * @javadoc
      */
-    public final Collection<String> getScopes() {
-        return getScopesMap().keySet();
-    }
-
-    public Map<String, String> getScopesMap() {
-        return Collections.unmodifiableMap(scopes);
+    public Collection<String> getScopes() {
+        return scopes.keySet();
     }
 
     /**

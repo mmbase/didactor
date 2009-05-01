@@ -1,12 +1,13 @@
+./resources/icaches.xml
+./resources/images.xml
 ./resources/attachments.xml
 ./resources/urls.xml
-./resources/images.xml
-./didactor_core/pagestays.xml
+./resources/posrel.xml
+./jumpers/jumpers.xml
 ./didactor_core/authrel.xml
 ./didactor_core/classes.xml
 ./didactor_core/classrel.xml
 ./didactor_core/copybooks.xml
-./didactor_core/disallowedusernames.xml
 ./didactor_core/editcontexts.xml
 ./didactor_core/educations.xml
 ./didactor_core/fields.xml
@@ -16,6 +17,7 @@
 ./didactor_core/rolerel.xml
 ./didactor_core/roles.xml
 ./didactor_core/workgroups.xml
+./didactor_core/disallowedusernames.xml
 ./didactor_component/components.xml
 ./didactor_component/settingrel.xml
 ./didactor_component/settings.xml
@@ -25,4 +27,3 @@
 ./didactor_resources/pdfs.xml
 ./didactor_resources/pools.xml
 ./didactor_resources/videotapes.xml
-./properties.xml

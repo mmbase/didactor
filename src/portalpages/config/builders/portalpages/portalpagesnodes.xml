@@ -14,8 +14,4 @@
   <descriptions>
     <description xml:lang="en">Portal Page Node</description>
   </descriptions>
-  <properties>
-    <property name="show_domain">/portalpages/frontoffice/</property>
-  </properties>
-
 </builder>

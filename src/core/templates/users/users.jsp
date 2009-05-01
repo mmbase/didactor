@@ -9,21 +9,16 @@
   If the user is connected directly to education it shows all useres in all classes
   -->
   <mm:content postprocessor="none">
-    <mm:hasrank minvalue="didactor user">
+    <mm:cloud rank="didactor user">
 
       <mm:import externid="mode"/>
 
       <mm:node number="$user">
-        <mm:hasrelationmanager
-            sourcemanager="people"
-            destinationmanager="educations" role="classrel">
-          <mm:relatednodes role="classrel" type="educations" id="directly_related" />
-        </mm:hasrelationmanager>
+        <mm:relatednodes role="classrel" type="educations" id="directly_related" />
 
-        <mm:relatednodes
-            add="directly_related?"
-            element="educations"
-            path="classrel,classes,classrel,educations">
+        <mm:relatednodes add="directly_related"
+                         comparator="nl.didactor.component.users.PeopleComparator"
+                         path="people,classrel,classes,classrel,educations">
           <!-- Do check: is anybody online for this education -->
           <mm:import id="show_this_item" reset="true">false</mm:import>
           <mm:related path="classrel,people">
@@ -40,7 +35,7 @@
            </mm:relatednodes>
 
            <mm:related path="classrel,classes" orderby="classes.name">
-             <mm:node element="classes">
+             <mm:node element="classes" jspvar="nodeClass">
 
                <mm:import id="show_this_item" reset="true">false</mm:import>
                <mm:related path="classrel,people">
@@ -61,6 +56,6 @@
          </mm:compare>
         </mm:relatednodes>
       </mm:node>
-    </mm:hasrank>
+    </mm:cloud>
   </mm:content>
 </jsp:root>

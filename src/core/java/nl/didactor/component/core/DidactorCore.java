@@ -1,5 +1,7 @@
+/**
+ * Component description interface.
+ */
 package nl.didactor.component.core;
-
 import nl.didactor.component.Component;
 import nl.didactor.builders.*;
 import org.mmbase.security.Action;
@@ -166,7 +168,7 @@ public class DidactorCore extends Component {
         String owner = classrel.getStringValue("owner");
 
         MMObjectNode copybook = MMBase.getMMBase().getBuilder("copybooks").getNewNode(owner);
-        copybook.setValue("name", "copybook for " + person.getFunctionValue("gui", null).toString());
+        copybook.setValue("name", "copybook for " + person.getGUIIndicator());
         copybook.insert(owner);
 
         MMObjectNode relnode = MMBase.getMMBase().getInsRel().getNewNode(owner);

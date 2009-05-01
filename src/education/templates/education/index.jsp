@@ -6,16 +6,12 @@
           >
   <di:html
       styleClass="education"
-      type="application/xhtml+xml"
       title_key="education.learnenvironmenttitle"
-      expires="0"
-      component="education">
+      expires="0" component="education" type="text/html">
 
     <!-- wtf -->
     <mm:hasnode number="component.drm">
-      <mm:haspage page="/drm/testlicense.jsp">
-        <di:include page="/drm/testlicense.jsp" />
-      </mm:haspage>
+      <di:include page="/drm/testlicense.jsp" />
     </mm:hasnode>
 
     <di:include page="/education/bookmark.jspx" />
@@ -26,7 +22,6 @@
           NO EDUCATION YET
         </c:when>
         <c:otherwise>
-          <di:script  src="/content/js/open.jsp" />
           <di:include debug="html" page="/education/navigation.jspx" />
           <di:include debug="html" page="/education/main.jspx" />
         </c:otherwise>

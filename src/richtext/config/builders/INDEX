@@ -1,4 +1,2 @@
-./richtext/rich.fields.xml
-./richtext/xmlcontent.xml
-./richtext/xmlnews.xml
-./richtext/rich.xml
+xmlcontent.xml
+xmlnews.xml

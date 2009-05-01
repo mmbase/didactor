@@ -98,7 +98,7 @@
                 <tr>
                   <td><di:translate key="progress.perccompleted" /></td>
                   <td>
-                    <mm:import id="progress" escape="trimmer"><mm:treeinclude page="/progress/getprogress.jsp" objectlist="$includePath" referids="$referids,student" /></mm:import>
+                    <mm:import id="progress" ><mm:treeinclude page="/progress/getprogress.jsp" objectlist="$includePath" referids="$referids,student" /></mm:import>
                     <fmt:formatNumber value="${progress}" type="percent" />
                   </td>
                 </tr>
@@ -128,23 +128,21 @@
                   </mm:present>
                 </mm:node>
 
-                <mm:present referid="classrel"> <!-- can be not present if e.g. admin -->
-                  <mm:node referid="classrel">
-                    <tr>
-                      <td><di:translate key="progress.logins" />:</td>
-                      <td><mm:field name="logincount" /></td>
-                    </tr>
+                <mm:node referid="classrel">
+                  <tr>
+                    <td><di:translate key="progress.logins" />:</td>
+                    <td><mm:field name="logincount" /></td>
+                  </tr>
 
-                    <tr>
-                      <td><di:translate key="progress.online" /></td>
-                      <td>
-                        <mm:field name="onlinetime">
-                          <mm:time format="HH:mm" />
-                        </mm:field>
-                      </td>
-                    </tr>
-                  </mm:node>
-                </mm:present>
+                  <tr>
+                    <td><di:translate key="progress.online" /></td>
+                    <td>
+                      <mm:field name="onlinetime">
+                        <mm:time format="HH:mm" />
+                      </mm:field>
+                    </td>
+                  </tr>
+                </mm:node>
               </table>
               <di:ifsetting component="progress" setting="showeducationplan">
                 <p><b><di:translate key="progress.educationplan" /></b></p>

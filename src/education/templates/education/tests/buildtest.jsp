@@ -1,13 +1,11 @@
 <jsp:root
-    version="2.0"
-    xmlns:jsp="http://java.sun.com/JSP/Page"
+    xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0"
     xmlns:mm="http://www.mmbase.org/mmbase-taglib-2.0"
     xmlns:di="http://www.didactor.nl/ditaglib_1.0"
     xmlns:c="http://java.sun.com/jsp/jstl/core"
     xmlns:fn="http://java.sun.com/jsp/jstl/functions"
     >
-  <mm:content type="application/xml" expires="0">
-
+  <mm:content postprocessor="none" expires="0">
     <mm:cloud rank="didactor user">
 
       <mm:import externid="learnobject" required="true"/>
@@ -29,20 +27,20 @@
         </mm:notpresent>
       </mm:present>
 
-      <jsp:text>&lt;!-- Made test: ${madetest} --&gt;</jsp:text>
 
-      <div class="content learnenvironment tests">
+      <div class="learnenvironment tests">
         <!-- Take care: form name is used in JavaScript of the specific question jsp pages! -->
         <mm:treefile id="post" page="/education/tests/rate.jsp" objectlist="$includePath" referids="$referids,learnobject,madetest@thismadetest" write="false"/>
-        <mm:node number="$learnobject" id="test">
+        <form name="questionform"
+              action="${post}"
+              method="POST">
 
-
-          <form name="questionform"
-                action="${post}"
-                method="POST">
-
-            <di:title field="name" />
-
+          <mm:node number="$learnobject" id="test">
+            <mm:field name="showtitle">
+              <mm:compare value="1">
+                <h1><mm:field name="name"/></h1>
+              </mm:compare>
+            </mm:field>
 
             <mm:hasfield name="text">
               <mm:field name="text" escape="toxml"/>
@@ -70,8 +68,6 @@
             <mm:nodelistfunction name="questions" id="my_questions" referids="copybookNo?@seed,page" />
 
             <mm:write session="my_questions" referid="my_questions" />
-
-            <jsp:text>&lt;!-- givenanswers: ${givenanswers}, my questions: ${my_questions} --&gt;</jsp:text>
 
             <mm:listnodes referid="my_questions">
 
@@ -113,45 +109,40 @@
             <mm:present referid="copybookNo">
               <!-- Determine if all questions are showed -->
               <c:choose>
-                <c:when test="${fn:length(my_questions) lt fn:length(questions)}">
+                <c:when test="${fn:length(my_questions) + fn:length(givenanswers) ge fn:length(questions)}">
                   <input type="button"
                          disabled="disabled"
-                         value="${di:translate('education.buttontextdone')}"
-                         class="formbutton"
-                         onclick="document.forms.questionform.command.value='done'; postContent('${post}', document.forms.questionform);" />
+                         value="${di:translate('education.buttontextdone')}" class="formbutton"
+                         onClick="questionform.command.value='done'; postContent('${post}', questionform);"/>
                 </c:when>
                 <c:otherwise>
                   <c:if test="${page gt 0}">
                     <input type="button"
                            value="${di:translate('education.buttontextprev')}"
                            class="formbutton"
-                           onclick="document.forms.questionform.command.value='back'; postContent('${post}', document.forms.questionform);" />
+                           onClick="questionform.command.value='back'; postContent('${post}', questionform);" />
                   </c:if>
-                  <c:if test="${learnobject.questionsperpage gt 0 and page * learnobject.questionsperpage lt fn:length(questions)}">
+                  <c:if test="${learnobject.questionsperpage gt 0 or page * learnobject.questionsperpage lt fn:length(questions)}">
                     <input type="button"
                            value="${di:translate('education.buttontextnext')}"
                            class="formbutton"
-                           onclick="postContent('${post}', questionform);" />
+                           onClick="postContent('${post}', questionform);" />
                   </c:if>
                   <c:if test="${learnobject.questionsperpage lt 1 or page * learnobject.questionsperpage ge fn:length(questions)}">
                     <input type="button"
                            value="${di:translate('education.buttontextdone')}"
                            class="formbutton"
-                           onclick="document.forms.questionform.command.value='done'; postContent('${post}', document.forms.questionform);" />
+                           onClick="questionform.command.value='done'; postContent('${post}', questionform);" />
                   </c:if>
                 </c:otherwise>
               </c:choose>
 
             </mm:present>
-          </form>
-
-          <mm:notpresent referid="copybookNo">
-            <di:translate key="education.nocopybookfound" />
-          </mm:notpresent>
-
-        <di:blocks classification="after_test" />
-      </mm:node>
-
+          </mm:node>
+        </form>
+        <mm:notpresent referid="copybookNo">
+          <di:translate key="education.nocopybookfound" />
+        </mm:notpresent>
       </div>
     </mm:cloud>
   </mm:content>

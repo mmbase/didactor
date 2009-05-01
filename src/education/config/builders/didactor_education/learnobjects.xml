@@ -30,7 +30,6 @@
 
   <properties>
     <property name="smartpathfield">name</property>
-    <property name="show_domain">/education/</property> <!-- used by /show/index.jspx" -->
   </properties>
 
   <fieldlist>
@@ -70,12 +69,10 @@
     </field>
 
     <field name="layout" state="virtual" readonly="true">
-      <editor><positions><input>-1</input><list>-1</list><search>-1</search></positions></editor>
       <datatype base="didactor_layout" xmlns="http://www.mmbase.org/xmlns/datatypes" />
     </field>
 
     <field name="imagelayout" state="virtual" readonly="true" >
-      <editor><positions><input>-1</input><list>-1</list><search>-1</search></positions></editor>
       <datatype base="didactor_imagelayout" xmlns="http://www.mmbase.org/xmlns/datatypes" />
     </field>
 
@@ -84,26 +81,6 @@
   <functionlist>
     <function key="path">
       <class>nl.didactor.education.Functions</class>
-    </function>
-
-    <function key="url">
-      <class>nl.didactor.education.Functions</class>
-    </function>
-
-    <function key="madetestholder">
-      <class>nl.didactor.education.Functions</class>
-    </function>
-
-    <function key="madetestholder">
-      <class>nl.didactor.education.Functions</class>
-    </function>
-
-    <function key="sequence">
-      <class>nl.didactor.education.Functions</class>
-    </function>
-
-    <function key="questions">
-      <class>nl.didactor.education.functions.LearnObjectQuestions</class>
     </function>
   </functionlist>
 

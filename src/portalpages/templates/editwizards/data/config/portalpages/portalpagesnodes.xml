@@ -3,17 +3,10 @@
 <wizard-schema id="empty">
   <title>Portal Pagina's Map Editor</title>
 
-
-
-  <action type="create">
-    <object type="portalpagesnodes" />
-  </action>
-
   <action type="load">
     <object type="portalpagesnodes"/>
-    <relation destinationtype="simplecontents" role="related" searchdir="destination" />
-    <relation destinationtype="simplexmlcontents" role="posrel" />
-    <relation destinationtype="portalpagesnodes" role="childppnn" searchdir="destination" />
+    <relation destinationtype="simplecontents" role="related"/>
+    <relation destinationtype="portalpagesnodes" role="childppnn"/>
     <relation destinationtype="paragraphs" role="posrel"/>
   </action>
 
@@ -24,11 +17,9 @@
     <title xml:lang="en">Name</title>
 
     <field name="name"  />
-    <field name="active" />
+    <field name="active" ftype="enum"  />
     <field name="body"   ftype="html" />
-
-    <field name="order_number" /> <!-- This is a horrible, horrible idea, because now we cannot use standard functionality to determin sort-order (posrel) -->
-
+    <field name="order_number" />
     <list role="related" destination="simplecontents" minoccurs="0" maxoccurs="*">
       <title>Content</title>
       <item>
@@ -53,30 +44,6 @@
       </action>
     </list>
 
-    <list role="posrel" destination="simplexmlcontents" minoccurs="0" maxoccurs="*" orderby="field[@name='pos']">
-      <title>Rich Content</title>
-      <item>
-        <field name="title" />
-      </item>
-      <command name="search" nodepath="simplexmlcontents" fields="title" age="-1">
-        <prompt>Search Content</prompt>
-        <search-filter>
-          <name>titel bevat</name>
-          <search-fields>title</search-fields>
-        </search-filter>
-      </command>
-      <action type="create">
-        <relation destinationtype="simplexmlcontents" role="posrel" >
-          <object type="simplecontents"/>
-        </relation>
-      </action>
-      <action type="add">
-        <relation destinationtype="simplecontents" role="related">
-          <field name="pos">{sum(//relation[@role='posrel' and @lastitem='true']/field[@name='pos'])+{$pos}}</field>
-        </relation>
-      </action>
-    </list>
-
     <list role="childppnn" destination="portalpagesnodes" minoccurs="0" maxoccurs="*">
       <title>Bijbehorende map</title>
       <item>
@@ -92,12 +59,10 @@
     </list>
   </form-schema>
 
-  <!--
   <form-schema id="step2">
     <title xml:lang="nl">Alineas invoeren</title>
     <title xml:lang="en">Enter paragraphs</title>
     <field name="name" ftype="data"/>
     <list extends="config/paragraphs/add_paragraphs_posrel.xml"/>
   </form-schema>
-  -->
 </wizard-schema>

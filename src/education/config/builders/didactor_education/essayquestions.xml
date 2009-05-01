@@ -17,8 +17,5 @@
     <description xml:lang="en">An open question, where the user can write his own answer</description>
   </descriptions>
 
-  <properties>
-    <property name="key:new:name">education.createnewessayquestions</property>
-    <property name="key:new:description">education.createnewessayquestionsdescription</property>
-  </properties>
+  <fieldlist />
 </builder>

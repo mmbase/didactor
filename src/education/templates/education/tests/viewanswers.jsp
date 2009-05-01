@@ -21,7 +21,7 @@
                 <mm:import id="questiontype"><mm:nodeinfo type="type"/></mm:import>
                 <div class="view_answer">
                   <b><di:translate key="education.question" />: </b>
-                  <mm:field name="title" escape="none" />
+                  <mm:field name="text" escape="none" />
                   <br/>
                   <mm:node id="question" />
                 </div>

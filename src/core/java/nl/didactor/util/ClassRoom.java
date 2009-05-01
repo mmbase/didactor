@@ -13,7 +13,7 @@ import org.mmbase.util.logging.Logging;
 
 /**
  * @javadoc
- * @version $Id: ClassRoom.java,v 1.10 2008-09-25 16:26:56 michiel Exp $
+ * @version $Id: ClassRoom.java,v 1.7 2008-01-22 08:51:59 michiel Exp $
  */
 public class ClassRoom extends FunctionProvider {
     private static final Logger log = Logging.getLoggerInstance(ClassRoom.class);
@@ -57,7 +57,7 @@ public class ClassRoom extends FunctionProvider {
                 klass.getStringValue("number"),
                 "classes,classrel,people,related,roles",
                 "roles.name,people.number,people.firstname,people.lastname",
-                "roles.name='" + role + "'",
+                "roles.name='teacher'",
                 "people.lastname,people.firstname",
                 null,
                 null,
@@ -67,7 +67,7 @@ public class ClassRoom extends FunctionProvider {
         while (people.hasNext()) {
             list.add(people.nextNode().getNodeValue("people.number"));
         }
-        log.debug("Found " + list + " for " + klass.getNumber() + " " + role);
+        log.info("Found " + list + " for " + klass.getNumber() + " " + role);
         return list;
     }
 
@@ -81,7 +81,7 @@ public class ClassRoom extends FunctionProvider {
     }
 
     /**
-     * Same as getPeople, but only returns students.
+     * Same as getPeople, but only returns students NOTE: persons without a role will be included!
      * @param klass
      * @return List of student Nodes
      */
@@ -123,9 +123,7 @@ public class ClassRoom extends FunctionProvider {
 
 
 
-    public static Collection<String> getRoles(Node personnode, int educationno) {
-        return getRoles(MMBase.getMMBase().getBuilder("people").getNode(personnode.getNumber()), educationno, personnode.getCloud());
-    }
+
 
     /**
      * Return the roles of the user based on the given context

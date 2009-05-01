@@ -18,11 +18,6 @@
     <description xml:lang="en">An open question, where the user can write his own answer</description>
   </descriptions>
 
-  <properties>
-    <property name="key:new:name">education.createnewfillquestions</property>
-    <property name="key:new:description">education.createnewfillquestionsdescription</property>
-  </properties>
-
   <fieldlist>
 
     <field name="textFirst">
@@ -65,7 +60,17 @@
         <guiname xml:lang="nl">Positie afbeelding</guiname>
         <guiname xml:lang="en">Image position</guiname>
       </gui>
-      <datatype base="didactor_imageposition" xmlns="http://www.mmbase.org/xmlns/datatypes" />
+      <datatype base="integer" xmlns="http://www.mmbase.org/xmlns/datatypes" >
+        <default value="0" />
+        <enumeration>
+          <entry value="0" xml:lang="nl" display="Boven" />
+          <entry value="0" xml:lang="en" display="Above" />
+          <entry value="1" xml:lang="nl" display="Onder" />
+          <entry value="1" xml:lang="en" display="Under" />
+          <entry value="2" xml:lang="nl" display="Naast" />
+          <entry value="2" xml:lang="en" display="Next to" />
+        </enumeration>
+      </datatype>
     </field>
 
     <field name="flashOrText">
@@ -73,7 +78,15 @@
         <description xml:lang="nl">Kies flash of tekst</description>
         <description xml:lang="en">Choose flash file or text</description>
       </descriptions>
-      <datatype base="didactor_flashortext" xmlns="http://www.mmbase.org/xmlns/datatypes" />
+      <datatype base="integer" xmlns="http://www.mmbase.org/xmlns/datatypes" >
+        <default value="1" />
+        <enumeration>
+          <entry value="0" xml:lang="nl" display="Tekst" />
+          <entry value="0" xml:lang="en" display="Text" />
+          <entry value="1" xml:lang="nl" display="Flash" />
+          <entry value="1" xml:lang="en" display="Flash" />
+        </enumeration>
+      </datatype>
     </field>
 
   </fieldlist>

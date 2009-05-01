@@ -10,10 +10,7 @@
   <title xml:lang="en">People editor</title>
 
   <action type="create">
-    <object type="people">
-      <relation role="related" destination="$origin" />
-      <relation role="classrel" destination="$education" />
-    </object>
+    <object type="people"/>
   </action>
 
   <action type="load">
@@ -24,10 +21,16 @@
     <relation destinationtype="educations" role="classrel"/>
     &extra_loads;
   </action>
-
+  
   <action type="unlink">
 
   </action>
+  
+
+  <lists>
+    <optionlist include="config/option_list/enabled.xml" />
+    <optionlist include="config/option_list/gender.xml" />
+  </lists>
 
   <form-schema id="step1">
     <title xml:lang="nl">Persoon invoeren</title>
@@ -36,7 +39,9 @@
     <field name="initials" />
     <field name="suffix" ftype="line" />
     <field name="lastname" />
-    <field name="gender" />
+    <field name="gender" ftype="enum">
+      <optionlist select="gender" />        
+    </field>
     <field name="address" />
     <field name="zipcode" />
     <field name="city" />
@@ -47,10 +52,12 @@
     <field name="website" ftype="line" />
     <field name="dayofbirth" />
     <field name="username" />
-    <field name="password"  />
+    <field name="password" />
     <field name="remarks" ftype="line" />
     <field name="description" rows="8" ftype="text" />
-    <field name="person_status" />
+    <field name="person_status" ftype="enum">
+      <optionlist select="enabled" />        
+    </field>
 
     <list extends="config/role/roles-list.xml" />
     <list extends="config/workgroup/workgroups-list.xml" />
