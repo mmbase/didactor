@@ -25,7 +25,7 @@ import org.mmbase.util.logging.Logging;
  * <p>
  * The translationtable will walk the current directory and
  * read all files found in it.
- * @version $Id: TranslateTable.java,v 1.20 2008-08-06 17:14:47 michiel Exp $
+ * @version $Id$
  */
 public class TranslateTable {
     private static final Logger log = Logging.getLoggerInstance(TranslateTable.class);

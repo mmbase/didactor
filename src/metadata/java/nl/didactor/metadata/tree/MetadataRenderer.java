@@ -17,7 +17,7 @@ import org.mmbase.util.logging.Logger;
 
 /**
  * @javadoc
- * @version $Id: MetadataRenderer.java,v 1.5 2007-07-26 14:48:55 michiel Exp $
+ * @version $Id$
  */
 
 public class MetadataRenderer extends TreeCellRendererAdapter implements TreeCellRenderer {

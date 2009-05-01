@@ -48,7 +48,7 @@ package uk.ac.reload.diva.util;
  * So we can wrap a File or URL in this class and query it as we wish
  *
  * @author Phillip Beauvoir
- * @version $Id: ObjectPath.java,v 1.2 2005-08-29 00:06:51 azemskov Exp $
+ * @version $Id$
  */
 public interface ObjectPath {
 

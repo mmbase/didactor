@@ -7,7 +7,7 @@ import java.util.*;
 /**
  * Determines the questions for a certains test.
  * @author Michiel Meeuwissen
- * @version $Id: LearnObjectQuestions.java,v 1.1 2008-11-20 16:57:44 michiel Exp $
+ * @version $Id$
  */
 public class LearnObjectQuestions {
     protected final static Logger log = Logging.getLoggerInstance(LearnObjectQuestions.class);

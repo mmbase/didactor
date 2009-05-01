@@ -16,7 +16,7 @@ import org.mmbase.util.logging.*;
  * @author Michiel Meeuwissen
  * @author Johannes Verelst &lt;johannes.verelst@eo.nl&gt;
  * @since Didactor-2.3
- * @version $Id: SmartPath.java,v 1.2 2007-06-21 16:34:25 michiel Exp $
+ * @version $Id$
  */
 public class SmartPath extends org.mmbase.module.core.SmartPathFunction {
     protected static Logger log = Logging.getLoggerInstance(SmartPath.class);

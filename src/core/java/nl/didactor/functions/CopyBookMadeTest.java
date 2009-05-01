@@ -11,7 +11,7 @@ import java.lang.reflect.*;
  * Retrieves a 'madetests' object for a certain tests and copybook objects.
  *
  * @author Michiel Meeuwissen
- * @version $Id: CopyBookMadeTest.java,v 1.7 2008-11-20 15:09:40 michiel Exp $
+ * @version $Id$
  */
 public class CopyBookMadeTest {
     protected final static Logger log = Logging.getLoggerInstance(CopyBookMadeTest.class);

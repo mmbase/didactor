@@ -12,7 +12,7 @@ import javax.servlet.http.*;
 /**
  * Some didactor specific Node functions (implemented as 'bean')
  * @author Michiel Meeuwissen
- * @version $Id: PeopleClassFunction.java,v 1.10 2008-12-04 15:25:11 michiel Exp $
+ * @version $Id$
  */
 public class PeopleClassFunction {
     protected final static Logger log = Logging.getLoggerInstance(PeopleClassFunction.class);

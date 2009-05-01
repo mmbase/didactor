@@ -10,7 +10,7 @@ import java.util.*;
 /**
  * Some didactor specific Node functions (implemented as 'bean')
  * @author Michiel Meeuwissen
- * @version $Id: Functions.java,v 1.10 2009-01-08 13:45:59 michiel Exp $
+ * @version $Id$
  */
 public class Functions {
     protected final static Logger log = Logging.getLoggerInstance(Functions.class);

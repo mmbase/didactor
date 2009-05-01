@@ -12,7 +12,7 @@ import org.mmbase.module.core.*;
  * somethings wrong here, and making things less clear in JSP's? (because you need to guess what
  * happens in this class, which btw also lacks javadoc).
  *
- * @version $Id: EducationPeopleConnector.java,v 1.7 2007-06-08 14:03:33 michiel Exp $
+ * @version $Id$
  */
 public class EducationPeopleConnector {
     private Cloud cloud;

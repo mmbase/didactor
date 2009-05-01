@@ -11,7 +11,7 @@ import org.mmbase.module.core.MMObjectNode;
  * The MetadataHandler interface must be implemented by classes who are responsible
  * for automatically getting metadata from the cloud
  * @author Gerard van Enk <gvenk@millionpieces.nl>
- * @version $Id: MetadataHandler.java,v 1.1 2004-11-01 12:52:45 jdiepenmaat Exp $
+ * @version $Id$
  */
 public interface MetadataHandler {
 

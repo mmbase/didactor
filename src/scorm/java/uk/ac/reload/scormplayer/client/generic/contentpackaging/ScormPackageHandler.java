@@ -41,7 +41,7 @@
  *
  *  Web:      http://www.reload.ac.uk
 
- * @version $Id: ScormPackageHandler.java,v 1.6 2007-03-14 13:56:46 michiel Exp $
+ * @version $Id$
  *
  */
 
@@ -85,7 +85,7 @@ import nl.didactor.component.scorm.metastandart.MetaDataImporter;
  * a sco cmi data model.
  *
  * @author Paul Sharples
- * @version $Id: ScormPackageHandler.java,v 1.6 2007-03-14 13:56:46 michiel Exp $
+ * @version $Id$
  */
 public class ScormPackageHandler extends XMLDocument {
 

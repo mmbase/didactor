@@ -9,7 +9,7 @@ import java.util.*;
 /**
  * Determines the questions for a certains test.
  * @author Michiel Meeuwissen
- * @version $Id: RichQuestions.java,v 1.2 2008-11-24 13:37:54 michiel Exp $
+ * @version $Id$
  */
 public class RichQuestions {
     protected final static Logger log = Logging.getLoggerInstance(RichQuestions.class);

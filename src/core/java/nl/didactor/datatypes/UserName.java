@@ -14,7 +14,7 @@ import java.util.regex.*;
  * These disallowed names are stored in a specialized builder for that, named 'disallowedusernames'.
  *
  * @author Michiel Meeuwissen
- * @version $Id: UserName.java,v 1.4 2008-02-01 14:13:01 michiel Exp $
+ * @version $Id$
  */
 public class UserName extends StringDataType implements NodeEventListener {
     private static final Logger log = Logging.getLoggerInstance(UserName.class);

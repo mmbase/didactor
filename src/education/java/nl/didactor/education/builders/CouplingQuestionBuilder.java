@@ -11,7 +11,7 @@ import org.mmbase.util.logging.Logging;
 /**
  * This builder class can score the answer given to a Coupling
  * question.
- * @version $Id: CouplingQuestionBuilder.java,v 1.3 2008-06-20 12:43:45 michiel Exp $
+ * @version $Id$
  */
 public class CouplingQuestionBuilder extends QuestionBuilder {
 

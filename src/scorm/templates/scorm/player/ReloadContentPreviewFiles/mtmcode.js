@@ -40,7 +40,7 @@
  *  Web:      http://www.reload.ac.uk
  *
  *  @author Paul Sharples
- *  @version $Id: mtmcode.js,v 1.1 2007-04-30 16:40:49 michiel Exp $
+ *  @version $Id$
  */
 // -->
 // Morten's JavaScript Tree Menu

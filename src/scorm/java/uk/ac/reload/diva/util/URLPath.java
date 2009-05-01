@@ -49,7 +49,7 @@ import java.net.URL;
  * A URL/Path representaion of a URL.
  *
  * @author Phillip Beauvoir
- * @version $Id: URLPath.java,v 1.2 2005-08-29 00:06:51 azemskov Exp $
+ * @version $Id$
  */
 public class URLPath
 implements ObjectPath

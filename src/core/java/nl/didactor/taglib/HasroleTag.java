@@ -21,7 +21,7 @@ import nl.didactor.util.ClassRoom;
 /**
  * HasroleTag: retrieve a setting for a component
  * @author Johannes Verelst &lt;johannes.verelst@eo.nl&gt;
- * @version $Id: HasroleTag.java,v 1.10 2008-11-13 16:57:25 michiel Exp $
+ * @version $Id$
  */
 public class HasroleTag extends CloudReferrerTag {
     private final static Logger log = Logging.getLoggerInstance(HasroleTag.class);

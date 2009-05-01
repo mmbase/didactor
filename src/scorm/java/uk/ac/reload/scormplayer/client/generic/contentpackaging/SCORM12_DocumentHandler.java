@@ -57,7 +57,7 @@ import uk.ac.reload.jdom.XMLUtils;
  * We don't support earlier IMS Content Packaging versions since the Schema is deprecated<br>
  *
  * @author Phillip Beauvoir
- * @version $Id: SCORM12_DocumentHandler.java,v 1.2 2005-08-29 00:06:52 azemskov Exp $
+ * @version $Id$
  */
 public class SCORM12_DocumentHandler {
     

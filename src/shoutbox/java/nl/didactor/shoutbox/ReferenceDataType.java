@@ -22,7 +22,7 @@ import org.mmbase.util.logging.Logging;
 /**
 
  * @author Michiel Meeuwissen
- * @version $Id: ReferenceDataType.java,v 1.1 2008-09-04 13:23:12 michiel Exp $
+ * @version $Id$
  * @since MMBase-1.9
  */
 public class ReferenceDataType extends NodeDataType {

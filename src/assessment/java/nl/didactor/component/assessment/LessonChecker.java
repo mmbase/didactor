@@ -24,7 +24,7 @@ import org.mmbase.util.logging.*;
 
  * Functionality are made accessible to front-end jsps using (node) functions (see e.g. people.xml).
  *
- * @version $Id: LessonChecker.java,v 1.6 2009-01-08 13:46:18 michiel Exp $
+ * @version $Id$
  */
 
 public class LessonChecker {
