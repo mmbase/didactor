@@ -4,43 +4,23 @@
 
           xmlns:di="http://www.didactor.nl/ditaglib_1.0"
           >
-
-  <mm:import externid="mode">educations</mm:import>
-  <mm:import externid="e">${education}</mm:import>
-
   <di:html
-      type="application/xhtml+xml"
-      styleClass="editwizards ${mode}"
+      type="text/html"
+      styleClass="editwizards"
       component="education.wizards"
       title_key="education.editwizards"
-      css="/education/wizards/style.css"
       rank="editor" expires="0">
 
-    <mm:link page="/core/js/jquery-treeview/lib/jquery.cookie.js">
-      <script src="${_}" type="text/javascript"><jsp:text> </jsp:text></script>
-    </mm:link>
+    <!--
+    <script type="text/javascript">
 
-    <mm:link page="/core/js/jquery-treeview/jquery.treeview.pack.js">
-      <script type="text/javascript" src="${_}"><jsp:text> </jsp:text></script>
-    </mm:link>
-
-
-    <mm:treefile
-        write="false"
-        objectlist="${includePath}"
-        page="/education/wizards/wizard.js">
-      <script type="text/javascript" src="${_}"><jsp:text> </jsp:text></script>
-    </mm:treefile>
-
+      addEventHandler(window, 'load', loadTree);
+      addEventHandler(window, 'unload', storeTree);
+    </script>
+    -->
     <div class="rows" id="rows">
 
-      <mm:treefile
-          write="false"
-          objectlist="${includePath}"
-          page="/education/wizards/modes/${mode}.jsp"
-          referids="education_topmenu_course?">
-        <a href="${_}" id="mode_url" style="display: none;">Mode url</a>
-      </mm:treefile>
+      <di:include debug="html" page="/education/wizards/javascript.jsp" />
 
       <di:include debug="html" page="/education/wizards/navigation.jspx" />
 
@@ -48,9 +28,7 @@
         <table class="layout">
           <tr>
             <td id="left_menu">
-              <div id="mode-${mode}">
-                <di:include debug="html" page="/education/wizards/modes/${mode}.jsp" />
-              </div>
+              <mm:treeinclude debug="html" page="/education/wizards/code.jsp" objectlist="$includePath" />
             </td>
             <td class="content">
               <mm:treefile id="ok" page="/education/wizards/ok.jsp"

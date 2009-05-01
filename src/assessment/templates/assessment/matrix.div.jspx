@@ -12,7 +12,7 @@
 
   <mm:import externid="source" required="true" />
   <mm:import externid="icondir" />
-	<mm:import externid="evaluate">true</mm:import>
+
 
   <!-- Display the problem itself -->
   <tr class="problemItem">
@@ -21,7 +21,7 @@
     <mm:node id="problem" number="${_node}" /> <!-- give current node an id, and put it in the current cloud -->
 
 
-    <c:set var="blockCount" value="-1" />
+    <c:set var="blockCount" value="0" />
 
     <!-- And, per lesson, how much trouble it gave -->
     <mm:node number="${education}">
@@ -93,13 +93,10 @@
       <mm:node id="test" />
     </mm:relatednodes>
     <mm:present referid="test">
-      <mm:link referids="test,_node@problem,sub?">
-        <mm:param name="stage">stage2-evaluate</mm:param>
-        <td colspan="${fn:length(learnBlock) - blockCount}" class="learnblockItems" align="left">
-        	<c:if test="${evaluate}">
-          	<a href="${_}">uitwerken</a>
-          </c:if>
-          <jsp:text> </jsp:text>
+      <mm:link  referids="test,_node@problem,sub?">
+        <mm:param name="stage">stage5-evaluate</mm:param>
+        <td colspan="${fn:length(learnBlock) - blockCount}" class="learnblockItems" align="right">
+          <a href="${_}">uitwerken</a>
         </td>
       </mm:link>
     </mm:present>

@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE application PUBLIC "-//MMBase//DTD application config 1.1//EN" "http://www.mmbase.org/dtd/application_1_1.dtd">
-<application name="DidactorAssessment" maintainer="didactor.nl" version="4" auto-deploy="true">
+<application name="DidactorAssessment" maintainer="didactor.nl" version="3" auto-deploy="true">
   <requirements>
     <requires name="DidactorResources" maintainer="didactor.nl" version="2" />
     <requires name="DidactorCore"      maintainer="didactor.nl" version="10" />
     <requires name="DidactorComponent" maintainer="didactor.nl" version="2" />
     <requires name="DidactorEducation" maintainer="didactor.nl" version="22" />
     <requires name="DidactorEmail"     maintainer="didactor.nl" version="3" />
-    <requires name="RichText"    			 maintainer="mmbase.org" version="2" />
   </requirements>
 
   <neededbuilderlist>
@@ -19,7 +18,6 @@
     <builder maintainer="didactor.nl" version="1">problems</builder>
     <builder maintainer="didactor.nl" version="1">problemtypes</builder>
     <builder maintainer="didactor.nl" version="3">emails</builder>
-    <builder maintainer="didactor.nl" version="1">rich</builder>
 
   </neededbuilderlist>
 
@@ -58,7 +56,6 @@
   <datasourcelist>
     <datasource builder="components" path="DidactorAssessment/components.xml" />
     <datasource builder="problemtypes" path="DidactorAssessment/problemtypes.xml" />
-    <datasource builder="problemtypes" path="DidactorAssessment/rich.xml" />
   </datasourcelist>
 
   <relationsourcelist />

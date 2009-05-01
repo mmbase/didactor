@@ -46,7 +46,6 @@
 
 
           <mm:hasnodemanager name="properties">
-            <c:if test="${empty source}">
             <!-- The properties builder is used to store the 'last check' time of this page -->
             <mm:import id="key">shouts.last_check</mm:import>
             <mm:functioncontainer nodemanager="properties">
@@ -55,42 +54,19 @@
               <mm:param name="key">shouts.previous_check</mm:param>
               <mm:function name="set" write="false" />
             </mm:functioncontainer>
-            
             <mm:functioncontainer nodemanager="properties">
               <mm:param name="node" referid="_node" />
               <mm:param name="value"><mm:time time="now" /></mm:param>
               <mm:function name="set" referids="key" write="false" />
             </mm:functioncontainer>
-            </c:if>
-            <c:if test="${!empty source}">
-            <!-- The properties builder is used to store the 'last check' time of this page -->
-            <mm:import id="key">shouts.last_check_source${source}</mm:import>
-            <mm:functioncontainer nodemanager="properties">
-              <mm:param name="node" referid="_node" />
-              <mm:param name="value"><mm:function name="get" referids="key" /></mm:param>
-              <mm:param name="key">shouts.previous_check_source${source}</mm:param>
-              <mm:function name="set" write="false" />
-            </mm:functioncontainer>
-            
-            <mm:functioncontainer nodemanager="properties">
-              <mm:param name="node" referid="_node" />
-              <mm:param name="value"><mm:time time="now" /></mm:param>
-              <mm:function name="set" referids="key" write="false" />
-            </mm:functioncontainer>
-            
-            </c:if>
-            
           </mm:hasnodemanager>
 
-
-					<c:if test="${self ne 'only'}">
           <h2>
             <fmt:message key="title">
               <fmt:param><mm:nodeinfo type="gui" /></fmt:param>
             </fmt:message>
           </h2>
-					</c:if>
-					
+
           <form action="index">
             <c:if test="${! empty source}">
               <input type="hidden" name="source" value="${source}" />
