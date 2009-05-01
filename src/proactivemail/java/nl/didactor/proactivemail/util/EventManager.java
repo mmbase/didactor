@@ -41,12 +41,11 @@ import org.mmbase.util.logging.*;
 
 /**
  * @author p.becic
- * @javadoc
  */
-public class EventManager implements DidactorEventListener {
-    private static final  Logger log = Logging.getLoggerInstance(nl.didactor.proactivemail.util.EventManager.class);
+public class EventManager implements EventListener {
+    private static Logger log = Logging.getLoggerInstance(nl.didactor.proactivemail.util.EventManager.class);
     
-    public void notify(Event event) {
+    public void report(Event event, HttpServletRequest request, HttpServletResponse response) {
         
         try {
             if ( event == null ) return;

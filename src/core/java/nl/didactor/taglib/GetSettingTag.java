@@ -15,12 +15,13 @@ import nl.didactor.component.Component;
  * GetSettingTag: retrieve a setting for a component
  * @author Johannes Verelst &lt;johannes.verelst@eo.nl&gt;
  */
-public class GetSettingTag extends CloudReferrerTag implements Writer {
-    private static final Logger log = Logging.getLoggerInstance(GetSettingTag.class);
+public class GetSettingTag extends CloudReferrerTag { 
+    private static Logger log = Logging.getLoggerInstance(GetSettingTag.class.getName());
     private String component;
     private String setting;
 
     /**
+     * Set the value for the 'component' argument of the GetSetting tag
      * @param component Component value
      */
     public void setComponent(String component) {
@@ -28,6 +29,7 @@ public class GetSettingTag extends CloudReferrerTag implements Writer {
     }
 
     /**
+     * Set the value for the 'setting' argument of the GetSetting tag
      * @param setting Setting name
      */
     public void setSetting(String setting) {
@@ -49,23 +51,19 @@ public class GetSettingTag extends CloudReferrerTag implements Writer {
             return SKIP_BODY;
         }
 
-        Object value = comp.getSetting(setting, getCloudVar(), getContextProvider().getContextContainer());
-
-        helper.setValue(value);
-        if (getId() != null) {
-            getContextProvider().getContextContainer().register(getId(), helper.getValue());
+        Object value = null;
+        
+        try {
+            value = comp.getSetting(setting, getCloudVar(), getContextProvider().getContextContainer());
+        } catch (IllegalArgumentException e) {
+            throw new JspTagException(e.getMessage());
         }
-        return EVAL_BODY_BUFFERED;
-    }
-    public int doAfterBody() throws JspException {
-        return helper.doAfterBody();
-    }
-
-    /**
-     *
-     **/
-    public int doEndTag() throws JspTagException {
-        helper.doEndTag();
-        return super.doEndTag();
+    
+        try {
+            pageContext.getOut().print(value);
+        } catch (Exception e) {
+            log.error(e);
+        }
+        return SKIP_BODY;
     }
 }

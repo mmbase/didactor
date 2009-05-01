@@ -8,15 +8,12 @@
   - clickthrough to the 'show the email' page
   - finish other functionality mentioned in FO
 --%>
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.1" prefix="mm" %>
 <%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
 <%-- mm:content postprocessor="reducespace"  expires="0" --%>
-<mm:cloud method="delegate">
-<jsp:directive.include file="/shared/setImports.jsp" />
-<mm:locale language="$language">
+<mm:cloud method="delegate" jspvar="cloud">
+<%@include file="/shared/setImports.jsp" %>
 <mm:import externid="mailbox">-1</mm:import>
-<mm:import externid="sf" />
-<mm:import externid="so" />
 
 <mm:compare referid="mailbox" value="-1">
   <mm:node number="$user">
@@ -28,15 +25,14 @@
 </mm:compare>
 
 <mm:node number="$mailbox" notfound="skip">
-  <mm:field name="type" id="mailboxtype" write="false" />
+  <mm:import id="mailboxtype"><mm:field name="type"/></mm:import>
   <mm:relatednodescontainer type="emails">
     <mm:import id="gfx_attachment"><mm:treefile page="/email/gfx/attachment.gif" objectlist="$includePath" referids="$referids" /></mm:import>
 
-    <hr />
     <di:table maxitems="10">
       <di:row>
         <di:headercell><input type="checkbox" onclick="selectAllClicked(this.form,this.checked)"></input></di:headercell>
-        <di:headercell><img src="${gfx_attachment}" /></di:headercell>
+        <di:headercell><img src="<mm:write referid="gfx_attachment"/>"/></di:headercell>
         <di:headercell sortfield="subject"><di:translate key="email.subject" /></di:headercell>
         <%-- show recipient if sentbox --%>
         <mm:compare referid="mailboxtype" value="1">
@@ -56,12 +52,12 @@
           </mm:compare>
         </mm:field>
           
-        <mm:compare referid="mailboxtype" value="11" inverse="true">
-          <mm:treefile page="/email/mailbox/email.jsp" objectlist="$includePath" referids="$referids,mailbox?,sf?,so?,_node@email" id="link"  write="false" />
-        </mm:compare>
-        <mm:compare referid="mailboxtype" value="11" >
-          <mm:treefile page="/email/write/write.jsp" objectlist="$includePath" referids="$referids,mailbox?,sf?,so?,_node@id" id="link" write="false" />
-        </mm:compare>
+        <mm:import id="link">
+          <a href="<mm:treefile page="/email/mailbox/email.jsp" objectlist="$includePath" referids="$referids">
+                     <mm:param name="mailbox"><mm:write referid="mailbox" /></mm:param>
+                     <mm:param name="email"><mm:field name="number" /></mm:param>
+                   </mm:treefile>">
+        </mm:import>
         <di:row>
           <di:cell><input type="checkbox" name="ids" value="<mm:field name="number"/>"></input></di:cell>
           <di:cell>
@@ -70,29 +66,27 @@
             </mm:relatednodes>
           </di:cell>
 
-          <%-- very ugly code, code duplication, only because of the <b's>. CSS class should have been used on the rows!! --%>
           <mm:present referid="isnew">
-            <di:cell><a href="${link}"><b><mm:field name="subject" /></b></a></di:cell>
+            <di:cell><mm:write escape="none" referid="link"/><b><mm:field name="subject" /></b></a></di:cell>
             <mm:compare referid="mailboxtype" value="1">
-              <di:cell><a href="${link}"><b><mm:field name="to" /></b></a></di:cell>
+              <di:cell><mm:write escape="none" referid="link"/><b><mm:field name="to" /></b></a></di:cell>
             </mm:compare>
             <mm:compare referid="mailboxtype" value="1" inverse="true">
-              <di:cell><a href="${link}"><b><mm:field name="from" /></b></a></di:cell>
+              <di:cell><mm:write escape="none" referid="link"/><b><mm:field name="from" /></b></a></di:cell>
             </mm:compare>
-            <di:cell><a href="${link}"><b><mm:field name="date"><mm:time format=":LONG.SHORT" /></mm:field></b></a></di:cell>
+            <di:cell><mm:write escape="none" referid="link"/><b><mm:field name="gui(date)" /></b></a></di:cell>
           </mm:present>
 
           <mm:notpresent referid="isnew">
-            <di:cell><a href="${link}"><mm:field name="subject" /></a></di:cell>
+            <di:cell><mm:write escape="none" referid="link"/><mm:field name="subject" /></a></di:cell>
             <mm:compare referid="mailboxtype" value="1">
-              <di:cell><a href="${link}"><mm:field name="to" /></a></di:cell>
+              <di:cell><mm:write escape="none" referid="link"/><mm:field name="to" /></a></di:cell>
             </mm:compare>
             <mm:compare referid="mailboxtype" value="1" inverse="true">
-              <di:cell><a href="${link}"><mm:field name="from" /></a></di:cell>
+              <di:cell><mm:write escape="none" referid="link"/><mm:field name="from" /></a></di:cell>
             </mm:compare>
-            <di:cell><a href="${link}"><mm:field name="date"><mm:time format=":LONG.SHORT" /></mm:field></a></di:cell>
+            <di:cell><mm:write escape="none" referid="link"/><mm:field name="gui(date)" /></a></di:cell>
           </mm:notpresent>
-
         </di:row>
         <mm:remove referid="link" />
       </mm:relatednodes>
@@ -111,6 +105,5 @@
       }
  }
 </script>
-</mm:locale>
 </mm:cloud>
 <%-- </mm:content> --%>

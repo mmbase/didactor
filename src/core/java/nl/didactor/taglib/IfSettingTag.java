@@ -116,9 +116,7 @@ public class IfSettingTag extends CloudReferrerTag {
         }
 
         Object retval = comp.getSetting(settingName, cloud, context);
-        if (log.isDebugEnabled()) {
-            log.debug("" + componentName + "." + settingName + " = '" + retval + "' (" + retval.getClass() + ")");
-        }
+        log.debug("" + componentName + "." + settingName + " = '" + retval + "' (" + retval.getClass() + ")");
         return retval;
     }
 }

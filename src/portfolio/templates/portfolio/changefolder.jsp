@@ -2,11 +2,11 @@
   This template changes a existing folder.
 --%>
 <%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.1" prefix="mm" %>
 <%-- expires is set so renaming a folder does not show the old name --%>
 <mm:content postprocessor="reducespace" expires="0">
 <mm:cloud method="delegate" jspvar="cloud">
-<jsp:directive.include file="/shared/setImports.jsp" />
+<%@include file="/shared/setImports.jsp" %>
 <mm:treeinclude page="/cockpit/cockpit_header.jsp" objectlist="$includePath" referids="$referids">
   <mm:param name="extraheader">
     <title><di:translate key="portfolio.renamefolder" /></title>
@@ -69,9 +69,9 @@
 <div class="folders">
 
 <div class="folderHeader">
-  <di:translate key="portfolio.portfolio" />
+<di:translate key="portfolio.portfolio" />
 </div>
-<div class="folderBody">
+<div class="folderBody"></div>
 </div>
 
 </div>

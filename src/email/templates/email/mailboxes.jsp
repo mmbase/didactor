@@ -1,8 +1,8 @@
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.1" prefix="mm" %>
 <%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
-<mm:cloud method="delegate" >
+<mm:cloud method="delegate" jspvar="cloud">
 <%@include file="/shared/setImports.jsp"%>
-<mm:locale language="$language">
+
 <mm:treeinclude page="/email/applyMailRules.jsp" objectlist="$includePath" referids="$referids"/>
 <mm:import externid="mailbox">-1</mm:import>
 <mm:node number="$user">
@@ -44,12 +44,9 @@
       <img src="<mm:treefile page="/email/gfx/persoonlijkemap.gif" objectlist="$includePath" />" width="18" height="17" border="0" alt="" />
     </mm:compare>
 
-    <mm:locale language="$language">
     <mm:compare referid="mboxtype" value="11" inverse="true">
-      <%@include file="mailboxesrow.jsp"%>     
+      <%@include file="mailboxesrow.jsp"%>
     </mm:compare>
-    </mm:locale>
   </mm:relatednodes>
 </mm:node>
-</mm:locale>
 </mm:cloud>

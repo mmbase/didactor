@@ -1,4 +1,4 @@
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm"%>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.1" prefix="mm"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
 <mm:content postprocessor="reducespace">
@@ -31,7 +31,7 @@
         <mm:import id="role" jspvar="role" reset="true"><mm:field name="name"/></mm:import>
         <mm:node number="$user" notfound="skipbody">
           <di:hasrole role="<%=role%>">
-            <div class="menuSeparatorApplicationMenubar"></div>
+            <div class="menuSeperatorApplicationMenubar"></div>
             <div class="menuItemApplicationMenubar">
               <a title="<mm:write referid="helpname"/>" href="<%=link%><%=helpNumber%>"  class="menubar"><mm:write referid="helpname"/></a>
             </div>

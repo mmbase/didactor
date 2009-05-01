@@ -1,30 +1,29 @@
-<jsp:root version="2.0"
-          xmlns:jsp="http://java.sun.com/JSP/Page"
-          xmlns:fn="http://java.sun.com/jsp/jstl/functions"
-          xmlns:mm="http://www.mmbase.org/mmbase-taglib-2.0"
-          xmlns:c="http://java.sun.com/jsp/jstl/core"
-          xmlns:di="http://www.didactor.nl/ditaglib_1.0">
-  <jsp:output omit-xml-declaration="yes" />
-  <mm:content postprocessor="none">
-    <mm:cloud method="delegate">
-      <mm:import id="scope" externid="scope" />
-      <mm:compare referid="scope" value="education">
-        <mm:listnodescontainer path="faqnodes,educations,people" element="faqnodes" id="q">
-          <mm:constraint field="people.number" value="${user}" />
-          <mm:constraint field="educations.number" value="${education}" />
-          <mm:listnodes max="1">
-            <div class="menuSeparator">
-              <jsp:text> </jsp:text>
-            </div>
-            <div class="menuItem">
-              <mm:treefile page="/faq/frontoffice/index.jsp" objectlist="$includePath"
-                           referids="$referids,_node@node">
-                <a title="${faqname}" href="${_}" class="menubar"><mm:field name="name"/></a>
-              </mm:treefile>
-            </div>
-          </mm:listnodes>
-        </mm:listnodescontainer>
-      </mm:compare>
-    </mm:cloud>
-  </mm:content>
-</jsp:root>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.1" prefix="mm" %>
+<%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
+<mm:content postprocessor="reducespace">
+<mm:cloud method="delegate" jspvar="cloud">
+<%@include file="/shared/setImports.jsp" %>
+<mm:import id="scope" externid="scope"/>   
+
+<mm:compare referid="scope" value="education">
+  <mm:import jspvar="link" id="link"><mm:treefile page="/faq/frontoffice/index.jsp" objectlist="$includePath" referids="$referids" escapeamps="false"/>&node=</mm:import>
+  <mm:listnodes type="faqcontainers">    
+    <mm:first>  
+      <mm:field id="faqcontainer" name="number" write="false" />
+    </mm:first>   
+  </mm:listnodes> 
+  <mm:node number="$faqcontainer" notfound="skipbody">
+    <mm:relatednodes type="faqnodes">   
+      <mm:import id="faqname" reset="true"><mm:field name="name"/></mm:import> 
+      <mm:import id="faqnumber" jspvar="faqNumber" reset="true"><mm:field name="number"/></mm:import>
+      <mm:related path="educations,people" constraints="people.number='$user'">
+          <div class="menuSeperator"></div>
+          <div class="menuItem">
+            <a title="<mm:write referid="faqname"/>" href="<%=link%><%=faqNumber%>" class="menubar"><mm:write referid="faqname"/></a>
+          </div>
+      </mm:related>
+    </mm:relatednodes>
+  </mm:node>
+</mm:compare>
+</mm:cloud>
+</mm:content>

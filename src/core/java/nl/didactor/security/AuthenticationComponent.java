@@ -5,9 +5,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import nl.didactor.security.UserContext;
 
-/**
- * How is this different from org.mmbase.security.Authentication?
- */
 public interface AuthenticationComponent {
     public UserContext processLogin(HttpServletRequest request, HttpServletResponse response, String application);
     public UserContext isLoggedIn(HttpServletRequest request, HttpServletResponse response);

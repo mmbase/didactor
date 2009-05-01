@@ -10,27 +10,67 @@
   <title xml:lang="en">Open question Editor</title>
 
   <action type="create">
-    <object type="openquestions" />
+    <object type="openquestions">
+		  <field name="showtitle">1</field>
+		  <field name="layout">0</field>
+		  <field name="type_of_score">0</field> 		   
+    </object>
   </action>
 
-  <action type="load">
+<action type="load">
     <relation destination="openanswers" role="related"/>
-
+     
     <relation destination="feedback" role="related" />
     &extra_loads;
   </action>
 
   <action type="delete" />
 
+  <lists>
+    <optionlist include="config/option_list/boolean.xml" />
+    <optionlist name="layout">
+      <option id="0">Groot veld</option>
+      <option id="1">Klein veld</option>
+    </optionlist>
+    <optionlist name="typeOfScore">
+    	<option id="0">De docent kijkt de vraag na </option>
+    	<option id="1">Kijk na met behulp van bijbehorende antwoorden </option>
+    	<option id="2">Geen score </option>
+    </optionlist>
+  </lists>
+
+  <steps>
+    <step form-schema="step1" />
+    &extra_steps;
+  </steps>
+
   <form-schema id="step1">
     <title xml:lang="nl">Open vraag invoeren</title>
     <title xml:lang="en">Enter open question</title>
-    <field name="title"  />
-    <field name="showtitle" />
-    <field name="text" ftype="html" dtminlength="0" />
-    <field name="layout" />
-    <field name="type_of_score" />
-
+    <field name="title" >
+      <prompt xml:lang="nl">Open vraag titel</prompt>
+      <prompt xml:lang="en">Open question title</prompt>
+    </field>
+    <field name="showtitle" ftype="enum">
+      <prompt xml:lang="nl">Titel laten zien</prompt>
+      <prompt xml:lang="en">Show title</prompt>
+      <optionlist select="boolean" />
+    </field> 
+    <field name="text" ftype="html" dtminlength="0">
+      <prompt xml:lang="nl">Tekst</prompt>
+      <prompt xml:lang="en">Text</prompt>
+    </field>
+    <field name="layout" ftype="enum">
+      <prompt xml:lang="nl">Layout</prompt>
+      <prompt xml:lang="en">Layout</prompt>
+      <optionlist select="layout" />
+    </field>
+    <field name="type_of_score" ftype="enum">
+      <prompt xml:lang="nl">Score</prompt>
+      <prompt xml:lang="en">Score</prompt>
+      <optionlist select="typeOfScore" />
+    </field>
+   
 
     <list destination="openanswers" role="related" ordertype="number" orderby="number">
       <title xml:lang="nl">Bijbehorende antwoorden (niet verplicht)</title>
@@ -44,7 +84,7 @@
         </field>
       </item>
 
-
+	  
       <action type="create">
         <relation role="related">
           <object type="openanswers" />

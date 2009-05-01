@@ -1,5 +1,5 @@
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" %>
-<mm:cloud rank="adminstrator">
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.1" prefix="mm" %>
+<mm:cloud jspvar="cloud">
 <mm:listnodes type="classes" id="class">
    <mm:field name="name" jspvar="class_name" vartype="String" write="false">
       <mm:remove referid="has_online_event" />

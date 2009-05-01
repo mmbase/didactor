@@ -1,4 +1,4 @@
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm"%>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.1" prefix="mm"%>
 <%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
 <mm:content postprocessor="reducespace" expires="0">
 <mm:cloud method="delegate" jspvar="cloud">
@@ -10,7 +10,7 @@
 <%@include file="/shared/setImports.jsp" %>
 <%@include file="/education/tests/definitions.jsp" %>
 
-<di:may component="education" action="rate" referids="studentNo@subject">
+<di:may component="education" action="isTeacherOf" arguments="studentNo">
 
 <mm:import id="correctiontext">
   <mm:node number="$madetest">
@@ -29,8 +29,8 @@
           <mm:present referid="answer" inverse="true">
             Score voor vraag <mm:write referid="questiontext" escape="none"/> niet gegeven.<br/>
             <mm:import id="incompleterating"/>
-          </mm:present>
-          <mm:present referid="answer">
+          </mm:present>            
+          <mm:present referid="answer"> 
             <mm:setfield name="score"><mm:write referid="answer"/></mm:setfield>
             <mm:remove referid="answer"/>
           </mm:present>
@@ -67,7 +67,6 @@
 
 <mm:treeinclude page="/cockpit/cockpit_header.jsp" objectlist="$includePath" referids="$referids">
   <mm:param name="extraheader">
-    <!-- TODO, this is dutch -->
     <title>Voortgang -> Correctie</title>
   </mm:param>
 </mm:treeinclude>
@@ -92,7 +91,6 @@
 </html>
 </mm:present>
 
-<!-- aarch, how can there follow code after </html> ? -->
 <mm:notpresent referid="incompleterating">
   <mm:treeinclude page="/progress/index.jsp" objectlist="$includePath" referids="$referids"/>
 </mm:notpresent>

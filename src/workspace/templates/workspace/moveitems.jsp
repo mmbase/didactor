@@ -2,7 +2,7 @@
   This template moves a folder item from one folder to another.
 --%>
 <%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.1" prefix="mm" %>
 <%-- expires is set so renaming a folder does not show the old name --%>
 <mm:content postprocessor="reducespace" expires="0">
 <mm:cloud method="delegate" jspvar="cloud">
@@ -219,7 +219,7 @@
           </mm:node>
         </mm:present>
           <mm:node number="$user">
-            <mm:relatednodes type="portfolios" constraints="[type] = 0">
+            <mm:relatednodes type="portfolios" constraints="m_type = 0">
               <mm:relatednodescontainer type="folders">
                 <mm:relatednodes>
                   <mm:import id="foldernumber" reset="true"><mm:field name="number"/></mm:import>
@@ -227,7 +227,7 @@
                 </mm:relatednodes>
               </mm:relatednodescontainer>
             </mm:relatednodes>
-            <mm:relatednodes type="portfolios" constraints="[type] = 1">
+            <mm:relatednodes type="portfolios" constraints="m_type = 1">
               <mm:relatednodescontainer type="folders">
                 <mm:relatednodes>
                   <mm:import id="foldernumber" reset="true"><mm:field name="number"/></mm:import>
@@ -235,7 +235,7 @@
                 </mm:relatednodes>
               </mm:relatednodescontainer>
             </mm:relatednodes>
-            <mm:relatednodes type="portfolios" constraints="[type] = 2">
+            <mm:relatednodes type="portfolios" constraints="m_type = 2">
               <mm:relatednodescontainer type="folders">
                 <mm:relatednodes>
                   <mm:import id="foldernumber" reset="true"><mm:field name="number"/></mm:import>
