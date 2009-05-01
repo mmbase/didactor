@@ -26,36 +26,6 @@
   </descriptions>
 
   <fieldlist>
-
-    <field name="username">
-      <gui>
-        <guiname xml:lang="nl">Gebruikersnaam</guiname>
-        <guiname xml:lang="en">Username</guiname>
-        <guiname xml:lang="fr">Nom d'utilisateur</guiname>
-        <guiname xml:lang="bg">Потребителско име</guiname>
-        <guiname xml:lang="ro">Utilizator</guiname>
-        <guiname xml:lang="eo">Uzulo</guiname>
-      </gui>
-      <editor>
-        <positions>
-          <list>6</list>
-        </positions>
-      </editor>
-      <datatype base="eline" xmlns="http://www.mmbase.org/xmlns/datatypes">
-        <class name="nl.didactor.datatypes.UserName" />
-        <unique value="true" />
-        <required value="false" />
-        <minLength value="5" />
-        <maxLength value="32" />
-        <pattern value="\S{5,32}" enforce="oncreate" />
-        <commitprocessor>
-          <class name="org.mmbase.datatypes.processors.FunctionValueIfEmptyCommitProcessor">
-            <param name="functionName">generateUserName</param>
-          </class>
-        </commitprocessor>
-      </datatype>
-    </field>
-
     <field name="firstname">
       <descriptions>
         <description xml:lang="en">Person's first name</description>
@@ -136,8 +106,7 @@
           <list>3</list>
         </positions>
       </editor>
-      <datatype base="didactor_people_lastname"
-                xmlns="http://www.mmbase.org/xmlns/datatypes" />
+      <datatype base="didactor_people_lastname" xmlns="http://www.mmbase.org/xmlns/datatypes" />
     </field>
 
     <field name="address">
@@ -317,10 +286,37 @@
       </gui>
       <datatype base="gender" xmlns="http://www.mmbase.org/xmlns/datatypes">
         <default value="0" />
-        <required value="false" />
       </datatype>
     </field>
 
+    <field name="username">
+      <gui>
+        <guiname xml:lang="nl">Gebruikersnaam</guiname>
+        <guiname xml:lang="en">Username</guiname>
+        <guiname xml:lang="fr">Nom d'utilisateur</guiname>
+        <guiname xml:lang="bg">Потребителско име</guiname>
+        <guiname xml:lang="ro">Utilizator</guiname>
+        <guiname xml:lang="eo">Uzulo</guiname>
+      </gui>
+      <editor>
+        <positions>
+          <list>6</list>
+        </positions>
+      </editor>
+      <datatype base="eline" xmlns="http://www.mmbase.org/xmlns/datatypes">
+        <class name="nl.didactor.datatypes.UserName" />
+        <unique value="true" />
+        <required value="false" />
+        <minLength value="5" />
+        <maxLength value="32" />
+        <pattern value="\S{5,32}" enforce="oncreate" />
+        <commitprocessor>
+          <class name="org.mmbase.datatypes.processors.FunctionValueIfEmptyCommitProcessor">
+            <param name="functionName">generateUserName</param>
+          </class>
+        </commitprocessor>
+      </datatype>
+    </field>
 
     <field name="password">
       <descriptions>
@@ -349,8 +345,6 @@
             </param>
           </class>
         </setprocessor>
-        <!--test:   {md5}098f6bcd4621d373cade4e832627b4f6
-        -->
       </datatype>
     </field>
     <field name="confirmpassword" state="virtual">
@@ -465,27 +459,15 @@
     <function key="peopleClass" name="class">
       <class>nl.didactor.functions.PeopleClassFunction</class>
     </function>
-    <function key="peopleClasses" name="classes">
+    <function key="blockedLearnBlocks" name="blockedLearnBlocks">
       <class>nl.didactor.functions.PeopleClassFunction</class>
     </function>
-
-
-    <function key="getBlockedLearnblocksForThisUser" name="blockedLearnBlocks">
-      <class>nl.didactor.component.assessment.LessonChecker</class>
-    </function>
-    <function key="getLessons" name="lessons">
-      <class>nl.didactor.component.assessment.LessonChecker</class>
-    </function>
-    <function key="canCloseLesson">
-      <class>nl.didactor.component.assessment.LessonChecker</class>
-    </function>
-
     <function key="hasrole">
       <class>nl.didactor.util.ClassRoom</class>
     </function>
 
     <function key="forwardEmail">
-      <class>nl.didactor.PeopleEmailFunctions</class>
+      <class>nl.didactor.builders.PeopleEmailFunctions</class>
     </function>
 
   </functionlist>

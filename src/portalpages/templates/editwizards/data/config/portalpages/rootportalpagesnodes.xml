@@ -5,7 +5,7 @@
 
   <action type="create">
     <object type="portalpagesnodes">
-      <relation role="related" destination="$origin" createdir="source"/>
+      <relation role="related" destination="{$origin}" />
     </object>
   </action>
 

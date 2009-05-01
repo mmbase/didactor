@@ -19,24 +19,25 @@
         </mm:treeinclude>
 
         <mm:node number="$learnobject">
-          <div class="subnavigationPage">
 
-            <di:include debug="html" page="/education/learnblocks/subnavigation.jspx" />
-          </div>
+          <di:include page="/education/learnblocks/subnavigation.jspx" />
 
-          <di:background>
+          <mm:relatednodes type="images" role="background">
+            <!-- f(png)+s(500)+fill(rgba(255,255,255,80))+draw(rectangle 0,0,1000,1000)+draw(rectangle 240,0,1000,1000) -->
+            <mm:import id="background">url('<mm:image  template="${di:setting('education', 'background_image_template')}" />')</mm:import>
+          </mm:relatednodes>
+          <div
+              style="background-image: ${empty background ? '' : background}"
+              class="learnenvironment">
+
+
             <di:include debug="xml" page="/education/learnblocks/node.jspx" />
-
-            <di:blocks classification="after_learnblock" />
-
-          </di:background>
+          </div>
 
           <di:include page="/education/prev_next.jsp" />
 
           <!-- hmm: -->
-          <!--<jsp:directive.include file="../includes/component_link.jsp" />-->
-
-
+          <jsp:directive.include file="../includes/component_link.jsp" />
         </mm:node>
       </mm:cloud>
     </div>

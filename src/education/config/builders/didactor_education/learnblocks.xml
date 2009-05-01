@@ -23,7 +23,6 @@
 
   <properties>
     <property name="smartpathfield">name</property> <!-- there is also a 'path' field, should it not be that? -->
-    <property name="madetestholder">true</property>
   </properties>
 
   <fieldlist>
@@ -36,7 +35,9 @@
         <guiname xml:lang="nl">Intro</guiname>
         <guiname xml:lang="en">Intro</guiname>
       </gui>
-      <datatype base="html" xmlns="http://www.mmbase.org/xmlns/datatypes"  />
+      <datatype base="field" xmlns="http://www.mmbase.org/xmlns/datatypes" >
+        <maxLength value="65535" enforce="never"/>
+      </datatype>
     </field>
 
     <field name="layout">
@@ -48,7 +49,11 @@
         <guiname xml:lang="nl">Layout</guiname>
         <guiname xml:lang="en">Layout</guiname>
       </gui>
-      <editor><positions><list>3</list></positions></editor>
+      <editor>
+        <positions>
+          <list>3</list>
+        </positions>
+      </editor>
       <datatype base="didactor_layout" xmlns="http://www.mmbase.org/xmlns/datatypes" />
     </field>
     <field name="imagelayout">
@@ -70,7 +75,10 @@
           <guiname xml:lang="nl">Path</guiname>
           <guiname xml:lang="en">Path</guiname>
        </gui>
-       <editor><positions><list>4</list></positions>
+       <editor>
+         <positions>
+           <list>4</list>
+         </positions>
        </editor>
        <!-- this used to have a guitype 'integer' but I suppose that was a mistake -->
       <datatype base="line" xmlns="http://www.mmbase.org/xmlns/datatypes" >

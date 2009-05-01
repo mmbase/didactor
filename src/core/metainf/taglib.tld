@@ -392,16 +392,12 @@
     <path>/META-INF/tags/di/core/rotatedtext.tagx</path>
   </tag-file>
   <tag-file>
-    <name>icon</name>
-    <path>/META-INF/tags/di/core/icon.tagx</path>
+    <name>leaf</name>
+    <path>/META-INF/tags/di/core/leaf.tagx</path>
   </tag-file>
   <tag-file>
     <name>rich</name>
     <path>/META-INF/tags/di/core/rich.tagx</path>
-  </tag-file>
-  <tag-file>
-    <name>kupulink</name>
-    <path>/META-INF/tags/di/core/kupulink.tagx</path>
   </tag-file>
   <tag-file>
     <name>title</name>
@@ -418,22 +414,6 @@
   <tag-file>
     <name>script</name>
     <path>/META-INF/tags/di/core/script.tagx</path>
-  </tag-file>
-  <tag-file>
-    <name>background</name>
-    <path>/META-INF/tags/di/core/background.tagx</path>
-  </tag-file>
-  <tag-file>
-    <name>blocks</name>
-    <path>/META-INF/tags/di/core/blocks.tagx</path>
-  </tag-file>
-  <tag-file>
-    <name>img</name>
-    <path>/META-INF/tags/di/core/img.tagx</path>
-  </tag-file>
-  <tag-file>
-    <name>question</name>
-    <path>/META-INF/tags/di/core/question.tagx</path>
   </tag-file>
 
   <function>

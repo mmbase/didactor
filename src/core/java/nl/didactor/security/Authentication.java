@@ -18,12 +18,8 @@ import org.mmbase.security.classsecurity.*;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 import org.mmbase.util.functions.*;
-import org.mmbase.util.transformers.*;
-import org.mmbase.util.Casting;
-
 
 import java.util.concurrent.CopyOnWriteArrayList;
-
 
 import nl.didactor.events.*;
 import nl.didactor.builders.*;
@@ -51,9 +47,8 @@ public class Authentication extends org.mmbase.security.Authentication {
      */
     protected void load() {
         String[] securityClasses = {
-            PropertiesSecurityComponent.class.getName(),
-            "nl.didactor.security.aselect.ASelectSecurityComponent", // if available, use aselect first
-            PlainSecurityComponent.class.getName()      // always fall back on plain
+                "nl.didactor.security.aselect.ASelectSecurityComponent", // if available, use aselect first
+                PlainSecurityComponent.class.getName()      // always fall back on plain
         };
         for (String className : securityClasses) {
             try {
@@ -97,12 +92,12 @@ public class Authentication extends org.mmbase.security.Authentication {
     protected org.mmbase.security.UserContext request(org.mmbase.security.UserContext uc, HttpServletRequest req) {
         Node n = getUserNode(ContextProvider.getDefaultCloudContext().getCloud("mmbase"), uc.getIdentifier());
         req.setAttribute("user", n == null ? "0" : n.getNumber());
-        log.debug("Found user " + (n == null ? "NULL" :  n.getNumber()) + " " + uc);
+        log.debug("Found user " + n.getNumber() + " " + uc);
         Object education = req.getAttribute("education");
-        if (education != null && n != null) {
+        if (education != null) {
             Function fun = n.getFunction("class");
             Parameters params = fun.createParameters();
-            params.set("education", Casting.toInt(education));
+            params.set("education", education);
             Node claz = (Node) fun.getFunctionValue(params);
             req.setAttribute("class", claz);
         }
@@ -116,8 +111,6 @@ public class Authentication extends org.mmbase.security.Authentication {
         log.debug("Processing didactor logout because ", new Exception());
         HttpSession session = request == null ? null : request.getSession(false);
         if (session != null) {
-            session.removeAttribute(nl.didactor.filter.ProviderFilter.USER_KEY);
-            session.removeAttribute(nl.didactor.filter.ProviderFilter.EDUCATION_KEY);
             String loginComponent = (String)session.getAttribute("didactor-logincomponent");
             if (loginComponent != null) {
                 for (AuthenticationComponent ac : securityComponents) {
@@ -139,8 +132,6 @@ public class Authentication extends org.mmbase.security.Authentication {
             log.warn("Cannot log out a user whose session is null");
         }
     }
-
-    private static final CharTransformer PARAM_ESCAPER= new Url(Url.ESCAPE);
     /**
      * Login method: it tests the given credentials against MMBase.
      * The flow is as following:
@@ -289,7 +280,7 @@ public class Authentication extends org.mmbase.security.Authentication {
             } catch (SecurityException se) {
                 HttpSession session = request.getSession(true);
                 session.setAttribute(REASON_KEY, se.getMessage());
-                log.service("For ac " + se.getMessage());
+                log.service(se.getMessage());
             }
         }
 
@@ -328,10 +319,7 @@ public class Authentication extends org.mmbase.security.Authentication {
                     } else {
                         referUrl.append('?');
                     }
-                    referUrl.append("referrer=");
-                    String q = request.getQueryString();
-                    String referrer = PARAM_ESCAPER.transform(request.getServletPath() + (q != null ? ("?" + q) : ""));
-                    referUrl.append(referrer);
+                    referUrl.append("referrer=").append(request.getRequestURI());
                     if (referUrl.toString().startsWith("/")) {
                         referUrl.insert(0, request.getContextPath());
                     }
@@ -369,9 +357,6 @@ public class Authentication extends org.mmbase.security.Authentication {
         }
     }
 
-    /**
-     * @deprecated
-     */
     protected static Node getUserNode(Cloud cloud, String id){
         NodeManager people = cloud.getNodeManager("people");
         NodeQuery nq = people.createQuery();
@@ -384,19 +369,10 @@ public class Authentication extends org.mmbase.security.Authentication {
         }
     }
 
-    /**
-     * @deprecated
-     */
     public static Node getCurrentUserNode(Cloud cloud){
         return getUserNode(cloud, cloud.getUser().getIdentifier());
 
     }
-    @Override public int getNode(org.mmbase.security.UserContext userContext) throws SecurityException {
-        String id = userContext.getIdentifier();
-        Node n = getUserNode(ContextProvider.getDefaultCloudContext().getCloud("mmbase", "class", null), id);
-        return n == null ? -1 : n.getNumber();
-    }
-
 
     private static final Parameter[]  NAME_PASSWORD_PARAMS = new Parameter[] {PARAMETER_USERNAME,
                                                                               PARAMETER_PASSWORD,

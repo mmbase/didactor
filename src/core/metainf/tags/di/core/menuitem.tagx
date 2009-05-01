@@ -17,9 +17,7 @@
       <mm:param name="scope">${empty scope ? 'provider' : scope}</mm:param>
     </mm:treeinclude>
   </mm:treehaspage>
-  <mm:treehaspage page="/${component.name}/cockpit/menuitem.jsp"
-                  objectlist="$includePath"
-                  inverse="true">
+  <mm:treehaspage page="/${component.name}/cockpit/menuitem.jsp" objectlist="$includePath" inverse="true">
     <!-- Default implementation -->
     <mm:treehaspage page="${component.name}/index.jspx" objectlist="$includePath">
       <mm:treefile page="/${component.name}/"
@@ -27,8 +25,8 @@
                    write="false" id="treefile" />
       <c:choose>
         <c:when test="${empty type or type eq 'div'}">
-          <div class="menuSeparator ${component_name}"><jsp:text> </jsp:text></div>
-          <div class="menuItem ${component_name}" id="menu_${component.name}">
+          <div class="menuSeperator"><jsp:text> </jsp:text></div>
+          <div class="menuItem" id="menu_${component.name}">
             <a href="${treefile}" class="menubar ${component.name eq active ? 'active' : ''}"><di:translate key="${component.name}.title" /></a>
           </div>
         </c:when>

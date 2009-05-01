@@ -4,7 +4,9 @@
           xmlns:mm="http://www.mmbase.org/mmbase-taglib-2.0"
           xmlns:di="http://www.didactor.nl/ditaglib_1.0">
   <div>
-    <mm:cloud method="asis">
+    <mm:cloud method="asis" jspvar="cloud">
+      <mm:log><jsp:expression>cloud</jsp:expression></mm:log>
+
       <!--
           This page can be requested with ajax, or be include directly.
           It returns the actual content represented by a certain object, typically a learnobject.
@@ -25,15 +27,11 @@
             <mm:treehaspage page="${domain}${type}/index.jsp" objectlist="$includePath">
               <mm:treeinclude debug="xml" page="${domain}${type}/index.jsp" objectlist="$includePath" referids="object@learnobject,$referids,fb_madetest?,justposted?" />
             </mm:treehaspage>
-            <mm:treehaspage page="${domain}${type}/index.jsp"
-                            objectlist="$includePath" inverse="true">
+            <mm:treehaspage page="${domain}${type}/index.jsp" objectlist="$includePath" inverse="true">
               <mm:treeinclude debug="xml" page="${domain}learnblocks/index.jsp" objectlist="$includePath" referids="object@learnobject,$referids,fb_madetest?" />
             </mm:treehaspage>
           </c:otherwise>
         </c:choose>
-
-        <di:blocks classification="after_content" />
-
       </mm:node>
     </mm:cloud>
   </div>

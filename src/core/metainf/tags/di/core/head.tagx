@@ -7,18 +7,7 @@
   <jsp:directive.tag description="Didactor head" />
   <head>
     <jsp:directive.include file="/mmbase/validation/javascript.jspxf" />
-    <di:script src="/mmbase/jquery/jquery.timer.js" />
     <di:script src="/core/js/utils.js" />
-    <di:script src="/core/js/jquery.query.js" />
-    <di:script src="/core/js/Didactor.js" />
-    <mm:treefile page="/core/js/specific.js"
-                 objectlist="$includePath" write="false">
-      <script type="text/javascript" src="${_}">
-        <jsp:text><!-- help IE --> </jsp:text>
-      </script>
-    </mm:treefile>
-
-
     <link rel="stylesheet" type="text/css" href="${mm:treelink('/css/base.css', includePath)}" />
 
     <mm:haspage page="/mmbase/style/css/mmxf.css">
@@ -32,35 +21,14 @@
       <link href="${_}" rel="stylesheet" type="text/css"  media="print"/>
     </mm:treefile>
 
-    <meta name="Didactor-Provider"     content="${provider}" />
-    <meta name="Didactor-Education"    content="${education}" />
-    <meta name="Didactor-PageReporter" content="${di:setting('core', 'pagereporter')}" />
-
-    <!-- The page marked as 'lastpage'
-         (todo: does this work?)
-    -->
-    <mm:listnodescontainer type="classrel">
-      <mm:constraint field="snumber" value="${user}" />
-      <mm:composite operator="or">
-        <mm:constraint field="dnumber" value="${class}" />
-        <mm:constraint field="dnumber" value="${education}" />
-      </mm:composite>
-      <mm:listnodes>
-        <meta name="Didactor-LastPage" content="${_node.lastpage}" />
-      </mm:listnodes>
-    </mm:listnodescontainer>
-
-    <c:if test="${di:setting('core', 'pagereporter') eq 'true'}">
-      <meta name="Didactor-PageReporterInterval" content="${di:setting('core', 'pagereporter_interval')}" />
-    </c:if>
-    <meta name="Didactor-Root"         content="${mm:link('/')}" />
-    <mm:link absolute="context">
-      <meta name="Didactor-URL" content="${_}" />
-    </mm:link>
-    <mm:treefile page="/shared/onlineReporter.jsp" objectlist="$includePath" write="false">
-      <meta name="Didactor-OnlineReporter" content="${_}" />
-    </mm:treefile>
-
+    <script type="text/javascript">
+      <mm:treefile id="keepalive" page="/shared/onlineReporter.jsp" objectlist="$includePath" referids="$referids" write="false">
+        <!--
+            escapeamps="${empty param.escapeamps ?  false : param.escapeamps}" />
+        -->
+        <jsp:text>$(window).ready(function() { focusFirstForm(); keepalive("${_}"); });</jsp:text>
+      </mm:treefile>
+    </script>
     <jsp:doBody />
   </head>
 </jsp:root>

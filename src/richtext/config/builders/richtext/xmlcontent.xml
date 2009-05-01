@@ -5,7 +5,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.mmbase.org/xmlns/builder
                         http://www.mmbase.org/xmlns/builder.xsd"
-    name="xmlcontent" maintainer="mmbase.org" version="10"
+    name="xmlcontent" maintainer="mmbase.org" version="0"
     extends="learnobjects">
   <names>
     <singular xml:lang="nl">Inhoudsobject</singular>
@@ -24,17 +24,8 @@
   <properties>
     <property name="key:new:name">richtext.createnewxmlcontent</property>
     <property name="key:new:description">richtext.createnewxmlcontentdescription</property>
-    <property name="madetestholder">true</property>
   </properties>
 
-
   <xi:include href="rich.fields.xml" />
-
-
-  <functionlist>
-    <function key="questions">
-      <class>nl.didactor.functions.RichQuestions</class>
-    </function>
-  </functionlist>
 
 </builder>

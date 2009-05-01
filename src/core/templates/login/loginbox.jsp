@@ -26,7 +26,8 @@
       <mm:import externid="referrer">/index.jsp</mm:import>
 
 
-      <form method="post" action="${mm:link(referrer)}" name="loginForm" onSubmit="return check_passwords()">
+      <form method="post" action="${referrer}" name="loginForm" onSubmit="return check_passwords()">
+        ${referrer}
         <input type="hidden" name="authenticate"  value="plain"  />
         <input type="hidden" name="command" value="login" />
         <di:translate key="core.username" /><br />

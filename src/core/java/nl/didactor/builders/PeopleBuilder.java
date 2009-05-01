@@ -45,7 +45,7 @@ public class PeopleBuilder extends DidactorBuilder {
 
             List nodelist = getNodes(query);
             if (nodelist.size() == 0) {
-                log.debug("No users with the name '" + username + "'");
+                log.service("No users with the name '" + username + "'", new Exception());
                 return null;
                 // fail silently
             } else if (nodelist.size() > 1) {
@@ -59,7 +59,7 @@ public class PeopleBuilder extends DidactorBuilder {
                 String storedPassword = node.getStringValue("password");
                 String md5 = "{md5}" + MD5.encode(password);
                 if (storedPassword == null || ! storedPassword.equals(md5)) {
-                    log.debug("Invalid password " + storedPassword + " != " + md5);
+                    log.debug("Invalid password " + storedPassword + "!=" + md5);
                     return null;
                 }
                 return node;
@@ -114,7 +114,7 @@ public class PeopleBuilder extends DidactorBuilder {
      * @param originalValue The original value of the field.
      * @return boolean indicating this set was allowed
      */
-    @Override public boolean setValue(MMObjectNode node, String fieldname, Object originalValue) {
+    public boolean setValue(MMObjectNode node, String fieldname, Object originalValue) {
         if (fieldname.equals("username")) {
             Object newValue = node.getValues().get(fieldname);
 
@@ -145,7 +145,7 @@ public class PeopleBuilder extends DidactorBuilder {
      * @param field Name of the field.
      * @return an object containing the value.
      */
-    @Override public Object getValue(MMObjectNode node, String field) {
+    public Object getValue(MMObjectNode node, String field) {
         FieldDefs fd = getField(field);
         if (fd != null) {
             return super.getValue(node, field);
@@ -185,7 +185,7 @@ public class PeopleBuilder extends DidactorBuilder {
         return super.getValue(node, field);
     }
 
-    @Override public int insert(String owner, MMObjectNode node) {
+    public int insert(String owner, MMObjectNode node) {
         // forbid setting a username to an existing one
 
         String newValue = (String) node.getValues().get("username");

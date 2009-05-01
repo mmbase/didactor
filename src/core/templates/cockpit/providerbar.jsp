@@ -12,6 +12,7 @@
 
   -->
   <mm:cloud method="asis">
+    <di:include page="/shared/keepalive.jsp" /> <!-- not necessary when using di:html, but it has a duplicate-include-protection -->
 
     <div class="providerMenubar">
       <mm:hasrank minvalue="didactor user">
@@ -19,12 +20,22 @@
           <mm:functioncontainer>
             <mm:param name="bar">provider</mm:param>
             <mm:listfunction name="components">
-
+              <di:menuitem component="${_}" />
             </mm:listfunction>
           </mm:functioncontainer>
         </mm:node>
       </mm:hasrank>
 
+      <!-- If the user has the rights, then always show the management link. That allows us to enable/disable components after install on an empty database -->
+      <di:menuitem component="${di:component('education')}" />
+
+      <mm:hasrank value="anonymous">
+        <div class="provideranonymous">
+          <mm:node referid="provider">
+            <mm:nodeinfo type="gui" />
+          </mm:node>
+        </div>
+      </mm:hasrank>
     </div>
   </mm:cloud>
 </jsp:root>

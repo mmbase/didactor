@@ -9,14 +9,13 @@ import org.mmbase.module.database.MultiConnection;
 import org.mmbase.bridge.*;
 import org.mmbase.storage.search.*;
 import org.mmbase.storage.search.implementation.*;
-import org.mmbase.util.xml.applicationdata.ApplicationReader;
+import org.mmbase.util.xml.ApplicationReader;
 import org.mmbase.util.xml.BuilderReader;
 
 import java.util.*;
 import java.io.File;
 
 import java.sql.*;
-import java.lang.reflect.*;
 
 import nl.didactor.component.Component;
 import nl.didactor.component.BasicComponent;
@@ -24,7 +23,7 @@ import nl.didactor.component.BasicComponent;
 /**
  *
  * @author Johannes Verelst &lt;johannes.verelst@eo.nl&gt;
- * @version $Id: ComponentBuilder.java,v 1.15 2008-09-04 09:49:14 michiel Exp $
+ * @version $Id: ComponentBuilder.java,v 1.13 2007-06-07 16:09:48 michiel Exp $
  */
 public class ComponentBuilder extends DidactorBuilder {
 
@@ -58,7 +57,7 @@ public class ComponentBuilder extends DidactorBuilder {
 
         // Make sure that all applications are correct.
         initApplications();
-
+        
         // Initialize all the components
         for (Component c : v) {
             try {
@@ -93,12 +92,14 @@ public class ComponentBuilder extends DidactorBuilder {
             comp = new BasicComponent(componentname);
         } else {
             try {
-                Class clazz  = Class.forName(classname);
-                try {
-                    Constructor c = clazz.getConstructor(MMObjectNode.class);
-                    comp = (Component) c.newInstance(component);
-                } catch (NoSuchMethodException  nsme) {
-                    comp = (Component) clazz.newInstance();
+                Class c = Class.forName(classname);
+                if (c == null) {
+                    comp = new BasicComponent(componentname);
+                } else {
+                    comp = (Component)c.newInstance();
+                    if (comp == null) {
+                        comp = new BasicComponent(componentname);
+                    }
                 }
             } catch (ClassNotFoundException e) {
                 log.info("Class not found: " + classname);
