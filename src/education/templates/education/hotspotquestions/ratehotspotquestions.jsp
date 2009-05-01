@@ -1,7 +1,7 @@
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm"%>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.0" prefix="mm"%>
 <%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
 <mm:content postprocessor="reducespace">
-<mm:cloud method="delegate" jspvar="cloud">
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
 
 <mm:import externid="question" required="true"/>
 <mm:import externid="madetest" required="true"/>
@@ -20,9 +20,8 @@
 	
     <mm:import externid="hotspot$question" id="givenanswer" />
 
-    <%-- Search the given answer in the possible answers --%>
-    <% int i = 1; %>
-    <mm:relatednodes type="hotspotanswers" id="my_answers" orderby="x1,y1">
+    <%-- Search the given answer in the possible answers --%>		
+    <mm:relatednodes type="hotspotanswers" id="my_answers">
 
       <mm:field id="answer" name="number" write="false"/>
 
@@ -31,14 +30,12 @@
         <mm:field id="questioncorrect" name="correct" write="false"/>
         <mm:node referid="my_givenanswers">
           <mm:setfield name="score"><mm:write referid="questioncorrect"/></mm:setfield>
-          <mm:setfield name="text"><%= i %></mm:setfield>
         </mm:node>
         <mm:remove referid="questioncorrect" />
         
 <%--        <mm:createrelation role="related" source="my_givenanswers" destination="my_answers"/> --%>
         
       </mm:compare>
-      <% i++; %>
     </mm:relatednodes>
   
 </mm:node>

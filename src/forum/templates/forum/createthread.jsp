@@ -3,7 +3,7 @@
 This page allows a teacher or administrator to create a new thread.
 Calls itself to create the forum and foward to the forum in which the new thread has been created.
 --%>
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.0" prefix="mm" %>
 <%@taglib uri="oscache" prefix="os" %>
 <%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
 <mm:cloud jspvar="cloud" name="mmbase" loginpage="/login.jsp">
@@ -19,7 +19,7 @@ Calls itself to create the forum and foward to the forum in which the new thread
 
 <div class="navigationbar">
   <div class="titlebar">
-  <img src="<mm:treefile write="true" page="/gfx/icon_forum.gif" objectlist="$includePath" />" width="25" height="13" border="0"  title="forum" alt="forum" /> Forum
+  <img src="<mm:treefile write="true" page="/gfx/icon_forum.gif" objectlist="$includePath" />" width="25" height="13" border="0" alt="forum" /> Forum
   </div>
 </div>
 <div class="folders">
@@ -79,19 +79,19 @@ Calls itself to create the forum and foward to the forum in which the new thread
   <table cellspacing="0" cellpadding="0" border="0">
 	<tr>
 	    <td colspan="2">
-	      <di:translate key="forum.create_topic_name" /> :
+	      <di:translate id="create_topic_name" >Topic Name</di:translate> :
 	      <input type="text" name="name" class="forminput" style="width:240px;">&nbsp;
 	    </td>
 	</tr>
 	<tr>
 	  <td align="center">
 	    <div class="button1">
-	    <a href="javascript:submitForm('newthread');"><di:translate key="forum.create" /></a>
+	    <a href="javascript:submitForm('newthread');"><di:translate id="create">create</di:translate></a>
 	    </div>
 	  </td>
 	  <td>
 	    <div class="button1">
-	    <a href="javascript:history.go(-1);"><di:translate key="forum.back" /></a>
+	    <a href="javascript:history.go(-1);"><di:translate id="back">back</di:translate></a>
 	    </div>
 	  </td>
 	</tr>
@@ -100,13 +100,13 @@ Calls itself to create the forum and foward to the forum in which the new thread
               <%--<tr>
                 <td>
                   <mm:treeinclude write="true" page="/forum/default.jsp" objectlist="$includePath" referids="$referids">
-                    <mm:param name="caption"><di:translate key="forum.create" /></mm:param>
+                    <mm:param name="caption"><di:translate id="create" >Create</di:translate></mm:param>
                     <mm:param name="onclick">javascript:submitForm('newthread');</mm:param>
                   </mm:treeinclude>
                 </td>
                 <td>
                   <mm:treeinclude write="true" page="/forum/default.jsp" objectlist="$includePath" referids="$referids">
-                    <mm:param name="caption"><di:translate key="forum.back" /></mm:param>
+                    <mm:param name="caption"><di:translate id="back" >Back</di:translate></mm:param>
                     <mm:param name="onclick">javascript:history.go(-1);</mm:param>
                   </mm:treeinclude>
                 </td>
