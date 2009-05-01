@@ -1,15 +1,16 @@
 <%--
   This template adds a chatlog to a folder.
 --%>
-<%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.0" prefix="mm" %>
 
 <mm:content postprocessor="reducespace" expires="0">
-<mm:cloud method="delegate" jspvar="cloud">
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
 <%@include file="/shared/setImports.jsp" %>
+<fmt:bundle basename="nl.didactor.component.workspace.WorkspaceMessageBundle">
 <mm:treeinclude page="/cockpit/cockpit_header.jsp" objectlist="$includePath" referids="$referids">
   <mm:param name="extraheader">
-    <title><di:translate key="portfolio.addchatlog" /></title>
+    <title><fmt:message key="ADDCHATLOG" /></title>
   </mm:param>
 </mm:treeinclude>
 
@@ -23,7 +24,7 @@
 
 <%-- Check if the create button is pressed --%>
 <mm:present referid="action1">
-  <mm:import id="action1text"><di:translate key="portfolio.create" /></mm:import>
+  <mm:import id="action1text"><fmt:message key="CREATE" /></mm:import>
   <mm:compare referid="action1" referid2="action1text">
 
     <mm:compare referid="typeof" value="1">
@@ -66,25 +67,30 @@
 
 <%-- Check if the back button is pressed --%>
 <mm:present referid="action2">
-  <mm:import id="action2text"><di:translate key="portfolio.back" /></mm:import>
+  <mm:import id="action2text"><fmt:message key="BACK" /></mm:import>
   <mm:compare referid="action2" referid2="action2text">
     <mm:redirect referids="$referids,typeof,currentchatlog" page="$callerpage"/>
   </mm:compare>
 </mm:present>
 
 <div class="rows">
+
 <div class="navigationbar">
-<div class="titlebar">
-  <img src="<mm:treefile write="true" page="/gfx/icon_shareddocs.gif" objectlist="$includePath" referids="$referids"/>" width="25" height="13" border="0" title="<di:translate key="portfolio.portfolio" />" alt="<di:translate key="portfolio.portfolio" />"/>
-      <di:translate key="portfolio.portfolio" />
-</div>
+  <div class="titlebar">
+    <mm:compare referid="typeof" value="1">
+      <mm:import id="titletext"><fmt:message key="MYDOCUMENTS" /></mm:import>
+    </mm:compare>
+    <mm:compare referid="typeof" value="2">
+      <mm:import id="titletext"><fmt:message key="SHAREDDOCUMENTS" /></mm:import>
+    </mm:compare>
+    <img src="<mm:treefile write="true" page="/gfx/icon_portfolio.gif" objectlist="$includePath" referids="$referids"/>" width="25" height="13" border="0" alt="<fmt:message key="MYDOCUMENTS" />" />
+    <mm:write referid="titletext"/>
+  </div>
 </div>
 
 <div class="folders">
-
-<div class="folderHeader">
-    <di:translate key="portfolio.portfolio" />
-</div>
+  <div class="folderHeader">
+  </div>
   <div class="folderBody">
   </div>
 </div>
@@ -92,7 +98,7 @@
 <div class="mainContent">
 
   <div class="contentHeader">
-    <di:translate key="portfolio.addchatlog" />
+    <fmt:message key="ADDCHATLOG" />
   </div>
 
   <div class="contentBodywit">
@@ -119,7 +125,7 @@
         </mm:compare>
 
         <mm:relatednodes referid="myfolders">
-          <mm:first><di:translate key="portfolio.folders" /><select name="foldername"></mm:first>
+          <mm:first><fmt:message key="FOLDERS" /><select name="foldername"></mm:first>
           <option><mm:field name="name"/></option>
           <mm:last></select></mm:last>
         </mm:relatednodes>
@@ -139,13 +145,14 @@
       <input type="hidden" name="callerpage" value="<mm:write referid="callerpage"/>"/>
       <input type="hidden" name="currentchatlog" value="<mm:write referid="currentchatlog"/>"/>
       <input type="hidden" name="typeof" value="<mm:write referid="typeof"/>"/>
-      <input class="formbutton" type="submit" name="action1" value="<di:translate key="portfolio.create" />" />
-      <input class="formbutton" type="submit" name="action2" value="<di:translate key="portfolio.back" />" />
+      <input class="formbutton" type="submit" name="action1" value="<fmt:message key="CREATE" />" />
+      <input class="formbutton" type="submit" name="action2" value="<fmt:message key="BACK" />" />
     </form>
 
   </div>
 </div>
 </div>
 <mm:treeinclude page="/cockpit/cockpit_footer.jsp" objectlist="$includePath" referids="$referids" />
+</fmt:bundle>
 </mm:cloud>
 </mm:content>

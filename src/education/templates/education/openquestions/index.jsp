@@ -1,40 +1,41 @@
-<jsp:root
-    xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0"
-    xmlns:mm="http://www.mmbase.org/mmbase-taglib-2.0"
-    xmlns:c="http://java.sun.com/jsp/jstl/core"
-    xmlns:di="http://www.didactor.nl/ditaglib_1.0" >
-  <mm:content>
-    <mm:cloud rank="didactor user">
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.0" prefix="mm"%>
+<%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
+<mm:content postprocessor="reducespace">
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
 
-      <di:question
-          question="${param.question}"
-          madetest="${param.madetest}">
+<mm:import externid="question" required="true"/>
 
-        <mm:present referid="answernode">
-          <mm:node referid="answernode">
-            <mm:field name="text" id="answer" write="false"/>
-          </mm:node>
-        </mm:present>
+<%@include file="/shared/setImports.jsp" %>
 
-        <c:choose>
-          <c:when test="${_node.layout eq 0}">
-            <!-- Generate large input field -->
-            <textarea name="${_node}"
-                      class="question mm_validate mm_dt_requiredfield"
-                      cols="80" rows="5">
-              <mm:present referid="answer"><mm:write referid="answer" escape="text/plain"/></mm:present>
-              <jsp:text></jsp:text>
-            </textarea>
-          </c:when>
-          <c:otherwise>
-            <!-- Generate small input field -->
-            <input type="text" size="100"
-                   class="question mm_validate mm_dt_requiredfield"
-                   name="${_node}" value="${answer}"/>
-          </c:otherwise>
-        </c:choose>
+<!-- TODO Make the editbox appear small and large -->
+<!-- TODO Check for styles -->
+<!-- TODO What if layout isn't 0 or 1. Log this situation? -->
+<!-- TODO Is there always one open answer given or more? -->
 
-      </di:question>
-    </mm:cloud>
-  </mm:content>
-</jsp:root>
+<mm:node number="$question">
+
+  <h2>
+    <mm:field name="title"/>
+  </h2>
+
+  <p/>
+  <mm:field name="text" escape="none"/>
+  <p/>
+
+  <mm:import id="layout"><mm:field name="layout"/></mm:import>
+
+  <%-- Generate large input field --%>
+  <mm:compare referid="layout" value="0">
+    <input type="text" size="500" name="<mm:write referid="question"/>"/>
+    <br/>
+  </mm:compare>
+
+  <%-- Generate small input field --%>
+  <mm:compare referid="layout" value="1">
+    <input type="text" size="100" name="<mm:write referid="question"/>"/>
+    <br/>
+  </mm:compare>
+
+</mm:node>
+</mm:cloud>
+</mm:content>

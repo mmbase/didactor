@@ -3,18 +3,20 @@
   hyperlinks that are grouped in url-categories. These folders are related
   to the current education.
 --%>
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.0" prefix="mm" %>
 <%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
 
 <mm:content postprocessor="reducespace">
-<mm:cloud method="delegate" jspvar="cloud">
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
 
 <mm:import externid="urlcat">-1</mm:import>
 
 <%@include file="/shared/setImports.jsp" %>
+<fmt:bundle basename="nl.didactor.component.sources.SourcesMessageBundle">
 <mm:treeinclude page="/cockpit/cockpit_header.jsp" objectlist="$includePath" referids="$referids">
   <mm:param name="extraheader">
-    <title><di:translate key="sources.sources" /></title>
+    <title><fmt:message key="SOURCES" /></title>
   </mm:param>
 </mm:treeinclude>
 
@@ -22,14 +24,14 @@
 
 <div class="navigationbar">
   <div class="titlebar">
-    <img src="<mm:treefile write="true" page="/gfx/icon_sources.gif" objectlist="$includePath" />" width="25" height="13" border="0" title="<di:translate key="sources.sources" />" alt="<di:translate key="sources.sources" />" />
-    <di:translate key="sources.sources" />
+    <img src="<mm:treefile write="true" page="/gfx/icon_sources.gif" objectlist="$includePath" />" width="25" height="13" border="0" alt="<fmt:message key="SOURCES" />" />
+    <fmt:message key="SOURCES" />
   </div>
 </div>
 
 <div class="folders">
   <div class="folderHeader">
-    <di:translate key="sources.categories" />
+    <fmt:message key="CATEGORIES" />
   </div>
   <div class="folderBody">
     <mm:node number="$education" notfound="skip">
@@ -48,12 +50,12 @@
 
           <%-- folder is open --%>
           <mm:compare referid="currenturlcat" referid2="urlcat">
-            <img src="<mm:treefile page="/sources/gfx/mapopen.gif" objectlist="$includePath" referids="$referids"/>" alt="<di:translate key="sources.folderopened" />"/>
+            <img src="<mm:treefile page="/sources/gfx/mapopen.gif" objectlist="$includePath" referids="$referids"/>" alt="<fmt:message key="FOLDEROPENED" />"/>
           </mm:compare>
 
           <%-- folder is closed --%>
           <mm:compare referid="currenturlcat" referid2="urlcat" inverse="true">
-            <img src="<mm:treefile page="/sources/gfx/mapdicht.gif" objectlist="$includePath" referids="$referids"/>" alt="<di:translate key="sources.folderclosed" />"/>
+            <img src="<mm:treefile page="/sources/gfx/mapdicht.gif" objectlist="$includePath" referids="$referids"/>" alt="<fmt:message key="FOLDERCLOSED" />"/>
           </mm:compare>
 
           <a href="<mm:treefile page="/sources/index.jsp" objectlist="$includePath" referids="$referids">
@@ -82,9 +84,9 @@
       <mm:relatednodescontainer type="urls">
         <di:table maxitems="10">
           <di:row>
-            <di:headercell sortfield="name" default="true"><di:translate key="sources.urlname" /></di:headercell>
-            <di:headercell sortfield="url"><di:translate key="sources.urllink" /></di:headercell>
-            <di:headercell sortfield="description"><di:translate key="sources.urldescription" /></di:headercell>
+            <di:headercell sortfield="name" default="true"><fmt:message key="URLNAME" /></di:headercell>
+            <di:headercell sortfield="url"><fmt:message key="URLLINK" /></di:headercell>
+            <di:headercell sortfield="description"><fmt:message key="URLDESCRIPTION" /></di:headercell>
           </di:row>
           <mm:relatednodes>
             <di:row>
@@ -112,5 +114,6 @@
 
 <mm:treeinclude page="/cockpit/cockpit_footer.jsp" objectlist="$includePath" referids="$referids" />
 
+</fmt:bundle>
 </mm:cloud>
 </mm:content>
