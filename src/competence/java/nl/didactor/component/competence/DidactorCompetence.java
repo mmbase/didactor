@@ -1,5 +1,5 @@
 package nl.didactor.component.competence;
-import nl.didactor.component.Component;
+import nl.didactor.component.Component; 
 import org.mmbase.bridge.*;
 import java.util.Map;
 
@@ -15,11 +15,10 @@ public class DidactorCompetence extends Component {
      * Returns the name of the component
      */
     public String getName() {
-        return "competence";
+        return "DidactorCompetence";
     }
 
     public void init() {
-        super.init();
         Component.getComponent("education").registerInterested(this);
     }
 
@@ -31,8 +30,11 @@ public class DidactorCompetence extends Component {
         return new Component[] {Component.getComponent("education")};
     }
 
-    @Override
-    public String getValue(String setting, Cloud cloud, Map context, String[] arguments) {
+    public boolean[] may (String operation, Cloud cloud, Map context, String[] arguments) {
+        return new boolean[]{true, true};
+    }
+
+    public String getSetting(String setting, Cloud cloud, Map context, String[] arguments) {
         if ("showlo".equals(setting)) {
             return "" + showLo(cloud, context, Integer.parseInt(arguments[0]), Integer.parseInt(arguments[1]));
         }
@@ -49,14 +51,14 @@ public class DidactorCompetence extends Component {
      * </ul>
      * For competence management, this means that:
      * <ul>
-     *  <li>If the user doesn't have competence that is related to the object in a
+     *  <li>If the user doesn't have competence that is related to the object in a 
      *      'must-have' relation, it returns '0';
-     *  <li>If the user has the competence that is related to the object in a
+     *  <li>If the user has the competence that is related to the object in a 
      *      'develops' relation, it returns '1'.
-     * </ul>
+     * </ul> 
      */
     private int showLo(Cloud cloud, Map context, int lonumber, int maxlevel) {
-        if (maxlevel == 0)
+        if (maxlevel == 0) 
             return 0;
         Node lo = cloud.getNode(lonumber);
 
