@@ -1,12 +1,9 @@
 <%--
-  THIS JSP IS NEARLY DEPRECATED.
-
-
   Figure out the following variables:
   - current username (into variable $username)
   - current user id (into variable $user)
   - current server name (into varabiel $servername)
-  - if 'provider' is not set:
+  - if 'provider' is not set: 
     - current provider (into variable $provider)
       - if there is more than 1 provider, look if there is an 'url' related to
          one of the providers with the $servername name.
@@ -21,17 +18,35 @@
 <%--
   Step 6: Based on the student and the education, try to find the class.
 --%>
-<mm:import externid="class"    from="request" />
+<mm:import externid="class" />
+<mm:isempty referid="class">
+  <mm:isgreaterthan referid="user" value="0">
+    <mm:present referid="education">
+      <mm:listcontainer path="people,classes,educations" fields="people.number,educations.number,classes.number">
+        <mm:constraint field="people.number"     referid="user" />
+        <mm:constraint field="educations.number" referid="education" />
+          <mm:list>
+            <mm:remove referid="class"/>
+            <mm:field name="classes.number" id="class" write="false" />
+          </mm:list>
+        </mm:listcontainer>
+      </mm:present>
+  </mm:isgreaterthan>
+</mm:isempty>
+
 
 <%--
   Step 7: call the 'validateUser' (which can be overwritten for a specific implementation)
-  to make sure that this user may log in.
+  to make sure that this user may log in. 
 --%>
-<mm:import escape="trimmer" id="validatemessage"><mm:treeinclude page="/shared/validateUser.jsp" objectlist="$includePath" referids="$referids" /></mm:import>
+<mm:import escape="trimmer" id="validatemessage">
+  <mm:treeinclude page="/shared/validateUser.jsp" objectlist="$includePath" referids="$referids,user" />
+</mm:import>
+
 <mm:isnotempty referid="validatemessage">
-  <mm:cloud method="logout" />
+  <mm:cloud method="delegate"  authenticate="didactor-logout"/>
   <% if (! response.isCommitted()) { %>
-  <mm:redirect page="/login/declined.jspx" referids="validatemessage@message">
+  <mm:redirect page="/declined.jsp" referids="validatemessage@message">
     <mm:param name="referrer"><mm:treefile page="/index.jsp" objectlist="$includePath" referids="$referids" /></mm:param>
   </mm:redirect>
   <% } %>
