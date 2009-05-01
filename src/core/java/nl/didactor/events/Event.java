@@ -1,24 +1,18 @@
 package nl.didactor.events;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
-
-/**
- * @javadoc
- */
-public class Event extends org.mmbase.core.event.Event {
-    private final String username;
-    private final transient HttpServletRequest request;
-    private final Integer provider;
-    private final Integer education;
-    private final Integer cls;
-    private final String eventtype;
-    private final String eventvalue;
-    private final String note;
-
-    public Event(String username, HttpServletRequest  req, Integer provider, Integer education, Integer cls, String eventtype, String eventvalue, String note) {
+public class Event {
+    private String username;
+    private String sessionid;
+    private Integer provider;
+    private Integer education;
+    private Integer cls;
+    private String eventtype;
+    private String eventvalue;
+    private String note;
+    
+    public Event(String username, String sessionid, Integer provider, Integer education, Integer cls, String eventtype, String eventvalue, String note) {
         this.username = username;
-        this.request = req;
+        this.sessionid = sessionid;
         this.provider = provider;
         this.education = education;
         this.cls = cls;
@@ -31,8 +25,8 @@ public class Event extends org.mmbase.core.event.Event {
         return username;
     }
 
-    public HttpServletRequest getRequest() {
-        return request;
+    public String getSessionId() {
+        return sessionid;
     }
 
     public Integer getProvider() {

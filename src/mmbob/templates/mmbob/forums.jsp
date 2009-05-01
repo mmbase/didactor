@@ -26,10 +26,7 @@
    <tr><th><di:translate key="mmbob.forumname" /></th><th><di:translate key="mmbob.numberofmessages" /></th><th><di:translate key="mmbob.numberofviews" /></th><th><di:translate key="mmbob.numberofmembers" /></th></tr>
   <mm:nodelistfunction set="mmbob" name="getForums">
             <tr>
-              <mm:link page="start.jsp">
-                <mm:param name="forumid"><mm:field name="id" /></mm:param>
-                <td><a href="${_}"><mm:field name="name" /></a></td>
-              </mm:link>
+            <td><a href="start.jsp?forumid=<mm:field name="id" />"><mm:field name="name" /></a></td>
             <td><mm:field name="postcount" /></td>
             <td><mm:field name="viewcount" /></td>
             <td><mm:field name="posterstotal" /></td>

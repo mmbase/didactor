@@ -1,5 +1,5 @@
 <%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.1" prefix="mm" %>
 <mm:content postprocessor="reducespace" expires="0">
 <mm:cloud method="delegate" jspvar="cloud">
 
@@ -8,7 +8,7 @@
 
 	<mm:compare referid="mailbox" value="-1">
 	  <mm:node number="$user">
-	    <mm:relatednodes id="inbox" type="mailboxes" max="1" constraints="[mailboxes.type]=0">
+	    <mm:relatednodes id="inbox" type="mailboxes" max="1" constraints="mailboxes.m_type=0">
 	      <mm:remove referid="mailbox"/>
 	      <mm:field name="number" id="mailbox" write="false"/>
   	    </mm:relatednodes>

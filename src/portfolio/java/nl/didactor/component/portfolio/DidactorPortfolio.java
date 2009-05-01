@@ -6,18 +6,14 @@ import nl.didactor.component.core.*;
 import org.mmbase.bridge.Cloud;
 import org.mmbase.module.core.*;
 import org.mmbase.module.corebuilders.*;
-import org.mmbase.storage.search.*;
-
+import org.mmbase.storage.search.RelationStep;
+import org.mmbase.storage.search.SearchQueryException;
 import org.mmbase.storage.search.implementation.NodeSearchQuery;
-import org.mmbase.util.logging.*;
-
-import java.util.*;
-
-
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
 
 public class DidactorPortfolio extends Component {
-
-    private static final Logger log = Logging.getLoggerInstance(DidactorPortfolio.class);
     /**
      * Returns the version of the component
      */
@@ -41,34 +37,6 @@ public class DidactorPortfolio extends Component {
         DidactorBuilder classes = (DidactorBuilder)mmbase.getBuilder("classes");
         classes.registerPostInsertComponent(this, 10);
         classes.registerPreDeleteComponent(this, 10);
-        
-        MMObjectBuilder chatlogs = mmbase.getBuilder("chatlogs");
-        if (chatlogs != null) {
-            //<relation from="folders"     to="chatlogs"    type="related" />
-            //<relation from="chatlogs"    to="portfoliopermissions" type="related"/>
-            TypeRel typeRel = mmbase.getTypeRel();
-            RelDef  relDef = mmbase.getRelDef();
-            int related = relDef.getNumberByName("related");
-            MMObjectBuilder folders = mmbase.getBuilder("folders");
-            MMObjectBuilder portfoliopermissions = mmbase.getBuilder("portfoliopermissions");
-            if (!typeRel.contains(folders.getObjectType(), chatlogs.getObjectType(), related)) {
-                log.info("No relation folders-related->chatlogs. Creating now");
-                MMObjectNode n = typeRel.getNewNode("system");
-                n.setValue("snumber", folders.getObjectType());
-                n.setValue("dnumber", chatlogs.getObjectType());
-                n.setValue("rnumber", related);
-                int id = typeRel.insert("system", n);
-            }
-            if (!typeRel.contains(chatlogs.getObjectType(), portfoliopermissions.getObjectType(), related)) {
-                log.info("No relation chatlogs-related->portfoliopermissions. Creating now");
-                MMObjectNode n = typeRel.getNewNode("system");
-                n.setValue("snumber", chatlogs.getObjectType());
-                n.setValue("dnumber", portfoliopermissions.getObjectType());
-                n.setValue("rnumber", related);
-                int id = typeRel.insert("system", n);
-            }
-            
-        }
     }
 
     public void install() {

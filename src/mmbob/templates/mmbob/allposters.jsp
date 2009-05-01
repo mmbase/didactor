@@ -1,9 +1,7 @@
 <%-- !DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml/DTD/transitional.dtd" --%>
-<%@ page contentType="text/html; charset=utf-8" language="java" 
-%><%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" 
-%><%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" 
-%><%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"
-%>
+<%@ page contentType="text/html; charset=utf-8" language="java" %>
+<%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.0" prefix="mm" %>
 <mm:cloud method="delegate" jspvar="cloud">
 <%@include file="/shared/setImports.jsp" %>
 <%@ include file="thememanager/loadvars.jsp" %>
@@ -47,13 +45,12 @@
       <td><a href="<mm:treefile page="/portfolio/index.jsp" objectlist="$includePath" referids="$referids">
                      <mm:param name="contact"><mm:field name="people.number"/></mm:param>
                    </mm:treefile>" target="_top">
-                   <di:person element="posters"  />
-                   (<mm:field name="posters.account" />)</a>
+               <mm:field name="posters.firstname" /> <mm:field name="posters.lastname" /> (<mm:field name="posters.account" />)</a>
       </td>
       <di:ifsetting component="mmbob" setting="showlocation">
         <td><mm:field name="posters.location" /></td>
       </di:ifsetting>
-      <td><mm:field name="posters.lastseen"><mm:time format="${timeFormat}" /></mm:field></td>
+      <td><mm:field name="posters.lastseen"><mm:time format="<%= timeFormat %>" /></mm:field></td>
     </tr>
   </mm:related>
 </mm:node>

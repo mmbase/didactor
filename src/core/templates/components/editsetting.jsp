@@ -1,4 +1,4 @@
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.1" prefix="mm" %>
 <%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
 <%@page import="nl.didactor.component.Component,java.util.*,org.mmbase.bridge.Cloud,javax.servlet.http.HttpServletRequest" %>
 <%!
@@ -88,7 +88,7 @@
             Component comp = Component.getComponent(cname);
             if (comp != null) {
               Component.Setting setting = (Component.Setting)comp.getSettings().get(settingname);
-              List scopes = setting.getScope();
+              Vector scopes = setting.getScope();
             %>
             <hr />
             <h2>Waarden</h2>
