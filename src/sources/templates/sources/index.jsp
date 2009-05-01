@@ -3,11 +3,11 @@
   hyperlinks that are grouped in url-categories. These folders are related
   to the current education.
 --%>
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.1" prefix="mm" %>
 <%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
 
 <mm:content postprocessor="reducespace">
-<mm:cloud method="delegate" jspvar="cloud">
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
 
 <mm:import externid="urlcat">-1</mm:import>
 
@@ -22,7 +22,7 @@
 
 <div class="navigationbar">
   <div class="titlebar">
-    <img src="<mm:treefile write="true" page="/gfx/icon_sources.gif" objectlist="$includePath" />" width="25" height="13" border="0" title="<di:translate key="sources.sources" />" alt="<di:translate key="sources.sources" />" />
+    <img src="<mm:treefile write="true" page="/gfx/icon_sources.gif" objectlist="$includePath" />" width="25" height="13" border="0" alt="<di:translate key="sources.sources" />" />
     <di:translate key="sources.sources" />
   </div>
 </div>

@@ -1,4 +1,4 @@
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm"%>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.1" prefix="mm"%>
 
 <%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
 
@@ -6,7 +6,7 @@
 
 <mm:content postprocessor="reducespace">
 
-<mm:cloud method="delegate" jspvar="cloud">
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
 
 
 
@@ -204,6 +204,7 @@ dropnumbers['<mm:write referid="question"/>'] = new Array();
 
   <p/>
 
+  <mm:import id="questiontype"><mm:field name="type"/></mm:import>
 
   <mm:import id="numdragquestions" jspvar="numDragQuestions" vartype="Integer"><mm:countrelations role="dragimagerel"/></mm:import>
 
@@ -237,9 +238,7 @@ dropnumbers['<mm:write referid="question"/>'] = new Array();
 
 		style="position: absolute; top: <%= 200 * dragCounter++ %>px; left: 0px; width: 200px; height: 200px;" 
 
-		title="<mm:field name="title"/>"
-    
-     alt="<mm:field name="title"/>" 
+		alt="<mm:field name="title"/>" 
 
 		class="dragimage"
 
@@ -257,7 +256,7 @@ dropnumbers['<mm:write referid="question"/>'] = new Array();
             </mm:field> 
             <br>
 
-	    <img src="<mm:image template="s(150x150)"/>" title="<mm:field name="title"/>" alt="<mm:field name="title"/>">
+	    <img src="<mm:image template="s(150x150)"/>" alt="<mm:field name="title"/>">
 
 	    <br/>
 
@@ -325,7 +324,7 @@ dropnumbers['<mm:write referid="question"/>'] = new Array();
             </mm:field> 
             <br>
 
-	    <img src="<mm:image template="s(150x150)"/>" title="<mm:field name="title"/>" alt="<mm:field name="title"/>" >
+	    <img src="<mm:image template="s(150x150)"/>" alt="<mm:field name="title"/>" >
 
 	    </div>
 

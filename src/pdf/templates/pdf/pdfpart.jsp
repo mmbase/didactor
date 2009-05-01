@@ -1,5 +1,5 @@
 <%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm"%>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.1" prefix="mm"%>
 
 <%@page import="java.io.UnsupportedEncodingException" %>
 <%@page import="java.io.StringBufferInputStream" %>
@@ -179,7 +179,7 @@
                                           {
                                              link = url;
                                              %>
-                                                <td><img src="<%= baseUrl %>/education/gfx/http_url.gif" align="right" title="" alt=""/></td>
+                                                <td><img src="<%= baseUrl %>/education/gfx/http_url.gif" align="right" alt=""/></td>
                                                 <td width="60%">&nbsp;websites:</td>
                                                 <td width="100%"><%= url %></td>
                                              <%
@@ -195,7 +195,7 @@
                                                    %>
                                                    </mm:isnotempty>
                                                 </mm:field>
-                                                <td><img src="<%= baseUrl %>/education/gfx/email_url.gif" align="right" title="" alt=""/></td>
+                                                <td><img src="<%= baseUrl %>/education/gfx/email_url.gif" align="right" alt=""/></td>
                                                 <td width="60%">&nbsp;email:</td>
                                                 <td width="100%"><%= url %></td>
                                              <%
@@ -211,7 +211,7 @@
                            <mm:related path="posrel,attachments" orderby="posrel.pos">
                               <tr>
                                  <td></td>
-                                 <td><img src="<%= baseUrl %>/education/gfx/http_url.gif" align="right" title="" alt=""/></td>
+                                 <td><img src="<%= baseUrl %>/education/gfx/http_url.gif" align="right" alt=""/></td>
                                  <td width="60%">&nbsp;download:</td>
                                  <td width="100%">
                                     <mm:node element="attachments">

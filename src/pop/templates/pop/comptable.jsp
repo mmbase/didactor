@@ -1,8 +1,8 @@
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.1" prefix="mm" %>
 <%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
 <%@page import="java.util.*" %>
 <mm:content postprocessor="reducespace">
-<mm:cloud method="delegate" jspvar="cloud">
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
 <%@include file="/shared/setImports.jsp" %>
 <%@ include file="getids.jsp" %>
 <% boolean isEmpty = true; %>
@@ -31,7 +31,7 @@
                   <tr style="vertical-align:top;">
                     <td class="listItem">
                       <img src="<mm:treefile page="/pop/gfx/present.gif" objectlist="$includePath" referids="$popreferids"/>" border="0"
-                          title="<di:translate key="pop.comphave"/>"  alt="<di:translate key="pop.comphave"/>" />
+                          alt="<di:translate key="pop.comphave"/>" />
                     </td>
                     <%@ include file="comptablecell.jsp" %>
                   </tr>
@@ -47,7 +47,7 @@
                   <tr style="vertical-align:top;">
                     <td class="listItem">
                       <img src="<mm:treefile page="/pop/gfx/developed.gif" objectlist="$includePath" referids="$popreferids"/>" border="0"
-                          title="<di:translate key="pop.compdeveloped"/>"  alt="<di:translate key="pop.compdeveloped"/>" />
+                          alt="<di:translate key="pop.compdeveloped"/>" />
                     </td>
                     <%@ include file="comptablecell.jsp" %>
                   </tr>
@@ -64,7 +64,7 @@
                   <tr style="vertical-align:top;">
                     <td class="listItem">
                       <img src="<mm:treefile page="/pop/gfx/todevelop.gif" objectlist="$includePath" referids="$popreferids"/>" border="0"
-                          title="<di:translate key="pop.compneeded"/>" alt="<di:translate key="pop.compneeded"/>" />
+                          alt="<di:translate key="pop.compneeded"/>" />
                     </td>
                     <%@ include file="comptablecell.jsp" %>
                   </tr>

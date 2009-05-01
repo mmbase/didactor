@@ -1,38 +1,45 @@
-<?xml version="1.0"?>
-<!DOCTYPE wizard-schema PUBLIC "-//MMBase/DTD editwizard 1.0//EN" "http://www.mmbase.org/dtd/wizard-schema_1_0.dtd">
-<wizard-schema id="empty">
-  <title xml:lang="en">Metavocabulary Editor</title>
-  <title xml:lang="nl">Metadatawaarde editor</title>
+<!DOCTYPE list PUBLIC "-//MMBase/DTD editwizard 1.0//EN" "http://www.mmbase.org/dtd/wizard-schema_1_0.dtd">
+<list fdatapath="relation[@role='posrel']/object[@type='metavocabulary']/../../relation[@role='posrel']/object[@type='metavocabulary']" fparentdatapath="../object[@type='metadata']" minoccurs="0" maxoccurs="*" hidecommand="delete-item">
+  <title>Bijbehorende Vocabulaire</title>
+  <item>
+
+    <field fdatapath="field[@name='value']" ftype="data">
+      <prompt>Waarde</prompt>
+    </field>
+  </item>
 
   <action type="load">
-    <field name="value" />
-    <relation destinationtype="metavocabulary" role="posrel" />
-    <relation destinationtype="metavocabulary" role="constraints" />
-    <relation destinationtype="metadefinition" role="posrel" />
+        <relation destination="metavocabulary" role="posrel" />
+          <relation destination="metadefinition" role="constraints" />
   </action>
 
+
+  
   <action type="create">
-    <object type="metavocabulary" />
+    <relation destinationtype="metavocabulary" role="posrel">
+      <object type="metavocabulary"></object>
+    </relation>
+
+    <relation destinationtype="metadefinition" role="constraints">
+      <object type="metadefinition"></object>
+    </relation>
+
   </action>
 
- <lists>
-    <optionlist include="config/option_list/constraint_type.xml" />
-    <optionlist include="config/option_list/metadatatypes.xml" />
-    <optionlist include="config/option_list/boolean.xml" />
-  </lists>
+  <action type="delete"/>
 
-  <steps>
-    <step form-schema="step1" />
-  </steps>
+  <action type="add">
+    <relation destinationtype="metavocabulary" role="posrel">
+    </relation>
+    <relation destinationtype="metadefinition" role="constraints">
+    </relation>
+  </action>
 
-  <form-schema id="step1">
-    <title xml:lang="en">Edit Metavocabulary</title>
-    <title xml:lang="nl">Metadatawaarde invoeren</title>
-    <field name="value" />
-    <list extends="config/metavocabulary/metavocabulary-posrel-list.xml"/>
-    <list extends="config/metadefinition/metadefinition-inmetavocabulary.xml"/>
-    <list extends="config/metavocabulary/metavocabulary-constraint-list-source.xml"/>
-    <list extends="config/metavocabulary/metavocabulary-constraint-list-destination.xml"/>
-  </form-schema>
-
-</wizard-schema>
+  <command name="search" nodepath="metavocabulary" fields="value" age="-1" orderby="number" directions="down" >
+    <prompt>Zoeken naar tekenreeksen</prompt>
+    <search-filter>
+      <name>Waarde bevat</name>
+      <search-fields>value</search-fields>
+    </search-filter>
+  </command>
+</list>

@@ -1,14 +1,14 @@
 <%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.1" prefix="mm" %>
 <mm:content postprocessor="reducespace" expires="0">
-<mm:cloud method="delegate" jspvar="cloud">
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
 
 <%@include file="/shared/setImports.jsp"%>
 	<mm:import externid="mailbox">-1</mm:import>
 
 	<mm:compare referid="mailbox" value="-1">
 	  <mm:node number="$user">
-	    <mm:relatednodes id="inbox" type="mailboxes" max="1" constraints="[mailboxes.type]=0">
+	    <mm:relatednodes id="inbox" type="mailboxes" max="1" constraints="mailboxes.m_type=0">
 	      <mm:remove referid="mailbox"/>
 	      <mm:field name="number" id="mailbox" write="false"/>
   	    </mm:relatednodes>
@@ -19,7 +19,7 @@
 
 <div class="navigationbar">
   <div class="titlebar">
-    <img src="<mm:treefile write="true" page="/gfx/icon_email.gif" objectlist="$includePath" />" width="25" height="13" border="0" title="<di:translate key="email.email" />" alt="<di:translate key="email.email" />" /> <di:translate key="email.email" />
+    <img src="<mm:treefile write="true" page="/gfx/icon_email.gif" objectlist="$includePath" />" width="25" height="13" border="0" alt="<di:translate key="email.email" />" /> <di:translate key="email.email" />
   </div>
 </div>
 

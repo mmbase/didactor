@@ -1,15 +1,16 @@
 <%@page import = "nl.didactor.metadata.util.MetaDataHelper" %>
 <mm:field name="number" jspvar="sCurrentNode" vartype="String" write="false">
 <%
-   if(MetaDataHelper.hasTheObjectValidMetadata(cloud.getNode(sCurrentNode), application, nl.didactor.security.Authentication.getCurrentUserNode(cloud)).size() == 0) {
-
+   if((new MetaDataHelper()).hasValidMetadata(cloud,sCurrentNode)) {
+   
       imageName = "gfx/metavalid.gif";
-      sAltText = "metadata_correct";
-
+      sAltText = "Metadata is correct, bewerk metadata voor dit object";
+   
    } else {
-
+   
       imageName = "gfx/metaerror.gif";
-      sAltText = "metadata_incorrect";
+      sAltText = "Metadata is niet correct, bewerk metadata voor dit object";
    }
+
 %>
 </mm:field>

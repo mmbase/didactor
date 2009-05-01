@@ -1,7 +1,7 @@
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.1" prefix="mm" %>
 <%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
 <mm:content postprocessor="reducespace" expires="0">
-<mm:cloud method="delegate" jspvar="cloud">
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
 <%@include file="/shared/setImports.jsp" %>
 <mm:import externid="page" required="true"/>
 <mm:treeinclude page="/cockpit/cockpit_header.jsp" objectlist="$includePath" referids="$referids">
@@ -111,7 +111,7 @@
 
       <i><mm:field name="description" escape="inline"/></i><br>
 
-      <a href="<mm:attachment/>"><img src="<mm:treefile page="/education/gfx/attachment.gif" objectlist="$includePath" />" border="0" title="Download" alt="Download <mm:field name="title"/>"></a>
+      <a href="<mm:attachment/>"><img src="<mm:treefile page="/education/gfx/attachment.gif" objectlist="$includePath" />" border="0" alt="Download <mm:field name="title"/>"></a>
 
     </p>
 
@@ -139,7 +139,7 @@
 
       <mm:field name="body" escape="inline"/><br>
 
-      <a href="<mm:field name="url" />"><img src="<mm:treefile page="/education/gfx/audio.gif" objectlist="$includePath" />" border="0" title="Beluister" alt="Beluister <mm:field name="title" />"></a></b>
+      <a href="<mm:field name="url" />"><img src="<mm:treefile page="/education/gfx/audio.gif" objectlist="$includePath" />" border="0" alt="Beluister <mm:field name="title" />"></a></b>
 
       </p>
 
@@ -167,7 +167,7 @@
 
       <mm:field name="body" escape="inline"/><br>
 
-     <a href="<mm:field name="url" />"><img src="<mm:treefile page="/education/gfx/video.gif" objectlist="$includePath" />" border="0" title="Bekijk" alt="Bekijk <mm:field name="title" />"></a>
+     <a href="<mm:field name="url" />"><img src="<mm:treefile page="/education/gfx/video.gif" objectlist="$includePath" />" border="0" alt="Bekijk <mm:field name="title" />"></a>
 
       </p>
 

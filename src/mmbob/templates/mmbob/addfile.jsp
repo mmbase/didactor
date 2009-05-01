@@ -1,15 +1,21 @@
-<mm:import externid="_handle" from="multipart" />
+<mm:import externid="_handle_name" from="multipart"/>
+<mm:import externid="_handle_type" from="multipart"/>
+<mm:import externid="_handle_size" from="multipart"/>
+<mm:import externid="_title" from="multipart"/> 
 
-<mm:compare referid="_handle" value="" inverse="true">
-  <c:if test="${! empty _handle.name}">
-    <mm:import externid="_title" from="multipart" /> 
-    <mm:createnode type="attachments" id="newitem">
+<mm:compare referid="_handle_size" value="0" inverse="true">
+   <mm:createnode type="attachments" id="newitem">
       <mm:setfield name="title"><mm:write referid="_title"/></mm:setfield>
       <mm:setfield name="description"></mm:setfield>
-      <mm:setfield name="filename">${_handle.name}</mm:setfield>
+      <mm:setfield name="filename"><mm:write referid="_handle_name"/></mm:setfield>
+      <mm:setfield name="mimetype"><mm:write referid="_handle_type"/></mm:setfield>
+      <mm:setfield name="size"><mm:write referid="_handle_size"/></mm:setfield>
       <mm:fieldlist fields="handle">
          <mm:fieldinfo type="useinput" />
       </mm:fieldlist>
+      <%-- set upload time --%>
+      <% long currentDate = System.currentTimeMillis() / 1000; %>
+      <mm:setfield name="date"><%=currentDate%></mm:setfield>
    </mm:createnode>
    <mm:list nodes="$postingid" path="postings,related,attachments">
       <mm:node element="related"><mm:deletenode/></mm:node>
@@ -22,5 +28,4 @@
       </mm:node>
    </mm:list>
    <mm:createrelation role="related" source="postingid" destination="newitem"/>
-  </c:if>
 </mm:compare>

@@ -12,34 +12,17 @@
         <relation destinationtype="simplecontents" role="related"/>  
         <relation destinationtype="helpnodes" role="childhnn"/> 
         <relation destinationtype="educations" role="related"/>  
-        <relation destinationtype="roles" role="related"/> 
-        <relation destination="paragraphs" role="posrel">
-            <object>
-                <relation destination="attachments" role="posrel" />
-                <relation destination="images" role="pos2rel" />
-                <relation destination="urls" role="posrel" />
-            </object>
-        </relation>     
+        <relation destinationtype="roles" role="related"/>      
     </action>
     
     <action type="delete" />
     
-    <lists>
-        <optionlist include="config/option_list/images_position.xml" />
-        <optionlist include="config/option_list/boolean.xml" />
-        <optionlist include="config/option_list/layout.xml" />
-        <optionlist include="config/option_list/imagelayout.xml" />
-    </lists>
-    
     <steps>
         <step form-schema="step1" />
-        <step form-schema="step2" />
     </steps>
 
     <form-schema id="step1">
-        <title xml:lang="nl">Naam</title>
-        <title xml:lang="en">Name</title>
-        
+        <title>Naame</title>
         <field name="name" >
             <prompt>Naam</prompt>
         </field>        
@@ -54,9 +37,9 @@
 											<prompt>Titel</prompt>
 											<description></description>
 										</field>
-										<field wizardname="config/help/simplecontents" ftype="startwizard" />
+										<field wizardname="config/portalpages/simplecontents" ftype="startwizard" />
 									</item>	
-									<command name="startwizard" inline="true" wizardname="config/help/simplecontents" objectnumber="new" />
+									<command name="startwizard" inline="true" wizardname="config/portalpages/simplecontents" objectnumber="new" />
 									<command name="search" nodepath="simplecontents" fields="title" age="-1">
 										<prompt>Search Content</prompt>
 										<search-filter>
@@ -74,16 +57,16 @@
 									</action>																	
 				</list>  
         <list role="childhnn" destination="helpnodes" minoccurs="0" maxoccurs="*">
-									<title>Bijbehorende map</title>
+									<title>Bijbehorende Map</title>
 									<!-- Show the 'item' in a list (the object) -->
 									<item>
 										<field name="name">
 											<prompt>Naam</prompt>
 											<description></description>
 										</field>
-										<field wizardname="config/help/leafhelpnodes" ftype="startwizard" />
+										<field wizardname="config/help/helpnodes" ftype="startwizard" />
 									</item>	
-									<command name="startwizard" inline="true" wizardname="config/help/leafhelpnodes-origin" objectnumber="new" />
+									<command name="startwizard" inline="true" wizardname="config/help/helpnodes" objectnumber="new" />
 									<action type="create">
 										<relation destinationtype="helpnodes" role="childhnn" >
     										<object type="helpnodes"/>
@@ -91,7 +74,7 @@
 									</action>																		
 				</list> 				
         <list role="related" destination="educations" minoccurs="0" maxoccurs="*">
-									<title>Bijbehorende opleidingen</title>
+									<title>Bijbehorende Opleidingen</title>
 									<!-- Show the 'item' in a list (the object) -->
 									<item>
 										<field name="name">
@@ -102,7 +85,7 @@
 									</item>	
 									<command name="startwizard" inline="true" wizardname="config/education/educations" objectnumber="new" />
 									<command name="search" nodepath="educations" fields="name" age="-1">
-										<prompt>Search opleidingen</prompt>
+										<prompt>Search Opleidingen</prompt>
 										<search-filter>
 											<name>name bevat</name>
 											<search-fields>name</search-fields>
@@ -118,7 +101,7 @@
 									</action>																	
 				</list> 		
         <list role="related" destination="roles" minoccurs="0" maxoccurs="*">
-									<title>Bijbehorende rol</title>
+									<title>Bijbehorende Rol</title>
 									<!-- Show the 'item' in a list (the object) -->
 									<item>
 										<field name="name">
@@ -129,7 +112,7 @@
 									</item>	
 									<command name="startwizard" inline="true" wizardname="config/role/roles" objectnumber="new" />
 									<command name="search" nodepath="roles" fields="name" age="-1">
-										<prompt>Search rol</prompt>
+										<prompt>Search Rol</prompt>
 										<search-filter>
 											<name>naam bevat</name>
 											<search-fields>name</search-fields>
@@ -144,14 +127,5 @@
 										<relation destinationtype="roles" role="related" />
 									</action>																	
 				</list> 						
-    </form-schema>
-    
-    <!-- Added by Nix <n.milutinovic@Levi9.com> -->
-    <form-schema id="step2">
-        <title xml:lang="nl">Alineas invoeren</title>
-        <title xml:lang="en">Enter paragraphs</title>
-        
-        <field name="name" ftype="data"/>
-        <list extends="config/paragraphs/add_paragraphs_posrel.xml"/>
     </form-schema>
 </wizard-schema>

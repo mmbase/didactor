@@ -1,7 +1,7 @@
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm"%>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.1" prefix="mm"%>
 <%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
 <mm:content postprocessor="reducespace">
-<mm:cloud method="delegate" jspvar="cloud">
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
 
 <mm:import externid="question" required="true"/>
 <mm:import externid="madetest">-1</mm:import>
@@ -37,10 +37,10 @@
   <mm:relatednodes id="my_shuffled_couplinganswers" comparator="SHUFFLE"/>
 
   <%-- Generate for each text1 answer a dropdown with possible text2 answers --%>
-  <mm:field name="text" write="true"/> 
+  <mm:field name="text1" write="true"/> 
   <mm:relatednodes referid="my_shuffled_couplinganswers">
 
-    <mm:field name="text"/>
+    <mm:field name="text1"/>
     <mm:field id="answer" name="number" write="false"/>
     <mm:import id="givencouplinganswer" reset="true">-1</mm:import>
     <mm:relatedcontainer path="leftanswer,givenanswers,rightanswer,couplinganswers">

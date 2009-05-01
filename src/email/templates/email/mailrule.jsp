@@ -3,15 +3,13 @@
   A link is created for every email to the 'email.jsp' page, where the user
   can view the email and do other actions.
 --%>
-<%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" 
-%><%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" 
-%><mm:content postprocessor="reducespace" expires="0">
-<mm:cloud method="delegate">
+<%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.1" prefix="mm" %>
+<mm:content postprocessor="reducespace" expires="0">
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
 
-<jsp:directive.include file="/shared/setImports.jsp" />
+<%@include file="/shared/setImports.jsp"%>
 <mm:import externid="mailbox">-1</mm:import>
-<mm:import externid="so"/>
-<mm:import externid="sf"/>
 
 <mm:treeinclude page="/cockpit/cockpit_header.jsp" objectlist="$includePath" referids="$referids">
   <mm:param name="extraheader">
@@ -36,8 +34,8 @@
 
 <mm:import externid="action_back" from="parameters" id="action_back"/>
     <mm:present referid="action_back">
-      <mm:redirect page="/email/index.jsp" referids="$referids,mailbox,so?,sf?">
-        <mm:param name="callerpage">/email/mailrule.jsp</mm:param>
+	<mm:redirect page="/email/index.jsp" referids="$referids,mailbox">
+	    <mm:param name="callerpage">/email/mailrule.jsp</mm:param>
 	</mm:redirect>
 </mm:present>
 
@@ -47,14 +45,14 @@
 <mm:present referid="ids">
     <mm:import externid="action_delete.x" from="parameters" id="action_delete"/>
     <mm:present referid="action_delete">
-	<mm:redirect page="/email/deleterules.jsp" referids="$referids,mailbox,ids,so?,sf?">
+	<mm:redirect page="/email/deleterules.jsp" referids="$referids,mailbox,ids">
 	    <mm:param name="callerpage">/email/mailrule.jsp</mm:param>
 	</mm:redirect>
     </mm:present>
 
     <mm:import externid="action_create"  from="parameters" id="action_create"/>
 	<mm:present referid="action_create">
-	<mm:redirect page="/email/mailboxes/editmailrule.jsp" referids="$referids,mailbox,ids,so?,sf?">
+	<mm:redirect page="/email/mailboxes/editmailrule.jsp" referids="$referids,mailbox,ids">
 	    <mm:param name="callerpage">/email/mailrule.jsp</mm:param>
 	</mm:redirect>
     </mm:present>
@@ -83,12 +81,6 @@
 
 <form action="<mm:treefile page="/email/mailrule.jsp" objectlist="$includePath" referids="$referids"/>" method="POST">
     <input type="hidden" name="mailbox" value="<mm:write referid="mailbox"/>">
-      <mm:present referid="so">
-        <input type="hidden" name="so" value="${so}" />
-      </mm:present>
-      <mm:present referid="sf">
-        <input type="hidden" name="sf" value="${sf}" />
-      </mm:present>
 
 
 <div class="mainContent">
@@ -97,9 +89,9 @@
   </div>
   <div class="contentSubHeader">
     <a href="<mm:treefile page="/email/mailbox/editmailrule.jsp" objectlist="$includePath" referids="$referids"/>">
-      <img src="<mm:treefile write="true" page="/gfx/icon_emailschrijven.gif" objectlist="$includePath" />" width="50" height="28" border="0" title="<di:translate key="email.writenewrule" />" alt="<di:translate key="email.writenewrule" />" /></a>
+      <img src="<mm:treefile write="true" page="/gfx/icon_emailschrijven.gif" objectlist="$includePath" />" width="50" height="28" border="0" alt="<di:translate key="email.writenewrule" />" /></a>
 
-       <input type="image" src="<mm:treefile page="/email/gfx/verwijder geselecteerde.gif" objectlist="$includePath" referids="$referids"/>" border="0" title="<di:translate key="email.deleteselected" />" alt="<di:translate key="email.deleteselected" />" name="action_delete" value="delete"/>
+       <input type="image" src="<mm:treefile page="/email/gfx/verwijder geselecteerde.gif" objectlist="$includePath" referids="$referids"/>" border="0" alt="<di:translate key="email.deleteselected" />" name="action_delete" value="delete"/>
        
   </div>
   <div class="contentBody">

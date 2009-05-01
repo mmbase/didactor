@@ -17,13 +17,9 @@ import java.io.*;
 import java.net.URL;
 import org.w3c.tidy.Tidy;
 
-import org.mmbase.util.logging.Logger;
-import org.mmbase.util.logging.Logging;
 
 public class PDFConverter {
-
-    private static Logger log = Logging.getLoggerInstance(PDFConverter.class);
-
+    
     public static void pageAsPDF (URL url, OutputStream out, URL headerImageURL) 
         throws ServletException, java.io.IOException
     {
@@ -41,7 +37,7 @@ public class PDFConverter {
 
             pdf.setFooter(footer());
 
-            if ( headerImageURL != null && header(headerImageURL)!=null ) {
+            if ( headerImageURL != null ) {
                 pdf.setHeader(header(headerImageURL));
             }
 
@@ -99,24 +95,19 @@ public class PDFConverter {
         throws com.lowagie.text.BadElementException,
                java.net.MalformedURLException,
                java.io.IOException {
-        HeaderFooter header = null;
-        try {
-           header = 
-               new HeaderFooter( 
-                   new Phrase(
-                       new Chunk( 
-                           Image.getInstance( headerImage ),
-                           310.0f,
-                           -14.0f
-            ///               -60.0f 
-                       )
-                   ),
-                   false
-               );
-           header.setBorder(Rectangle.NO_BORDER);
-        } catch (Exception e) { 
-           log.error("Could not find header image for PDF from " + headerImage + ". Is the setting for internalUrl in web.xml correct?");
-        }
+        HeaderFooter header = 
+            new HeaderFooter( 
+                new Phrase(
+                    new Chunk( 
+                        Image.getInstance( headerImage ),
+                        310.0f,
+                        -14.0f
+         ///               -60.0f 
+                    )
+                ),
+                false
+            );
+        header.setBorder(Rectangle.NO_BORDER);
         return header; 
     }
  
