@@ -11,19 +11,6 @@
       <mm:import externid="question" required="true"/>
       <mm:import externid="madetest" required="true"/>
 
-      <mm:import externid="answernode" />
-
-      <mm:notpresent referid="answernode">
-        <mm:remove referid="answernode" />
-        <mm:createnode id="answernode" type="givenanswers" />
-        <mm:createrelation role="related" source="madetest" destination="answernode"/>
-        <mm:createrelation role="related" source="question" destination="answernode"/>
-      </mm:notpresent>
-
-      <mm:present referid="answernode">
-        <mm:node id="answernode" referid="answernode" />
-      </mm:present>
-
       <jsp:directive.include file="/education/tests/definitions.jsp" />
 
       <mm:node number="$question" id="my_question">
@@ -37,33 +24,33 @@
           <c:choose>
             <c:when test="${_ eq 2}">
               <!-- Save the answer if type_of_score=2, no scoring -->
-              <mm:node referid="answernode" id="my_givenanswers">
+              <mm:createnode type="givenanswers" id="my_givenanswers">
                 <mm:setfield name="text"><mm:write referid="givenanswer"/></mm:setfield>
                 <mm:setfield name="score"><mm:write referid="TESTSCORE_COR"/></mm:setfield>
-              </mm:node>
+              </mm:createnode>
             </c:when>
             <c:when test="${_ eq 0 or fn:length(openanswers) eq 0}">
               <!-- Save the answer if type_of_score=0, will be checked by coach-->
-              <mm:node referid="answernode" id="my_givenanswers">
+              <mm:createnode type="givenanswers" id="my_givenanswers">
                 <mm:setfield name="text"><mm:write referid="givenanswer"/></mm:setfield>
                 <mm:setfield name="score"><mm:write referid="TESTSCORE_TBS"/></mm:setfield>
-              </mm:node>
+              </mm:createnode>
             </c:when>
             <c:otherwise>
               <!-- Save the answer if type_of_score=1, will be checked using example answers -->
               <mm:listnodes referid="openanswers">
                 <mm:field name="text" id="text">
                   <mm:compare referid="givenanswer" referid2="text">
-                    <mm:node referid="answernode" id="my_givenanswers">
+                    <mm:createnode type="givenanswers" id="my_givenanswers">
                       <mm:setfield name="text"><mm:write referid="givenanswer"/></mm:setfield>
                       <mm:setfield name="score"><mm:write referid="TESTSCORE_COR"/></mm:setfield>
-                    </mm:node>
+                    </mm:createnode>
                   </mm:compare>
                   <mm:compare referid="givenanswer" referid2="text" inverse="true">
-                    <mm:node referid="answernode" id="my_givenanswers">
+                    <mm:createnode type="givenanswers" id="my_givenanswers">
                       <mm:setfield name="text"><mm:write referid="givenanswer"/></mm:setfield>
                       <mm:setfield name="score"><mm:write referid="TESTSCORE_WR"/></mm:setfield>
-                    </mm:node>
+                    </mm:createnode>
                   </mm:compare>
                 </mm:field>
               </mm:listnodes>
@@ -71,6 +58,9 @@
           </c:choose>
 
         </mm:field>
+
+        <mm:createrelation role="related" source="madetest" destination="my_givenanswers"/>
+        <mm:createrelation role="related" source="question" destination="my_givenanswers"/>
 
       </mm:node>
 

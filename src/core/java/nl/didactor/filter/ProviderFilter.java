@@ -12,7 +12,6 @@ package nl.didactor.filter;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import java.util.*;
-import java.io.*;
 
 import org.mmbase.bridge.*;
 import org.mmbase.bridge.util.*;
@@ -34,15 +33,11 @@ import org.mmbase.util.logging.*;
  * Request scope vars are 'provider', 'education', 'class'.
  *
  * @author Michiel Meeuwissen
- * @version $Id: ProviderFilter.java,v 1.28 2008-11-28 10:28:23 michiel Exp $
+ * @version $Id: ProviderFilter.java,v 1.16 2008-08-08 16:00:54 michiel Exp $
  */
 public class ProviderFilter implements Filter, MMBaseStarter, NodeEventListener, RelationEventListener {
     private static final Logger log = Logging.getLoggerInstance(ProviderFilter.class);
     private static MMBase mmbase;
-
-
-    public static String USER_KEY = "nl.didactor.user_attributes";
-    public static String EDUCATION_KEY = "nl.didactor.education";
 
     private static Map<String, Map<String, Object>> providerCache = new HashMap<String, Map<String, Object>>();
 
@@ -100,9 +95,8 @@ public class ProviderFilter implements Filter, MMBaseStarter, NodeEventListener,
      * Utility method. In didactor the current provider/education are determined using related url
      * objects to provider and education objects. This method does the needed queries.
      */
-    protected NodeList selectByRelatedUrl(Cloud cloud, NodeList nodes, String url) {
+    protected Node selectByRelatedUrl(NodeList nodes, String url) {
         log.debug("Select for " + url);
-        NodeList result = cloud.getCloudContext().createNodeList();
         NodeIterator ni = nodes.nodeIterator();
         while (ni.hasNext()) {
             Node suggestion = ni.nextNode();
@@ -113,32 +107,11 @@ public class ProviderFilter implements Filter, MMBaseStarter, NodeEventListener,
                 String u = urlNode.getStringValue("url");
                 if (u.equals(url)) {
                     log.debug("found "  + suggestion.getNumber());
-                    result.add(suggestion);
+                    return suggestion;
                 }
             }
         }
-        return result;
-    }
-
-
-    protected NodeList selectForUser(Cloud cloud, NodeList nodes) {
-        int userNode = cloud.getCloudContext().getAuthentication().getNode(cloud.getUser());
-        log.debug("Fitering for user " + cloud.getUser());
-        if (cloud.hasNode(userNode)) {
-            Node user = cloud.getNode(userNode);
-            Set<Node> related = (Set<Node>) user.getFunctionValue("educations", null).get();
-
-            NodeList result = cloud.getCloudContext().createNodeList();
-
-            for (Node e : nodes) {
-                if (related.contains(e)) {
-                    result.add(e);
-                }
-            }
-            return result;
-        } else {
-            return nodes;
-        }
+        return null;
     }
 
 
@@ -195,6 +168,9 @@ public class ProviderFilter implements Filter, MMBaseStarter, NodeEventListener,
         }
     }
 
+    protected Node getUser(Cloud cloud) {
+        return nl.didactor.security.Authentication.getCurrentUserNode(cloud);
+    }
 
 
     /**
@@ -202,10 +178,8 @@ public class ProviderFilter implements Filter, MMBaseStarter, NodeEventListener,
      * @param provider If provider already determined, it can be given.
      * @param
      */
-    protected Node getEducation(Cloud cloud, Node provider, String[] urls) {
-        if (log.isDebugEnabled()) {
-            log.debug("Finding education for " + provider.getNumber() + " " + Arrays.asList(urls));
-        }
+    protected Node getEducation(Cloud cloud, Node provider, String[] urls, Map<String, Object> attributes) {
+
         Node education = null;
         NodeList educations;
         if (provider != null) {
@@ -215,33 +189,17 @@ public class ProviderFilter implements Filter, MMBaseStarter, NodeEventListener,
                 educations = cloud.getNodeManager("educations").getList(null, null, null);
             }
         } else {
-            log.warn("No provider, using all educations");
             // there was no provider found yet, so we try educations only
             educations = cloud.getNodeManager("educations").getList(null, null, null);
         }
 
-        {
-            NodeList e = educations;
-            for (String u : urls) {
-                e = selectByRelatedUrl(cloud, e, u);
-            }
-            if (e.size() > 0) {
-                educations = e;
-            } else {
-                // no match at all, ignore the urls
-            }
-            log.debug("Filtered for url " + education);
+        for (String u : urls) {
+            education = selectByRelatedUrl(educations, u);
+            if (education != null) break;
         }
 
-        educations = selectForUser(cloud, educations);
-
-        if (educations.size() > 0) {
-            education = educations.getNode(0);
-            log.debug("Education matched for user " + education.getNumber());
-        }
 
         if (education == null && provider != null) {
-            log.service("No education found");
             // no url related to the educations, simply take one related to the provider if
             // that was found.
             NodeList eds = provider.getRelatedNodes("educations");
@@ -253,21 +211,19 @@ public class ProviderFilter implements Filter, MMBaseStarter, NodeEventListener,
         if (education == null && educations.size() > 0) {
             // Still no education found, if there are education at all, simply guess one.
             education = educations.nodeIterator().nextNode();
-            log.debug("No education matched, taking " + education.getNumber());
         }
 
+        if (education != null) {
+            log.debug("Found education " + education.getNumber());
+            attributes.put("education", education.getNumber());
+        } else {
+            //attributes.put("education", null);
+        }
         return education;
     }
 
 
-    private static final CharTransformer escaper = new Xml(Xml.ESCAPE);
-
-    private static Set<String> NODE_KEYS = new HashSet<String>();
-    static {
-        NODE_KEYS.add("class");
-        NODE_KEYS.add("education");
-        NODE_KEYS.add("provider");
-    }
+    private static CharTransformer escaper = new Xml(Xml.ESCAPE);
     /**
      * Filters the request: tries to find a jumper and redirects to this url when found, otherwise the
      * request will be handled somewhere else in the filterchain.
@@ -276,24 +232,16 @@ public class ProviderFilter implements Filter, MMBaseStarter, NodeEventListener,
      * @param filterChain The FilterChain.
      */
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws java.io.IOException, ServletException {
-        HttpServletResponse res = (HttpServletResponse) response;
-        HttpServletRequest req = (HttpServletRequest) request;
-
-        String sp = req.getServletPath();
-        if (sp.endsWith(".css") ||
-            sp.endsWith(".png") ||
-            sp.endsWith(".gif") ||
-            sp.endsWith(".js"))
-            {
+        if (mmbase == null || ! mmbase.getState()) {
+            // if mmbase not yet running. Things not using mmbase can work, otherwise this may give
+            // 503.
+            log.debug("NO MMBASE member");
             filterChain.doFilter(request, response);
             return;
         }
-        if (mmbase == null || ! mmbase.getState()) {
-            // if mmbase not yet.503.
-            res.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE, "MMBase not yet, or not successfully initialized (check mmbase log)");
-            return;
-        }
+        HttpServletRequest req = (HttpServletRequest) request;
 
+        String sp = req.getServletPath();
         if (sp.startsWith("/images/") ||
             sp.startsWith("/attachments/")) {
             // no jsps here, these are blobs.
@@ -313,48 +261,36 @@ public class ProviderFilter implements Filter, MMBaseStarter, NodeEventListener,
         String contextPath = req.getContextPath();
         HttpSession session = req.getSession(false);
 
-        String parameterEducation = useParameters ? req.getParameter("education") : null;
+
+        String parameterEducation = useParameters && session != null ? (String) session.getAttribute("education") : null;
+        if ((parameterEducation == null || parameterEducation.length() == 0) && useParameters) parameterEducation = req.getParameter("education");
         if (parameterEducation != null && parameterEducation.length() == 0) parameterEducation = null;
-        if (parameterEducation == null && session != null) {
-            parameterEducation = (String) session.getAttribute(EDUCATION_KEY);
-            log.debug("education found from session " + parameterEducation);
+
+        if (parameterEducation != null && useParameters && session != null) {
+            // remember some explicit education parameter in the session.
+            session.setAttribute("education", parameterEducation);
         }
 
-        String parameterProvider  = useParameters ? req.getParameter("provider") : null;
-
-        log.debug("Provider found from request " + parameterProvider);
+        String providerParameter  = useParameters ? req.getParameter("provider") : null;
 
         Cloud cloud = getCloud(req);
-        Map<String, Serializable> userAttributes;
+        Map<String, Object> userAttributes;
         if (session == null) {
             log.debug("no session");
-            userAttributes = new HashMap<String, Serializable>();
+            userAttributes = new HashMap<String, Object>();
             userAttributes.put("user", 0);
         } else {
-            userAttributes = (Map<String, Serializable>) session.getAttribute(USER_KEY);
+            userAttributes = (Map<String, Object>) session.getAttribute("nl.didactor.user_attributes");
             if (userAttributes == null) {
-                userAttributes = new HashMap<String, Serializable>();
-                session.setAttribute(USER_KEY, userAttributes);
-            } else {
-                if (log.isDebugEnabled()) {
-                    log.debug("User attributes from session " + userAttributes);
-                }
+                userAttributes = new HashMap<String, Object>();
+                session.setAttribute("nl.didactor.user_attributes", userAttributes);
             }
-            int userNumber = cloud.getCloudContext().getAuthentication().getNode(cloud.getUser());
-            if (userNumber < 0) userNumber = 0;
 
-            userAttributes.put("user", userNumber);
-
-            if (parameterEducation != null && useParameters && userNumber > 0) {
-                // remember some explicit education parameter in the session.
-                session.setAttribute(EDUCATION_KEY, parameterEducation);
-            }
+            Node user = getUser(cloud);
+            userAttributes.put("user", user == null ? 0 : user.getNumber());
         }
 
-        String key = serverName + contextPath + ':' + parameterEducation + ':' + parameterProvider  + ":" + cloud.getUser().getIdentifier();
-
-
-        log.debug("key " + key);
+        String key = serverName + contextPath + ':' + parameterEducation + ':' + providerParameter;
         Map<String, Object> attributes = providerCache.get(key);
         if (attributes == null) {
 
@@ -368,10 +304,10 @@ public class ProviderFilter implements Filter, MMBaseStarter, NodeEventListener,
 
             Node provider = null;
             {
-                if (cloud.hasNode(parameterProvider)) {
+                if (cloud.hasNode(providerParameter)) {
                     // explicitely stated provider on the URL.
                     // Don't know if that should be maintained.
-                    provider = cloud.getNode(parameterProvider);
+                    provider = cloud.getNode(providerParameter);
                 } else {
                     NodeList providers = cloud.getNodeManager("providers").getList(null, null, null);
                     if (providers.size() == 0) {
@@ -379,31 +315,19 @@ public class ProviderFilter implements Filter, MMBaseStarter, NodeEventListener,
                         log.info("No provider objects found, should at least be one");
                     } else if (providers.size() == 1) {
                         provider = providers.getNode(0);
-                        log.debug("Only one provider " + provider.getNumber());
                     } else {
                         // which are we going to use?
                         for (String u : urls) {
-                            providers = selectByRelatedUrl(cloud, providers, u);
-                            if (providers.size() > 0) {
-                                provider = providers.getNode(0);
-                                break;
-                            }
+                            provider = selectByRelatedUrl(providers, u);
+                            if (provider != null) break;
                         }
-                        log.debug("Provider " + provider);
 
                         // no matching URL object directly related to provider.
                         // Try via education object too.
                     }
                 }
             }
-            Node defaultEducation = getEducation(cloud, provider, urls);
-            Node education =
-                parameterEducation != null ?
-                cloud.getNode(parameterEducation) : // explicit education always takes preference
-                defaultEducation;
-
-            log.debug("Default education " + defaultEducation + " education " + education);
-
+            Node education = getEducation(cloud, provider, urls, attributes);
 
             // try determining provider if education found, but not yet a provider
             if (provider == null && education != null) {
@@ -415,30 +339,12 @@ public class ProviderFilter implements Filter, MMBaseStarter, NodeEventListener,
 
 
             if (provider == null) {
-                NodeList providers = cloud.getNodeManager("providers").getList(null, "number", "descending");
-                for (Node prov : providers) {
-                    if (prov.getRelations("related", "educations").size() > 0) {
-                        provider = prov;
-                        break;
-                    }
+                NodeList providers = cloud.getNodeManager("providers").getList(null, null, null);
+                if (providers.size() > 0) {
+                    provider = providers.getNode(0);
+                    education = getEducation(cloud, provider, urls, attributes);
                 }
-                if (provider == null && providers.size() > 0) {
-                    provider = providers.get(0);
-                    log.debug("Found provider " + provider.getNumber());
-                }
-                defaultEducation = getEducation(cloud, provider, urls);
-                log.debug("Found education " + defaultEducation);
-                education = defaultEducation;
-
             }
-
-            if (education != null) {
-                log.debug("Found education " + education.getNumber());
-                attributes.put("education", education.getNumber());
-            } else {
-                //attributes.put("education", null);
-            }
-
             Locale locale;
             if (provider != null) {
                 log.debug("Found provider " + provider.getNumber());
@@ -462,6 +368,7 @@ public class ProviderFilter implements Filter, MMBaseStarter, NodeEventListener,
                 if (req.getServletPath().startsWith("/mmbase")) {
                     filterChain.doFilter(request, response);
                 } else {
+                    HttpServletResponse res = (HttpServletResponse) response;
                     request.setAttribute("org.mmbase.servlet.error.message", "No provider found for '" + key + "'");
                     res.sendError(HttpServletResponse.SC_NOT_FOUND, "No provider found for '" + key + "'");
                 }
@@ -475,7 +382,7 @@ public class ProviderFilter implements Filter, MMBaseStarter, NodeEventListener,
                 attributes.put("includePath", "" + provider.getNumber());
             }
 
-            attributes.put("referids", "class?,workgroup?,student?,c?" + ((education != null && defaultEducation != null && education.getNumber() != defaultEducation.getNumber()) ? ",education" : ""));
+            attributes.put("referids", "class?,workgroup?,student?,c?");
 
             providerCache.put(key, attributes);
 
@@ -493,81 +400,34 @@ public class ProviderFilter implements Filter, MMBaseStarter, NodeEventListener,
         String c = useParameters ? request.getParameter("class") : null;
         if (c != null) {
             if (cloud.hasNode(c)) {
-                userAttributes.put("class", cloud.getNode(c).getNumber());
+                userAttributes.put("class", Casting.wrap(cloud.getNode(c), escaper));
             }
         } else {
-            Integer userClass = (Integer) userAttributes.get("class");
-            Integer education = (Integer) attributes.get("education");
-            if (userClass != null) {
-                // check if this class is consisten with the selected education.
-                Node claz = cloud.getNode(userClass);
-                if (education == null) {
-                    attributes.put("education", claz.getIntValue("education"));
-                } else {
-                    if (education != claz.getIntValue("education")) {
-                        userClass = null;
-                        userAttributes.put("class", null);
-                    }
+            Object education = attributes.get("education");
+            if (education != null && userAttributes.get("class") == null) {
+                try {
+                    Node user = cloud.getNode((Integer) userAttributes.get("user"));
+                    Function fun = user.getFunction("class");
+                    Parameters params = fun.createParameters();
+                    params.set("education", education);
+                    Node claz = (Node) fun.getFunctionValue(params);
+                    userAttributes.put("class", Casting.wrap(claz, escaper));
+                } catch (NotFoundException nfe) {
+                    // never mind
+                    userAttributes.put("class", null);
                 }
-
-            }
-
-            if (userClass == null) {
-                if (education != null) {
-                    int userNumber = (Integer) userAttributes.get("user");
-                    if (userNumber > 0) {
-                        try {
-                            Node user = cloud.getNode(userNumber);
-                            Function fun = user.getFunction("class");
-                            Parameters params = fun.createParameters();
-                            params.set("education", education);
-                            Node claz = (Node) fun.getFunctionValue(params);
-                            userAttributes.put("class", claz == null ? null : claz.getNumber());
-                            log.debug("Found " + (claz == null ? "NULL" : claz.getNumber()) + " for user " + (user == null ? "NULL" : user.getNumber()) + " and education " + (education == null ? "NULL" : education));
-                        } catch (NotFoundException nfe) {
-                            log.warn(nfe);
-                            // never mind
-                            userAttributes.put("class", null);
-                        }
-                    }
-                } else {
-                    log.warn("No education found");
-                }
-            } else {
-                log.debug("Explicit class in " + userAttributes);
             }
         }
 
         // copy all attributes to the request.
         for (Map.Entry<String, Object> entry : attributes.entrySet()) {
-            String k = entry.getKey();
-            Object value = entry.getValue();
-            if (NODE_KEYS.contains(k)) {
-                if (value != null) {
-                    value = Casting.wrap(cloud.getNode("" + value), escaper);
-                }
-            }
-            request.setAttribute(k, value);
+            request.setAttribute(entry.getKey(), entry.getValue());
         }
         request.setAttribute(org.mmbase.framework.Framework.COMPONENT_INCLUDEPATH_KEY, request.getAttribute("includePath"));
 
         assert request.getAttribute("provider") != null : "attributes" + attributes;
-        for (Map.Entry<String, Serializable> entry : userAttributes.entrySet()) {
-            //log.info("Putting " + entry + " " + (entry.getValue() == null ? "" : entry.getValue().getClass()));
-            //Casting.wrap(claz, escaper));
-            String k = entry.getKey();
-            Object value = entry.getValue();
-            if (NODE_KEYS.contains(k)) {
-                if (value != null) {
-                    value = Casting.wrap(cloud.getNode("" + value), escaper);
-                }
-            }
-            request.setAttribute(k, value);
-        }
-
-        if (request.getAttribute("includePath") == null) {
-            res.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE, "Didactor not yet initialized");
-            return;
+        for (Map.Entry<String, Object> entry : userAttributes.entrySet()) {
+            request.setAttribute(entry.getKey(), entry.getValue());
         }
 
         filterChain.doFilter(request, response);

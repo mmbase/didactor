@@ -15,21 +15,15 @@
         <tr>
           <th class="listHeader">&amp;nbsp;</th>
           <mm:node number="$education">
-            <mm:relatednodescontainer element="learnblocks"  path="posrel,learnblocks${di:setting('assessment', 'relate_learnblocks') ? ',related,components' : ''}">
-              <mm:sortorder field="posrel.pos" />
-              <c:if test="${di:setting('assessment', 'relate_learnblocks')}">
-                <mm:addnode element="components" number="component.assessment" />
-              </c:if>
-              <mm:relatednodes id="learnblocks">
-                <th class="listHeader">
-                  <mm:field name="name" />
-                  <!--
-                      <br />
-                      <di:translate key="assessment.period" /><jsp:text> </jsp:text><mm:index />
-                  -->
-                </th>
-              </mm:relatednodes>
-            </mm:relatednodescontainer>
+            <mm:relatednodes type="learnblocks" path="posrel,learnblocks" id="learnblocks" orderby="posrel.pos">
+              <th class="listHeader">
+                <mm:field name="name" />
+                <!--
+                    <br />
+                <di:translate key="assessment.period" /><jsp:text> </jsp:text><mm:index />
+                -->
+              </th>
+            </mm:relatednodes>
           </mm:node>
         </tr>
         <mm:relatednodes type="classes" path="classrel,classes" id="class">
@@ -38,7 +32,7 @@
               element="people">
             <mm:constraint field="roles.name" value="student" />
             <mm:distinct />
-            <mm:sortorder field="${di:setting('core', 'personorderfield')}" casesensitive="false" />
+            <mm:sortorder field="lastname" />
             <mm:relatednodes id="student">
 
               <mm:first>
@@ -59,41 +53,73 @@
 
               <tr class="toggle_div${class}" id="toggle_div${class}_${_node}">
                 <td class="listItem">
-                <mm:node>
-                <mm:link>
-                	<mm:param name="subsub">coach_student_overview</mm:param>
-                	<mm:param name="student_id">${_node}</mm:param>
-                  <a href="${_}"><mm:field name="firstname"/></a>
-                </mm:link>
-                </mm:node>
+                  <di:person />
                 </td>
-                <mm:relatednodes referid="learnblocks" id="learnblock">
-                  <td class="listItem">
+                <mm:node number="$education" notfound="skip">
+                  <mm:relatednodes type="learnblocks" path="posrel,learnblocks" orderby="posrel.pos" >
+                    <td class="listItem">
+                      <mm:relation role="classrel" to="${student}">
+                        <mm:relatednodes type="popfeedback">
+                          <mm:node id="feedback" />
+                        </mm:relatednodes>
+                      </mm:relation>
 
-                    <mm:node number="$student">
-                      <di:copybook>
-                        <mm:node id="copybookNo" />
-                      </di:copybook>
-                    </mm:node>
-                    <mm:node number="$student">
-                      <mm:relatednodescontainer type="shouts">
-                        <mm:constraint field="reference" value="${learnblock}" />
-                        <mm:link page="/c/shoutbox/index/" referids="learnblock@reference">
-                          <mm:param name="source">${_node}</mm:param>
-                          (<a href="${_}" name=""><mm:size /></a>)
-                        </mm:link>
-                      </mm:relatednodescontainer>
-                    </mm:node>
-                  </td>
-                </mm:relatednodes>
+                      <c:choose>
+                        <c:when test="${empty feedback}">
+                          &amp;nbsp;
+                        </c:when>
+                        <c:otherwise>
+                          <mm:treefile
+                              page="/assessment/feedback.jspx" objectlist="$includePath"
+                              referids="$referids,feedback@feedback_n"
+                              write="false"
+                              >
+                            <mm:param name="coachmode" value="true" />
+                            <a href="${_}">
+                              <di:img src="${feedback.status ge 0 ? '/assessment/gfx/todevelop.gif' : '/assessment/gfx/developed.gif'}"
+                                      title="assessment.goto_feedback" />
+                            </a>
+                          </mm:treefile>
+                          <mm:remove referid="feedback" />
+                        </c:otherwise>
+                      </c:choose>
+
+                      <mm:node number="$student">
+                        <di:copybook>
+                          <mm:node id="copybookNo" />
+                        </di:copybook>
+                      </mm:node>
+
+                      <mm:node number="${assessment_evaluationtest}" notfound="skip">
+                        <!-- get madetest -->
+                        <mm:relatednodescontainer path="madetests,copybooks" element="madetests">
+
+                          <mm:relatednodes>
+                            <mm:treefile page="/assessment/showtest.jsp"
+                                         write="false"
+                                         objectlist="$includePath" referids="$referids">
+                              <mm:param name="test"><mm:write referid="assessment_evaluationtest" /></mm:param>
+                              <mm:param name="madetest"><mm:field name="number" /></mm:param>
+                              <mm:param name="coachmode">true</mm:param>
+                              <a href="${_}">
+                                <di:img src="assessment/gfx/present.gif"
+                                        title="assessment.view_evaluationtest" />
+                              </a>
+                            </mm:treefile>
+                          </mm:relatednodes>
+                        </mm:relatednodescontainer>
+                      </mm:node>
+                    </td>
+                  </mm:relatednodes>
                   <td>
                     <mm:node number="$student">
                       <mm:link page="/c/shoutbox/index/">
-                        <mm:param name="source">${_node}</mm:param>
-                        <a href="${_}" name=""><di:translate key="assessment.messages"/></a>
-                      </mm:link>
+						  <mm:param name="source">${_node}</mm:param>
+						<a href="${_}" name=""><di:translate key="assessment.messages"/></a>
+					  </mm:link>
                     </mm:node>
                   </td>
+                </mm:node>
               </tr>
             </mm:relatednodes>
           </mm:relatednodescontainer>

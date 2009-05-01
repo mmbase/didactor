@@ -12,17 +12,17 @@
 
   <searchage>0</searchage>
   <names>
-    <singular xml:lang="en">Message</singular>
-    <singular xml:lang="nl">Bericht</singular>
+    <singular xml:lang="en">Annotation</singular>
+    <singular xml:lang="nl">Aantekening</singular>
 
-    <plural xml:lang="en">Messages</plural>
-    <plural xml:lang="nl">Berichten</plural>
+    <plural xml:lang="en">Annotations</plural>
+    <plural xml:lang="nl">Aantekeningen</plural>
   </names>
 
   <fieldlist>
 
-    <field name="from" state="system">
-      <gui>
+    <field name="from" type="system">
+	  <gui>
         <guiname xml:lang="en">From</guiname>
         <guiname xml:lang="nl">Van</guiname>
       </gui>
@@ -30,20 +30,6 @@
       <datatype base="user" xmlns="http://www.mmbase.org/xmlns/datatypes">
         <required value="true" />
       </datatype>
-    </field>
-
-
-    <field name="reference">
-      <gui>
-        <guiname xml:lang="en">Refers</guiname>
-        <guiname xml:lang="nl">Behandelt</guiname>
-      </gui>
-      <descriptions>
-        <description xml:lang="en">A node where this shout is about. This normally only further
-        specifies the 'box' where the shout is in. E.g. we could couple 'shouts' to people, and it
-        serves a simple inbox. But you could also want to talk _about_ another object.</description>
-      </descriptions>
-      <datatype base="shoutbox_references" xmlns="http://www.mmbase.org/xmlns/datatypes" />
     </field>
 
     <field name="title">
@@ -57,16 +43,6 @@
       </datatype>
     </field>
 
-
-    <field name="time" readonly="true">
-      <gui>
-        <guiname xml:lang="en">Time</guiname>
-        <guiname xml:lang="nl">Tijd</guiname>
-      </gui>
-      <editor><positions><list>4</list></positions></editor>
-      <datatype base="created" xmlns="http://www.mmbase.org/xmlns/datatypes" />
-    </field>
-
     <field name="body">
       <gui>
         <guiname xml:lang="en">Text</guiname>
@@ -76,7 +52,6 @@
         <maxLength value="65000" />
       </datatype>
     </field>
-
   </fieldlist>
 
 </builder>

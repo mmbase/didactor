@@ -24,7 +24,7 @@ import org.mmbase.util.logging.Logging;
 
  *
  * @author Michiel Meeuwissen
- * @version $Id: DidactorFramework.java,v 1.6 2009-01-02 09:36:10 michiel Exp $
+ * @version $Id: DidactorFramework.java,v 1.4 2008-08-08 14:44:05 michiel Exp $
  * @since Didactor-2.3
  */
 public class DidactorFramework extends BasicFramework {
@@ -50,7 +50,6 @@ public class DidactorFramework extends BasicFramework {
         COMPONENT:
         for (Component comp : rep.getComponents()) {
             Node node = SearchUtil.findNode(cloud, "components", "name", comp.getName());
-            if (comp.getSetting("has_didactor_component") != null) continue;
             if (node == null) {
                 for (Block block : comp.getBlocks()) {
                     CLASS:
@@ -71,7 +70,7 @@ public class DidactorFramework extends BasicFramework {
                     }
 
                 }
-                log.debug("No blocks classified as didactor found for " + comp);
+                log.service("No blocks classified as didactor found for " + comp);
             } else {
 
             }

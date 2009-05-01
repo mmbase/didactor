@@ -7,11 +7,10 @@
   <div class="navigationbar">
     <di:include page="/logo.jspx" />
     <mm:import externid="object" />
-    <mm:import externid="name" />
+	<mm:import externid="name" />
 
-    <di:include page="/shared/titlebar.jspx" />
-    <h1><di:translate key="${name}.name" /></h1>
-
-
+    <div class="titlebar"><!--nothing here --></div>
+ 	<h1><di:translate key="${name}.name" /></h1>
   </div>
+
 </jsp:root>

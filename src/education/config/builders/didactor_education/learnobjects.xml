@@ -86,24 +86,8 @@
       <class>nl.didactor.education.Functions</class>
     </function>
 
-    <function key="url">
-      <class>nl.didactor.education.Functions</class>
-    </function>
-
-    <function key="madetestholder">
-      <class>nl.didactor.education.Functions</class>
-    </function>
-
-    <function key="madetestholder">
-      <class>nl.didactor.education.Functions</class>
-    </function>
-
-    <function key="sequence">
-      <class>nl.didactor.education.Functions</class>
-    </function>
-
-    <function key="questions">
-      <class>nl.didactor.education.functions.LearnObjectQuestions</class>
+    <function name="url" key="{REQUEST.getContextPath}/education/?learnobject={NODE.number}">
+      <class>org.mmbase.util.functions.PatternNodeFunctionProvider</class>
     </function>
   </functionlist>
 

@@ -13,7 +13,7 @@ import org.mmbase.util.logging.Logging;
 /**
  * The didactor component wrapping an mmbase component.
  * @author Michiel Meeuwissen
- * @version $Id: MMBaseComponent.java,v 1.8 2009-01-02 09:36:10 michiel Exp $
+ * @version $Id: MMBaseComponent.java,v 1.5 2008-08-21 09:42:34 michiel Exp $
  */
 
 public class MMBaseComponent extends nl.didactor.component.Component {
@@ -21,11 +21,10 @@ public class MMBaseComponent extends nl.didactor.component.Component {
 
     enum Scope {
         COMPONENT("component"),
-        PROVIDERS("provider"),
-        EDUCATIONS("education", PROVIDERS),
-        CLASSES("class", EDUCATIONS),
-        PEOPLE("people");
-
+            PROVIDERS("provider"),
+            EDUCATIONS("education", PROVIDERS),
+            CLASSES("class", EDUCATIONS),
+            PEOPLE("people");
         private final String ref;
         private final Scope implies;
         Scope(String r) {
@@ -95,9 +94,7 @@ public class MMBaseComponent extends nl.didactor.component.Component {
                 }
             }
         }
-        if (log.isDebugEnabled()) {
-            log.debug("Found " + scopes);
-        }
+        log.info("Found " + scopes);
         return scopes;
     }
 
@@ -113,7 +110,7 @@ public class MMBaseComponent extends nl.didactor.component.Component {
         org.mmbase.framework.Component component = getComponent();
         if (component == null) throw new IllegalStateException("No component '" + name + "' found");
         org.mmbase.framework.Setting setting = component.getSetting("didactor_templatebar");
-        if (setting == null) throw new IllegalStateException("No setting 'didactor_templatebar' in " + component);
+        if (setting == null) throw new IllegalStateException();
         return (String) fw.getSettingValue(setting, fw.createSettingValueParameters());
     }
 

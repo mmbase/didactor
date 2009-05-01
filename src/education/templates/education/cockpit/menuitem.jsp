@@ -7,11 +7,11 @@
       <div class="coursemanagement">
         <mm:import externid="scope"/>
         <mm:compare referid="scope" value="provider">
-          <div class="menuSeparator"><jsp:text> </jsp:text></div>
+          <div class="menuSeperator"><jsp:text> </jsp:text></div>
           <div class="menuItem" id="coursemanagement">
             <mm:import from="request" externid="component" />
             <mm:treefile page="/education/wizards/index.jsp"
-                         objectlist="$includePath"  write="false" >
+                         objectlist="$includePath" referids="$referids,user?" write="false" >
               <a href="${_}" class="menubar ${component eq 'education.wizards' ? 'active' : ''}" >
                 <di:translate key="education.coursemanagement" />
               </a>

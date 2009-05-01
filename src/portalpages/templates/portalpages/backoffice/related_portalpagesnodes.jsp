@@ -11,46 +11,57 @@
                    orderby="order_number"
                    type="portalpagesnodes">
 
-    <li>
+    <di:leaf
+        branchPath="${branchPath} "
+        click="portal_child_${_node}"
+        >
       <mm:link referid="wizardjsp" referids="_node@objectnumber">
         <mm:param name="wizard">config/portalpages/leafportalpagesnodes</mm:param>
-        <a href="${_}" title="edit" target="text"><mm:field name="name"/></a>
+        <td><a href="${_}" title="edit" target="text"><mm:field name="name"/></a></td>
       </mm:link>
-      <ul>
-        <li>
-          <di:icon name="new_education" />
-          <mm:link referid="wizardjsp" referids="thischild@origin">
-            <mm:param name="wizard">config/portalpages/newsimplecontents</mm:param>
-            <mm:param name="objectnumber">new</mm:param>
+    </di:leaf>
+    <div id="portal_child_${_node}" style="display:none">
+      <di:leaf
+          branchPath="${branchPath}"
+          icon="new_education"
+          >
+        <mm:link referid="wizardjsp" referids="thischild@origin">
+          <mm:param name="wizard">config/portalpages/newsimplecontents</mm:param>
+          <mm:param name="objectnumber">new</mm:param>
+          <td>
             <a href="${_}" title="nieuwe content" target="text">nieuwe content</a>
-          </mm:link>
-        </li>
-        <mm:relatednodes role="related" path="simplecontents" varStatus="status">
-          <li>
-            <di:icon name="learnblock" />
-            <mm:link referid="wizardjsp" referids="_node@objectnumber">
-              <mm:param name="wizard">config/portalpages/simplecontents</mm:param>
+          </td>
+        </mm:link>
+      </di:leaf>
+      <mm:relatednodes role="related" path="simplecontents" varStatus="status">
+        <di:leaf
+            branchPath="${branchPath} ${status.last ? '.' : ' '}"
+            icon="learnblock">
+          <mm:link referid="wizardjsp" referids="_node@objectnumber">
+            <mm:param name="wizard">config/portalpages/simplecontents</mm:param>
+            <td>
               <a href="${_}" target="text"><mm:field name="title"/></a>
-            </mm:link>
-          </li>
-        </mm:relatednodes>
-        <mm:relatednodes role="posrel"
-                         type="simplexmlcontents" varStatus="status">
-          <li>
-            <di:icon name="kupu" />
-            <di:kupulink
-                node="${_node}"
-                referrer="${referrer}"
-                wizard="config/portalpages/simplexmlcontents">
-              <a href="${_}" title="edit" target="text">
-                <mm:field name="title"/>
-              </a>
-            </di:kupulink>
-          </li>
-
-        </mm:relatednodes>
-      </ul>
-    </li>
+            </td>
+          </mm:link>
+        </di:leaf>
+      </mm:relatednodes>
+      <mm:relatednodes role="posrel"
+                       type="simplexmlcontents" varStatus="status">
+        <di:leaf
+            branchPath="${branchPath} ${status.last ? '.' : ' '}"
+            icon="kupu_icon">
+          <mm:link page="/mmbase/kupu/mmbase" referids="_node@objectnumber,referrer,kupu_back">
+            <mm:param name="templates">/editwizards/data</mm:param>
+            <mm:param name="wizard">config/portalpages/simplexmlcontents</mm:param>
+            <mm:param name="link_nodetypes">${di:setting('richtext', 'link_nodetypes')}</mm:param>
+            <mm:param name="language">${locale.language}</mm:param>
+            <a href="${_}" title="edit" target="text">
+              <mm:field name="title"/>
+            </a>
+          </mm:link>
+        </di:leaf>
+      </mm:relatednodes>
+    </div>
   </mm:relatednodes>
 
   <!-- WTF is the sort order here
@@ -59,25 +70,28 @@
   -->
   <mm:relatednodes role="related"
                    type="simplecontents" varStatus="status">
-    <li>
-      <di:icon name="learnblock" />
+    <di:leaf
+        branchPath="${branchPath}${status.last ? '.' : ' '}"
+        icon="learnblock">
       <mm:link referid="wizardjsp" referids="_node@objectnumber">
         <mm:param name="wizard">config/portalpages/simplecontents</mm:param>
         <a href="${_}" title="edit" target="text"><mm:field name="title"/></a>
       </mm:link>
-    </li>
+    </di:leaf>
   </mm:relatednodes>
 
   <mm:relatednodes role="posrel"
                    type="simplexmlcontents" varStatus="status">
-    <li>
-      <di:icon name="kupu" />
-      <di:kupulink
-          referrer="${referrer}"
-          wizard="config/portalpages/simplexmlcontents"
-          node="${_node}">
-          <a href="${_}" title="edit" target="text"><mm:field name="title"/></a>
-      </di:kupulink>
-    </li>
+    <di:leaf
+        branchPath="${branchPath}${status.last ? '.' : ' '}"
+        icon="kupu_icon">
+      <mm:link page="/mmbase/kupu/mmbase" referids="_node@objectnumber,referrer,kupu_back">
+        <mm:param name="templates">/editwizards/data</mm:param>
+        <mm:param name="wizard">config/portalpages/simplexmlcontents</mm:param>
+        <mm:param name="link_nodetypes">${di:setting('richtext', 'link_nodetypes')}</mm:param>
+        <mm:param name="language">${locale.language}</mm:param>
+        <a href="${_}" title="edit" target="text"><mm:field name="title"/></a>
+      </mm:link>
+    </di:leaf>
   </mm:relatednodes>
 </jsp:root>

@@ -24,7 +24,7 @@
 
   <property name="download.dir"           location="${basedir}/download" />
   <property name="war.dir"                value="${build.dir}" />
-  <property name="version"                value="1.9-SNAPSHOT" />
+  <property name="mmbase.version"         value="1.9.0-SNAPSHOT" />
 
   <property name="dest" value="${build.webapp.dir}" />
   <property name="jardest" value="${build.webapp.dir}/WEB-INF/lib" />
@@ -37,8 +37,7 @@
       <available file="install-dependency.xml" />
     </not>
     <then>
-      <get src="http://cvs.mmbase.org/viewcvs/*checkout*/all/install-dependency.xml"
-           dest="install-dependency.xml"
+      <get src="http://cvs.mmbase.org/viewcvs/*checkout*/all/install-dependency.xml" dest="install-dependency.xml"
            usetimestamp="true"  ignoreerrors="true" />
     </then>
   </if>
@@ -205,7 +204,6 @@
             <include name="translations/**" />
             <include name="security/**" />
             <include name="utils/**" />
-            <include name="modules/**" />
             <include name="datatypes.xml" />
             <include name="framework.xml" />
           </fileset>
