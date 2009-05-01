@@ -1,15 +1,16 @@
 <%--
   This template delete existing items of a folder.
 --%>
-<%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.0" prefix="mm" %>
 <%-- expires is set so renaming a folder does not show the old name --%>
 <mm:content postprocessor="reducespace" expires="0">
-<mm:cloud method="delegate" jspvar="cloud">
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
 <%@include file="/shared/setImports.jsp" %>
+<fmt:bundle basename="nl.didactor.component.workspace.WorkspaceMessageBundle">
 <mm:treeinclude page="/cockpit/cockpit_header.jsp" objectlist="$includePath" referids="$referids">
   <mm:param name="extraheader">
-    <title><di:translate key="portfolio.deletefolderitems" /></title>
+    <title><fmt:message key="DELETEFOLDERITEMS" /></title>
   </mm:param>
 </mm:treeinclude>
 
@@ -31,7 +32,7 @@
 
 <%-- Check if the yes button is pressed --%>
 <mm:present referid="action1">
-  <mm:import id="action1text"><di:translate key="portfolio.deleteyes" /></mm:import>
+  <mm:import id="action1text"><fmt:message key="DELETEYES" /></mm:import>
   <mm:compare referid="action1" referid2="action1text">
 
     <mm:node number="$currentfolder">
@@ -70,7 +71,7 @@
 
 <%-- Check if the no button is pressed --%>
 <mm:present referid="action2">
-  <mm:import id="action2text"><di:translate key="portfolio.deleteno" /></mm:import>
+  <mm:import id="action2text"><fmt:message key="DELETENO" /></mm:import>
   <mm:compare referid="action2" referid2="action2text">
     <mm:redirect referids="$referids,currentfolder,typeof,contact?" page="$callerpage"/>
   </mm:compare>
@@ -83,15 +84,15 @@
 
 <div class="navigationbar">
 <div class="titlebar">
-<img src="<mm:treefile write="true" page="/gfx/icon_shareddocs.gif" objectlist="$includePath" referids="$referids"/>" width="25" height="13" border="0" title="<di:translate key="portfolio.portfolio" />" alt="<di:translate key="portfolio.portfolio" />"/>
-<di:translate key="portfolio.portfolio" />
+<img src="<mm:treefile write="true" page="/gfx/icon_shareddocs.gif" objectlist="$includePath" referids="$referids"/>" width="25" height="13" border="0" alt="<fmt:message key="PORTFOLIO" />"/>
+<fmt:message key="PORTFOLIO" />
 </div>
 </div>
 
 <div class="folders">
 
 <div class="folderHeader">
-<di:translate key="portfolio.portfolio" />
+<fmt:message key="PORTFOLIO" />
 </div>
 <div class="folderBody"></div>
 </div>
@@ -99,14 +100,14 @@
 <div class="mainContent">
 
   <div class="contentHeader">
-  	<di:translate key="portfolio.deletefolderitems" />
+  	<fmt:message key="DELETEFOLDERITEMS" />
   </div>
 
   <div class="contentBodywit">
 
     <%-- Show the form --%>
     <form name="deletefolderitems" method="post" action="<mm:treefile page="/portfolio/deleteitems.jsp" objectlist="$includePath" referids="$referids"/>">
-      <di:translate key="portfolio.deletefolderitemsyesno" />
+      <fmt:message key="DELETEFOLDERITEMSYESNO" />
       <p/>
 
       <!-- TODO show data in near future -->
@@ -120,11 +121,12 @@
       <mm:compare referid="contact" value="-1" inverse="true">
         <input type="hidden" name="contact" value="<mm:write referid="contact"/>"/>
       </mm:compare>
-      <input class="formbutton" type="submit" name="action1" value="<di:translate key="portfolio.deleteyes" />" />
-      <input class="formbutton" type="submit" name="action2" value="<di:translate key="portfolio.deleteno" />" />
+      <input class="formbutton" type="submit" name="action1" value="<fmt:message key="DELETEYES" />" />
+      <input class="formbutton" type="submit" name="action2" value="<fmt:message key="DELETENO" />" />
     </form>
   </div>
 </div>
 </div>
+</fmt:bundle>
 </mm:cloud>
 </mm:content>

@@ -1,17 +1,16 @@
-  <mm:compare referid="popcmd" value="addtodo">
+  <mm:compare referid="command" value="addtodo">
     <%@ include file="addtodo.jsp" %>
-    <mm:remove referid="popcmd"/>
-    <mm:import id="popcmd">-1</mm:import>
+    <mm:remove referid="command"/>
+    <mm:import id="command">-1</mm:import>
   </mm:compare>
-  <mm:compare referid="popcmd" value="savetodo">
+  <mm:compare referid="command" value="savetodo">
     <%@ include file="savetodo.jsp" %>
-    <mm:remove referid="popcmd"/>
-    <mm:import id="popcmd"><mm:write referid="returnto"/></mm:import>
+    <mm:remove referid="command"/>
+    <mm:import id="command"><mm:write referid="returnto"/></mm:import>
   </mm:compare>
-  <mm:compare referid="popcmd" value="deltodo">
+  <mm:compare referid="command" value="deltodo">
     <%@ include file="deltodo.jsp" %>
-    <mm:import id="dummy" jspvar="dummy" vartype="String" reset="true"><di:translate key="pop.msgremoveselectedtodo" /></mm:import>
-    <% msgString = dummy; %>
-    <mm:remove referid="popcmd"/>
-    <mm:import id="popcmd">continue</mm:import>
+    <% msgString = "De geselecteerde persoonlijke taken zijn verwijdert"; %>
+    <mm:remove referid="command"/>
+    <mm:import id="command">continue</mm:import>
   </mm:compare>
