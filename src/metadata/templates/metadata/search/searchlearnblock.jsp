@@ -1,7 +1,6 @@
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" %>
-<%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.0" prefix="mm" %>
 <mm:content postprocessor="reducespace">
-<mm:cloud method="delegate" jspvar="cloud">
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
 <%@include file="/shared/setImports.jsp" %>
 <%@page import="java.util.StringTokenizer"%>
 <mm:import externid="search_query"/>
@@ -9,8 +8,8 @@
 
 <%-- search classes --%>
 <mm:import externid="learnblock"/>
-<mm:list nodes="$learnblock" path="learnblocks,learnobjects,metadata,metavalue">
-<mm:import jspvar="metaValue" reset="true" vartype="String"><mm:field name="metavalue.value"/></mm:import>
+<mm:list nodes="$learnblock" path="learnblocks,learnobjects,metadata">
+<mm:import jspvar="metaValue" reset="true" vartype="String"><mm:field name="metadata.value"/></mm:import>
 <%
 try {
     metaValue=metaValue.toUpperCase();
@@ -45,7 +44,7 @@ try {
     if (hit) {
 	%>
 	    <tr>
-		<td class="listItem"><di:translate key="education.learnobject" /></td>
+		<td class="listItem"><di:translate id="learnobject">Leerobject</di:translate></td>
 		<td class="listItem">
 		    <mm:import id="learnobjectnumber" reset="true"><mm:field name="learnobjects.number"/></mm:import>
 		    <mm:node number="$learnobjectnumber">
