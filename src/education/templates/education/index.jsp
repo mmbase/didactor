@@ -3,19 +3,24 @@
           xmlns:jsp="http://java.sun.com/JSP/Page"
           xmlns:mm="http://www.mmbase.org/mmbase-taglib-2.0"
           xmlns:di="http://www.didactor.nl/ditaglib_1.0"
+          xmlns:di-t="urn:jsptagdir:/WEB-INF/tags/di/core"
           >
   <di:html
       styleClass="education"
-      type="application/xhtml+xml"
+      type="text/html"
       title_key="education.learnenvironmenttitle"
       expires="0"
       component="education">
+    <!--
+         serving out as tex/html because of:
+         https://bugzilla.mozilla.org/show_bug.cgi?id=456008
+         Flash will not be visible then in FF 3.0.2. Bug is fixed. In a few months it can be removed again.
+
+    -->
 
     <!-- wtf -->
     <mm:hasnode number="component.drm">
-      <mm:haspage page="/drm/testlicense.jsp">
-        <di:include page="/drm/testlicense.jsp" />
-      </mm:haspage>
+      <di:include page="/drm/testlicense.jsp" />
     </mm:hasnode>
 
     <di:include page="/education/bookmark.jspx" />

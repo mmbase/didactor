@@ -12,7 +12,7 @@ import javax.servlet.http.*;
 /**
  * Some didactor specific Node functions (implemented as 'bean')
  * @author Michiel Meeuwissen
- * @version $Id: PeopleClassFunction.java,v 1.10 2008-12-04 15:25:11 michiel Exp $
+ * @version $Id: PeopleClassFunction.java,v 1.8 2008-11-17 17:37:37 michiel Exp $
  */
 public class PeopleClassFunction {
     protected final static Logger log = Logging.getLoggerInstance(PeopleClassFunction.class);
@@ -30,9 +30,7 @@ public class PeopleClassFunction {
     }
 
 
-    /**
-     * Returns all classes asociated with a certain user.
-     */
+
     public NodeList peopleClasses() {
         Cloud cloud = node.getCloud();
         if (e == -1) {
@@ -53,7 +51,6 @@ public class PeopleClassFunction {
         RelationStep step = query.addRelationStep(cloud.getNodeManager("educations"), null, null);
         Queries.addConstraint(query, query.createConstraint(query.createStepField(step.getNext(),"number"), education.getNumber()));
         NodeList foundClasses = classes.getList(query);
-        log.debug("Classes " + foundClasses + " found with " + query.toSql());
         return foundClasses;
     }
 
@@ -92,6 +89,19 @@ public class PeopleClassFunction {
         return claz;
     }
 
+
+    public Set<Node> blockedLearnBlocks() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException{
+        // A user can have access to only "opened" top learnblocks (lession)
+        try {
+            Class classLessonChecker = Class.forName("nl.didactor.component.assessment.education_menu.utils.LessonChecker");
+            Method method = classLessonChecker.getMethod("getBlockedLearnblocksForThisUser", Node.class, Node.class);
+            return (Set<Node>) method.invoke(null, node.getCloud().getNode(e), node);
+        } catch (ClassNotFoundException cnfe) {
+            log.debug(cnfe);
+            // if assessment not installed, then no learnblocks are blocked.
+            return new HashSet<Node>();
+        }
+    }
 
 
 

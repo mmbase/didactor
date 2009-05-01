@@ -4,13 +4,10 @@
     xmlns:jsp="http://java.sun.com/JSP/Page"
     xmlns:mm="http://www.mmbase.org/mmbase-taglib-2.0"
     xmlns:di="http://www.didactor.nl/ditaglib_1.0"
-    id="learnblock"
     >
   <jsp:output omit-xml-declaration="yes" />
-  <mm:import externid="parent" />
-  <div class="learnblock ${empty parent ? 'active' : ''}"
-       id="${parent}${empty parent ? '' : '_'}${_node}_block">
-    <a class="learnblock_anchor" name="${parent}${empty parent ? '' : '_'}${_node}"><jsp:text> </jsp:text></a>
+  <div class="learnblock" id="learnblock_${_node}">
+    <a name="learnblock_${_node}"><jsp:text> </jsp:text></a>
 
     <mm:nodeinfo type="type">
       &lt;!-- type ${_} --&gt;
@@ -41,13 +38,8 @@
           <mm:relatednodescontainer role="posrel"
                                     type="learnobjects" searchdirs="destination">
             <mm:sortorder field="posrel.pos" />
-            <mm:relatednodes varStatus="status">
-              <div class="item${status.index} ${status.first ? 'first' : ''} ${status.last ? 'last' : ''}">
-                <mm:treeinclude
-                    page="/education/learnblocks/node.jspx"
-                    objectlist="${includePath}"
-                    referids="learnblock@parent"/>
-              </div>
+            <mm:relatednodes>
+              <di:include page="/education/learnblocks/node.jspx" />
             </mm:relatednodes>
           </mm:relatednodescontainer>
         </div>

@@ -4,8 +4,8 @@
     xmlns:jsp="http://java.sun.com/JSP/Page"
     version="2.0">
   <jsp:directive.tag description="Wether a certain component is available for the current object. Component is defined by either name or node number. Works like an mm-nodereferrer tag." />
-  <jsp:directive.attribute name="name"    />
-  <jsp:directive.attribute name="number"    />
+  <jsp:directive.attribute name="name"    /> 
+  <jsp:directive.attribute name="number"    /> 
   <mm:node>
     <mm:relatednodescontainer role="settingrel" type="components">
       <c:choose>

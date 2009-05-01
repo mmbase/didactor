@@ -1,13 +1,11 @@
 <jsp:root
-    version="2.0"
-    xmlns:jsp="http://java.sun.com/JSP/Page"
+    xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0"
     xmlns:mm="http://www.mmbase.org/mmbase-taglib-2.0"
     xmlns:di="http://www.didactor.nl/ditaglib_1.0"
     xmlns:c="http://java.sun.com/jsp/jstl/core"
     xmlns:fn="http://java.sun.com/jsp/jstl/functions"
     >
-  <mm:content type="application/xml" expires="0">
-
+  <mm:content type="application/xml" postprocessor="reducespace" expires="0">
     <mm:cloud rank="didactor user">
 
       <mm:import externid="learnobject" required="true"/>
@@ -113,7 +111,8 @@
             <mm:present referid="copybookNo">
               <!-- Determine if all questions are showed -->
               <c:choose>
-                <c:when test="${fn:length(my_questions) lt fn:length(questions)}">
+                <c:when test="${fn:length(my_questions) + fn:length(givenanswers) ge fn:length(questions)}">
+
                   <input type="button"
                          disabled="disabled"
                          value="${di:translate('education.buttontextdone')}"
@@ -125,9 +124,9 @@
                     <input type="button"
                            value="${di:translate('education.buttontextprev')}"
                            class="formbutton"
-                           onclick="document.forms.questionform.command.value='back'; postContent('${post}', document.forms.questionform);" />
+                           onclick="questionform.command.value='back'; postContent('${post}', questionform);" />
                   </c:if>
-                  <c:if test="${learnobject.questionsperpage gt 0 and page * learnobject.questionsperpage lt fn:length(questions)}">
+                  <c:if test="${learnobject.questionsperpage gt 0 or page * learnobject.questionsperpage lt fn:length(questions)}">
                     <input type="button"
                            value="${di:translate('education.buttontextnext')}"
                            class="formbutton"
@@ -137,7 +136,7 @@
                     <input type="button"
                            value="${di:translate('education.buttontextdone')}"
                            class="formbutton"
-                           onclick="document.forms.questionform.command.value='done'; postContent('${post}', document.forms.questionform);" />
+                           onclick="questionform.command.value='done'; postContent('${post}', questionform);" />
                   </c:if>
                 </c:otherwise>
               </c:choose>
