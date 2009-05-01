@@ -22,40 +22,40 @@
   </mm:compare>
 
   <form name="newtodoform" action="<mm:treefile page="/pop/index.jsp" objectlist="$includePath" 
-          referids="$popreferids,currentfolder,currentcomp">
+          referids="$referids,currentfolder,currentcomp">
         </mm:treefile>" method="post">
-    <input type="hidden" name="popcmd" value="savetodo">
+    <input type="hidden" name="command" value="savetodo">
     <input type="hidden" name="returnto" value="<mm:write referid="returnto"/>">
     <input type="hidden" name="todonumber" value="<mm:write referid="todonumber"/>">
     <input type="hidden" name="myfeedback1" value="<mm:write referid="myfeedback1"/>">
     <input type="hidden" name="myfeedback2" value="<mm:write referid="myfeedback2"/>">
-    <table class="font" width="90%">
+    <table width="90%" border="1">
       <tr>
-        <td width="80"><di:translate key="pop.todotask" /></td>
-        <td><input name="todoname" class="popFormInput" type="text" size="50" maxlength="255" value="<mm:write referid="todoname"/>"></td>
+        <td width="80">Taak</td>
+        <td><input name="todoname" type="text" size="50" maxlength="255" value="<mm:write referid="todoname"/>"></td>
       </tr>
       <tr>
-        <td><di:translate key="pop.description" /></td>
-        <td><textarea name="tododesc" class="popFormInput" cols="50" rows="5"><mm:write referid="tododesc"/></textarea></td>
+        <td>Beschrijving</td>
+        <td><textarea name="tododesc" cols="50" rows="5"><mm:write referid="tododesc"/></textarea></td>
       </tr>
       <tr>
-        <td><di:translate key="pop.tododuration" /></td>
+        <td>Verwachte duur</td>
         <td>
-          <input name="durationvalue" class="popDurationFormInput" type="text" size="15" maxlength="15" value="<mm:write referid="durationvalue"/>">
-          <select name="durationmeasure" class="popDurationFormSelect">
-            <option value="1"<mm:compare referid="durationmeasure" value="1"> selected</mm:compare>><di:translate key="pop.todohour" /></option>
-            <option value="2"<mm:compare referid="durationmeasure" value="2"> selected</mm:compare>><di:translate key="pop.tododay" /></option>
-            <option value="3"<mm:compare referid="durationmeasure" value="3"> selected</mm:compare>><di:translate key="pop.todoweek" /></option>
-            <option value="4"<mm:compare referid="durationmeasure" value="4"> selected</mm:compare>><di:translate key="pop.todomonth" /></option>
-            <option value="5"<mm:compare referid="durationmeasure" value="5"> selected</mm:compare>><di:translate key="pop.todoyear" /></option>
+          <input name="durationvalue" type="text" size="15" maxlength="15" value="<mm:write referid="durationvalue"/>">
+          <select name="durationmeasure">
+            <option value="1"<mm:compare referid="durationmeasure" value="1"> selected</mm:compare>>uur</option>
+            <option value="2"<mm:compare referid="durationmeasure" value="2"> selected</mm:compare>>dag</option>
+            <option value="3"<mm:compare referid="durationmeasure" value="3"> selected</mm:compare>>week</option>
+            <option value="4"<mm:compare referid="durationmeasure" value="4"> selected</mm:compare>>maand</option>
+            <option value="5"<mm:compare referid="durationmeasure" value="5"> selected</mm:compare>>jaar</option>
           </select>
         </td>
       </tr>
       <mm:compare referid="currentcomp" value="-1">
         <tr>
-          <td><di:translate key="pop.competence" /></td>
+          <td>Competentie</td>
           <td>
-            <select name="todocomp" class="popCompFormSelect">
+            <select name="todocomp">
               <option value="-1">...</option>
               <%@ include file="getcompetencies.jsp" %>
               <%  TreeMap competenciesIterator = (TreeMap) allCompetencies.clone();
@@ -73,12 +73,7 @@
         </tr>
       </mm:compare>
     </table>
-    <mm:compare referid="todonumber" value="-1">
-      <input type="submit" class="formbutton" value="<di:translate key="pop.makebutton" />">
-    </mm:compare>
-    <mm:compare referid="todonumber" value="-1" inverse="true">
-      <input type="submit" class="formbutton" value="<di:translate key="pop.savebutton" />">
-    </mm:compare>
-    <input type="submit" class="formbutton" value="<di:translate key="pop.backbuttonlc" />" onClick="newtodoform.popcmd.value='continue'">
+    <input type="submit" value="aanmaken">
+    <input type="submit" value="terug" onClick="newtodoform.command.value='continue'">
   </form>
 </div>

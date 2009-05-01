@@ -1,47 +1,44 @@
-<jsp:root version="2.0"
-          xmlns:jsp="http://java.sun.com/JSP/Page"
-          xmlns:fn="http://java.sun.com/jsp/jstl/functions"
-          xmlns:mm="http://www.mmbase.org/mmbase-taglib-2.0"
-          xmlns:di="http://www.didactor.nl/ditaglib_1.0">
-  <jsp:output omit-xml-declaration="yes" />
-
-  <mm:nodeinfo id="objecttype" type="type" write="false" />
-
-  <mm:link referid="wizardjsp" referids="_node@objectnumber,_node@origin">
-    <mm:param name="wizard">config/<mm:write referid="objecttype" />/<mm:write referid="objecttype" /></mm:param>
-    <mm:param name="path">${sessionScope.eduname}${sessionScope.path}</mm:param>
-    <a href='${_}' title="${di:translate('education.edit')} ${objecttype}">
-      <di:icon name="edit_learnobject" />
-      <mm:hasfield name="name"><mm:field name="name" /></mm:hasfield>
-      <mm:hasfield name="title"><mm:field name="title" /></mm:hasfield>
-    </a>
-  </mm:link>
-
-  <!--
-      <mm:present referid="pdfurl">
-      <mm:compare referid="objecttype" value="pages">
-      <mm:link referid="pdfurl" referids="_node@number">
-      <a href='${_}' target='text'><img src='gfx/icpdf.gif' border='0' title='(PDF)' alt='(PDF)'/></a>
-      </mm:link>
-      </mm:compare>
-      <mm:compare referid="objecttype" value="learnblocks">
-      <mm:link referid="pdfurl" referids="_node@number">
-      <a href='${_}' target='text'><img src='gfx/icpdf.gif' border='0' title='(PDF)' alt='(PDF)'/></a>
-      </mm:link>
-      </mm:compare>
-      </mm:present>
-  -->
-
-  <mm:field write="false" name="number" id="node_number" />
-  <mm:node number="component.metadata" notfound="skip"> <!-- WTF -->
-    <mm:link page="metaedit.jsp" referids="node_number@number">
-      <a href='${_}'><img id='img_${_}' src='' border='0' title='' alt='' /></a>
-    </mm:link>
-  </mm:node>
-  <mm:node number="component.versioning" notfound="skip"> <!-- WTF -->
-    <mm:link page="versioning.jsp" referids="node_number@nodeid">
-      <a href="${_}"><img src="gfx/versions.gif" border="0" /></a>
-    </mm:link>
-  </mm:node>
-
-</jsp:root>
+<mm:node number="<%= learnobjects2_number %>">
+   <%@include file="whichimage.jsp"%>
+   <mm:import id="objecttype" reset="true"><mm:nodeinfo type="type" /></mm:import>
+   
+   <mm:import id="mark_error" reset="true"></mm:import>
+   <mm:compare referid="objecttype" value="tests">
+       <mm:remove referid="questionamount" />
+       <mm:field name="questionamount" id="questionamount">
+           <mm:isgreaterthan value="0">
+               <mm:countrelations type="questions">
+                   <mm:islessthan value="$questionamount">
+                       <mm:import id="mark_error" reset="true">Er zijn minder vragen ingevoerd dan er gesteld moeten worden.</mm:import>
+                   </mm:islessthan>
+               </mm:countrelations>
+           </mm:isgreaterthan>
+           <mm:remove referid="requiredscore" />
+           <mm:field name="requiredscore" id="requiredscore">
+             <mm:countrelations type="questions">
+                 <mm:islessthan value="$requiredscore">
+                     <mm:import id="mark_error" reset="true">Er zijn minder vragen ingevoerd dan er goed beantwoord moeten worden.</mm:import>
+                 </mm:islessthan>
+             </mm:countrelations>
+             <mm:isgreaterthan referid="questionamount" value="0">
+                 <mm:islessthan referid="questionamount" value="$requiredscore">
+                   <mm:import id="mark_error" reset="true">Er worden minder vragen gesteld dan er goed beantwoord moeten worden.</mm:import>
+                 </mm:islessthan>
+             </mm:isgreaterthan>
+           </mm:field>
+       </mm:field>
+   </mm:compare>
+   <mm:compare referid="objecttype" value="mcquestions">
+       <mm:import id="mark_error" reset="true">Een multiple-choice vraag moet minstens 1 goed antwoord hebben</mm:import>
+       <mm:relatednodes type="mcanswers" constraints="mcanswers.correct > '0'" max="1">
+           <mm:import id="mark_error" reset="true"></mm:import>
+       </mm:relatednodes>
+   </mm:compare>
+   
+   lbTree<%= lastLearnObject[depth-1] %>z.addItem(
+       "<mm:field name="name"><mm:isempty><mm:field name="title"/></mm:isempty><mm:isnotempty><mm:write/></mm:isnotempty></mm:field><mm:present referid="pdfurl"><mm:compare referid="objecttype" value="pages"></a> <a href='<mm:write referid="pdfurl"/>&number=<mm:field name="number"/>' target='text'><img src='gfx/icpdf.gif' border='0' alt='(PDF)'/></mm:compare><mm:compare referid="objecttype" value="learnblocks"></a> <a href='<mm:write referid="pdfurl"/>&number=<mm:field name="number"/>' target='text'><img src='gfx/icpdf.gif' border='0' alt='(PDF)'/></mm:compare></mm:present></a> <a href='metaedit.jsp?number=<mm:field name="number"/>' target='text'><img id='img_<mm:field name="number"/>' src='<%= imageName %>' border='0' alt='<%= sAltText %>'> <mm:isnotempty referid="mark_error"></a> <a style='color: red; font-weight: bold' href='javascript:alert(&quot;<mm:write referid="mark_error"/>&quot;);'>!</mm:isnotempty>",
+       "<mm:write referid="wizardjsp"/>?wizard=<mm:write referid="objecttype" />&objectnumber=<mm:field name="number" />&origin=<mm:field name="number" />",
+       null,
+       "bewerk object",
+       "<mm:treefile write="true" page="/education/wizards/gfx/edit_learnobject.gif" objectlist="" />");
+</mm:node>
