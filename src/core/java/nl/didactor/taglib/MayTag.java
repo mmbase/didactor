@@ -7,13 +7,6 @@ import javax.servlet.jsp.tagext.*;
 import javax.servlet.jsp.*;
 import javax.servlet.Servlet;
 import org.mmbase.bridge.jsp.taglib.*;
-import org.mmbase.bridge.jsp.taglib.util.Attribute;
-import org.mmbase.bridge.jsp.taglib.util.Referids;
-import org.mmbase.security.Action;
-import org.mmbase.util.logging.Logger;
-import org.mmbase.util.logging.Logging;
-import org.mmbase.util.functions.Parameters;
-
 import nl.didactor.component.Component;
 import java.util.StringTokenizer;
 
@@ -21,40 +14,43 @@ import java.util.StringTokenizer;
  * MayTag: retrieve a security privilege for a component
  * @author Johannes Verelst &lt;johannes.verelst@eo.nl&gt;
  */
-public class MayTag extends CloudReferrerTag implements Condition {
-    private static final Logger log = Logging.getLoggerInstance(MayTag.class);
-    private Attribute component = Attribute.NULL;
-    private Attribute  action   = Attribute.NULL;
-    private Attribute referids =  Attribute.NULL;
-    private Attribute inverse =  Attribute.NULL;
+public class MayTag extends CloudReferrerTag { 
+    private String component;
+    private String action;
+    private String[] arguments = new String[0];
 
     /**
      * Set the value for the 'component' argument of the May tag
      * @param component Component value
      */
-    public void setComponent(String component) throws JspException {
-        this.component = getAttribute(component);
+    public void setComponent(String component) {
+        this.component = component;
     }
 
     /**
      * Set the value for the 'action' argument of the May tag
      * @param action Action identifier
      */
-    public void setAction(String action) throws JspTagException {
-        this.action = getAttribute(action);
+    public void setAction(String action) {
+        this.action = action;
     }
 
     /**
+     * Set the value for the 'arguments' argument of the May tag, Comma seperated.
+     * @param arguments Optional arguments
      */
-    public void setReferids(String arguments) throws JspTagException {
-        this.referids = getAttribute(arguments);
-    }
-    public void setInverse(String i) throws JspTagException {
-        this.inverse = getAttribute(i);
+    public void setArguments(String arguments) {
+        StringTokenizer st = new StringTokenizer(arguments, ",");
+        if (st.countTokens() > 0) {
+            this.arguments = new String[st.countTokens()];
+            for (int i=0; i<st.countTokens(); i++) {
+                this.arguments[i] = st.nextToken();
+            }
+        }
     }
 
     /**
-     * Decide whether or not the body of the tag should be executed, based on:
+     * Decide whether or not the body of the tag should be executed, based on: 
      * <ul>
      *   <li>Given component name (is used to find the correct class to handle the setting)</li>
      *   <li>Given action name</li>
@@ -64,34 +60,29 @@ public class MayTag extends CloudReferrerTag implements Condition {
      * </ul>
      */
     public int doStartTag() throws JspTagException {
-        Component comp = Component.getComponent(component.getString(this));
+        Component comp = Component.getComponent(component);
         if (comp == null) {
-            log.error("Component "+ component + "cannot be found" );
+            System.err.println( "Component "+ component + "cannot be found" );
             return SKIP_BODY;
         }
 
-        boolean[] value;
-
-        Action a = comp.getActions().get(action.getString(this));
-        if (a == null) {
-            throw new JspTagException("No such action " + action + " defined for component " + comp + ". The possible actions are " + comp.getActions());
+        boolean[] value = new boolean[0];
+        
+        try {
+            value = comp.may(action, getCloud(), getContextProvider().getContextContainer(), arguments);
+        } catch (IllegalArgumentException e) {
+            throw new JspTagException(e.getMessage());
         }
-        Parameters params = a.createParameters();
-        fillStandardParameters(params);
-        DidactorHelper.fillStandardParameters(this, params);
-
-        Map m = Referids.getReferids(referids, this);
-        for (Map.Entry entry : ((Collection<Map.Entry>) m.entrySet())) {
-            String key = (String) entry.getKey();
-            params.set(key, entry.getValue());
-        }
-        log.debug("Checking " + a + " with " + params);
-        params.checkRequiredParameters();
-        value = comp.may(getCloudVar(), a, params);
-
-        if (value[0] != inverse.getBoolean(this, false)) {
+    
+        if (value[0]) {
             return EVAL_BODY;
         } else {
+            try {
+                pageContext.getOut().print( "<h1>Permission denied!</h1>");
+            }
+            catch (java.io.IOException e) {
+               System.err.println( "di:may IO error:" + e.getMessage());
+            }
             return SKIP_BODY;
         }
     }

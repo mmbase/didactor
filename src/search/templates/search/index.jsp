@@ -2,17 +2,19 @@
   This template shows the search page.
 --%>
 
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.0" prefix="mm" %>
 <%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <mm:content postprocessor="reducespace" expires="0">
-<mm:cloud method="delegate" jspvar="cloud">
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
 
+<fmt:bundle basename="nl.didactor.component.search.SearchMessageBundle">
 <%@include file="/shared/setImports.jsp" %>
 
 <mm:treeinclude page="/cockpit/cockpit_header.jsp" objectlist="$includePath" referids="$referids">
   <mm:param name="extraheader">
-    <title><di:translate key="search.search_caption" /></title>
+    <title>Zoeken</title>
   </mm:param>
 </mm:treeinclude>
 
@@ -25,8 +27,8 @@
 <div class="rows">
   <div class="navigationbar">
     <div class="titlebar">
-     <img src="<mm:treefile write="true" page="/gfx/icon_search.gif" objectlist="$includePath" referids="$referids"/>" width="25" height="13" border="0" title="<di:translate key="search.advancedsearch" />" alt="<di:translate key="search.advancedsearch" />" />
-    <di:translate key="search.advancedsearch" />
+     <img src="<mm:treefile write="true" page="/gfx/icon_search.gif" objectlist="$includePath" referids="$referids"/>" width="25" height="13" border="0" alt="<fmt:message key="ADVANCEDSEARCH"/>"/>
+    <fmt:message key="ADVANCEDSEARCH"/>
     </div>
   </div>
 
@@ -34,44 +36,44 @@
   <div class="folders">
 
   <div class="folderHeader">
-  <di:translate key="search.searchquery" />
+  <fmt:message key="SEARCHQUERY"/>
   </div>
 
   <div class="folderBody">
-    <di:translate key="search.search_for" /><br />
+    <di:translate id="search_for">Zoeken op:</di:translate><br />
     <form action="index.jsp" method="GET">
     <input type="text" name="search_query" style="width: 150px" value="<mm:write referid="search_query"/>"/>
     <p>
     <select name="search_type" style="width: 150px">
       <mm:compare referid="search_type" value="all">
-	<option value="all" selected="selected"><di:translate key="search.all_words" /></option>
+	<option value="all" selected="selected"><di:translate id="all_words">Alle woorden</di:translate></option>
       </mm:compare>
        <mm:compare referid="search_type" value="all" inverse="true">
-	<option value="all"><di:translate key="search.all_words" /></option>
+	<option value="all"><di:translate id="all_words">Alle woorden</di:translate></option>
       </mm:compare>
       
       <mm:compare referid="search_type" value="any">
-	<option value="any" selected="selected"><di:translate key="search.one_or_more_words" /></option>
+	<option value="any" selected="selected"><di:translate id="one_or_more_words">&Eacute;&eacute;n of meer woorden</di:translate></option>
       </mm:compare>
       <mm:compare referid="search_type" value="any" inverse="true">
-        <option value="any"><di:translate key="search.one_or_more_words" /></option>
+        <option value="any"><di:translate id="one_or_more_words">&Eacute;&eacute;n of meer woorden</di:translate></option>
 	</mm:compare>
 		    
       <mm:compare referid="search_type" value="exact">
-	<option value="exact" selected="selected"><di:translate key="search.exact_match" /></option>
+	<option value="exact" selected="selected"><di:translate id="exact_match">Exacte resultaten</di:translate></option>
       </mm:compare>
 
       <mm:compare referid="search_type" value="exact" inverse="true">
-	<option value="exact"><di:translate key="search.exact_match" /></option>
+	<option value="exact"><di:translate id="exact_match">Exacte resultaten</di:translate></option>
       </mm:compare>
 
 
     </select>
     </p>
     <p>
-    <di:translate key="search.search_in" /><br>
+    <di:translate id="search_in">Zoeken in:</di:translate><br>
     <select name="search_component" style="width: 150px">
-      <option value=""><di:translate key="search.all" /></option>
+      <option value=""><di:translate id="all">Alles</di:translate></option>
       <%-- hier door alle componenten itereren ... --%>
       <mm:node number="$provider">
        <mm:related path="settingrel,components">
@@ -90,7 +92,7 @@
     </select>
     </p>
     <p>
-    <input type="submit" value="<di:translate key="search.search" />" />
+    <input type="submit" value="<di:translate id="search">zoek</di:translate>" />
     </p>
     </form>
    </div>
@@ -98,7 +100,7 @@
 </div>
 <div class="mainContent">
   <div class="contentHeader">
-  <di:translate key="search.search_result" />
+  <di:translate id="search_result">zoek resultaat</di:translate>
   </div>
 
   <div class="contentSubHeader">
@@ -113,8 +115,8 @@
         ) { %>
       <table class="listTable">
       <tr>
-	<th class="listHeader"><di:translate key="search.component" /></th>
-	<th class="listHeader"><di:translate key="search.location" /></th>
+	<th class="listHeader"><di:translate id="component">Onderdeel</di:translate></th>
+	<th class="listHeader"><di:translate id="location">Plek</di:translate></th>
       </tr>
 	<%-- include search results  for each component --%>
       <mm:node number="$provider">
@@ -144,5 +146,6 @@
 </div>
 <mm:treeinclude page="/cockpit/cockpit_footer.jsp" objectlist="$includePath" referids="$referids" />
 
+</fmt:bundle>
 </mm:cloud>
 </mm:content>

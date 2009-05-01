@@ -1,4 +1,4 @@
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm"%>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.0" prefix="mm"%>
 
 <%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
 
@@ -6,7 +6,7 @@
 
 <mm:content postprocessor="reducespace" expires="0">
 
-<mm:cloud method="delegate" jspvar="cloud">
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
 
 
 
@@ -34,12 +34,37 @@
 
 
 <%-- remove old results --%>
+
 <mm:present referid="madetest" inverse="true">
 
-
 <%-- find student's copybook --%>
+
+<mm:import id="copybookNo"/>
+
 <mm:node number="$student">
-   <%@include file="find_copybook.jsp"%>
+
+  <mm:relatedcontainer path="classrel,classes">
+
+    <mm:constraint field="classes.number" value="$class"/>
+
+    <mm:related>
+
+      <mm:node element="classrel">
+
+        <mm:relatednodes type="copybooks">
+
+          <mm:remove referid="copybookNo"/>
+
+          <mm:field id="copybookNo" name="number" write="false"/>
+
+        </mm:relatednodes>
+
+      </mm:node>
+
+    </mm:related>  
+
+  </mm:relatedcontainer>
+
 </mm:node>
 
 
@@ -78,7 +103,7 @@
 
     </mm:relatednodes>
 
-
+    
 
   </mm:relatednodescontainer>
 
@@ -114,11 +139,7 @@
 
 <mm:node number="$learnobject">
 
-  <mm:field name="showtitle">
-    <mm:compare value="1">
-      <h1><mm:field name="name"/></h1>
-    </mm:compare>
-  </mm:field>
+  <h1><mm:field name="name"/></h1>
 
 
 
@@ -190,7 +211,7 @@
 
       <mm:import id="questionperpageamount"><mm:write referid="questionamount"/></mm:import>
 
-     </mm:islessthan>
+     </mm:islessthan>	
 
   </mm:write>
 
@@ -204,7 +225,7 @@
 
       <mm:import id="questionperpageamount">1</mm:import>
 
-     </mm:islessthan>
+     </mm:islessthan>	
 
   </mm:write>
 
@@ -214,7 +235,7 @@
 
 
 
-
+  
 
   <%-- Determine pages to show --%>
 
@@ -360,7 +381,7 @@
 
   <mm:compare referid="pagesamount" value="0">
 
-    <di:translate key="education.testwithoutquestions" />
+    <di:translate id="testwithoutquestions">This test has no questions.</di:translate>
 
     <p/>
 
@@ -372,11 +393,11 @@
 
   <% if ( pageCounter.intValue() == pagesAmount.intValue() || pagesAmount.intValue() == 0 ) { %>
 
-       <input type="submit" value="<di:translate key="education.buttontextdone" />" class="formbutton"/>
+       <input type="submit" value="<di:translate id="buttontextdone">OK</di:translate>" class="formbutton"/>
 
   <% } else { %>
 
-       <input type="submit" value="<di:translate key="education.buttontextnext" />" class="formbutton"/>
+       <input type="submit" value="<di:translate id="buttontextnext">Volgende</di:translate>" class="formbutton"/>
 
   <% } %>
 
