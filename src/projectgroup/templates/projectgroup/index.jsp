@@ -2,11 +2,11 @@
   This template shows the personal workspace (in dutch: persoonlijke werkruimte).
 --%>
 <%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm"%>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.1" prefix="mm"%>
 <%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di"%>
 <%-- expires is set so renaming a folder does not show the old name --%>
 <mm:content postprocessor="reducespace" expires="0">
-	<mm:cloud method="delegate" jspvar="cloud">
+	<mm:cloud loginpage="/login.jsp" jspvar="cloud">
 		<%@include file="/shared/setImports.jsp"%>
 			<mm:treeinclude page="/cockpit/cockpit_header.jsp"
 				objectlist="$includePath" referids="$referids">
@@ -45,7 +45,6 @@
 			<div class="titlebar"><img
 				src="<mm:treefile write="true" page="/gfx/icon_shareddocs.gif" objectlist="$includePath" referids="$referids"/>"
 				width="25" height="13" border="0"
-				title="<di:translate key="workspace.shareddocuments" />"
 				alt="<di:translate key="workspace.shareddocuments" />" /> <di:translate key="workspace.projectgroups" /></div>
 			</div>
 
@@ -53,14 +52,14 @@
 
 			<div class="folderHeader"><di:translate key="workspace.projectgroups" /></div>
 
-            <div class="folderBody">
+
 				<a
 					href="<mm:treefile page="/projectgroup/create.jsp" objectlist="$includePath" referids="$referids">
            <mm:param name="callerpage">/projectgroup/index.jsp</mm:param>
 	 </mm:treefile>">
 				<img
 					src="<mm:treefile page="/workspace/gfx/map maken.gif" objectlist="$includePath" referids="$referids"/>"
-					border="0" title="<di:translate key="workspace.createprojectgroup" />" alt="<di:translate key="workspace.createprojectgroup" />" /></a>
+					border="0" alt="<di:translate key="workspace.createprojectgroup" />" /></a>
 
 				<mm:isgreaterthan referid="workgroup" value="0">
 					<a
@@ -70,7 +69,7 @@
 
 					<img
 						src="<mm:treefile page="/workspace/gfx/map hernoemen.gif" objectlist="$includePath" referids="$referids"/>"
-						border="0" title="<di:translate key="workspace.renameprojectgroup" />" alt="<di:translate key="workspace.renameprojectgroup" />" /></a>
+						border="0" alt="<di:translate key="workspace.renameprojectgroup" />" /></a>
 
 					<a
 						href="<mm:treefile page="/projectgroup/delete.jsp" objectlist="$includePath" referids="$referids">
@@ -78,7 +77,7 @@
 	   </mm:treefile>">
 					<img
 						src="<mm:treefile page="/workspace/gfx/verwijder map.gif" objectlist="$includePath" referids="$referids"/>"
-						border="0" title="<di:translate key="workspace.deleteprojectgroup" />" alt="<di:translate key="workspace.deleteprojectgroup" />" /></a>
+						border="0" alt="<di:translate key="workspace.deleteprojectgroup" />" /></a>
 				</mm:isgreaterthan>
 				<br clear="all">
 
@@ -109,7 +108,7 @@
 
 			<div class="mainContent">
 
-			<div class="contentHeader">  &nbsp;</div>  
+			<div class="contentHeader">  &nbsp;</div>
 
 			<mm:node referid="workgroup" notfound="skip">
 
@@ -123,17 +122,15 @@
 				<img
 					src="<mm:treefile page="/gfx/icon_addcontact.gif" objectlist="$includePath" referids="$referids"/>"
 					width="50" height="28" border="0"
-					title="<di:translate key="address.addcontact" />"
 					alt="<di:translate key="address.addcontact" />" /></a> <input type="image"
 					name="action_delete" value="delete"
 					src="<mm:treefile page="/gfx/icon_deletecontact.gif" objectlist="$includePath" referids="$referids"/>"
 					width="50" height="28" border="0"
-					title="<di:translate key="address.deletecontact" />"
-					alt="<di:translate key="address.deletecontact" />" />
+					alt="<di:translate key="address.deletecontact" />" /></a>
 					 
 					<a href="<mm:treefile page="/workspace/index.jsp" objectlist="$includePath" referids="$referids,workgroup"><mm:param name="typeof">4</mm:param></mm:treefile>">
 					<img src="<mm:treefile page="/workspace/gfx/document plaatsen.gif" objectlist="$includePath" referids="$referids"/>"
-					border="0" title="<di:translate key="workspace.adddocument" />" alt="<di:translate key="workspace.adddocument" />" /></div>
+					border="0" alt="<di:translate key="workspace.adddocument" />" /></div>
 				<div class="contentBody"><mm:relatednodescontainer type="people">
 					<di:table maxitems="50">
 
@@ -180,7 +177,6 @@
 									<mm:compare referid="nodetype" value="contacts">
 										<img
 											src="<mm:treefile page="/address/gfx/contact.gif" objectlist="$includePath" referids="$referids"/>"
-											title="<di:translate key="address.contact" />"
 											alt="<di:translate key="address.contact" />" />
 									</mm:compare>
 
@@ -192,13 +188,11 @@
 											<mm:compare referid="isonline" value="0">
 												<img
 													src="<mm:treefile page="/address/gfx/editor_offline.gif" objectlist="$includePath" referids="$referids"/>"
-													title="<di:translate key="core.editoroffline" />"
 													alt="<di:translate key="core.editoroffline" />" />
 											</mm:compare>
 											<mm:compare referid="isonline" value="1">
 												<img
 													src="<mm:treefile page="/address/gfx/editor_online.gif" objectlist="$includePath" referids="$referids"/>"
-													title="<di:translate key="core.editoronline" />"
 													alt="<di:translate key="core.editoronline" />" />
 											</mm:compare>
 										</di:hasrole>
@@ -207,13 +201,11 @@
 											<mm:compare referid="isonline" value="0">
 												<img
 													src="<mm:treefile page="/address/gfx/editor_offline.gif" objectlist="$includePath" referids="$referids"/>"
-													title="<di:translate key="core.editoroffline" />"
 													alt="<di:translate key="core.editoroffline" />" />
 											</mm:compare>
 											<mm:compare referid="isonline" value="1">
 												<img
 													src="<mm:treefile page="/address/gfx/editor_online.gif" objectlist="$includePath" referids="$referids"/>"
-													title="<di:translate key="core.editoronline" />"
 													alt="<di:translate key="core.editoronline" />" />
 											</mm:compare>
 										</di:hasrole>
@@ -222,13 +214,11 @@
 											<mm:compare referid="isonline" value="0">
 												<img
 													src="<mm:treefile page="/address/gfx/administrators_offline.gif" objectlist="$includePath" referids="$referids"/>"
-													title="<di:translate key="core.administratoroffline" />"
 													alt="<di:translate key="core.administratoroffline" />" />
 											</mm:compare>
 											<mm:compare referid="isonline" value="1">
 												<img
 													src="<mm:treefile page="/address/gfx/administrators_online.gif" objectlist="$includePath" referids="$referids"/>"
-													title="<di:translate key="core.administratoronline" />"
 													alt="<di:translate key="core.administratoronline" />" />
 											</mm:compare>
 										</di:hasrole>
@@ -237,13 +227,11 @@
 											<mm:compare referid="isonline" value="0">
 												<img
 													src="<mm:treefile page="/address/gfx/teachers_offline.gif" objectlist="$includePath" referids="$referids"/>"
-													title="<di:translate key="core.teacheroffline" />"
 													alt="<di:translate key="core.teacheroffline" />" />
 											</mm:compare>
 											<mm:compare referid="isonline" value="1">
 												<img
 													src="<mm:treefile page="/address/gfx/teachers_online.gif" objectlist="$includePath" referids="$referids"/>"
-													title="<di:translate key="core.teacheronline" />"
 													alt="<di:translate key="core.teacheronline" />" />
 											</mm:compare>
 										</di:hasrole>
@@ -252,13 +240,11 @@
 											<mm:compare referid="isonline" value="0">
 												<img
 													src="<mm:treefile page="/address/gfx/students_offline.gif" objectlist="$includePath" referids="$referids"/>"
-													title="<di:translate key="core.studentoffline" />" 
 													alt="<di:translate key="core.studentoffline" />" />
 											</mm:compare>
 											<mm:compare referid="isonline" value="1">
 												<img
 													src="<mm:treefile page="/address/gfx/students_online.gif" objectlist="$includePath" referids="$referids"/>"
-													title="<di:translate key="core.studentonline" />" 
 													alt="<di:translate key="core.studentonline" />" />
 											</mm:compare>
 										</di:hasrole>
@@ -291,7 +277,7 @@
 				</mm:relatednodescontainer>
 			</mm:node></div>
 			</form>
-			
+			</div>
 			<!--comment-->
 
 		<script>
@@ -308,7 +294,7 @@
 	  }
       }
 
-</script></div>
+</script>
 
 		<mm:treeinclude page="/cockpit/cockpit_footer.jsp"
 			objectlist="$includePath" referids="$referids" />

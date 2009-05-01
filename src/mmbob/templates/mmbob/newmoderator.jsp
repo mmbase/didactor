@@ -2,14 +2,13 @@
 <%@ page contentType="text/html; charset=utf-8" language="java" %>
 <%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
 <%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.0" prefix="mm" %>
-<mm:cloud method="delegate" jspvar="cloud">
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
 <%@include file="/shared/setImports.jsp" %>
 <%@ include file="thememanager/loadvars.jsp" %>
 <%@ include file="settings.jsp" %>
 <html>
 <head>
    <link rel="stylesheet" type="text/css" href="<mm:write referid="style_default" />" />
-   <link rel="stylesheet" type="text/css" href="<mm:treefile page="/css/base.css" objectlist="$includePath" referids="$referids" />" />
    <title>MMBob</title>
 </head>
 <mm:import externid="forumid" />
@@ -36,14 +35,14 @@
                 </mm:url>" method="post">
     <tr><th align="left"><di:translate key="mmbob.presentmoderators" /></th><td colspan="2" align="left">
           <mm:nodelistfunction set="mmbob" name="getModerators" referids="forumid,postareaid">
-            <mm:field name="account" /> (<di:person />)<br />
+            <mm:field name="account" /> (<mm:field name="firstname" /> <mm:field name="lastname" />)<br />
           </mm:nodelistfunction>
     <p />
     </td></tr>
     <tr><th align="left"><di:translate key="mmbob.possiblemoderators" /></th><td colspan="2">
           <select name="newmoderator">
           <mm:nodelistfunction set="mmbob" name="getNonModerators" referids="forumid,postareaid">
-                <option value="<mm:field name="id" />"><mm:field name="account" /> (<di:person  />)<br />
+                <option value="<mm:field name="id" />"><mm:field name="account" /> (<mm:field name="firstname" /> <mm:field name="lastname" />)<br />
           </mm:nodelistfunction>
         </select>
     </td></tr>

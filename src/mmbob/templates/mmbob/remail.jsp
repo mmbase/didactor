@@ -2,14 +2,13 @@
 <%@ page contentType="text/html; charset=utf-8" language="java" %>
 <%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
 <%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.0" prefix="mm" %>
-<mm:cloud method="delegate" jspvar="cloud">
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
 <%@include file="/shared/setImports.jsp" %>
 <%@ include file="thememanager/loadvars.jsp" %>
 <%@ include file="settings.jsp" %>
 <html>
 <head>
    <link rel="stylesheet" type="text/css" href="<mm:write referid="style_default" />" />
-   <link rel="stylesheet" type="text/css" href="<mm:treefile page="/css/base.css" objectlist="$includePath" referids="$referids" />" />
    <title>MMBob</title>
 </HEAD>
 <mm:import externid="forumid" />
@@ -39,9 +38,8 @@
                 </mm:createnode>
 
 
-                <!-- send the email node (Didactor way) -->
-                <mm:node referid="mail1">
-                   <mm:setfield name="type">1</mm:setfield>
+                <!-- send the email node -->                    <mm:node referid="mail1">
+                        <mm:field name="mail(oneshot)" />
                 </mm:node>
         <mm:import id="mailed">true</mm:import>
                 </mm:relatednodes>

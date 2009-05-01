@@ -135,7 +135,6 @@ public class Processor
       nodePerson.setValue("city", participant.getCity());
       nodePerson.setValue("country", participant.getCountry());
       nodePerson.setValue("email", participant.getEmail());
-      nodePerson.setValue("username", participant.getExternid());
 
 
       SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
@@ -195,17 +194,11 @@ public class Processor
                   rlClassRelToDelete.remove(nlClassRel.get(0));
                }
             }
-
+/*
             //profile for the class
-            Node nodeProfileRelation = null;
-            try
-            {
-               nodeProfileRelation = this.storeProfile(nodePerson, sClassName.split("#")[2]);
-               rlProfilesToDelete.remove(nodeProfileRelation);
-            }
-            catch (Exception ex)
-            {
-            }
+            Node nodeProfileRelation = this.storeProfile(nodePerson, sClassName.substring(1,7));
+            rlProfilesToDelete.remove(nodeProfileRelation);
+            */
          }
       }
 

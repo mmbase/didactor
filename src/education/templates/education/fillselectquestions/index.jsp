@@ -1,36 +1,14 @@
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm"%>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.1" prefix="mm"%>
 <%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
 
 <mm:content postprocessor="reducespace" expires="0">
-<mm:cloud method="delegate" jspvar="cloud">
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
 
 <mm:import externid="question" required="true"/>
-<mm:import externid="madetest">-1</mm:import>
 
 <%@include file="/shared/setImports.jsp" %>
 
 <mm:node number="$question">
-   <% String allGivenAnswers = ""; %>
-   <mm:relatedcontainer path="givenanswers,madetests">
-      <mm:constraint field="madetests.number" value="$madetest"/>
-      <mm:related>
-         <mm:node element="givenanswers">
-            <mm:relatednodes type="answers">
-               <mm:first>
-                  <mm:field name="number" jspvar="answerNo" vartype="String">
-                     <% allGivenAnswers = answerNo; %>
-                  </mm:field>
-               </mm:first>
-               <mm:first inverse="true">
-                  <mm:field name="number" jspvar="answerNo" vartype="String">
-                     <% allGivenAnswers += "," + answerNo; %>
-                  </mm:field>
-               </mm:first>
-            </mm:relatednodes>
-         </mm:node>
-      </mm:related>
-   </mm:relatedcontainer>
-
     <mm:import id="temp" jspvar="temp"><mm:field name="text" escape="none"/></mm:import>
     <mm:import id="questiontype"><mm:field name="type"/></mm:import>
     <mm:import id="questionlayout"><mm:field name="layout"/></mm:import>
@@ -160,11 +138,11 @@
   
     <mm:compare referid="questionlayout" valueset="2,5">
         <mm:listnodes referid="answerlist"> 
-            <mm:field name="number" id="answer_id" write="false"/>
+    
     
             <mm:first><select name="<mm:write referid="question"/>"></mm:first>
 
-            <option <mm:compare referid="answer_id" valueset="<%= allGivenAnswers %>">selected</mm:compare> ><mm:field name="text"/></option>
+            <option><mm:field name="text"/></option>
 
             <mm:last></select></mm:last>
     

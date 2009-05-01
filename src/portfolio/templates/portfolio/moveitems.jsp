@@ -2,10 +2,11 @@
   This template moves a folder item from one folder to another.
 --%>
 <%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" %>
+<%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.1" prefix="mm" %>
 <%-- expires is set so renaming a folder does not show the old name --%>
 <mm:content postprocessor="reducespace" expires="0">
-<mm:cloud method="delegate" jspvar="cloud">
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
 <%@include file="/shared/setImports.jsp" %>
 <mm:treeinclude page="/cockpit/cockpit_header.jsp" objectlist="$includePath" referids="$referids">
   <mm:param name="extraheader">
@@ -142,7 +143,7 @@
 <div class="rows">
 <div class="navigationbar">
 <div class="titlebar">
-  <img src="<mm:treefile write="true" page="/gfx/icon_shareddocs.gif" objectlist="$includePath" referids="$referids"/>" width="25" height="13" border="0" title="<di:translate key="portfolio.portfolio" />" alt="<di:translate key="portfolio.portfolio" />"/>
+  <img src="<mm:treefile write="true" page="/gfx/icon_shareddocs.gif" objectlist="$includePath" referids="$referids"/>" width="25" height="13" border="0" alt="<di:translate key="portfolio.portfolio" />"/>
       <di:translate key="portfolio.portfolio" />
 </div>
 </div>
@@ -201,7 +202,7 @@
           </mm:node>
         </mm:present>
           <mm:node number="$user">
-            <mm:relatednodes type="portfolios" constraints="[type] = 0">
+            <mm:relatednodes type="portfolios" constraints="m_type = 0">
               <mm:relatednodescontainer type="folders">
                 <mm:relatednodes>
                   <mm:import id="foldernumber" reset="true"><mm:field name="number"/></mm:import>
@@ -220,7 +221,7 @@
               </mm:relatednodes>
  
             <di:hasrole role="teacher">
-                <mm:relatednodes type="portfolios" constraints="[type] = 1">
+                <mm:relatednodes type="portfolios" constraints="m_type = 1">
                   <mm:relatednodescontainer type="folders">
                     <mm:relatednodes>
                       <mm:import id="foldernumber" reset="true"><mm:field name="number"/></mm:import>
@@ -229,7 +230,7 @@
                   </mm:relatednodescontainer>
                 </mm:relatednodes>
             </di:hasrole>
-             <mm:relatednodes type="portfolios" constraints="[type] = 2">
+             <mm:relatednodes type="portfolios" constraints="m_type = 2">
               <mm:relatednodescontainer type="folders">
                 <mm:relatednodes>
                   <mm:import id="foldernumber" reset="true"><mm:field name="number"/></mm:import>

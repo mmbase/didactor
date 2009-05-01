@@ -5,10 +5,10 @@
     <mm:constraint field="popfeedback.number" value="$nfeedback" operator="EQUAL" />
     <mm:constraint field="popfeedback.status" value="0" />
     <mm:list nodes="$user">
-      <form name="givefeedbackform" action="<mm:treefile page="/pop/sendfeedback.jsp" objectlist="$includePath" 
+      <form name="givefeedbackform" action="<mm:treefile page="/pop/index.jsp" objectlist="$includePath" 
               referids="$referids">
             </mm:treefile>" method="post">
-        <input type="hidden" name="popcmd" value="sendfeedback">
+        <input type="hidden" name="command" value="sendfeedback">
         <input type="hidden" name="nfeedback" value="<mm:write referid="nfeedback"/>">
         <p><di:translate key="pop.getinvitemessagepart1" /> <b><mm:field name="competencies.name"/></b> <di:translate key="pop.getinvitemessagepart2" /> <b><mm:list
             nodes="$nfeedback" path="popfeedback,pop,people"
@@ -36,7 +36,7 @@
           </tr>
         </table>
         <input type="submit" class="formbutton" value="<di:translate key="pop.sendbutton" />">
-        <input type="submit" class="formbutton" value="<di:translate key="pop.backbuttonlc" />" onClick="givefeedbackform.popcmd.value='no'">
+        <input type="submit" class="formbutton" value="<di:translate key="pop.backbuttonlc" />" onClick="givefeedbackform.command.value='no'">
       </form>
     </mm:list>
   </mm:listcontainer>

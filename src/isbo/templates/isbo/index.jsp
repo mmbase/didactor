@@ -1,4 +1,4 @@
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm"%>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.1" prefix="mm"%>
 <%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
 
 
@@ -37,9 +37,9 @@
 %>
 
 <mm:content postprocessor="reducespace">
-<mm:cloud method="delegate" jspvar="cloud">
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
 <%@include file="/shared/setImports.jsp"%>
-<%-- <di:hasrole role="systemadministrator"> --%>
+<di:hasrole role="systemadministrator">
 
 <% request.getSession().setAttribute("hassysprivs","true"); %>
 <%
@@ -85,14 +85,14 @@ if (top == self) {
                <td>
     
 <form action="index.jsp" method="POST" enctype="multipart/form-data">
-<input type="file" size="120" name="filename" style=" height:20px" /> ISBO file<br/>
-<input type="submit" value="Start" style="width:60px; text-align:center" />
+<input type="file" name="filename"/> ISBO file<br/>
+<input type="submit" value="Start"/>
 </form>
 </td>
 </tr></table></td></tr></table>
 </body>
 </html>
 
-<%--</di:hasrole>--%>
+</di:hasrole>
 </mm:cloud>
 </mm:content>

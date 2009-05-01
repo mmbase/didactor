@@ -5,7 +5,7 @@ This message is also create by this page.
 --%>
 <%@ page import="java.text.SimpleDateFormat,
                  java.util.Calendar"%>
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.1" prefix="mm" %>
 <%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
 <%@taglib uri="oscache" prefix="os" %>
 
@@ -81,7 +81,7 @@ This message is also create by this page.
 
 <div class="navigationbar">
   <div class="titlebar">
-  <img src="<mm:treefile write="true" page="/gfx/icon_forum.gif" objectlist="$includePath" />" width="25" height="13" border="0" title="forum" alt="forum" /> Forum
+  <img src="<mm:treefile write="true" page="/gfx/icon_forum.gif" objectlist="$includePath" />" width="25" height="13" border="0" alt="forum" /> Forum
   </div>
 </div>
 <div class="folders">

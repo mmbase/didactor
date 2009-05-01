@@ -1,12 +1,5 @@
 <%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm"%>
-
-<%@page import="java.io.UnsupportedEncodingException" %>
-<%@page import="java.io.StringBufferInputStream" %>
-<%@page import="java.io.ByteArrayOutputStream" %>
-<%@page import="java.io.PrintWriter" %>
-<%@page import="org.w3c.tidy.Tidy" %>
-
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.1" prefix="mm"%>
 <mm:content postprocessor="reducespace" expires="0">
 <%--
     we need to get the parameters from the request by hand
@@ -179,7 +172,7 @@
                                           {
                                              link = url;
                                              %>
-                                                <td><img src="<%= baseUrl %>/education/gfx/http_url.gif" align="right" title="" alt=""/></td>
+                                                <td><img src="<%= baseUrl %>/education/gfx/http_url.gif" align="right" alt=""/></td>
                                                 <td width="60%">&nbsp;websites:</td>
                                                 <td width="100%"><%= url %></td>
                                              <%
@@ -195,7 +188,7 @@
                                                    %>
                                                    </mm:isnotempty>
                                                 </mm:field>
-                                                <td><img src="<%= baseUrl %>/education/gfx/email_url.gif" align="right" title="" alt=""/></td>
+                                                <td><img src="<%= baseUrl %>/education/gfx/email_url.gif" align="right" alt=""/></td>
                                                 <td width="60%">&nbsp;email:</td>
                                                 <td width="100%"><%= url %></td>
                                              <%
@@ -211,7 +204,7 @@
                            <mm:related path="posrel,attachments" orderby="posrel.pos">
                               <tr>
                                  <td></td>
-                                 <td><img src="<%= baseUrl %>/education/gfx/http_url.gif" align="right" title="" alt=""/></td>
+                                 <td><img src="<%= baseUrl %>/education/gfx/http_url.gif" align="right" alt=""/></td>
                                  <td width="60%">&nbsp;download:</td>
                                  <td width="100%">
                                     <mm:node element="attachments">
@@ -353,27 +346,48 @@
    private String doCleaning(String text)
    {
       if(text==null) { text =  ""; }
+      //System.err.println("Cleaning up '"+text+"'");
+        //
+        // remove some of the annoying html that messes up the PDFs
+        //
+        text = text.replaceAll("</?(font|style|div|span)[^>]*>","");
+        text = text.replaceAll("(?<=[^>]\\s)+(width|height|style|align)=\\s*(\"[^\"]*\"|'[^']*'|\\S+)","");
+        text = text.replaceAll("<(t[dh][^>]*)>","<$1 width=\"100%\">");
+        text = text.replaceAll("<br>","<br/>");
+        text = text.replaceAll("(<br\\s*/>\\s*)+(((</b>|</em>|</u>|</strong>|</i>)\\s*)+)","$2$1");
+        text = text.replaceAll("<u\\s*>","<span style=\"color: #808080\">");
+        text = text.replaceAll("<\\/\\s*u\\s*>","</span>");
+        
+        text = text.replaceAll("<br\\*s/>\\s*(<br\\s*/>\\s*)*","<p>$1");
+        text = text.replaceAll("<\\/?\\s*personname\\s*\\/>","");
+/*        if (nodeType.equals("pages") && "2".equals(layout)) {
+            text = text.replaceAll("<table[^>]*>","<table border='1' cellpadding='4' width='50%' align='left'>");
+        }
+        else if (nodeType.equals("pages") && "3".equals(layout)) {
+            text = text.replaceAll("<table[^>]*>","<table border='1' cellpadding='4' width='50%' align='right'>");
+        }
+        else { */
+            text = text.replaceAll("<table[^>]*>","<table border='1' cellpadding='4' width='100%'>");
+//        }
+        text = text.replaceAll("<p\\s*/>","");
+        text = text.replaceAll("<p\\s*>\\s*</p>\\s*","");
+        text = text.replaceFirst("\\A\\s*","");
+        text = text.replaceFirst("\\s*\\z","");
+/*        if (!text.startsWith("<p>")) {
+            text = "<p>"+text;
+        }
+        if (!text.endsWith("</p>"))
+        {
+            text = text+"</p>";
+        } */
 
-      StringBufferInputStream in;
-      ByteArrayOutputStream out;
-      ByteArrayOutputStream err;
-      String sOut = "";
+        text = text.replaceAll("<p>\\s*<table","<table");
+        text = text.replaceAll("</table>\\s*</p>","</table>");
+        text = text.replaceAll("\\x93","\"");
+        text = text.replaceAll("\\x91","'");
 
-      Tidy tidy = new Tidy();
+      //System.err.println("Result: '"+text+"'");
 
-      out = new ByteArrayOutputStream();
-      err = new ByteArrayOutputStream();
-
-      tidy.setXmlOut(true);
-      try {
-          in = new StringBufferInputStream(text);
-          tidy.setErrout(new PrintWriter(err));
-          tidy.parse(in, out);
-          sOut = out.toString("UTF-8");
-      }
-      catch ( UnsupportedEncodingException e ) {
-          System.out.println( "Error in Tidy parsing: " + this.toString() + e.toString() );
-      }
-      return sOut;
+      return text;
    }
 %>

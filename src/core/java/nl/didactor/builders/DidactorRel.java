@@ -23,8 +23,6 @@ public class DidactorRel extends InsRel {
     private SortedSet preCommitComponents = new TreeSet();
     private SortedSet postCommitComponents = new TreeSet();
 
-    private SortedSet preDeleteComponents = new TreeSet();
-
     public boolean init() {
         return super.init();
     }
@@ -63,14 +61,8 @@ public class DidactorRel extends InsRel {
         log.info("Added listener on " + getTableName() + ".postCommit(): '" + c.getName() + "' with priority " + priority);
     }
 
-    public void registerPreDeleteComponent(Component c, int priority) {
-        EventInstance event = new EventInstance(c, priority);
-        preDeleteComponents.add(event);
-        log.info("Added listener on " + getTableName() + ".preDelete(): '" + c.getName() + "' with priority " + priority);
-    }
-
     /**
-     * Overridden 'insert' from MMObjectBuilder. It will call the 'preInsert()'
+     * Overridden 'insert' from MMObjectBuilder. It will call the 'preInsert()' 
      * method for all registered components just before inserting the node. It
      * calls the 'postInsert()' for all registered components after inserting the node.
      */
@@ -78,14 +70,14 @@ public class DidactorRel extends InsRel {
         Iterator i = preInsertComponents.iterator();
         while (i.hasNext()) {
             Component c = ((EventInstance)i.next()).component;
-            log.service("Firing " + c.getName() + ".preInsert() on object of type '" + node.getBuilder().getTableName() + "'");
+            log.info("Firing " + c.getName() + ".preInsert() on object of type '" + node.getBuilder().getTableName() + "'");
             c.preInsert(node);
         }
         int res = super.insert(owner, node);
         i = postInsertComponents.iterator();
         while (i.hasNext()) {
             Component c = ((EventInstance)i.next()).component;
-            log.service("Firing " + c.getName() + ".postInsert() on object of type '" + node.getBuilder().getTableName() + "'");
+            log.info("Firing " + c.getName() + ".postInsert() on object of type '" + node.getBuilder().getTableName() + "'");
             c.postInsert(node);
         }
         return res;
@@ -93,7 +85,7 @@ public class DidactorRel extends InsRel {
 
 
     /**
-     * Overridden 'preCommit' from MMObjectBuilder. It will call the 'preCommit()'
+     * Overridden 'preCommit' from MMObjectBuilder. It will call the 'preCommit()' 
      * method for all registered components.
      */
     public MMObjectNode preCommit(MMObjectNode node) {
@@ -123,22 +115,6 @@ public class DidactorRel extends InsRel {
     }
 
     /**
-     * This method does NOT override any methods from MMObjectBuilder, but is triggered
-     * by the authorization class. This is a rather ugly hack, which might not be supported
-     * in upcoming MMBase releases, but at the moment it is the only place to handle
-     * delete events on nodes before the bridge complains.
-     */
-    public boolean preDelete(MMObjectNode node) {
-        Iterator i = preDeleteComponents.iterator();
-        while (i.hasNext()) {
-            Component c = ((EventInstance)i.next()).component;
-            log.service("Firing " + c.getName() + ".preDelete() on object of type '" + node.getBuilder().getTableName() + "'");
-            c.preDelete(node);
-        }
-        return true;
-    }
-
-    /**
      * This small innerclass represents an event-instance. It mainly is just a wrapper
      * around the component, but also has a priority that allows the components to be
      * sorted when they are fired.
@@ -146,7 +122,7 @@ public class DidactorRel extends InsRel {
     private class EventInstance implements Comparable {
         protected Component component;
         protected int priority;
-
+      
         /**
          * Public constructor
          */

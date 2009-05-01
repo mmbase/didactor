@@ -1,8 +1,8 @@
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.1" prefix="mm" %>
 <%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
 <%@page import="java.util.*" %>
 <mm:content postprocessor="reducespace">
-<mm:cloud method="delegate" jspvar="cloud">
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
 <%@include file="/shared/setImports.jsp" %>
 <%@include file="/education/tests/definitions.jsp" %> 
 <%@ include file="getids.jsp" %>
@@ -55,27 +55,27 @@
           <td class="listItem">
               <a href="<mm:treefile page="/pop/index.jsp" objectlist="$includePath" 
                         referids="$popreferids,currentfolder">
-                      <mm:param name="popcmd">detail</mm:param>
-                    </mm:treefile>"><img src="/didactor/pop/gfx/1.gif" width=4 height=13 title="" alt="" border="0" 
+                      <mm:param name="command">detail</mm:param>
+                    </mm:treefile>"><img src="/didactor/pop/gfx/1.gif" width=4 height=13 alt="" border="0" 
                                       /><img src="/didactor/pop/gfx/2.gif" width=<%= progress %> height=13 
-                                      title="<di:translate key="pop.gototestrelults" />"  alt="<di:translate key="pop.gototestrelults" />" border="0" 
-                                      /><img src="/didactor/pop/gfx/3.gif" width=2 height=13 title="" alt="" 
+                                      alt="<di:translate key="pop.gototestrelults" />" border="0" 
+                                      /><img src="/didactor/pop/gfx/3.gif" width=2 height=13 alt="" 
                                       border="0" /><img src="/didactor/pop/gfx/4.gif" 
                                       width=<%= 100-progress.doubleValue() %> height=13 
-                                      title="<di:translate key="pop.gototestrelults" />" alt="<di:translate key="pop.gototestrelults" />" border="0" 
-                                      /><img src="/didactor/pop/gfx/5.gif" width=2 height=13 title="" alt="" 
+                                      alt="<di:translate key="pop.gototestrelults" />" border="0" 
+                                      /><img src="/didactor/pop/gfx/5.gif" width=2 height=13 alt="" 
                                       border="0" /></a><mm:write referid="progress"/>%
           </td>
           <td class="listItem">
             <mm:compare referid="intake" value="1">
               <mm:compare referid="startflag" value="1">
                 <mm:compare referid="finished" value="0">
-                  <input type="button" class="formbutton" onClick="top.location.href='<mm:treefile page="/education/index.jsp" objectlist="$includePath" referids="$referids">
+                  <input type="button" class="formbutton" onClick="top.location.href='<mm:treefile page="/education/index.jsp" objectlist="$includePath" referids="$popreferids">
                     </mm:treefile>'" value="<di:translate key="pop.continuebutton" />" title="<di:translate key="pop.continuecoursebutton" />">
                 </mm:compare>
               </mm:compare>
               <mm:compare referid="startflag" value="0">
-                  <input type="button" class="formbutton" onClick="top.location.href='<mm:treefile page="/education/index.jsp" objectlist="$includePath" referids="$referids">
+                  <input type="button" class="formbutton" onClick="top.location.href='<mm:treefile page="/education/index.jsp" objectlist="$includePath" referids="$popreferids">
                     </mm:treefile>'" value="<di:translate key="pop.startbutton" />"
                     title="<di:translate key="pop.begincoursebutton" />">
               </mm:compare>
@@ -83,7 +83,7 @@
             <mm:compare referid="intake" value="0">
                   <input type="button" class="formbutton" onClick="top.location.href='<mm:treefile page="/pop/index.jsp" objectlist="$includePath" 
                         referids="$popreferids,currentfolder">
-                      <mm:param name="popcmd">intake</mm:param>
+                      <mm:param name="command">intake</mm:param>
                     </mm:treefile>'" value="intake" 
                     title="<di:translate key="pop.intakecoursebutton" />">
             </mm:compare>
@@ -124,28 +124,28 @@
           <td class="listItem">
               <a href="<mm:treefile page="/pop/index.jsp" objectlist="$includePath" 
                         referids="$popreferids,currentfolder">
-                      <mm:param name="popcmd">detail</mm:param>
+                      <mm:param name="command">detail</mm:param>
                       <mm:param name="direct_connection">true</mm:param>
-                    </mm:treefile>"><img src="/didactor/pop/gfx/1.gif" width=4 height=13 title="" alt="" border="0" 
+                    </mm:treefile>"><img src="/didactor/pop/gfx/1.gif" width=4 height=13 alt="" border="0" 
                                       /><img src="/didactor/pop/gfx/2.gif" width=<%= progress %> height=13 
-                                      title="<di:translate key="pop.gototestrelults" />" alt="<di:translate key="pop.gototestrelults" />" border="0" 
-                                      /><img src="/didactor/pop/gfx/3.gif" width=2 height=13 title="" alt="" 
+                                      alt="<di:translate key="pop.gototestrelults" />" border="0" 
+                                      /><img src="/didactor/pop/gfx/3.gif" width=2 height=13 alt="" 
                                       border="0" /><img src="/didactor/pop/gfx/4.gif" 
                                       width=<%= 100-progress.doubleValue() %> height=13 
-                                      title="<di:translate key="pop.gototestrelults" />" alt="<di:translate key="pop.gototestrelults" />" border="0" 
-                                      /><img src="/didactor/pop/gfx/5.gif" width=2 height=13 title="" alt="" 
+                                      alt="<di:translate key="pop.gototestrelults" />" border="0" 
+                                      /><img src="/didactor/pop/gfx/5.gif" width=2 height=13 alt="" 
                                       border="0" /></a><mm:write referid="progress"/>%
           </td>
           <td class="listItem">
             <mm:compare referid="intake" value="1">
               <mm:compare referid="startflag" value="1">
                 <mm:compare referid="finished" value="0">
-                  <input type="button" class="formbutton" onClick="top.location.href='<mm:treefile page="/education/index.jsp" objectlist="$includePath" referids="$referids">
+                  <input type="button" class="formbutton" onClick="top.location.href='<mm:treefile page="/education/index.jsp" objectlist="$includePath" referids="$popreferids">
                     </mm:treefile>'" value="<di:translate key="pop.continuebutton" />" title="<di:translate key="pop.continuecoursebutton" />">
                 </mm:compare>
               </mm:compare>
               <mm:compare referid="startflag" value="0">
-                  <input type="button" class="formbutton" onClick="top.location.href='<mm:treefile page="/education/index.jsp" objectlist="$includePath" referids="$referids">
+                  <input type="button" class="formbutton" onClick="top.location.href='<mm:treefile page="/education/index.jsp" objectlist="$includePath" referids="$popreferids">
                     </mm:treefile>'" value="<di:translate key="pop.startbutton" />"
                     title="<di:translate key="pop.begincoursebutton" />">
               </mm:compare>
@@ -153,7 +153,7 @@
             <mm:compare referid="intake" value="0">
                   <input type="button" class="formbutton" onClick="top.location.href='<mm:treefile page="/pop/index.jsp" objectlist="$includePath" 
                         referids="$popreferids,currentfolder">
-                      <mm:param name="popcmd">intake</mm:param>
+                      <mm:param name="command">intake</mm:param>
                     </mm:treefile>'" value="intake" 
                     title="<di:translate key="pop.intakecoursebutton" />">
             </mm:compare>

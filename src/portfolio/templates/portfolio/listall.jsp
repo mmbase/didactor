@@ -1,11 +1,11 @@
 <%--
   This template shows the personal workspace (in dutch: persoonlijke werkruimte).
 --%>
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.1" prefix="mm" %>
 <%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
 <%-- expires is set so renaming a folder does not show the old name --%>
 <mm:content postprocessor="reducespace" expires="0">
-<mm:cloud jspvar="cloud" method="delegate" authenticate="asis">
+<mm:cloud jspvar="cloud" method="asis">
 <%@include file="/shared/setImports.jsp" %>
 <mm:treeinclude page="/cockpit/cockpit_header.jsp" objectlist="$includePath" referids="$referids">
   <mm:param name="extraheader">
@@ -16,7 +16,7 @@
 <div class="rows">
 <div class="navigationbar">
 <div class="titlebar">
-  <img src="<mm:treefile write="true" page="/gfx/icon_shareddocs.gif" objectlist="$includePath" referids="$referids"/>" width="25" height="13" border="0" title="<di:translate key="portfolio.portfolio" />" alt="<di:translate key="portfolio.portfolio" />"/>
+  <img src="<mm:treefile write="true" page="/gfx/icon_shareddocs.gif" objectlist="$includePath" referids="$referids"/>" width="25" height="13" border="0" alt="<di:translate key="portfolio.portfolio" />"/>
       <di:translate key="portfolio.portfolio" />
 </div>
 </div>

@@ -4,16 +4,17 @@
 <%@ page import = "java.util.TreeMap" %>
 
 
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.1" prefix="mm" %>
 <%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
 
-<mm:cloud method="delegate" jspvar="cloud">
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
 <%@include file="/shared/setImports.jsp"%>
 <%@include file="/education/wizards/roles_defs.jsp" %>
 <mm:import id="editcontextname" reset="true">competentie</mm:import>
 <%@include file="/education/wizards/roles_chk.jsp" %>
 
 <mm:import id="wizardjsp"><mm:treefile write="true" page="/editwizards/jsp/wizard.jsp" objectlist="$includePath" /></mm:import>
+<mm:import id="listjsp"><mm:treefile write="true" page="/editwizards/jsp/list.jsp" objectlist="$includePath" /></mm:import>
 
 <%
    String sSearchValue = request.getParameter("searchvalue");
@@ -239,7 +240,7 @@
 
 
 <%//         ------------------ MAIN TABLE ------------------              %>
-<table border="1" cellpadding="0" cellspacing="0" style="border:0px; width:100%; text-align:left" class="titlefield2">
+<table border="1" cellpadding="0" cellspacing="0" style="border:0px; width:100%" class="titlefield2">
    <tr>
       <%
          int iCounter = 1;

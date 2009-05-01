@@ -1,16 +1,13 @@
 <%-- !DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml/DTD/transitional.dtd" --%>
-<%@ page contentType="text/html; charset=utf-8" language="java" 
-%><%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" 
-%><%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"
-%><%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" 
-%>
-<mm:cloud method="delegate" jspvar="cloud">
+<%@ page contentType="text/html; charset=utf-8" language="java" %>
+<%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.0" prefix="mm" %>
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
 <%@include file="/shared/setImports.jsp" %>
 <html>
 <head>
    <title><di:translate key="mmbob.mmbaseforum" /></title>
    <link rel="stylesheet" type="text/css" href="<mm:write referid="style_default" />" />
-   <link rel="stylesheet" type="text/css" href="<mm:treefile page="/css/base.css" objectlist="$includePath" referids="$referids" />" />
 </head>
 <mm:import externid="adminmode">false</mm:import>
 <mm:import externid="forumid" />
@@ -86,7 +83,7 @@
     <mm:first>
         <mm:import id="messagesfound">true</mm:import>
     </mm:first>
-    <tr><td width="50%"><a href="<mm:url page="privatemessage.jsp" referids="forumid,mailboxid"><mm:param name="messageid"><mm:field name="number" /></mm:param></mm:url>"><mm:field name="subject" /></a></td><td width="25%" ><mm:field name="poster" /> (<mm:field name="fullname" />)</td><td width="25%"><mm:field name="createtime"><mm:time format="${timeFormat}" /></mm:field></td><td><input type="checkbox" name="selectedmessages"></td></tr>
+    <tr><td width="50%"><a href="<mm:url page="privatemessage.jsp" referids="forumid,mailboxid"><mm:param name="messageid"><mm:field name="number" /></mm:param></mm:url>"><mm:field name="subject" /></a></td><td width="25%" ><mm:field name="poster" /> (<mm:field name="fullname" />)</td><td width="25%"><mm:field name="createtime"><mm:time format="<%= timeFormat %>" /></mm:field></td><td><input type="checkbox" name="selectedmessages"></td></tr>
     </mm:relatednodes>
     </mm:node>
     <tr>

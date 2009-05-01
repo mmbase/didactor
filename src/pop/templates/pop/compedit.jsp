@@ -1,8 +1,8 @@
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.1" prefix="mm" %>
 <%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
 <%@page import="java.util.*" %>
-<mm:content postprocessor="reducespace" escaper="none">
-<mm:cloud method="delegate" jspvar="cloud">
+<mm:content postprocessor="reducespace">
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
 <%@include file="/shared/setImports.jsp" %>
 <%@ include file="getids.jsp" %>
 <% boolean isEmpty = true; %>
@@ -10,7 +10,7 @@
 <div class="contentBody">
   <%@ include file="getmyfeedback.jsp" %>
     <mm:compare referid="msg" value="-1" inverse="true">
-      <mm:write referid="msg" escape="text/plain"/>
+      <mm:write referid="msg"/>
     </mm:compare>
 
   <mm:node number="$currentcomp">
@@ -18,7 +18,7 @@
           referids="$popreferids,currentprofile,currentcomp">
         </mm:treefile>" method="post">
     <table class="font" width="70%">
-    <input type="hidden" name="popcmd" value="savecomp">
+    <input type="hidden" name="command" value="savecomp">
     <input type="hidden" name="returnto" value="editcomp">
     <input type="hidden" name="todonumber" value="-1">
       <tr style="vertical-align:top;">
@@ -42,7 +42,7 @@
     <tr>
       <td>
         <input type="button" class="formbutton" onClick="editcompform.submit()" value="<di:translate key="pop.savebutton" />">
-        <input type="button" class="formbutton" onClick="editcompform.popcmd.value='no';editcompform.submit()" value="<di:translate key="pop.backbuttonlc" />">
+        <input type="button" class="formbutton" onClick="editcompform.command.value='no';editcompform.submit()" value="<di:translate key="pop.backbuttonlc" />">
       </td>
 
     </tr>
@@ -56,18 +56,18 @@
           <mm:list nodes="$currentpop" path="pop,todoitems,competencies" orderby="todoitems.number" directions="UP"
               constraints="competencies.number='$currentcomp'">
             <input type="checkbox" name="ids" value="<mm:field name="todoitems.number"/>"><a href="#1"
-                onclick="editcompform.popcmd.value='addtodo';editcompform.todonumber.value='<mm:field name="todoitems.number"/>';editcompform.submit();return false;"
+                onclick="editcompform.command.value='addtodo';editcompform.todonumber.value='<mm:field name="todoitems.number"/>';editcompform.submit();return false;"
               ><mm:field name="todoitems.name" jspvar="todoName" vartype="String"
               ><% if (todoName.length()>0) { %><%= todoName %><% } else { %>...<% } %></mm:field></a><br/>
           </mm:list>
           <br/>
-          <a href="#1" onclick="editcompform.popcmd.value='addtodo';editcompform.submit();return false;"
+          <a href="#1" onclick="editcompform.command.value='addtodo';editcompform.submit();return false;"
             ><img src="<mm:treefile page="/pop/gfx/icon_add_todo.gif" objectlist="$includePath" referids="$popreferids"/>"
-                border="0" title="<di:translate key="pop.compeditmakenewtodo"/>" alt="<di:translate key="pop.compeditmakenewtodo"/>" /></a>
+                border="0" alt="<di:translate key="pop.compeditmakenewtodo"/>" /></a>
           <a href="#1" onclick="if (!window.confirm('<di:translate key="pop.areyousuredeltodo" />'))
-                return false;editcompform.popcmd.value='deltodo';editcompform.submit();return false;">
+                return false;editcompform.command.value='deltodo';editcompform.submit();return false;">
             <img src="<mm:treefile page="/pop/gfx/afspraak verwijderen.gif" objectlist="$includePath" referids="$popreferids"/>"
-                border="0" title="<di:translate key="pop.compeditremoveselectedtodo"/>" alt="<di:translate key="pop.compeditremoveselectedtodo"/>" /></a>
+                border="0" alt="<di:translate key="pop.compeditremoveselectedtodo"/>" /></a>
 <br/>
 <br/>
     <mm:relatedcontainer path="popfeedback,pop">
@@ -101,7 +101,7 @@
                       <mm:field name="ratings.name" id="rating" write="true"/>
                     </mm:related>
                   </td>
-                  <td class="listItem"><mm:field name="text" escape="p"/></td>
+                  <td class="listItem"><mm:field name="text"/></td>
                 <% } else { %>
                   <td class="listItem"><i><di:translate key="pop.notanswered" /></i></td>
                   <td class="listItem">&nbsp;</td>
@@ -113,9 +113,9 @@
         </mm:related>
       </table></div>
     </mm:relatedcontainer>
-        <a href="#1" onclick="editcompform.popcmd.value='invite';editcompform.submit();return false;">
+        <a href="#1" onclick="editcompform.command.value='invite';editcompform.submit();return false;">
           <img src="<mm:treefile page="/pop/gfx/icon_invitation.gif" objectlist="$includePath" referids="$popreferids"/>"
-            border="0" title="<di:translate key="pop.compeditinvitecolleague"/>" alt="<di:translate key="pop.compeditinvitecolleague"/>" /></a>
+            border="0" alt="<di:translate key="pop.compeditinvitecolleague"/>" /></a>
     <br/><br/><br/>
     <table width="80%" border="0" class="popGreyTableHeader">
       <tr>
@@ -178,13 +178,13 @@
       </mm:node>
     </mm:compare>
     <br/>
-    <a href="#1" onclick="editcompform.popcmd.value='adddoc';editcompform.submit();return false;">
-      <img src="<mm:treefile page="/portfolio/gfx/document plaatsen.gif" objectlist="$includePath" referids="$popreferids"/>" 
-        border="0" alt="<di:translate key="pop.portfolioadddoc"/>" /></a>
-     <a href="#1" onclick="if (!window.confirm('<di:translate key="pop.areyousuredeldoc" />'))
-        return false;editcompform.popcmd.value='deldocs';editcompform.submit();return false;">
+    <a href="#1" onclick="if (!window.confirm('<di:translate key="pop.areyousuredeldoc" />'))
+        return false;editcompform.command.value='deldocs';editcompform.submit();return false;">
       <img src="<mm:treefile page="/pop/gfx/afspraak verwijderen.gif" objectlist="$includePath" referids="$popreferids"/>"
         border="0" alt="<di:translate key="pop.compeditremoveselecteddoc"/>" /></a>
+    <a href="#1" onclick="editcompform.command.value='adddoc';editcompform.submit();return false;">
+      <img src="<mm:treefile page="/portfolio/gfx/document plaatsen.gif" objectlist="$includePath" referids="$popreferids"/>" 
+        border="0" alt="<di:translate key="pop.portfolioadddoc"/>" /></a>
   </form>
   </mm:node>
 </div>

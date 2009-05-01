@@ -1,8 +1,6 @@
-<%@ page contentType="text/html; charset=utf-8" language="java" 
-%><%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" 
-%><%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" 
-%><%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" 
-%><mm:cloud method="delegate" jspvar="cloud">
+<%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.0" prefix="mm" %>
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
 <%@include file="/shared/setImports.jsp" %>
 <mm:import externid="action" />
 <mm:import externid="forumid" />
@@ -21,26 +19,19 @@
 	  </mm:nodefunction>
 </mm:present>
 
-<mm:log>action ${action} admin: ${adminmode}</mm:log>
-
 <mm:compare value="postreply" referid="action">
 	<mm:import externid="postareaid" />
 	<mm:import externid="postthreadid" />
 	<mm:import externid="poster" />
 	<mm:import externid="subject" />
 	<mm:import externid="body" />
-	<mm:nodefunction set="mmbob" name="postReply" referids="forumid,postareaid,postthreadid,poster,subject,body">
-    <mm:field name="error">
-      <mm:compare value="none" inverse="true">
-        <mm:write />
-      </mm:compare>
-    </mm:field>
-	</mm:nodefunction>
+	<mm:booleanfunction set="mmbob" name="postReply" referids="forumid,postareaid,postthreadid,poster,subject,body">
+	</mm:booleanfunction>
 
-  <mm:list nodes="$postthreadid" path="postthreads,postings" orderby="postings.number" directions="DOWN" max="1">
-    <mm:import id="postingid"><mm:field name="postings.number"/></mm:import>
-  </mm:list>
-  <%@ include file="addfile.jsp" %>
+        <mm:list nodes="$postthreadid" path="postthreads,postings" orderby="postings.number" directions="DOWN" max="1">
+           <mm:import id="postingid"><mm:field name="postings.number"/></mm:import>
+        </mm:list>
+        <%@ include file="addfile.jsp" %>
 </mm:compare>
 
 <mm:compare value="newpost" referid="action">
@@ -48,19 +39,14 @@
 	<mm:import externid="poster" />
 	<mm:import externid="subject" />
 	<mm:import externid="body" />
-  <mm:nodefunction set="mmbob" name="newPost" referids="forumid,postareaid,poster,subject,body">
-    <mm:import id="postthreadid"><mm:field name="postthreadid"/></mm:import>
-    <mm:field name="error">
-      <mm:compare value="none" inverse="true">
-        <mm:write />
-      </mm:compare>
-    </mm:field>
+	<mm:nodefunction set="mmbob" name="newPost" referids="forumid,postareaid,poster,subject,body">
+	   <mm:import id="postthreadid"><mm:field name="postthreadid"/></mm:import>
 	</mm:nodefunction>
 
-  <mm:list nodes="$postthreadid" path="postthreads,postings" orderby="postings.number" max="1">
-    <mm:import id="postingid"><mm:field name="postings.number"/></mm:import>
-  </mm:list>
-  <jsp:directive.include file="addfile.jsp" />
+        <mm:list nodes="$postthreadid" path="postthreads,postings" orderby="postings.number" max="1">
+           <mm:import id="postingid"><mm:field name="postings.number"/></mm:import>
+        </mm:list>
+        <%@ include file="addfile.jsp" %>
 </mm:compare>
 
 
@@ -124,17 +110,10 @@
 
 
 <mm:compare value="true" referid="adminmode">
-
 <mm:compare value="newpostarea" referid="action">
 	<mm:import externid="name" />
-  <mm:import externid="description" />
-	<mm:nodefunction set="mmbob" name="newPostArea" referids="forumid,name,description,posterid@activeid">
-    <mm:field name="feedback">
-      <mm:isnotempty>
-        <mm:write />
-      </mm:isnotempty>
-    </mm:field>
-    <mm:log><mm:field name="feedback" />. Created <mm:field name="newpostareadid" /> </mm:log>
+	<mm:import externid="description" />
+	<mm:nodefunction set="mmbob" name="newPostArea" referids="forumid,name,description">
 	</mm:nodefunction>
 </mm:compare>
 
@@ -142,15 +121,15 @@
 	<mm:import externid="name" />
 	<mm:import externid="description" />
 	<mm:import externid="postareaid" />
-	<mm:booleanfunction set="mmbob" name="changePostArea" referids="forumid,postareaid,name,description,posterid@activeid">
+	<mm:booleanfunction set="mmbob" name="changePostArea" referids="forumid,postareaid,name,description">
 	</mm:booleanfunction>
 </mm:compare>
 
 <mm:compare value="changeforum" referid="action">
 	<mm:import externid="name" />
-	<mm:import externid="language" reset="true" />
+	<mm:import externid="language" />
 	<mm:import externid="description" />
-	<mm:booleanfunction set="mmbob" name="changeForum" referids="forumid,name,language@newlang,description,posterid@activeid" >
+	<mm:booleanfunction set="mmbob" name="changeForum" referids="forumid,name,language,description" >
 	</mm:booleanfunction>
 </mm:compare>
 

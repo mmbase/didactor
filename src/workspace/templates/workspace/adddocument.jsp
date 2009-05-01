@@ -2,12 +2,12 @@
   This template adds a document to a folder.
 --%>
 <%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.1" prefix="mm" %>
 
 <%-- expires is set so renaming a folder does not show the old name --%>
 <mm:content postprocessor="reducespace" expires="0">
 <mm:import externid="processupload">false</mm:import>
-<mm:cloud method="delegate" jspvar="cloud">
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
   <%@include file="/shared/setImports.jsp" %>
   <mm:treeinclude page="/cockpit/cockpit_header.jsp" objectlist="$includePath" referids="$referids">
     <mm:param name="extraheader">
@@ -46,7 +46,7 @@
 	    </mm:compare>
 
 
-        <img src="<mm:treefile write="true" page="/gfx/icon_portfolio.gif" objectlist="$includePath" referids="$referids"/>" width="25" height="13" border="0" title="<di:translate key="workspace.mydocuments" />" alt="<di:translate key="workspace.mydocuments" />" />
+        <img src="<mm:treefile write="true" page="/gfx/icon_portfolio.gif" objectlist="$includePath" referids="$referids"/>" width="25" height="13" border="0" alt="<di:translate key="workspace.mydocuments" />" />
         <mm:write referid="titletext"/>
       </div>
     </div>
@@ -145,9 +145,6 @@
       <% long currentDate = System.currentTimeMillis() / 1000; %>
       <mm:setfield name="date"><%=currentDate%></mm:setfield>
     </mm:createnode>
-
-    <mm:import id="docId" jspvar="docId"><mm:write referid="myattachements" /></mm:import>    
-    <di:event eventtype="add_document" eventvalue="<%= docId %>" note="add document" />
 
     <%-- related uploaded attachment to the current folder --%>
     <mm:createrelation role="related" source="mycurrentfolder" destination="myattachements"/>

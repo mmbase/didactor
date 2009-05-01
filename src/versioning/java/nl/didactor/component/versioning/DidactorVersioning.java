@@ -4,8 +4,11 @@ import nl.didactor.component.Component;
 import nl.didactor.builders.DidactorBuilder;
 import nl.didactor.component.core.*;
 import nl.didactor.versioning.VersioningController;
-
-import org.mmbase.bridge.*;
+import net.sf.mmapps.modules.cloudprovider.CloudProvider;
+import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
+import org.mmbase.bridge.Cloud;
+import org.mmbase.bridge.Node;
+import org.mmbase.bridge.NodeList;
 import org.mmbase.module.core.MMBase;
 import org.mmbase.module.core.MMObjectBuilder;
 import org.mmbase.module.core.MMObjectNode;
@@ -22,7 +25,7 @@ public class DidactorVersioning extends Component {
      * Returns the name of the component
      */
     public String getName() {
-        return "versioning";
+        return "DidactorVersioning";
     }
 
     /**
@@ -36,7 +39,6 @@ public class DidactorVersioning extends Component {
     }
 
     public void init() {
-        super.init();
         MMBase mmbase = MMBase.getMMBase();
         String[] builders = new String[]{"flashpages","htmlpages","learnblocks","learnobjects","pages","questions","paragraphs","educations"};
         for (int i=0; i<builders.length; i++) {
@@ -63,17 +65,20 @@ public class DidactorVersioning extends Component {
     }
 
     private void preCommitLO(MMObjectNode node) {
-        Cloud cloud = ContextProvider.getDefaultCloudContext().getCloud("mmbase", "class", null);
+        CloudProvider cloudProvider = CloudProviderFactory.getCloudProvider();
+        Cloud cloud = cloudProvider.getAdminCloud();
         VersioningController.addLOVersion(cloud.getNode(node.getNumber()));
     }
 
     private void preCommitSimple(MMObjectNode node) {
-        Cloud cloud = ContextProvider.getDefaultCloudContext().getCloud("mmbase", "class", null);
+        CloudProvider cloudProvider = CloudProviderFactory.getCloudProvider();
+        Cloud cloud = cloudProvider.getAdminCloud();
         VersioningController.addSimpleVersion(cloud.getNode(node.getNumber()));
     }
 
     private void preCommitParagraph(MMObjectNode node) {
-        Cloud cloud = ContextProvider.getDefaultCloudContext().getCloud("mmbase", "class", null);
+        CloudProvider cloudProvider = CloudProviderFactory.getCloudProvider();
+        Cloud cloud = cloudProvider.getAdminCloud();
         Node originalNode = cloud.getNode(node.getNumber());
         NodeList learnobjects = learnobjects = originalNode.getRelatedNodes("learnobjects");
         for(int i=0;i<learnobjects.size();i++) {

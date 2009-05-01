@@ -21,7 +21,7 @@ public class DidactorForum extends Component {
      * Returns the name of the component
      */
     public String getName() {
-        return "forum";
+        return "DidactorForum";
     }
 
     /**

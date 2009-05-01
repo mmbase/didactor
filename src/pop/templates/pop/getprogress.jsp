@@ -5,9 +5,7 @@
 <mm:node number="$student" notfound="skip">
 
    <%-- find user's copybook --%>
-   <mm:notpresent referid="copybookNo">
-      <%@include file="find_copybook.jsp"%>
-   </mm:notpresent>
+   <%@include file="find_copybook.jsp"%>
 
    <%
       int nof_tests= 0;

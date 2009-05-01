@@ -40,8 +40,6 @@
  *  e-mail:   p.sharples@bolton.ac.uk
  *
  *  Web:      http://www.reload.ac.uk
-
- * @version $Id: ScormPackageHandler.java,v 1.6 2007-03-14 13:56:46 michiel Exp $
  *
  */
 
@@ -64,6 +62,8 @@ import uk.ac.reload.moonunit.contentpackaging.CP_Core;
 import uk.ac.reload.moonunit.contentpackaging.SCORM12_Core;
 
 
+import net.sf.mmapps.modules.cloudprovider.CloudProvider;
+import net.sf.mmapps.modules.cloudprovider.CloudProviderFactory;
 import org.mmbase.bridge.*;
 
 
@@ -71,7 +71,6 @@ import nl.didactor.utils.zip.Unpack;
 import nl.didactor.utils.files.CommonUtils;
 import nl.didactor.utils.http.FileDownloader;
 import nl.didactor.utils.http.exceptions.*;
-import nl.didactor.utils.debug.LogController;
 import nl.didactor.component.scorm.exceptions.*;
 import nl.didactor.component.scorm.metastandart.schema.Importer;
 import nl.didactor.component.scorm.metastandart.schema.Filter;
@@ -85,7 +84,7 @@ import nl.didactor.component.scorm.metastandart.MetaDataImporter;
  * a sco cmi data model.
  *
  * @author Paul Sharples
- * @version $Id: ScormPackageHandler.java,v 1.6 2007-03-14 13:56:46 michiel Exp $
+ * @version $Id: ScormPackageHandler.java,v 1.4 2005-09-01 17:35:53 azemskov Exp $
  */
 public class ScormPackageHandler extends XMLDocument {
 
@@ -114,6 +113,7 @@ public class ScormPackageHandler extends XMLDocument {
      * Default Constructor
      */
 
+   private CloudProvider cloudProvider;
    private Cloud cloud;
    NodeManager nmMetaStandart;
    NodeManager nmMetaDefinition;
@@ -127,17 +127,14 @@ public class ScormPackageHandler extends XMLDocument {
    private Filter filter;
 
 
-   private boolean bDebugMode = LogController.showLogs("az");
-   private String  sDebugIndo = "Scorm Package Handler: ";
-
-
    public ScormPackageHandler(File manifest, String sNodePackageID) throws JDOMException, IOException
    {
       // Load the Document
       loadDocument(manifest);
       _projectName = manifest.getParentFile().getName();
       _scormCore = new SCORM12_Core(this);
-      cloud = ContextProvider.getDefaultCloudContext().getCloud("mmbase", "class", null);
+      CloudProvider cloudProvider = CloudProviderFactory.getCloudProvider();
+      cloud = cloudProvider.getAdminCloud();
       nmMetaStandart   = cloud.getNodeManager("metastandard");
       nmMetaDefinition = cloud.getNodeManager("metadefinition");
       nmPosrel         = cloud.getNodeManager("posrel");
@@ -258,7 +255,7 @@ public class ScormPackageHandler extends XMLDocument {
                     tempHref = tempHref.replaceAll("%20", " ");
 
 
-                    if(bDebugMode) System.out.println(sDebugIndo + "resource href=" + tempHref);
+                    System.out.println("ScormPackageHandler: resource href=" + tempHref);
 
 
                     //New htmlpage node
@@ -276,11 +273,7 @@ public class ScormPackageHandler extends XMLDocument {
                        elemMetadataLocation = elemMetadata.getChild("location", SCORM12_DocumentHandler.ADLCP_NAMESPACE_12);
                     }
 
-
-
-                    if(bDebugMode) System.out.println(sDebugIndo +  "metadatalocation = " + elemMetadataLocation);
-
-
+                    System.out.println("ScormPackageHandler: metadatalocation = " + elemMetadataLocation);
 
                     if(elemMetadataLocation != null)
                     {
@@ -456,7 +449,6 @@ public class ScormPackageHandler extends XMLDocument {
                //New learnblock node
                Node nodeLearnblock = cloud.getNodeManager("learnblocks").createNode();
                nodeLearnblock.setValue("name", "" + child.getChild("title", SCORM12_DocumentHandler.IMSCP_NAMESPACE_112).getText());
-               nodeLearnblock.setValue("path", "" + nodePackage.getNumber() + "-" + iPosrelCounter);
 //Deep level
 //               nodeLearnblock.setValue("intro", "deep level=" + iCurrentLevel);
                nodeLearnblock.commit();
