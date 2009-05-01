@@ -5,9 +5,7 @@
 <mm:node number="$student" notfound="skip">
 
    <%-- find user's copybook --%>
-   <mm:notpresent referid="copybookNo">
-      <%@include file="find_copybook.jsp"%>
-   </mm:notpresent>
+   <%@include file="find_copybook.jsp"%>
 
    <%
       int nof_tests= 0;
@@ -19,7 +17,7 @@
       <mm:relatednodescontainer type="learnobjects" role="posrel">
          <mm:sortorder field="posrel.pos" direction="up"/>
 
-         <mm:tree type="learnobjects" role="posrel" searchdir="destination" orderby="posrel.pos" directions="up">
+         <mm:tree type="learnobjects" role="posrel" searchdir="destination" orderby="posrel.pos" direction="up">
             <mm:import id="nodetype" reset="true"><mm:nodeinfo type="type" /></mm:import>
 
             <mm:compare referid="nodetype" value="tests">
@@ -66,7 +64,7 @@
     <mm:import id="intake" reset="true">1</mm:import>
     <mm:relatednodescontainer type="learnobjects" role="posrel">
       <mm:sortorder field="posrel.pos" direction="up"/>
-      <mm:tree type="learnobjects" role="posrel" searchdir="destination" orderby="posrel.pos" directions="up">
+      <mm:tree type="learnobjects" role="posrel" searchdir="destination" orderby="posrel.pos" direction="up">
         <mm:related path="developcomp,competencies">
           <mm:field name="competencies.number" jspvar="thisCompetencie" vartype="String">
             <% neededCompetencies += thisCompetencie + ","; %>

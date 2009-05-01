@@ -1,11 +1,12 @@
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.0" prefix="mm" %>
 <%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <%@page import="java.util.*" %>
 
 <mm:content postprocessor="reducespace" expires="0">
 
-<mm:cloud method="delegate" jspvar="cloud">
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
 
 
 
@@ -15,6 +16,24 @@
 <%@ include file="getids.jsp" %>
 
 <mm:import externid="direct_connection" reset="true">false</mm:import>
+
+   <%
+
+      String bundlePOP = null;
+
+   %>
+
+   <mm:write referid="lang_code" jspvar="sLangCode" vartype="String" write="false">
+
+      <%
+
+         bundlePOP = "nl.didactor.component.pop.PopMessageBundle_" + sLangCode;
+
+      %>
+
+   </mm:write>
+
+<fmt:bundle basename="<%= bundlePOP %>">
   <div class="contentBody">
 
 <mm:node number="$education">
@@ -29,7 +48,7 @@
 
     <mm:sortorder field="posrel.pos" direction="up"/>
 
-    <mm:tree type="learnobjects" role="posrel" searchdir="destination" orderby="posrel.pos" directions="up">
+    <mm:tree type="learnobjects" role="posrel" searchdir="destination" orderby="posrel.pos" direction="up">
 
       <mm:import id="nodetype" reset="true"><mm:nodeinfo type="type" /></mm:import>
 
@@ -56,17 +75,17 @@
     <mm:node number="progresstextbackground">
 
     <th>
-        <mm:import id="template" reset="true">font(mm:fonts/didactor.ttf)+fill(000000)+pointsize(10)+gravity(NorthEast)+text(0,5,'<di:translate key="pop.progress" />')+rotate(90)</mm:import>
+        <mm:import id="template" reset="true">font(mm:fonts/didactor.ttf)+fill(000000)+pointsize(10)+gravity(NorthEast)+text(0,5,'<fmt:message key="Progress"/>')+rotate(90)</mm:import>
         <img src="<mm:image template="$template"/>">
     </th>
 
     <th>
-        <mm:import id="template" reset="true">font(mm:fonts/didactor.ttf)+fill(000000)+pointsize(10)+gravity(NorthEast)+text(0,5,'<di:translate key="pop.numberofvisits" />')+rotate(90)</mm:import>
+        <mm:import id="template" reset="true">font(mm:fonts/didactor.ttf)+fill(000000)+pointsize(10)+gravity(NorthEast)+text(0,5,'<fmt:message key="NumberOfVisits"/>')+rotate(90)</mm:import>
         <img src="<mm:image template="$template"/>">
     </th>
 
     <th>
-        <mm:import id="template" reset="true">font(mm:fonts/didactor.ttf)+fill(000000)+pointsize(10)+gravity(NorthEast)+text(0,5,'<di:translate key="pop.timeofvisits" />')+rotate(90)</mm:import>
+        <mm:import id="template" reset="true">font(mm:fonts/didactor.ttf)+fill(000000)+pointsize(10)+gravity(NorthEast)+text(0,5,'<fmt:message key="TimeOfVisits"/>')+rotate(90)</mm:import>
         <img src="<mm:image template="$template"/>">
     </th>
 
@@ -144,10 +163,10 @@
 <span style="float: right"><a href="<mm:treefile  page="/pop/index.jsp" objectlist="$includePath" referids="$popreferids,currentfolder">
 
     <mm:param name="startAt"><%= startAt + 15 %></mm:param>
-    <mm:param name="popcmd">detail</mm:param>
+    <mm:param name="command">detail</mm:param>
     <mm:param name="direct_connection"><mm:write referid="direct_connection"/></mm:param>
 
-</mm:treefile>"><di:translate key="pop.nextresults" /></a></span>
+</mm:treefile>"><fmt:message key="NextResults"/></a></span>
 
 <% }
 
@@ -156,10 +175,10 @@
 <a href="<mm:treefile  page="/pop/index.jsp" objectlist="$includePath" referids="$popreferids,currentfolder">
 
     <mm:param name="startAt"><%= startAt - 15 %></mm:param>
-    <mm:param name="popcmd">detail</mm:param>
+    <mm:param name="command">detail</mm:param>
     <mm:param name="direct_connection"><mm:write referid="direct_connection"/></mm:param>
 
-</mm:treefile>"><di:translate key="pop.prevresults" /></a>
+</mm:treefile>"><fmt:message key="PrevResults"/></a>
 
 <% } %>
 
@@ -167,6 +186,7 @@
 
 
   </div>
+</fmt:bundle>
 
 </mm:cloud>
 

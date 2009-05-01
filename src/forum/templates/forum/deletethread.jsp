@@ -2,26 +2,21 @@
 <%--
 This page allows a teacher or administrator to completely remove a thread, including all related messages
 --%>
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.0" prefix="mm" %>
 <%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
 <%@taglib uri="oscache" prefix="os" %>
 <mm:cloud jspvar="cloud" name="mmbase" loginpage="/login.jsp">
   <%@ include file="/shared/setImports.jsp"%>
-
-  <%@include file="/education/wizards/roles_defs.jsp" %>
-  <mm:import id="editcontextname" reset="true">docent schermen</mm:import>
-  <%@include file="/education/wizards/roles_chk.jsp" %>
-
   <mm:import id="name" externid="name" />
   <mm:import id="forum" externid="forum" jspvar="forum"/>
   <mm:import id="delthread" externid="delthread" />
 
-  <mm:islessthan referid="rights" referid2="RIGHTS_RW" inverse="true">
+  <di:hasrole role="teacher" inverse="false">
     <mm:import id="isTeacher">true</mm:import>
-  </mm:islessthan>
-  <mm:islessthan referid="rights" referid2="RIGHTS_RW">
+  </di:hasrole>
+  <di:hasrole role="teacher" inverse="true">
     <mm:import id="isTeacher">false</mm:import>
-  </mm:islessthan>
+  </di:hasrole>
 
   <mm:isnotempty referid="delthread">
     <mm:compare referid="isTeacher" value="true">

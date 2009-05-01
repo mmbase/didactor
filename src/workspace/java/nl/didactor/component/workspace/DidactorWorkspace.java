@@ -1,19 +1,12 @@
 package nl.didactor.component.workspace;
-import nl.didactor.builders.DidactorBuilder;
 import nl.didactor.component.Component;
 import nl.didactor.component.core.*;
 import org.mmbase.bridge.Cloud;
 import org.mmbase.module.core.*;
 import org.mmbase.module.corebuilders.*;
-import org.mmbase.storage.search.RelationStep;
-import org.mmbase.storage.search.SearchQueryException;
-import org.mmbase.storage.search.implementation.NodeSearchQuery;
-import org.mmbase.util.logging.*;
-
-import java.util.*;
+import java.util.Map;
 
 public class DidactorWorkspace extends Component {
-    private static final Logger log = Logging.getLoggerInstance(DidactorWorkspace.class);
     /**
      * Returns the version of the component
      */
@@ -25,66 +18,7 @@ public class DidactorWorkspace extends Component {
      * Returns the name of the component
      */
     public String getName() {
-        return "workspace";
-    }
-
-    public void init() {
-        super.init();
-        MMBase mmbase = MMBase.getMMBase();
-        DidactorBuilder people = (DidactorBuilder)mmbase.getBuilder("people");
-        people.registerPostInsertComponent(this, 10);
-        people.registerPreDeleteComponent(this, 10);
-
-        DidactorBuilder classes = (DidactorBuilder)mmbase.getBuilder("classes");
-        classes.registerPostInsertComponent(this, 10);
-        classes.registerPreDeleteComponent(this, 10);
-
-        DidactorBuilder workgroups = (DidactorBuilder)mmbase.getBuilder("workgroups");
-        workgroups.registerPostInsertComponent(this, 10);
-        workgroups.registerPreDeleteComponent(this, 10);
-        
-        // This is experimental code: 
-        // See also applications/DidactorWorkspace.xml
-        MMObjectBuilder chatlogs = mmbase.getBuilder("chatlogs");
-        if (chatlogs != null) {
-            //<relation from="folders"     to="chatlogs"    type="related" />
-            TypeRel typeRel = mmbase.getTypeRel();
-            RelDef  relDef = mmbase.getRelDef();
-            int related = relDef.getNumberByName("related");
-            MMObjectBuilder folders = mmbase.getBuilder("folders");
-            MMObjectBuilder portfoliopermissions = mmbase.getBuilder("portfoliopermissions");
-            if (!typeRel.contains(folders.getObjectType(), chatlogs.getObjectType(), related)) {
-                log.info("No relation folders-related->chatlogs. Creating now");
-                MMObjectNode n = typeRel.getNewNode("system");
-                n.setValue("snumber", folders.getObjectType());
-                n.setValue("dnumber", chatlogs.getObjectType());
-                n.setValue("rnumber", related);
-                n.setValue("max", -1);
-                int id = typeRel.insert("system", n);
-            }
-        }
-    }
-
-    public void install() {
-        MMBase mmbase = MMBase.getMMBase();
-        DidactorBuilder people = (DidactorBuilder)mmbase.getBuilder("people");
-        DidactorBuilder classes = (DidactorBuilder)mmbase.getBuilder("classes");
-        DidactorBuilder workgroups = (DidactorBuilder)mmbase.getBuilder("workgroups");
-        try {
-            List nodes = people.getNodes(new NodeSearchQuery(people));
-            for (int i=0; i<nodes.size(); i++) {
-                postInsert((MMObjectNode)nodes.get(i));
-            }
-            nodes = classes.getNodes(new NodeSearchQuery(classes));
-            for (int i=0; i<nodes.size(); i++) {
-                postInsert((MMObjectNode)nodes.get(i));
-            }
-            nodes = workgroups.getNodes(new NodeSearchQuery(workgroups));
-            for (int i=0; i<nodes.size(); i++) {
-                postInsert((MMObjectNode)nodes.get(i));
-            }
-        } catch (SearchQueryException e) {
-        }
+        return "DidactorWorkspace";
     }
 
     /**
@@ -97,40 +31,32 @@ public class DidactorWorkspace extends Component {
     }
 
     /**
-     * This method is called when a new object is added to Didactor. If the component
-     * needs to insert objects for this object, it can do so. 
+     * Permission framework: indicate whether or not a given operation may be done, with the
+     * given arguments. The return value is a list of 2 booleans; the first boolean indicates
+     * whether or not the operation is allowed, the second boolean indicates whether or not
+     * this result may be cached.
      */
-    public boolean postInsert(MMObjectNode node) {
-        if (node.getBuilder().getTableName().equals("people")) {
-            return createUser(node);
-        }
+    public boolean[] may (String operation, Cloud cloud, Map context, String[] arguments) {
+        return new boolean[]{true, true};
+    }
 
-        if (node.getBuilder().getTableName().equals("classes")) {
-            return createClass(node);
-        }
-
-        if (node.getBuilder().getTableName().equals("workgroups")) {
-            return createWorkgroup(node);
-        }
-
-        return true;
+    public String getSetting(String setting, Cloud cloud, Map context, String[] arguments) {
+        throw new IllegalArgumentException("Unknown setting '" + setting + "'");
     }
 
     /**
-     * This method is called when a new object is removed from Didactor.
+     * This method is called when a new object is added to Didactor. If the component
+     * needs to insert objects for this object, it can do so. 
      */
-    public boolean preDelete(MMObjectNode node) {
-        if (node.getBuilder().getTableName().equals("people")) {
-            return deleteObject(node);
-        }
+    public boolean notifyCreate(MMObjectNode node) {
+        if (node.getBuilder().getTableName().equals("people"))
+            return createUser(node);
 
-        if (node.getBuilder().getTableName().equals("classes")) {
-            return deleteObject(node);
-        }
+        if (node.getBuilder().getTableName().equals("classes"))
+            return createClass(node);
 
-        if (node.getBuilder().getTableName().equals("workgroups")) {
-            return deleteObject(node);
-        }
+        if (node.getBuilder().getTableName().equals("workgroups"))
+            return createWorkgroup(node);
 
         return true;
     }
@@ -198,42 +124,6 @@ public class DidactorWorkspace extends Component {
         relation.setValue("rnumber", related);
         insrel.insert(username, relation);
 
-        return true;
-    }
-
-    /**
-     * This method deletes the workspace for the user, class or workgroup
-     */
-    private boolean deleteObject(MMObjectNode object) {
-        Vector workspaces = object.getRelatedNodes("workspaces", "related", RelationStep.DIRECTIONS_DESTINATION);
-
-        // Iterate the workspaces, to remove them all
-        for (int i=0; i<workspaces.size(); i++) {
-            MMObjectNode workspace = (MMObjectNode)workspaces.get(i);
-            Vector folders = workspace.getRelatedNodes("folders", "posrel", RelationStep.DIRECTIONS_DESTINATION);
-
-            for (int j=0; j<folders.size(); j++) {
-                MMObjectNode folder = (MMObjectNode)folders.get(j);
-
-                // WARNING: NEED TO CHECK IF WE MAY DELETE ALL THESE!!
-                String[] otypes = new String[]{"attachments", "chatlogs", "pages", "urls"};
-                for (int k=0; k<otypes.length; k++) {
-                    Vector objs = folder.getRelatedNodes(otypes[k], "related", RelationStep.DIRECTIONS_DESTINATION);
-
-                    // Iterate the attachments etc., to remove them all
-                    for (int l=0; l<objs.size(); l++) {
-                        MMObjectNode obj = (MMObjectNode)objs.get(l);
-                        obj.getBuilder().removeRelations(obj);
-                        obj.getBuilder().removeNode(obj);
-                    }
-                }
-                folder.getBuilder().removeRelations(folder);
-                folder.getBuilder().removeNode(folder);
-            }
-
-            workspace.getBuilder().removeRelations(workspace);
-            workspace.getBuilder().removeNode(workspace);
-        }
         return true;
     }
 }
