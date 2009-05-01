@@ -6,23 +6,15 @@
 %>
 
 <mm:compare referid="imagelayout" value="0">
-     <table width="100%">
-        <tr>
-
    <mm:related path="sizerel,images" orderby="sizerel.pos">
    <mm:import id="imwidth" reset="true"><mm:field name="sizerel.width"/></mm:import>
    <mm:import id="imheight" reset="true"><mm:field name="sizerel.height"/></mm:import>
    <mm:import id="imnum" reset="true"><mm:field name="images.number"/></mm:import>
    <mm:node number="$imnum">
-  
-      <td valign="top" width="100%">
-      <table>
-        <tr><td>
-         <mm:field name="showtitle">
-        <mm:compare value="1">
-          <h3> <mm:field name="title"/></h3>
-        </mm:compare>
-        </mm:field>
+   
+      <td>
+      <mm:field name="title"/>
+      <br/>
        <mm:isgreaterthan referid="imwidth" value="0">
           <mm:isgreaterthan referid="imheight" value="0">
             <mm:import id="template" reset="true">s(<mm:write referid="imwidth"/>x<mm:write referid="imheight"/>)</mm:import>
@@ -40,36 +32,24 @@
       </mm:islessthan>
 
       
-        </td></tr>
-        <tr><td>
-        <mm:field name="description"/>
-        </td></tr>
-     </table>
+        <br clear="all"/>
+        
+      <mm:field name="description"/>
      </td>
-    </mm:node>
+     </mm:node>
     </mm:related>
-
-       </tr>
-     </table>
- 
     </mm:compare>
     
     <mm:compare referid="imagelayout" value="1">
-      <table width="100%">
-  <mm:related path="sizerel,images" orderby="sizerel.pos">
-
+    <td>
+   <mm:related path="sizerel,images" orderby="sizerel.pos">
    <mm:import id="imwidth" reset="true"><mm:field name="sizerel.width"/></mm:import>
    <mm:import id="imheight" reset="true"><mm:field name="sizerel.height"/></mm:import>
    <mm:import id="imnum" reset="true"><mm:field name="images.number"/></mm:import>
    <mm:node number="$imnum">
-        <tr>
-       <td valign="top" width="100%">
-          <mm:field name="showtitle">
-        <mm:compare value="1">
-          <h3> <mm:field name="title"/></h3>
-        </mm:compare>
-        </mm:field>
- 
+   
+      <mm:field name="title"/>
+      <br/>
        <mm:isgreaterthan referid="imwidth" value="0">
        <mm:isgreaterthan referid="imheight" value="0">
        <mm:import id="template" reset="true">s(<mm:write referid="imwidth"/>x<mm:write referid="imheight"/>)</mm:import>
@@ -87,13 +67,12 @@
       </mm:islessthan>
              
        
-        </td></tr>
-        <tr><td width="100%">
+        <br clear="all"/>
         
       <mm:field name="description"/>
-        </td></tr>
+        <br clear="all"/>
      </mm:node>
     </mm:related>
-   </table>
+    </td>
     </mm:compare>
 

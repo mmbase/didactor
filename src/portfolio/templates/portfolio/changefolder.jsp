@@ -1,15 +1,16 @@
 <%--
   This template changes a existing folder.
 --%>
-<%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.0" prefix="mm" %>
 <%-- expires is set so renaming a folder does not show the old name --%>
 <mm:content postprocessor="reducespace" expires="0">
-<mm:cloud method="delegate" jspvar="cloud">
-<jsp:directive.include file="/shared/setImports.jsp" />
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
+<%@include file="/shared/setImports.jsp" %>
+<fmt:bundle basename="nl.didactor.component.workspace.WorkspaceMessageBundle">
 <mm:treeinclude page="/cockpit/cockpit_header.jsp" objectlist="$includePath" referids="$referids">
   <mm:param name="extraheader">
-    <title><di:translate key="portfolio.renamefolder" /></title>
+    <title><fmt:message key="RENAMEFOLDER" /></title>
   </mm:param>
 </mm:treeinclude>
 
@@ -50,7 +51,7 @@
 
 <%-- Check if the back button is pressed --%>
 <mm:present referid="action2">
-  <mm:import id="action2text"><di:translate key="portfolio.back" /></mm:import>
+  <mm:import id="action2text"><fmt:message key="BACK" /></mm:import>
   <mm:compare referid="action2" referid2="action2text">
     <mm:redirect referids="$referids,currentfolder,typeof,contact?" page="$callerpage"/>
   </mm:compare>
@@ -60,26 +61,29 @@
 <div class="rows">
 
 <div class="navigationbar">
-<div class="titlebar">
-<img src="<mm:treefile write="true" page="/gfx/icon_shareddocs.gif" objectlist="$includePath" referids="$referids"/>" width="25" height="13" border="0" title="<di:translate key="portfolio.portfolio" />"  alt="<di:translate key="portfolio.portfolio" />"/>
-<di:translate key="portfolio.portfolio" />
-</div>
+  <div class="titlebar">
+    <mm:compare referid="typeof" value="1">
+      <img src="<mm:treefile write="true" page="/gfx/icon_mydocs.gif" objectlist="$includePath" referids="$referids"/>" width="25" height="13" border="0" alt="<fmt:message key="MYDOCUMENTS" />" />
+      <fmt:message key="MYDOCUMENTS" />
+    </mm:compare>
+    <mm:compare referid="typeof" value="2">
+      <img src="<mm:treefile write="true" page="/gfx/icon_shareddocs.gif" objectlist="$includePath" referids="$referids"/>" width="25" height="13" border="0" alt="<fmt:message key="SHAREDDOCUMENTS" />" />
+      <fmt:message key="SHAREDDOCUMENTS" />
+    </mm:compare>
+  </div>
 </div>
 
 <div class="folders">
-
-<div class="folderHeader">
-  <di:translate key="portfolio.portfolio" />
-</div>
-<div class="folderBody">
-</div>
-
+  <div class="folderHeader">
+  </div>
+  <div class="folderBody">
+  </div>
 </div>
 
 <div class="mainContent">
 
   <div class="contentHeader">
-    <di:translate key="portfolio.renamefolder" />
+    <fmt:message key="RENAMEFOLDER" />
   </div>
 
   <div class="contentBodywit">
@@ -107,17 +111,18 @@
       <mm:compare referid="contact" value="-1" inverse="true">
         <input type="hidden" name="contact" value="<mm:write referid="contact"/>"/>
       </mm:compare>
-      <input class="formbutton" type="submit" name="action1" value="<di:translate key="portfolio.rename" />" />
-      <input class="formbutton" type="submit" name="action2" value="<di:translate key="portfolio.back" />" />
+      <input class="formbutton" type="submit" name="action1" value="<fmt:message key="RENAME" />" />
+      <input class="formbutton" type="submit" name="action2" value="<fmt:message key="BACK" />" />
 
 	  <mm:present referid="error">
 	    <p/>
-	    <h1><di:translate key="portfolio.foldernamenotempty" /></h1>
+	    <h1><fmt:message key="FOLDERNAMENOTEMPTY" /></h1>
 	  </mm:present>
     </form>
   </div>
 </div>
 </div>
 <mm:treeinclude page="/cockpit/cockpit_footer.jsp" objectlist="$includePath" referids="$referids" />
+</fmt:bundle>
 </mm:cloud>
 </mm:content>

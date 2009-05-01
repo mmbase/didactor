@@ -1,21 +1,22 @@
-<jsp:root version="2.0"
-          xmlns:jsp="http://java.sun.com/JSP/Page"
-          xmlns:mm="http://www.mmbase.org/mmbase-taglib-2.0"
-          xmlns:di="http://www.didactor.nl/ditaglib_1.0">
-  <mm:import externid="extraheader" />
-  <mm:import externid="extrabody" />
-  <mm:cloud method="asis">
-    <![CDATA[<html xmlns="http://www.w3.org/1999/xhtml">]]><!-- UGLY: opened, but not closed in this file -->
-    <di:head>
-      <mm:write referid="extraheader" escape="none" />
-    </di:head>
-    <![CDATA[<body class="componentbody"]]><!-- UGLY: opened, but not closed in this file -->
-    <mm:write referid="extrabody" escape="none" />
-    <![CDATA[>]]>
-    <div class="">
-      <di:include page="/cockpit/applicationbar.jsp" />
-      <di:include page="/cockpit/providerbar.jsp"  />
-      <di:include page="/cockpit/educationbar.jsp" />
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.0" prefix="mm" %>
+<mm:import externid="extraheader" />
+<mm:import externid="extrabody" />
+<mm:content postprocessor="reducespace">
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
+<%@include file="/shared/setImports.jsp" %>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <mm:write referid="extraheader" escape="none" />
+<%--    <link rel="stylesheet" type="text/css" href="<mm:treefile page="/css/menubars.css" objectlist="$includePath" referids="$referids" />" />--%>
+    <link rel="stylesheet" type="text/css" href="<mm:treefile page="/css/base.css" objectlist="$includePath" referids="$referids" />" />
+<%--    <link rel="stylesheet" type="text/css" href="<mm:treefile page="/css/calendar.css" objectlist="$includePath" referids="$referids" />" />--%>
+  </head>
+  <body <mm:write referid="extrabody" escape="none" />>
+	<div>
+      <mm:treeinclude page="/cockpit/applicationbar.jsp" objectlist="$includePath" referids="$referids"/>
+      <mm:treeinclude page="/cockpit/providerbar.jsp" objectlist="$includePath" referids="$referids" />
+      <mm:treeinclude page="/cockpit/educationbar.jsp" objectlist="$includePath" referids="$referids" />
     </div>
-  </mm:cloud>
-</jsp:root>
+</mm:cloud>
+</mm:content>
