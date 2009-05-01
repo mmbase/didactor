@@ -1,66 +1,174 @@
-<jsp:root version="2.0"
-          xmlns:jsp="http://java.sun.com/JSP/Page"
-          xmlns:mm="http://www.mmbase.org/mmbase-taglib-2.0"
-          xmlns:di="http://www.didactor.nl/ditaglib_1.0">
-  <!--
-  This is the list of users with role student, as used in the big (main) cockpit.
-  It lists all users from the classes of which the current user is a member.
+<%--
+   This is the list of users with role student, as used in the big (main) cockpit.
+   It lists all users from the classes of which the current user is a member.
 
-  If the user is connected directly to education it shows all useres in all classes
-  -->
-  <mm:content postprocessor="none">
-    <mm:hasrank minvalue="didactor user">
+   If the user is connected directly to education it shows all useres in all classes
+--%>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.0" prefix="mm" %>
+<%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
 
-      <mm:import externid="mode"/>
+<%@page import ="java.util.Iterator" %>
+<%@page import ="java.util.HashSet" %>
+<%@page import ="java.util.SortedSet" %>
+<%@page import ="java.util.TreeSet" %>
 
-      <mm:node number="$user">
-        <mm:hasrelationmanager
-            sourcemanager="people"
-            destinationmanager="educations" role="classrel">
-          <mm:relatednodes role="classrel" type="educations" id="directly_related" />
-        </mm:hasrelationmanager>
+<%@page import ="nl.didactor.component.users.PeopleComparator" %>
 
-        <mm:relatednodes
-            add="directly_related?"
-            element="educations"
-            path="classrel,classes,classrel,educations">
-          <!-- Do check: is anybody online for this education -->
-          <mm:import id="show_this_item" reset="true">false</mm:import>
-          <mm:related path="classrel,people">
-            <jsp:directive.include file="online_check.jsp" />
-          </mm:related>
-          <mm:related path="classrel,classes,classrel,people">
-           <jsp:directive.include file="online_check.jsp" />
+
+<mm:content postprocessor="reducespace" expires="0">
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
+   <%@include file="/shared/setImports.jsp" %>
+
+   <mm:import externid="mode"/>
+
+   <%
+//      SortedSet sortsetUsers = new TreeSet(new PeopleComparator());
+      SortedSet sortsetEducations = new TreeSet(new PeopleComparator());
+   %>
+
+   <mm:list path="people,classrel,educations" constraints="people.number=$user">
+      <mm:node element="educations" jspvar="nodeEducation">
+         <%
+            String[] arrstrEducation = new String[3];
+            arrstrEducation[0] = "" + nodeEducation.getNumber();
+            arrstrEducation[1] = (String) nodeEducation.getValue("name");
+            arrstrEducation[2] = "";
+            sortsetEducations.add(arrstrEducation);
+         %>
+      </mm:node>
+   </mm:list>
+   <mm:list path="people,classrel,classes,related,educations" constraints="people.number=$user">
+      <mm:node element="educations" jspvar="nodeEducation">
+         <%
+            String[] arrstrEducation = new String[3];
+            arrstrEducation[0] = "" + nodeEducation.getNumber();
+            arrstrEducation[1] = (String) nodeEducation.getValue("name");
+            arrstrEducation[2] = "";
+            sortsetEducations.add(arrstrEducation);
+         %>
+      </mm:node>
+   </mm:list>
+
+   <%
+      for(Iterator it = sortsetEducations.iterator(); it.hasNext();)
+      {
+         String[] arrstrEducation = (String[]) it.next();
+         %>
+      <mm:node number="<%= arrstrEducation[0] %>">
+         <%// Do check: is anybody online for this education %>
+         <mm:import id="show_this_item" reset="true">false</mm:import>
+         <mm:related path="classrel,people">
+            <%@include file="online_check.jsp"%>
+         </mm:related>
+         <mm:related path="related,classes,classrel,people">
+            <%@include file="online_check.jsp"%>
          </mm:related>
          <mm:compare referid="show_this_item" value="true">
-           <di:translate key="core.users_educationheader" /><b><mm:field name="name"/></b>
-           <br/>
-           <mm:relatednodes role="classrel" type="people">
-             <jsp:directive.include file="add_person.jsp" />
-           </mm:relatednodes>
+            EDUCATION:<b><mm:field name="name"/></b>
+            <br/>
+            <mm:related path="classrel,people">
+               <%@include file="add_person.jsp"%>
+            </mm:related>
 
-           <mm:related path="classrel,classes" orderby="classes.name">
-             <mm:node element="classes">
 
-               <mm:import id="show_this_item" reset="true">false</mm:import>
-               <mm:related path="classrel,people">
-                 <jsp:directive.include file="online_check.jsp" />
-               </mm:related>
-               <mm:compare referid="show_this_item" value="true">
-                 <di:translate key="core.users_classheader" />
-                 <mm:treefile write="false" page="/index.jsp" objectlist="$includePath" referids="_node@class">
-                   <b><a href="${_}"><mm:field name="name"/></a></b>
-                 </mm:treefile>
-                 <br/><!-- brs are evil! -->
-                 <mm:relatednodes role="classrel" type="people">
-                   <jsp:directive.include file="add_person.jsp" />
-                 </mm:relatednodes>
-               </mm:compare>
-             </mm:node>
-           </mm:related>
+
+            <mm:related path="related,classes" orderby="classes.name">
+               <mm:node element="classes" jspvar="nodeClass">
+
+                  <mm:import id="show_this_item" reset="true">false</mm:import>
+                  <mm:related path="classrel,people">
+                     <%@include file="online_check.jsp"%>
+                  </mm:related>
+                  <mm:compare referid="show_this_item" value="true">
+                     class:<b><mm:field name="name"/></b>
+                     <br/>
+                     <mm:related path="classrel,people">
+                        <%@include file="add_person.jsp"%>
+                     </mm:related>
+                  </mm:compare>
+               </mm:node>
+            </mm:related>
          </mm:compare>
-        </mm:relatednodes>
       </mm:node>
-    </mm:hasrank>
-  </mm:content>
-</jsp:root>
+         <%
+      }
+   %>
+
+<%--
+   <mm:list path="people,classrel,classes" constraints="people.number=$user" orderby="classes.name">
+      <mm:node element="classes" jspvar="nodeClass">
+         <%
+            if(!hsetClasses.contains("" + nodeClass.getNumber()))
+            {
+               %>
+                  <mm:import id="show_this_item" reset="true">false</mm:import>
+
+                  <mm:compare referid="show_this_item" value="true">
+                     class:<b><mm:field name="name"/></b>
+                     <br/>
+                     <mm:related path="classrel,people">
+                        <%@include file="add_person.jsp"%>
+                     </mm:related>
+                  </mm:compare>
+               <%
+            }
+         %>
+      </mm:node>
+   </mm:list>
+--%>
+<%--
+   <mm:node referid="user">
+      <mm:related path="classrel,educations">
+         <mm:node element="educations">
+            <mm:related path="classrel,people">
+               <%@include file="add_person.jsp"%>
+            </mm:related>
+            <mm:related path="related,classes">
+               <mm:node element="classes">
+                  <mm:related path="classrel,people">
+                     <%@include file="add_person.jsp"%>
+                  </mm:related>
+               </mm:node>
+            </mm:related>
+         </mm:node>
+      </mm:related>
+      <mm:related path="classrel,classes">
+         <mm:node element="classes">
+            <mm:related path="classrel,people">
+               <%@include file="add_person.jsp"%>
+            </mm:related>
+         </mm:node>
+      </mm:related>
+   </mm:node>
+--%>
+
+   <%
+/*
+      for(Iterator it = sortsetUsers.iterator(); it.hasNext(); )
+      {
+         String[] arrstr = (String[]) it.next();
+         %>
+            <mm:node number="<%= arrstr[0] %>">
+               <a href="<mm:treefile page="/portfolio/index.jsp" objectlist="$includePath" referids="$referids">
+                           <mm:param name="contact"><%= arrstr[0] %></mm:param>
+                        </mm:treefile>" class="users">
+                        <%-- Online/offline status is retrieved using the nl.didactor.builders.PeopleBuilder class  --%>
+                  <mm:field name="isonline" id="isonline" write="false" />
+                  <mm:compare referid="isonline" value="0">
+                     <img src="<mm:treefile write="true" page="/gfx/icon_offline.gif" objectlist="$includePath" />" width="6" height="12" border="0" alt="offline" />
+                  </mm:compare>
+                  <mm:compare referid="isonline" value="1">
+                     <img src="<mm:treefile write="true" page="/gfx/icon_online.gif" objectlist="$includePath" />" width="6" height="12" border="0" alt="online" />
+                  </mm:compare>
+                  <mm:remove referid="isonline" />
+                  <%= arrstr[2] %> <%= arrstr[1] %>
+               </a>
+               <br />
+            </mm:node>
+         <%
+      }
+*/
+   %>
+
+</mm:cloud>
+</mm:content>

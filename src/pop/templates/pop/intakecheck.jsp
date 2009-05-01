@@ -7,15 +7,13 @@
    <%@include file="find_copybook.jsp"%>
 
 
-<%	
-// get the needed competencies related to this education tree
-String neededCompetencies = "";
-String intakeCompetencies = ""; 
+<%	String neededCompetencies = "";
+	String intakeCompetencies = ""; 
 %>
 <mm:node number="$education">
   <mm:relatednodescontainer type="learnobjects" role="posrel">
     <mm:sortorder field="posrel.pos" direction="up"/>
-    <mm:tree type="learnobjects" role="posrel" searchdir="destination" orderby="posrel.pos" directions="up">
+    <mm:tree type="learnobjects" role="posrel" searchdir="destination" orderby="posrel.pos" direction="up">
       <mm:related path="developcomp,competencies">
         <mm:field name="competencies.number" jspvar="thisCompetencie" vartype="String">
           <% neededCompetencies += thisCompetencie + ","; %>
@@ -24,9 +22,7 @@ String intakeCompetencies = "";
     </mm:tree> 
   </mm:relatednodescontainer> 
 </mm:node>
-<%
-// for all needed competencies: if the intake test related to the competence is passed, set the havecomp relation to the current pop
-if (neededCompetencies.length() != 0) { %>
+<% if (neededCompetencies.length() != 0) { %>
   <mm:list nodes="<%= neededCompetencies %>" path="competencies">
     <% boolean needIntake = true;
        boolean passed = true; 
