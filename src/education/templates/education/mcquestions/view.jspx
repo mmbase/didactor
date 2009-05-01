@@ -4,16 +4,21 @@
     xmlns:mm="http://www.mmbase.org/mmbase-taglib-2.0"
     xmlns:jsp="http://java.sun.com/JSP/Page">
   <jsp:output omit-xml-declaration="yes" />
+  <mm:node number="${param.question}">
+    <mm:field name="type" id="type" write="false"/>
+  </mm:node>
 
-  <mm:node number="${param.question}" id="question" />
-
-  <b class="type${question.type}">
-    <di:translate key="education.givenanswer${question.type eq 1 ? 's' : ''}" /><!-- So much for i18n, plural by s is only true for a few languages -->
-    <jsp:text>: </jsp:text>
-  </b>
-  <mm:relatednodes type="mcanswers">
-    <mm:field name="text"/>
-    <mm:last inverse="true">, </mm:last>
-  </mm:relatednodes>
-
+  <mm:compare referid="type" value="0">
+    <mm:relatednodes type="answers">
+      <b><di:translate key="education.givenanswer" />:</b>
+      <mm:field name="text"/>
+    </mm:relatednodes>
+  </mm:compare>
+  <mm:compare referid="type" value="1">
+    <b><di:translate key="education.givenanswer" />en:</b>
+    <mm:relatednodes type="answers">
+      <mm:field name="text"/>
+      <mm:last inverse="true">, </mm:last>
+    </mm:relatednodes>
+  </mm:compare>
 </mm:node>

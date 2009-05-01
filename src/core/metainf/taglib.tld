@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
-<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
-        version="2.0" xmlns:ns0="http://www.w3.org/2001/XMLSchema-instance"
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee" 
+        version="2.0" xmlns:ns0="http://www.w3.org/2001/XMLSchema-instance" 
         ns0:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd">
   <tlib-version>1.0</tlib-version>
   <shortname>di</shortname>
@@ -81,21 +81,6 @@
       <required>false</required>
       <rtexprvalue>true</rtexprvalue>
     </attribute>
-    <attribute>
-      <name>id</name>
-      <required>false</required>
-      <rtexprvalue>true</rtexprvalue>
-    </attribute>
-    <attribute>
-      <name>write</name>
-      <required>false</required>
-      <rtexprvalue>true</rtexprvalue>
-    </attribute>
-    <attribute>
-      <name>vartype</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-    </attribute>
   </tag>
   <tag>
     <name>getsetting</name>
@@ -170,12 +155,7 @@
       <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
-      <name>referids</name>
-      <required>false</required>
-      <rtexprvalue>true</rtexprvalue>
-    </attribute>
-    <attribute>
-      <name>inverse</name>
+      <name>arguments</name>
       <required>false</required>
       <rtexprvalue>true</rtexprvalue>
     </attribute>
@@ -360,16 +340,8 @@
     <path>/META-INF/tags/di/core/url.tagx</path>
   </tag-file>
   <tag-file>
-    <name>html</name>
-    <path>/META-INF/tags/di/core/html.tagx</path>
-  </tag-file>
-  <tag-file>
-    <name>head</name>
-    <path>/META-INF/tags/di/core/head.tagx</path>
-  </tag-file>
-  <tag-file>
-    <name>include</name>
-    <path>/META-INF/tags/di/core/include.tagx</path>
+    <name>frame</name>
+    <path>/META-INF/tags/di/core/frame.tagx</path>
   </tag-file>
   <tag-file>
     <name>copybook</name>
@@ -379,62 +351,6 @@
     <name>email</name>
     <path>/META-INF/tags/di/core/email.tagx</path>
   </tag-file>
-  <tag-file>
-    <name>menuitem</name>
-    <path>/META-INF/tags/di/core/menuitem.tagx</path>
-  </tag-file>
-  <tag-file>
-    <name>has</name>
-    <path>/META-INF/tags/di/core/has.tagx</path>
-  </tag-file>
-  <tag-file>
-    <name>rotatedtext</name>
-    <path>/META-INF/tags/di/core/rotatedtext.tagx</path>
-  </tag-file>
-  <tag-file>
-    <name>icon</name>
-    <path>/META-INF/tags/di/core/icon.tagx</path>
-  </tag-file>
-  <tag-file>
-    <name>rich</name>
-    <path>/META-INF/tags/di/core/rich.tagx</path>
-  </tag-file>
-  <tag-file>
-    <name>kupulink</name>
-    <path>/META-INF/tags/di/core/kupulink.tagx</path>
-  </tag-file>
-  <tag-file>
-    <name>title</name>
-    <path>/META-INF/tags/di/core/title.tagx</path>
-  </tag-file>
-  <tag-file>
-    <name>flash</name>
-    <path>/META-INF/tags/di/core/flash.tagx</path>
-  </tag-file>
-  <tag-file>
-    <name>gui</name>
-    <path>/META-INF/tags/di/core/gui.tagx</path>
-  </tag-file>
-  <tag-file>
-    <name>script</name>
-    <path>/META-INF/tags/di/core/script.tagx</path>
-  </tag-file>
-  <tag-file>
-    <name>background</name>
-    <path>/META-INF/tags/di/core/background.tagx</path>
-  </tag-file>
-  <tag-file>
-    <name>blocks</name>
-    <path>/META-INF/tags/di/core/blocks.tagx</path>
-  </tag-file>
-  <tag-file>
-    <name>img</name>
-    <path>/META-INF/tags/di/core/img.tagx</path>
-  </tag-file>
-  <tag-file>
-    <name>question</name>
-    <path>/META-INF/tags/di/core/question.tagx</path>
-  </tag-file>
 
   <function>
     <description>
@@ -442,23 +358,15 @@
     </description>
     <name>translate</name>
     <function-class>nl.didactor.taglib.Functions</function-class>
-    <function-signature>String translate(java.lang.String)</function-signature>
+    <function-signature>String translate(javax.servlet.jsp.PageContext, java.lang.String)</function-signature>
   </function>
   <function>
     <description>
-      Simple version of di:getsetting. Easily usuable in EL like ${di:setting('email', 'showbcc')}.
+      Simple version of di:getsetting. Easily usuable in EL like ${di:translate(pageContext, 'email', 'showbcc')}.
     </description>
     <name>setting</name>
     <function-class>nl.didactor.taglib.Functions</function-class>
-    <function-signature>String setting(java.lang.String, java.lang.String)</function-signature>
-  </function>
-  <function>
-    <description>
-      Gets component by name
-    </description>
-    <name>component</name>
-    <function-class>nl.didactor.taglib.Functions</function-class>
-    <function-signature>nl.didactor.component component(java.lang.String)</function-signature>
+    <function-signature>String setting(javax.servlet.jsp.PageContext, java.lang.String, java.lang.String)</function-signature>
   </function>
 
 </taglib>

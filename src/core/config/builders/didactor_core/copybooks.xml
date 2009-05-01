@@ -43,8 +43,5 @@
     <function key="madetest">
       <class>nl.didactor.functions.CopyBookMadeTest</class>
     </function>
-    <function key="madetests">
-      <class>nl.didactor.functions.CopyBookMadeTest</class>
-    </function>
   </functionlist>
 </builder>

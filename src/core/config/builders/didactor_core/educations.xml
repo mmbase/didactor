@@ -6,7 +6,7 @@
     name="educations" maintainer="didactor.nl" version="3" extends="object">
 
   <class>nl.didactor.builders.DidactorBuilder</class>
-  <searchage>100000</searchage>
+  <searchage>-1</searchage>
 
   <names>
     <singular xml:lang="nl">Opleiding</singular>
@@ -21,8 +21,8 @@
   </descriptions>
 
   <properties>
+    <property name="max-nodes-from-query">99999</property>
     <property name="smartpathfield">path,name</property>
-    <property name="show_domain">/education/</property>
   </properties>
 
   <fieldlist>
@@ -41,24 +41,25 @@
           <list>1</list>
         </positions>
       </editor>
-      <datatype base="line" xmlns="http://www.mmbase.org/xmlns/datatypes">
-        <required value="true" />
-        <maxLength value="255" />
-      </datatype>
+      <datatype base="line" xmlns="http://www.mmbase.org/xmlns/datatypes" />
+      <db>
+        <type state="persistent" size="255" notnull="true" key="false">STRING</type>
+      </db>
     </field>
 
     <field name="intro">
       <descriptions>
-        <description xml:lang="nl">Introtekst, te gebruiken als 'description'</description>
+        <description xml:lang="nl">Introtekst</description>
         <description xml:lang="en">Introductionary text</description>
       </descriptions>
       <gui>
         <guiname xml:lang="nl">Intro</guiname>
         <guiname xml:lang="en">Intro</guiname>
       </gui>
-      <datatype base="field" xmlns="http://www.mmbase.org/xmlns/datatypes">
-        <maxLength value="65535" />
-      </datatype>
+      <datatype base="field" xmlns="http://www.mmbase.org/xmlns/datatypes" />
+      <db>
+        <type state="persistent" size="65535" notnull="false" key="false">STRING</type>
+      </db>
     </field>
 
     <field name="path">
@@ -75,10 +76,10 @@
           <list>3</list>
         </positions>
       </editor>
-      <datatype base="eline" xmlns="http://www.mmbase.org/xmlns/datatypes">
-        <required value="true" />
-        <maxLength value="255" />
-      </datatype>
+      <datatype base="line" xmlns="http://www.mmbase.org/xmlns/datatypes" />
+      <db>
+        <type state="persistent" size="255" notnull="true" key="false">STRING</type>
+      </db>
     </field>
 
     <field name="showtitle">
@@ -95,9 +96,7 @@
           <list>2</list>
         </positions>
       </editor>
-      <datatype base="boolean" xmlns="http://www.mmbase.org/xmlns/datatypes">
-        <default value="true" />
-      </datatype>
+      <datatype base="boolean" xmlns="http://www.mmbase.org/xmlns/datatypes" />
     </field>
 
     <field name="layout">
@@ -114,7 +113,9 @@
           <list>2</list>
         </positions>
       </editor>
-      <datatype base="didactor_layout" xmlns="http://www.mmbase.org/xmlns/datatypes" />
+      <datatype base="integer" xmlns="http://www.mmbase.org/xmlns/datatypes">
+        <!-- probably a enumeration -->
+      </datatype>
     </field>
 
     <field name="imagelayout">
@@ -126,70 +127,25 @@
         <guiname xml:lang="nl">Layout afbeeldingen</guiname>
         <guiname xml:lang="en">Images layout</guiname>
       </gui>
-      <datatype base="didactor_imagelayout" xmlns="http://www.mmbase.org/xmlns/datatypes" />
-    </field>
-
-    <field name="provider" state="virtual">
-      <gui>
-        <guiname xml:lang="nl">Aanbieder</guiname>
-        <guiname xml:lang="en">Provider</guiname>
-      </gui>
-      <datatype base="node" xmlns="http://www.mmbase.org/xmlns/datatypes">
-        <required value="true" enforce="never" />
-        <enumeration enforce="never">
-          <query type="providers"  xmlns="http://www.mmbase.org/xmlns/searchquery">
-            <sortorder field="name" />
-          </query>
-        </enumeration>
-        <setprocessor>
-          <class name="org.mmbase.datatypes.processors.Related$Setter">
-            <param name="type">providers</param>
-            <param name="searchDir">source</param>
-          </class>
-        </setprocessor>
-        <getprocessor>
-          <class name="org.mmbase.datatypes.processors.Related$Getter">
-            <param name="type">providers</param>
-            <param name="searchDir">source</param>
-          </class>
-        </getprocessor>
-
+      <datatype base="integer" xmlns="http://www.mmbase.org/xmlns/datatypes">
+        <!-- probably a enumeration -->
       </datatype>
-
     </field>
-
 
   </fieldlist>
   <functionlist>
-
+    
     <function key="educationLocale" name="locale">
-      <class>nl.didactor.functions.Functions</class>
-    </function>
-
-    <function key="tree">
-      <class>nl.didactor.functions.Functions</class>
-    </function>
-
-    <function key="learnblocks">
       <class>nl.didactor.functions.Functions</class>
     </function>
 
     <function name="smartpath">
       <class>nl.didactor.functions.SmartPath</class>
     </function>
-
+    
     <function key="relatedPersons" name="persons">
       <class>nl.didactor.component.education.utils.EducationPeopleConnector</class>
     </function>
-
-    <function key="tests">
-      <class>nl.didactor.education.functions.Tests</class>
-    </function>
-
-    <function key="getLessons" name="lessons">
-      <class>nl.didactor.component.assessment.LessonChecker</class>
-    </function>
-
 
   </functionlist>
 </builder>

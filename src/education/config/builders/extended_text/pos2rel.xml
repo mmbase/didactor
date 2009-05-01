@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<builder
+<builder 
     xmlns="http://www.mmbase.org/xmlns/builder"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.mmbase.org/xmlns/builder
-                        http://www.mmbase.org/xmlns/builder.xsd"
+    xsi:schemaLocation="http://www.mmbase.org/xmlns/builder 
+                        http://www.mmbase.org/xmlns/builder.xsd"                        
     name="pos2rel" maintainer="mmbase.org" version="0" extends="insrel">
   <names>
     <singular xml:lang="nl">Positie2relatie</singular>
@@ -28,7 +28,6 @@
         </positions>
       </editor>
       <datatype xmlns="http://www.mmbase.org/xmlns/datatypes" base="integer">
-        <default value="2" />
         <enumeration>
           <entry value="1" display="rechts (oorspronkelijk formaat)" xml:lang="nl" />
           <entry value="1" display="right (original formaat)" xml:lang="en" />
@@ -50,17 +49,17 @@
       </datatype>
     </field>
     <field name="pos2">
-      <!-- calling a field pos2 while it means 'popup' is straightforwardly ridiculous -->
       <gui>
-        <guiname xml:lang="nl">Popup</guiname>
-        <guiname xml:lang="en">Pop up</guiname>
+        <guiname xml:lang="nl">Positie2</guiname>
+        <guiname xml:lang="fr">Placent2</guiname>
+        <guiname xml:lang="en">Position2</guiname>
       </gui>
       <editor>
         <positions>
           <list>4</list>
         </positions>
       </editor>
-      <datatype xmlns="http://www.mmbase.org/xmlns/datatypes" base="yesno" />
+      <datatype xmlns="http://www.mmbase.org/xmlns/datatypes" base="integer"  />
     </field>
   </fieldlist>
 </builder>

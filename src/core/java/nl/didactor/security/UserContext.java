@@ -16,7 +16,7 @@ import java.util.*;
  * the roles based on a given context.
  * @author Johannes Verelst &lt;johannes.verelst@eo.nl&gt;
  * @author Michiel Meeuwissen
- * @version $Id: UserContext.java,v 1.13 2008-11-13 16:57:24 michiel Exp $
+ * @version $Id: UserContext.java,v 1.10 2007-07-26 12:58:35 michiel Exp $
  */
 public class UserContext extends org.mmbase.security.BasicUser implements WeakNodeEventListener {
     private static final Logger log = Logging.getLoggerInstance(UserContext.class);
@@ -46,9 +46,8 @@ public class UserContext extends org.mmbase.security.BasicUser implements WeakNo
     }
 
     /**
-     * Mainly used for class-security and anonymous user.
+     * From the org.mmbase.security.UserContext interface
      */
-
     public UserContext(String identifier, String owner, Rank rank, String app) {
         super(app);
         this.identifier = identifier;
@@ -67,7 +66,7 @@ public class UserContext extends org.mmbase.security.BasicUser implements WeakNo
         //wrappedNode = node.getCloud().getNode(node.getNumber());
         owner = node.getStringValue("username");
         identifier = owner;
-        wrappedNode = node == null ? 0 : node.getNumber();
+        this.wrappedNode = node == null ? 0 : node.getNumber();
         roles = getRoles(node);
         Rank proposedRank = Rank.ANONYMOUS;
         for (String roleName : getRoles()) {
@@ -79,7 +78,7 @@ public class UserContext extends org.mmbase.security.BasicUser implements WeakNo
                 continue;
             }
             if (roleName.equals("systemadministrator")) {
-                proposedRank = Rank.ADMIN;
+                proposedRank = Rank.ADMIN; 
                 break;
             }
             Rank user = Rank.getRank("didactor user");
@@ -88,7 +87,7 @@ public class UserContext extends org.mmbase.security.BasicUser implements WeakNo
             }
         }
         if (proposedRank == Rank.ANONYMOUS) {
-            throw new org.mmbase.security.SecurityException("No role  for user '" + owner + "' (" + wrappedNode + ")");
+            throw new org.mmbase.security.SecurityException("No role");
         }
         rank = proposedRank;
         org.mmbase.core.event.EventManager.getInstance().addEventListener(this);
@@ -123,18 +122,18 @@ public class UserContext extends org.mmbase.security.BasicUser implements WeakNo
     public Set<String> getRoles() {
         return roles;
     }
-
+    
     /**
      * From the org.mmbase.security.UserContext interface
      */
-    @Override public String getIdentifier() {
+    public String getIdentifier() {
         return identifier;
     }
 
     /**
      * From the org.mmbase.security.UserContext interface
      */
-    @Override public String getOwnerField() {
+    public String getOwnerField() {
         return owner;
     }
 

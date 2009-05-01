@@ -1,24 +1,21 @@
 package nl.didactor.component.education;
 
-import java.util.*;
-
+import java.util.Map;
+import java.util.Vector;
+import java.lang.Integer;
 import javax.servlet.jsp.JspTagException;
 import nl.didactor.component.Component;
 import nl.didactor.util.ClassRoom;
 import org.mmbase.module.core.*;
-import org.mmbase.bridge.*;
-import org.mmbase.security.Action;
-import org.mmbase.security.ActionChecker;
-import org.mmbase.security.UserContext;
-import org.mmbase.util.functions.Parameters;
-import org.mmbase.util.functions.Parameter;
+import org.mmbase.bridge.Node;
+import org.mmbase.bridge.NodeList;
+import org.mmbase.bridge.Cloud;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
-
 /**
  * @javadoc
- * @version $Id: DidactorEducation.java,v 1.15 2008-02-05 15:05:55 michiel Exp $
+ * @version $Id: DidactorEducation.java,v 1.8 2007-07-20 10:18:43 michiel Exp $
  */
 public class DidactorEducation extends Component {
     private static Logger log = Logging.getLoggerInstance(DidactorEducation.class);
@@ -60,76 +57,60 @@ public class DidactorEducation extends Component {
          return value;
     }
 
-    private static final Parameter SUBJECT   = new Parameter("subject", Node.class, true);
+    // javadoc inherited
+    public boolean[] may (String operation, Cloud cloud, Map context, String[] arguments) {
+        boolean mayvalue[]= new boolean[] {false, false};
+        try {
+            if (operation.equals( "isSelfOrTeacherOf") || operation.equals( "isTeacherOf")) {
 
-    private static final Parameter[] PARAMS = new Parameter[] {Component.EDUCATION, Component.CLASS, SUBJECT};
+                Object user = context.get( "user");
+                Object educationobj= context.get( "education");
+                Object classobj= context.get( "class");
+
+                MMObjectNode usernode = MMBase.getMMBase().getBuilder("people").getNode(  ((Integer)user).intValue());
+                if (usernode == null) {
+                    throw new JspTagException("User with number '" + user + "' not found");
+                }
+                int educationno = castIdentifier( educationobj);
 
 
-    /**
-     * TODO, 'view answers' actually sounds like normal 'node based' mmbase security.
-     * you can principally per answer node calculate whether you may see it or not.
-     */
-    private static final Action VIEW_ANSWERS = new Action("education","viewAnswers", new ActionChecker() {
-            public boolean check(UserContext user, Action ac, Parameters parameters) {
-                if (user.getRank() == org.mmbase.security.Rank.ADMIN) return true;
-                Node subject = (Node) parameters.get(SUBJECT);
-                Node education = (Node) parameters.get(Component.EDUCATION);
-                Node clazz = (Node) parameters.get(Component.CLASS);
-                int u = ((nl.didactor.security.UserContext)user).getUserNumber();
-                return u == subject.getNumber() ||
-                    isTeacherOf(subject.getCloud(), u, subject.getNumber(), education.getNumber(), clazz == null ? -1 : clazz.getNumber());
+                int classno;
+                if((classobj != null) && ( (classobj instanceof String) && (!classobj.equals("null"))) ) {
+                    //the class is a number
+                    classno = castIdentifier(classobj);
+                } else {
+                    //the class is null
+                    classno = -1;
+                }
+
+
+                int subjectno = 0;
+
+                if ((arguments.length > 0) && (arguments[0] != null)) {
+                    subjectno= castIdentifier( context.get( arguments[0]));
+                } else {
+                    throw new JspTagException("1 argument required: subject person ID");
+                }
+                //System.out.println( subjectno);
+                //System.out.println( usernode.getNumber());
+
+                boolean isTeacherOf= ClassRoom.isClassMember(usernode, subjectno, classno, educationno, "teacher", cloud)
+                || ClassRoom.isWorkgroupMember(usernode, subjectno, classno, educationno, "teacher", cloud);
+
+                if (operation.equals( "isTeacherOf")) {
+                    mayvalue[0]= isTeacherOf;
+                } else {
+                    mayvalue[0]= (subjectno == usernode.getNumber()) || isTeacherOf;
+                }
             }
-        }) {
-            public Parameters createParameters() {
-                return new Parameters(PARAMS);
-            }
-        };
-
-
-
-    /**
-     * Rating an answer is changing a certain field of a node. MMBase security is based on entire
-     * nodes. So we need something special. 'Action' framework is used.
-     */
-    private static final Action RATE         = new Action("education", "rate", new ActionChecker() {
-            public boolean check(UserContext user, Action ac, Parameters parameters) {
-                if (user.getRank() == org.mmbase.security.Rank.ADMIN) return true;
-                Node subject = (Node) parameters.get(SUBJECT);
-                Node education = (Node) parameters.get(EDUCATION);
-                Node clazz = (Node) parameters.get(CLASS);
-                return isTeacherOf(subject.getCloud(), Integer.parseInt(user.getIdentifier()), subject.getNumber(), education.getNumber(), clazz == null ? -1 : clazz.getNumber());
-            }
-        }) {
-            public Parameters createParameters() {
-                return new Parameters(PARAMS);
-            }
-        };
-    private static final Map<String, Action> actions = new HashMap<String, Action>();
-
-    static {
-        actions.put(VIEW_ANSWERS.getName(), VIEW_ANSWERS);
-        actions.put(RATE.getName(), VIEW_ANSWERS);
-    }
-
-    public Map<String, Action> getActions() {
-        return Collections.unmodifiableMap(actions);
-    }
-
-    protected static boolean  isTeacherOf(Cloud cloud, int user, int subject, int education, int clazz) {
-        MMObjectNode usernode = MMBase.getMMBase().getBuilder("people").getNode(user);
-        return ClassRoom.isClassMember(usernode, subject, clazz, education, "teacher", cloud)
-            || ClassRoom.isWorkgroupMember(usernode, subject, clazz, education, "teacher", cloud);
+            return mayvalue;
+        } catch (JspTagException e) {
+            log.warn( "may: education: " + operation + " "  +e.getMessage());
+            return new boolean[] {false, false};
+        }
     }
 
     // javadoc inherited
-    @Override
-    public boolean[] may(Cloud cloud, Action action, Parameters arguments) {
-        boolean mayvalue[]= new boolean[] {false, false};
-        mayvalue[0] = action.getDefault().check(cloud.getUser(), action, arguments);
-        return mayvalue;
-    }
-
-    @Override
     public String getValue(String setting, Cloud cloud, Map context, String[] arguments) {
         if ("showlo".equals(setting)) {
             String lo = arguments[0];

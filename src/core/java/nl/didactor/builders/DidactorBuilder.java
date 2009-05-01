@@ -5,7 +5,6 @@ import org.mmbase.module.core.MMObjectNode;
 import org.mmbase.module.core.MMBase;
 import org.mmbase.module.corebuilders.FieldDefs;
 import org.mmbase.module.corebuilders.InsRel;
-import org.mmbase.core.CoreField;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 import java.util.*;
@@ -64,7 +63,7 @@ public class DidactorBuilder extends MMObjectBuilder {
     }
 
     /**
-     * Overridden 'insert' from MMObjectBuilder. It will call the 'preInsert()'
+     * Overridden 'insert' from MMObjectBuilder. It will call the 'preInsert()' 
      * method for all registered components just before inserting the node. It
      * calls the 'postInsert()' for all registered components after inserting the node.
      */
@@ -79,16 +78,13 @@ public class DidactorBuilder extends MMObjectBuilder {
         }
         int res = super.insert(owner, node);
 
-        for (CoreField fd : (Collection<CoreField>) getFields()) {
-            /*
+        for (FieldDefs fd : (Collection<FieldDefs>) getFields()) {
             if (fd.getDBState() == FieldDefs.DBSTATE_VIRTUAL && fd.getDBPos() == 300) {
-            // WTF?
                 if (log.isDebugEnabled()) {
-                    log.debug("Have to process set on field [" + fd.getName() + "] with value [" + node.getValues().get(fd.getName()) + "]");
+                    log.debug("Have to process set on field [" + fd.getDBName() + "] with value [" + node.getValues().get(fd.getDBName()) + "]");
                 }
-                setFieldValue(owner, node, fd.getName());
+                setFieldValue(owner, node, fd.getDBName());
             }
-            */
         }
 
         for (EventInstance e : postInsertComponents) {
@@ -103,7 +99,7 @@ public class DidactorBuilder extends MMObjectBuilder {
 
 
     /**
-     * Overridden 'preCommit' from MMObjectBuilder. It will call the 'preCommit()'
+     * Overridden 'preCommit' from MMObjectBuilder. It will call the 'preCommit()' 
      * method for all registered components.
      */
     public MMObjectNode preCommit(MMObjectNode node) {
@@ -131,14 +127,11 @@ public class DidactorBuilder extends MMObjectBuilder {
     public boolean commit(MMObjectNode node) {
         boolean bSuperCommit = super.commit(node);
 
-        for (CoreField fd : (Collection<CoreField>) getFields()) {
-            /*
-              WTF ?
+        for (FieldDefs fd : (Collection<FieldDefs>) getFields()) {
             if (fd.getDBState() == FieldDefs.DBSTATE_VIRTUAL && fd.getDBPos() == 300) {
                 log.debug("Have to process set on field [" + fd.getDBName() + "] with value [" + node.getValues().get(fd.getDBName()) + "]");
                 setFieldValue(node.getStringValue("owner"), node, fd.getDBName());
             }
-            */
         }
 
         for (EventInstance e : postCommitComponents) {
@@ -148,7 +141,7 @@ public class DidactorBuilder extends MMObjectBuilder {
         }
         return bSuperCommit;
     }
-
+    
     /**
      * This method does NOT override any methods from MMObjectBuilder, but is triggered
      * by the authorization class. This is a rather ugly hack, which might not be supported
@@ -163,7 +156,7 @@ public class DidactorBuilder extends MMObjectBuilder {
         }
         return true;
     }
-
+    
     /**
      * Return the value for a field of the node. This method
      * is overridden from MMObjectBuilder, and will return a value
@@ -217,7 +210,7 @@ public class DidactorBuilder extends MMObjectBuilder {
         InsRel insrel = (InsRel)MMBase.getMMBase().getBuilder("authrel");
         insrel.insert(owner, node.getNumber(), fieldId, authrel);
     }
-
+        
     /**
      * This small innerclass represents an event-instance. It mainly is just a wrapper
      * around the component, but also has a priority that allows the components to be
@@ -226,7 +219,7 @@ public class DidactorBuilder extends MMObjectBuilder {
     private class EventInstance implements Comparable {
         protected Component component;
         protected int priority;
-
+      
         /**
          * Public constructor
          */

@@ -1,8 +1,7 @@
-<di:html
-    xmlns:di="http://www.didactor.nl/ditaglib_1.0"
+<di:frame 
+    xmlns:di="http://www.didactor.nl/ditaglib_1.0" 
     xmlns:mm="http://www.mmbase.org/mmbase-taglib-2.0"
-    component="links"
-    title_key="links.title">
+    title_key="links.title">  
   <mm:node referid="education">
     <h1><mm:field name="name" /> - <di:translate key="links.title" /></h1>
     <mm:relatednodes type="pools" orderby="posrel.pos" role="posrel">
@@ -11,7 +10,7 @@
       <ul>
         <mm:relatednodes type="urls" role="posrel" orderby="posrel.pos">
           <li>
-            <a href="${mm:escape('text/html/attribute', _node.url)}">
+            <a href="${_node.url}">
               <mm:field name="name" write="true">
                 <mm:isempty>
                   <mm:field name="url" />
@@ -23,4 +22,4 @@
       </ul>
     </mm:relatednodes>
   </mm:node>
-</di:html>
+</di:frame>
