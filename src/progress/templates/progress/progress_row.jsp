@@ -1,129 +1,93 @@
-<jsp:root version="1.2"
-          xmlns:jsp="http://java.sun.com/JSP/Page"
-          xmlns:mm="http://www.mmbase.org/mmbase-taglib-2.0"
-          xmlns:di="http://www.didactor.nl/ditaglib_1.0"
-          xmlns:os="http://www.opensymphony.com/oscache"
-          xmlns:fn="http://java.sun.com/jsp/jstl/functions"
-          xmlns:c="http://java.sun.com/jsp/jstl/core">
-  <mm:content postprocessor="none">
-    <mm:cloud rank="didactor user">
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.0" prefix="mm" %>
+<%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
+<mm:content postprocessor="reducespace" expires="0">
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
 
-      <jsp:directive.include file="/education/tests/definitions.jsp" />
-      <jsp:directive.include file="/education/wizards/roles_defs.jsp" />
-      <mm:import id="editcontextname" reset="true">docent schermen</mm:import>
-      <jsp:directive.include file="/education/wizards/roles_chk.jsp" />
+<%@include file="/shared/setImports.jsp" %>
+<%@include file="/education/tests/definitions.jsp" %>
 
-      <mm:import externid="student"           required="true"/>
-      <mm:import externid="startAt"           jspvar="startAt" vartype="Integer" required="true"/>
-      <mm:import externid="direct_connection" required="true"/>
-      <mm:import externid="class" reset="true">${requestScope.class}</mm:import>
+<mm:import id="studentNo" externid="userNoX" required="true"/>
 
+<di:may component="education" action="isSelfOrTeacherOf" arguments="studentNo">
+ 
+<mm:node number="$studentNo">
+  <tr>
+  <mm:import id="user_string"><mm:field name="html(firstname)"/> <mm:field name="html(lastname)"/></mm:import>
+  <td><mm:write referid="user_string"/></td>
 
-      <mm:node number="$student">
-        <tr>
-          <td style="border-color:#000000; border-top:0px; border-left:0px">
-            <mm:treefile page="/progress/student.jsp" objectlist="$includePath" referids="class,student,class@c" write="false">
-              <a href="${_}">
-                <di:person />
-
-              </a>
-            </mm:treefile>
-          </td>
-          <td style="border-color:#000000; border-top:0px; border-left:0px">
-            <mm:import id="progress" vartype="Double">
-              <mm:treeinclude page="/progress/getprogress.jsp" objectlist="$includePath" referids="$referids,student" />
-            </mm:import>
-            ${progress * 100}
-          </td>
-
-          <!-- direct relation people-classrel-educations -->
-          <mm:compare referid="direct_connection" value="true">
-            <mm:list fields="classrel.number" path="people,classrel,educations" constraints="people.number=$student and educations.number=$education">
-              <mm:node element="classrel" id="classrel" />
-            </mm:list>
-          </mm:compare>
-          <mm:isnotempty referid="class">
-            <!-- people-classrel-class-related-educations -->
-            <mm:compare referid="direct_connection" value="true" inverse="true">
-              <mm:list fields="classrel.number" path="people,classrel,classes" constraints="people.number=$student and classes.number=$class">
-                <mm:node element="classrel" id="classrel" />
-              </mm:list>
-            </mm:compare>
-          </mm:isnotempty>
-
-
-          <mm:present referid="classrel">
-            <mm:node referid="classrel">
-              <td style="border-color:#000000; border-top:0px; border-left:0px">
-                <mm:field name="logincount"/>
-              </td>
-              <td style="border-color:#000000; border-top:0px; border-left:0px">
-                <mm:field name="onlinetime" />
-              </td>
-              <td style="border-color:#000000; border-top:0px; border-left:0px">
-                <mm:node number="$student">
-                  <mm:field name="gui(lastactivity)" />
-                </mm:node>
-              </td>
-            </mm:node>
-          </mm:present>
-          <mm:notpresent referid="classrel">
-            <td /><td />
-          </mm:notpresent>
-
-          <di:copybook student="${student}">
-            <mm:present referid="copybookNo">
-              <mm:remove referid="copybookNo" />
-            </mm:present>
-            <mm:node id="copybookNo" />
-          </di:copybook>
-
-          <mm:node number="$education">
-            <mm:nodelistfunction name="tests" id="testNo">
-              <jsp:directive.include file="teststatus.jspx" />
-              <mm:compare referid="teststatus" value="incomplete" inverse="true">
-                <mm:compare referid="teststatus" value="toberated">
-                  <mm:islessthan inverse="true" referid="rights" referid2="RIGHTS_RW">
-                    <td class="td_test_tbs" style="border-color:#000000; border-top:0px; border-left:0px">
-                      <mm:treefile page="/education/tests/rateopen.jsp"
-                                   objectlist="$includePath" referids="$referids,student,_node@testNo" write="false">
-                        <a href="${_}">
-                          <img src="${mm:treefile('/progress/gfx/question.gif', pageContext,  includePath)}"
-                               title="?" alt="?" border="0" />
-                        </a>
-                      </mm:treefile>
-                    </td>
-                  </mm:islessthan>
-                  <mm:islessthan referid="rights" referid2="RIGHTS_RW">
-                    <td class="td_test_tbs" style="border-color:#000000; border-top:0px; border-left:0px">
-                      <img src="${mm:treefile('/progress/gfx/question.gif', pageContext, includePath)}"  title="?" alt="?" border="0" />
-                    </td>
-                  </mm:islessthan>
-                </mm:compare>
-
-                <mm:compare referid="teststatus" value="passed">
-                  <td class="td_test_tbs" style="border-color:#000000; border-top:0px; border-left:0px">
-                    <img src="${mm:treefile('/progress/gfx/checked.gif', pageContext, includePath)}" title="Ok" alt="Ok" border="0" />
-                  </td>
-                </mm:compare>
-
-                <mm:compare referid="teststatus" value="failed">
-                  <td class="td_test_failed" style="border-color:#000000; border-top:0px; border-left:0px">
-                    <img src="${mm:treefile('/progress/gfx/box.gif', pageContext, includePath)}" alt="" border="0" />
-                  </td>
-                </mm:compare>
-              </mm:compare>
-
-              <mm:compare referid="teststatus" value="incomplete" >
-                <td class="td_test_not_done" style="border-color:#000000; border-top:0px; border-left:0px">
-                  <img src="${mm:treefile('/progress/gfx/box.gif', pageContext, includePath)}" alt="" border="0" />
-                </td>
-              </mm:compare>
-
-            </mm:nodelistfunction>
-          </mm:node>
-        </tr>
+  <%-- find copybook --%>
+  <mm:import id="copybookNo"/>
+  <mm:relatedcontainer path="classrel,classes">
+    <mm:constraint field="classes.number" value="$class"/>
+    <mm:related>
+      <mm:node element="classrel">
+        <mm:relatednodes type="copybooks">
+          <mm:remove referid="copybookNo"/>
+          <mm:field id="copybookNo" name="number" write="false"/>
+        </mm:relatednodes>
       </mm:node>
-    </mm:cloud>
-  </mm:content>
-</jsp:root>
+    </mm:related>  
+  </mm:relatedcontainer>
+
+<mm:node number="$education">
+  <mm:relatednodescontainer type="learnobjects" role="posrel">
+    <mm:sortorder field="posrel.pos" direction="up"/>
+    <mm:tree type="learnobjects" role="posrel" searchdir="destination" orderby="posrel.pos" direction="up">
+
+      <mm:import id="nodetype"><mm:nodeinfo type="type" /></mm:import>
+      <mm:compare referid="nodetype" value="tests">
+        <mm:import id="testNo" reset="true"><mm:field  name="number" /></mm:import>
+        <mm:field id="feedback" name="feedbackpage" write="false"/>
+ 
+<%--        <mm:import id="teststatus" reset="true" jspvar="testStatus" escape="reducespace"><mm:treeinclude page="/progress/teststatus.jsp" objectlist="$includePath" referids="$referids"><mm:param name="copybookNo"><mm:write referid="copybookNo"/></mm:param><mm:param name="testNo"><mm:field name="number"/></mm:param></mm:treeinclude></mm:import>
+         <%
+             testStatus = testStatus.trim();
+         %><mm:import id="teststatus" reset="true" jspvar="testStatus" escape="reducespace"><%= testStatus %></mm:import>
+--%>
+        <%@include file="teststatus.jsp"%>
+       <mm:compare referid="teststatus" value="incomplete" inverse="true">
+       
+             <mm:compare referid="teststatus" value="toberated">
+                 <di:hasrole role="teacher">
+            	   <td class="td_test_tbs"><a href="<mm:treefile page="/education/tests/rateopen.jsp" objectlist="$includePath" referids="$referids">
+                        <mm:param name="studentNo"><mm:write referid="studentNo"/></mm:param>
+                        <mm:param name="testNo"><mm:write referid="testNo"/></mm:param>
+                   </mm:treefile>">?</a></td>
+                 </di:hasrole>
+                 <di:hasrole role="teacher" inverse="true">
+                     <td class="td_test_tbs">?</td>
+                 </di:hasrole>
+             </mm:compare>
+            
+             <mm:compare referid="teststatus" value="passed">
+       	             <td class="td_test_tbs">
+                        <mm:compare referid="feedback" value="0">S</mm:compare>
+                        goed: <mm:write referid="goodanswers"/> / fout: <mm:write referid="falseanswers"/>
+                    </td>
+             </mm:compare>
+             
+             <mm:compare referid="teststatus" value="failed">
+       	             <td class="td_test_failed">
+                         <mm:compare referid="feedback" value="0">F</mm:compare>
+                         goed: <mm:write referid="goodanswers"/> / fout: <mm:write referid="falseanswers"/></td>
+       	     </mm:compare>
+            
+        </mm:compare>
+         <mm:compare referid="teststatus" value="incomplete" >
+           <td class="td_test_not_done">-</td>
+         </mm:compare>
+        <mm:remove referid="madetestscore"/>
+         <mm:remove referid="save_madetestscore"/>
+         <mm:remove referid="testNo"/>
+         </mm:compare>
+      <mm:remove referid="nodetype"/>
+    </mm:tree>
+  </mm:relatednodescontainer> <%-- learnobjects --%>
+</mm:node> <%-- education --%>
+</tr>
+<mm:remove referid="copybookNo"/>
+</mm:node> <%-- studentNo --%>
+</di:may>
+
+</mm:cloud>
+</mm:content>
