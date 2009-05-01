@@ -5,7 +5,7 @@
 %><%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" 
 %><%@page import="java.util.HashMap"%>
 <mm:content postprocessor="reducespace" expires="0">
-  <mm:cloud rank="didactor user">
+  <mm:cloud method="delegate">
     <jsp:directive.include file="/shared/setImports.jsp" />
     <mm:treeinclude page="/cockpit/cockpit_header.jsp" objectlist="$includePath" referids="$referids">
       <mm:param name="extraheader">
@@ -38,7 +38,7 @@
         <mm:import id="posterid" reset="true"><mm:write referid="dummy"/></mm:import>
       </di:hasrole>
 
-      <iframe width="100%" height="100%" name="content" frameborder="0" src="<mm:treefile page="/mmbob/start.jsp" objectlist="$includePath" referids="$referids,forumid" escapeamps="false"/>"></iframe>
+      <iframe width="100%" height="100%" name="content" frameborder="0" src="<mm:treefile page="/mmbob/start.jsp" objectlist="$includePath" referids="$referids" escapeamps="false"/>&forumid=<mm:write referid="forumid"/>"></iframe>
 
       <mm:treeinclude page="/cockpit/cockpit_footer.jsp" objectlist="$includePath" referids="$referids "/>
     </div>
