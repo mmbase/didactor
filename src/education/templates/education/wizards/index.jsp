@@ -1,66 +1,67 @@
-<jsp:root version="2.0"
-          xmlns:jsp="http://java.sun.com/JSP/Page"
-          xmlns:mm="http://www.mmbase.org/mmbase-taglib-2.0"
+<%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" 
+%><%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm"
+%><mm:content postprocessor="reducespace" expires="0">
+<mm:cloud rank="basic user" method="sessiondelegate">
+  <jsp:directive.include file="/shared/setImports.jsp" />
+  <mm:treeinclude page="/cockpit/cockpit_header.jsp" objectlist="$includePath" referids="$referids">
+    <mm:param name="extraheader">
+      <title><di:translate key="education.editwizards" /></title>
+      <style type="text/css">
+        a {
+        font-size: 11px;
+        }
+        .menu_font{
+        font-size: 11px;
+      }
+      .folderBodyTree {
+         width: 20%;
+         height: 90%;
+         overflow: scroll;
+      }
+      .contentBody {
 
-          xmlns:di="http://www.didactor.nl/ditaglib_1.0"
-          >
+        top: 0em;
+        left: 0em;
+        right: 0em;
+        bottom: 0em;
+        height: 100%;
+        padding: 0em;
+      }
+      .componentBody {
+      }
+    </style>
+    </mm:param>
+    <mm:param name="extrabody">
+      onLoad="loadTree();" onUnload="storeTree();"
+    </mm:param>
 
-  <mm:import externid="mode">educations</mm:import>
-  <mm:import externid="e">${education}</mm:import>
-
-  <di:html
-      type="application/xhtml+xml"
-      styleClass="editwizards ${mode}"
-      component="education.wizards"
-      title_key="education.editwizards"
-      css="/education/wizards/style.css"
-      rank="editor" expires="0">
-
-    <mm:link page="/core/js/jquery-treeview/lib/jquery.cookie.js">
-      <script src="${_}" type="text/javascript"><jsp:text> </jsp:text></script>
-    </mm:link>
-
-    <mm:link page="/core/js/jquery-treeview/jquery.treeview.pack.js">
-      <script type="text/javascript" src="${_}"><jsp:text> </jsp:text></script>
-    </mm:link>
+  </mm:treeinclude>
 
 
-    <mm:treefile
-        write="false"
-        objectlist="${includePath}"
-        page="/education/wizards/wizard.js">
-      <script type="text/javascript" src="${_}"><jsp:text> </jsp:text></script>
-    </mm:treefile>
+<table 
+    cellpadding="0" cellspacing="0" border="0" width="100%" height="100%">
+   <tr class="navigationbar">
+      <td colspan="2" class="titlebar">
+        <img src="${mm:treefile('/gfx/icon_agenda.gif', pageContext, includePath)}" 
+             title="${di:translate(pageContext, 'education.editwizards')}" alt="${di:translate(pageContext, 'education.editwizards')}" />
+        <span class="menu_font">Editwizards:</span> 
+        <mm:treeinclude page="/education/wizards/tree_top_menu.jsp" objectlist="$includePath" />
+      </td>
+   </tr>
+   <tr>
+      <td style="width:20%">
+         <div id="left_menu" style="overflow:auto; width:100%; height:100%" >
+           <mm:treeinclude debug="html" page="/education/wizards/code.jsp" objectlist="$includePath" />
+         </div>
+      </td>
 
-    <div class="rows" id="rows">
+      <td width="100%">
+        <mm:treefile id="ok" page="/education/wizards/ok.jsp" objectlist="$includePath" referids="$referids" write="false" />
+        <iframe id="text" name="text" width="99%" height="100%" marginwidth="0" marginheight="0" border="1" src="${ok}"></iframe>
+      </td>
+   </tr>
+</table>
 
-      <mm:treefile
-          write="false"
-          objectlist="${includePath}"
-          page="/education/wizards/modes/${mode}.jsp"
-          referids="education_topmenu_course?">
-        <a href="${_}" id="mode_url" style="display: none;">Mode url</a>
-      </mm:treefile>
-
-      <di:include debug="html" page="/education/wizards/navigation.jspx" />
-
-      <div class="mainContent">
-        <table class="layout">
-          <tr>
-            <td id="left_menu">
-              <div id="mode-${mode}">
-                <di:include debug="html" page="/education/wizards/modes/${mode}.jsp" />
-              </div>
-            </td>
-            <td class="content">
-              <mm:treefile id="ok" page="/education/wizards/ok.jsp"
-                           objectlist="$includePath" referids="$referids" write="false">
-                <iframe id="text" name="text" width="99%" height="100%" marginwidth="0" marginheight="0" border="1" src="${ok}"><jsp:text> </jsp:text></iframe>
-              </mm:treefile>
-            </td>
-          </tr>
-        </table>
-      </div>
-    </div>
-  </di:html>
-</jsp:root>
+<mm:treeinclude page="/cockpit/cockpit_footer.jsp" objectlist="$includePath" referids="$referids"/>
+</mm:cloud>
+</mm:content>

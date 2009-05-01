@@ -22,7 +22,6 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspTagException;
 
 import nl.didactor.events.*;
-import org.mmbase.util.Casting;
 
 import org.mmbase.bridge.Cloud;
 import org.mmbase.bridge.jsp.taglib.CloudReferrerTag;
@@ -67,17 +66,56 @@ public class EventTag extends CloudReferrerTag {
                 String username = cloud.getUser().getIdentifier();
 
                 HttpServletRequest request = (HttpServletRequest)pageContext.getRequest();
+                HttpServletResponse response = (HttpServletResponse)pageContext.getResponse();
+                HttpSession session = request.getSession(false);
+                // get sessionId
+                String sessionId = session.getId();
 
-                Integer provider = Casting.toInt(request.getAttribute("provider"));
-                Integer education = Casting.toInt((educationId != null) ? educationId : request.getAttribute("education"));
-                Integer classNumber = Casting.toInt(request.getAttribute("class"));
+                // get provider from request
+                String sProvider = request.getParameter("provider");
 
+                String sEducation = (educationId != null) ? educationId : request.getParameter("education");
 
-                Event event = new Event(username, request, provider, education, classNumber, eventtype, eventvalue, note);
-                org.mmbase.core.event.EventManager.getInstance().propagateEvent(event);
+                // get class from request
+                String sClass = request.getParameter("class");
+
+                Integer provider = null;
+                Integer education = null;
+                Integer classNumber = null;
+                if (sProvider != null) {
+                    try {
+                        provider = Integer.decode(sProvider);
+                    } catch (NumberFormatException nfe) {
+                        return SKIP_BODY;
+                    }
+                }
+
+                if (sEducation != null) {
+                    try {
+                        education = Integer.decode(sEducation);
+                    }
+                    catch (NumberFormatException nfe) {
+                        return SKIP_BODY;
+                    }
+                }
+
+                if (sClass != null) {
+                    try {
+                        classNumber = Integer.decode(sClass);
+                    }
+                    catch (NumberFormatException nfe) {
+                        return SKIP_BODY;
+                    }
+                }
+
+                // create and store Event
+                Event event = new Event(username, sessionId, provider, education, classNumber, eventtype, eventvalue, note);
+                EventDispatcher.report(event, request, response);
             }
         } catch (Exception ex) {
-            throw new JspTagException(ex.getMessage(), ex);
+            JspTagException e = new JspTagException(ex.getMessage());
+            e.initCause(ex);
+            throw e;
         }
         return SKIP_BODY;
     }

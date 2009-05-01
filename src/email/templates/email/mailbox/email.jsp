@@ -7,7 +7,7 @@
 <%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" 
 %><%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" 
 %><mm:content postprocessor="reducespace">
-<mm:cloud rank="didactor user">
+<mm:cloud method="delegate">
   <mm:import externid="mailbox">-1</mm:import>
   <mm:import externid="sf" />
   <mm:import externid="so" />
@@ -71,7 +71,7 @@
         <mm:node number="$email" notfound="skip">
           <di:translate key="email.from" />: <mm:field name="from" /> <br />
           <di:translate key="email.to_caption" />: <mm:field name="to" /> <br />
-          <di:translate key="email.date" />: <mm:field name="date"><mm:time format=":FULL.FULL" /></mm:field> <br />
+          <di:translate key="email.date" />: <mm:field name="gui(date)" /> <br />
           <di:translate key="email.subject" />: <mm:field name="subject"/> <br />
           <mm:functioncontainer>
             <mm:param name="field">headers</mm:param>
