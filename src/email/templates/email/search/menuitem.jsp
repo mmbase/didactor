@@ -1,18 +1,12 @@
-<%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" %>
-<mm:content postprocessor="reducespace" expires="0">
-<mm:cloud method="delegate" jspvar="cloud">
-<%@include file="/shared/setImports.jsp" %>
-
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.0" prefix="mm" %>
+<fmt:bundle basename="nl.didactor.component.email.EmailMessageBundle">
 <mm:import externid="search_component"/>
-
 <mm:compare referid="search_component" value="email">
-    <option value="email" selected="selected"><di:translate key="email.email" /></option>
+    <option value="email" selected="selected"><fmt:message key="EMAIL" /></option>
 </mm:compare>
-
 <mm:compare referid="search_component" value="email" inverse="true">
-    <option value="email"><di:translate key="email.email" /></option>
+    <option value="email"><fmt:message key="EMAIL" /></option>
 </mm:compare>
+</fmt:bundle>
 
-</mm:cloud>
-</mm:content>
