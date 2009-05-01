@@ -392,8 +392,8 @@
     <path>/META-INF/tags/di/core/rotatedtext.tagx</path>
   </tag-file>
   <tag-file>
-    <name>icon</name>
-    <path>/META-INF/tags/di/core/icon.tagx</path>
+    <name>leaf</name>
+    <path>/META-INF/tags/di/core/leaf.tagx</path>
   </tag-file>
   <tag-file>
     <name>rich</name>
@@ -430,10 +430,6 @@
   <tag-file>
     <name>img</name>
     <path>/META-INF/tags/di/core/img.tagx</path>
-  </tag-file>
-  <tag-file>
-    <name>question</name>
-    <path>/META-INF/tags/di/core/question.tagx</path>
   </tag-file>
 
   <function>

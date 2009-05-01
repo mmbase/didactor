@@ -19,10 +19,9 @@
         </mm:treeinclude>
 
         <mm:node number="$learnobject">
-          <div class="subnavigationPage">
 
-            <di:include debug="html" page="/education/learnblocks/subnavigation.jspx" />
-          </div>
+          <di:include debug="html" page="/education/learnblocks/subnavigation.jspx" />
+
 
           <di:background>
             <di:include debug="xml" page="/education/learnblocks/node.jspx" />
@@ -34,7 +33,7 @@
           <di:include page="/education/prev_next.jsp" />
 
           <!-- hmm: -->
-          <!--<jsp:directive.include file="../includes/component_link.jsp" />-->
+          <jsp:directive.include file="../includes/component_link.jsp" />
 
 
         </mm:node>

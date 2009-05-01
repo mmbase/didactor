@@ -65,13 +65,11 @@
     -->
     <setting name="personfields" type="string" default="firstname,suffix,lastname" canbeempty="false" />
     <setting name="pagereporter" type="boolean" default="true" canbeempty="false" />
-    <setting name="pagereporter_interval" type="integer" default="20" canbeempty="false" />
     <setting name="personorderfield" type="string" default="lastname" canbeempty="false" />
     <setting name="admin_personfields" type="string" default="firstname,suffix,lastname"  canbeempty="false" />
     <setting name="may_open_future" type="boolean" default="true" />
     <setting name="new_learnobjects" type="string" default="learnblocks,pages,flashpages,htmlpages,xmlcontent,tests" />
     <setting name="metacontentobjects" type="string" default="images,attachments,urls,flashobjects" />
-    <setting name="show_configuration" type="boolean" default="true" />
 
   </scope>
   <scope name="classes" referid="class">

@@ -242,8 +242,8 @@ input.search {
   padding: 0em 0.9em 0em 0em
 }
 
-.menuSeparator {
-  background-image: url('../gfx/menuseparator.gif');
+.menuSeperator {
+  background-image: url('../gfx/menuseperator.gif');
   background-repeat: no-repeat;
   height: 16px;
   width: 1px;
@@ -252,7 +252,7 @@ input.search {
   padding: 0.3em 1.5em 0.1em 0.5em
 }
 
-.menuSeparator:first-child {
+.menuSeperator:first-child {
   background-image: none;
 }
 
@@ -264,9 +264,8 @@ input.search {
   vertical-align: middle
 }
 
-
-.menuSeparatorApplicationMenubar {
-  background-image: url('../gfx/menuseparator.gif');
+.menuSeperatorApplicationMenubar {
+  background-image: url('../gfx/menuseperator.gif');
   background-repeat: no-repeat;
   height: 16px;
   width: 1px;
@@ -274,12 +273,6 @@ input.search {
   white-space: nowrap;
   margin: 0em 1em 0em 1em;
   padding: 0em 0.8em 0.1em 1em
-}
-.menuItemApplicationMenubar.start + .menuSeparatorApplicationMenubar {
-  display: none;
-}
-.menuItemApplicationMenubar.educationSelector form {
-  display: inline;
 }
 
 .spacer {
@@ -1058,9 +1051,4 @@ body.editwizards .titlebar a {
 
 img.icon {
   border: none;
-}
-
-
-a.answerquestion {
-  display: none;
 }

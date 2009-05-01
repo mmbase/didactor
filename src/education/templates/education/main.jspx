@@ -32,17 +32,9 @@
       <img id="ajax_loader" alt="" src="${mm:treelink('/gfx/ajax-loader.gif', includePath)}"  style="display: none;" />
 
       <div id="contentFrame">
-        <mm:node number="${education}">
-          <mm:import externid="learnobject">
-            <mm:relatednodescontainer type="learnobjects" role="posrel" searchdirs="destination">
-              <mm:sortorder field="posrel.pos" direction="up"/>
-              <mm:relatednodes max="1"><mm:field name="number" /></mm:relatednodes>
-            </mm:relatednodescontainer>
-          </mm:import>
-        </mm:node>
-
+        <mm:import externid="learnobject" />
         <mm:present referid="learnobject">
-          <mm:include page="/content/" referids="learnobject" />
+          <mm:include page="/content/" />
         </mm:present>
       </div>
 

@@ -129,48 +129,11 @@
       <datatype base="didactor_imagelayout" xmlns="http://www.mmbase.org/xmlns/datatypes" />
     </field>
 
-    <field name="provider" state="virtual">
-      <gui>
-        <guiname xml:lang="nl">Aanbieder</guiname>
-        <guiname xml:lang="en">Provider</guiname>
-      </gui>
-      <datatype base="node" xmlns="http://www.mmbase.org/xmlns/datatypes">
-        <required value="true" enforce="never" />
-        <enumeration enforce="never">
-          <query type="providers"  xmlns="http://www.mmbase.org/xmlns/searchquery">
-            <sortorder field="name" />
-          </query>
-        </enumeration>
-        <setprocessor>
-          <class name="org.mmbase.datatypes.processors.Related$Setter">
-            <param name="type">providers</param>
-            <param name="searchDir">source</param>
-          </class>
-        </setprocessor>
-        <getprocessor>
-          <class name="org.mmbase.datatypes.processors.Related$Getter">
-            <param name="type">providers</param>
-            <param name="searchDir">source</param>
-          </class>
-        </getprocessor>
-
-      </datatype>
-
-    </field>
-
 
   </fieldlist>
   <functionlist>
 
     <function key="educationLocale" name="locale">
-      <class>nl.didactor.functions.Functions</class>
-    </function>
-
-    <function key="tree">
-      <class>nl.didactor.functions.Functions</class>
-    </function>
-
-    <function key="learnblocks">
       <class>nl.didactor.functions.Functions</class>
     </function>
 
@@ -185,11 +148,6 @@
     <function key="tests">
       <class>nl.didactor.education.functions.Tests</class>
     </function>
-
-    <function key="getLessons" name="lessons">
-      <class>nl.didactor.component.assessment.LessonChecker</class>
-    </function>
-
 
   </functionlist>
 </builder>

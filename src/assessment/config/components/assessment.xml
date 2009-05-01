@@ -8,11 +8,6 @@
                         http://www.mmbase.org/xmlns/component.xsd">
 
   <class name="nl.didactor.component.assessment.Assessment" />
-
-  <setting name="has_didactor_component">
-    <datatype base="boolean" xmlns="http://www.mmbase.org/xmlns/datatypes" />
-  </setting>
-
   <block name="after_page"
          classification="didactor.after_page:10"
          mimetype="text/html">
@@ -20,21 +15,9 @@
   </block>
 
   <block name="learnblocks_fields"
-         classification="didactor.wizards.learnblocks.fields:1"
+         classification="didactor.wizards.learnblocks.fields"
          mimetype="application/xml">
     <body jsp="wizards/learnblocks_fields.jspx" />
-  </block>
-
-  <block name="email_templates"
-         classification="didactor.wizards.learnblocks.fields:2"
-         mimetype="application/xml">
-    <body jsp="wizards/email_templates.jspx" />
-  </block>
-
-  <block name="email_templates_load"
-         classification="didactor.wizards.learnblocks.load"
-         mimetype="application/xml">
-    <body jsp="wizards/email_templates.load.jspx" />
   </block>
 
 

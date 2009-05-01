@@ -20,6 +20,7 @@ public class Assessment extends org.mmbase.framework.BasicComponent {
         CoreField assessment= Fields.createField("assessment", Field.TYPE_BOOLEAN, Field.STATE_VIRTUAL, DataTypes.getDataType("didactor_assessment_field"));
         assessment.setParent(learnblocks);
         assessment.setStoragePosition(100);
+        assessment.finish();
 
         learnblocks.addField(assessment);
         log.info("Added virtual field " + assessment + " to " + learnblocks + " -> " + learnblocks.getFields());

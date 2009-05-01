@@ -1,7 +1,6 @@
 package nl.didactor.functions;
 
 import org.mmbase.bridge.*;
-import org.mmbase.bridge.util.*;
 import org.mmbase.storage.search.*;
 import org.mmbase.bridge.util.Queries;
 import org.mmbase.util.logging.*;
@@ -10,7 +9,7 @@ import java.util.*;
 /**
  * Some didactor specific Node functions (implemented as 'bean')
  * @author Michiel Meeuwissen
- * @version $Id: Functions.java,v 1.10 2009-01-08 13:45:59 michiel Exp $
+ * @version $Id: Functions.java,v 1.8 2007-11-06 17:37:32 michiel Exp $
  */
 public class Functions {
     protected final static Logger log = Logging.getLoggerInstance(Functions.class);
@@ -19,17 +18,6 @@ public class Functions {
 
     public void setNode(Node n) {
         node = n;
-    }
-
-
-    public  List<Node> learnblocks() {
-        Cloud cloud = node.getCloud();
-        NodeQuery q = Queries.createRelatedNodesQuery(node,
-                                                      cloud.getNodeManager("learnblocks"),
-                                                      "posrel",
-                                                      "destination");
-        Queries.addSortOrders(q, "posrel.pos", "UP");
-        return q.getNodeManager().getList(q);
     }
 
 
@@ -123,19 +111,6 @@ public class Functions {
         }
         return null;
 
-    }
-
-
-    /**
-     * Tree of learnobject. Most logically used by education objects.
-     */
-    public NodeList tree() {
-        NodeManager learnobjects = node.getCloud().getNodeManager("learnobjects");
-        NodeQuery q = Queries.createRelatedNodesQuery(node, learnobjects, "posrel", "destination");
-        Queries.addSortOrders(q, "posrel.pos", "up");
-        GrowingTreeList tree = new GrowingTreeList(q, 10, learnobjects, "posrel", "destination");
-        Queries.addSortOrders(tree.getTemplate(), "posrel.pos", "up");
-        return tree;
     }
 
 }

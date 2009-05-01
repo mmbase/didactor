@@ -136,8 +136,7 @@
           <list>3</list>
         </positions>
       </editor>
-      <datatype base="didactor_people_lastname"
-                xmlns="http://www.mmbase.org/xmlns/datatypes" />
+      <datatype base="didactor_people_lastname" xmlns="http://www.mmbase.org/xmlns/datatypes" />
     </field>
 
     <field name="address">
@@ -465,27 +464,15 @@
     <function key="peopleClass" name="class">
       <class>nl.didactor.functions.PeopleClassFunction</class>
     </function>
-    <function key="peopleClasses" name="classes">
+    <function key="blockedLearnBlocks" name="blockedLearnBlocks">
       <class>nl.didactor.functions.PeopleClassFunction</class>
     </function>
-
-
-    <function key="getBlockedLearnblocksForThisUser" name="blockedLearnBlocks">
-      <class>nl.didactor.component.assessment.LessonChecker</class>
-    </function>
-    <function key="getLessons" name="lessons">
-      <class>nl.didactor.component.assessment.LessonChecker</class>
-    </function>
-    <function key="canCloseLesson">
-      <class>nl.didactor.component.assessment.LessonChecker</class>
-    </function>
-
     <function key="hasrole">
       <class>nl.didactor.util.ClassRoom</class>
     </function>
 
     <function key="forwardEmail">
-      <class>nl.didactor.PeopleEmailFunctions</class>
+      <class>nl.didactor.builders.PeopleEmailFunctions</class>
     </function>
 
   </functionlist>
