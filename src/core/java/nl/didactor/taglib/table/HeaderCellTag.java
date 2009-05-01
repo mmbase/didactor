@@ -15,17 +15,17 @@ import org.mmbase.module.core.*;
  * TODO: make it work in a mm:relatedcontainer
  */
 public class HeaderCellTag extends CloudReferrerTag { 
-    private String sortField    = "";
-    private String defaultField = "";
+    String sortfield = "";
+    String defaultfield = "";
 
     /**
      */
     public void setSortfield(String sortfield) {
-        this.sortField = sortfield;
+        this.sortfield = sortfield;
     }
 
     public void setDefault(String defaultfield) {
-        this.defaultField = defaultfield;
+        this.defaultfield = defaultfield;
     }
 
     /**
@@ -35,8 +35,8 @@ public class HeaderCellTag extends CloudReferrerTag {
     }
 
     public void release() {
-        sortField = "";
-        defaultField = "";
+        sortfield = "";
+        defaultfield = "";
     }
 
     // Code copied from MMBase 'CloudTag' code. Don't know why this is the case
@@ -47,19 +47,19 @@ public class HeaderCellTag extends CloudReferrerTag {
         String tableSortfield = tt.getActiveSortfield();
         boolean sortingHere = false;
         if (tableSortfield == null) tableSortfield = "";
-        if (sortField == null) sortField = "";
+        if (sortfield == null) sortfield = "";
         
-        if ((!sortField.equals("") && sortField.equals(tableSortfield)) ||
-            (tableSortfield.equals("") && "true".equals(defaultField) && !sortField.equals(""))) {
+        if ((!sortfield.equals("") && sortfield.equals(tableSortfield)) ||
+            (tableSortfield.equals("") && "true".equals(defaultfield) && !sortfield.equals(""))) {
             sortingHere = true;
         }
 
-        if (tableSortfield.equals("") && "true".equals(defaultField) && !sortField.equals("")) {
-            String so = pageContext.getRequest().getParameter(tt.PARAM_ORDER);
-            if (so != null && !"".equals(so))
-                tt.setSort(sortField, so);
+        if (tableSortfield.equals("") && "true".equals(defaultfield) && !sortfield.equals("")) {
+            String sortorder = pageContext.getRequest().getParameter(tt.PARAM_ORDER);
+            if (sortorder != null && !"".equals(sortorder))
+                tt.setSort(sortfield, sortorder);
             else 
-                tt.setSort(sortField);
+                tt.setSort(sortfield);
         }
 
         String prefix = tt.getLabel("headercell.start");
@@ -67,13 +67,13 @@ public class HeaderCellTag extends CloudReferrerTag {
 
         // For all fields which are sortable, but which are not sorted on
         // at the moment, create a correct link
-        if (!sortingHere && !"".equals(sortField)) {
+        if (!sortingHere && !"".equals(sortfield)) {
             ArrayList disallowed = new ArrayList();
             disallowed.add(tt.PARAM_FIELD);
             disallowed.add(tt.PARAM_PAGE);
             disallowed.add(tt.PARAM_ORDER);
             StringBuffer url = Util.getCurrentUrl(pageContext, disallowed);
-            url.append(tt.PARAM_FIELD + "=" + sortField);
+            url.append(tt.PARAM_FIELD + "=" + sortfield);
             
             prefix += "<a href=\"" + url + "\">";
             postfix = tt.getLabel("sorting.none.label") + "</a>" + postfix;

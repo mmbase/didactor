@@ -1,7 +1,6 @@
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" %>
-<%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.0" prefix="mm" %>
 <mm:content postprocessor="reducespace">
-<mm:cloud method="delegate" jspvar="cloud">
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
 <%@include file="/shared/setImports.jsp" %>
 <%@page import="java.util.StringTokenizer"%>
 
@@ -15,15 +14,14 @@
   
 
 
-<mm:list nodes="$education" path="educations,metadata,metavalue">
+<mm:list nodes="$education" path="educations,metadata">
 
-<mm:import jspvar="metaValue" reset="true" vartype="String"><mm:field name="metavalue.value"/></mm:import>
+<mm:import jspvar="metaValue" reset="true" vartype="String"><mm:field name="metadata.value"/></mm:import>
 <%
 
 metaValue=metaValue.toUpperCase();
 try {
-    
-//    System.err.println("matching '"+metaValue+"' against '"+query+"' (education="+ request.getParameter("education")+")");
+//    System.err.println("matching '"+metaValue+"' against '"+query+"' (learnobject="+ request.getParameter("learnobject")+")");
     boolean hit = false;
     if ("exact".equals(qtype)) {
 	hit = metaValue.indexOf(query) > -1;
@@ -51,7 +49,7 @@ try {
     if (hit) {
 	%>
 	    <tr>
-		<td class="listItem"><di:translate key="core.education" /></td>
+		<td class="listItem"><di:translate id="education">Opleiding</di:translate></td>
 		<td class="listItem">
 		    <mm:node number="$education">
 		        <a href="<mm:treefile page="/education/index.jsp" objectlist="$includePath" referids="$referids">

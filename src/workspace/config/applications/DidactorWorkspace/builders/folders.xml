@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE builder PUBLIC "-//MMBase/DTD builder config 1.1//EN" "http://www.mmbase.org/dtd/builder_1_1.dtd">
-<builder name="folders" maintainer="didactor.nl" version="3" extends="object">
+<builder name="folders" maintainer="didactor.nl" version="2" extends="object">
   <status>active</status>
 
   <classfile>Dummy</classfile>
@@ -21,6 +21,9 @@
     <description xml:lang="en">A folder in a workspace, where attachments can be stored</description>
   </descriptions>
 
+  <properties>
+    <property name="max-nodes-from-query">200</property>
+  </properties>
 
   <fieldlist>
     <!-- POS 3 : <field> 'name'  -->

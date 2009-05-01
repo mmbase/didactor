@@ -2,7 +2,7 @@ package nl.didactor.education.builders;
 import org.mmbase.module.core.MMObjectBuilder;
 import org.mmbase.module.core.MMObjectNode;
 
-public class TestBuilder extends nl.didactor.builders.DidactorBuilder {
+public class TestBuilder extends MMObjectBuilder {
 
     /**
      * Iterate over all givenanswers and their questions. Calculate the
