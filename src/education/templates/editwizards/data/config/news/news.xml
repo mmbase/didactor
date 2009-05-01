@@ -12,7 +12,6 @@
   
   <action type="load">
     <relation destinationtype="images" role="posrel" />
-    <relation destinationtype="images" role="pos2rel" />
     <relation destination="paragraphs" role="posrel">
       <object>
         <relation destination="attachments" role="posrel" />
@@ -23,6 +22,14 @@
   </action>
   
   <action type="delete" />
+
+  <lists>
+    <optionlist include="config/option_list/images_position.xml" />
+    <optionlist include="config/option_list/boolean.xml" />
+    <optionlist include="config/option_list/layout.xml" />
+    <optionlist include="config/option_list/imagelayout.xml" />
+  </lists>
+
   
   <form-schema id="step1">
     <title xml:lang="nl">Nieuwsbericht invoeren</title>
@@ -32,10 +39,7 @@
     <field name="intro" />
     <field name="body" />
     <field name="date" />
-
     <list destination="images" extends="config/image/positionedimages.xml" />
-    <list include="config/image/add_images_pos2rel_position.xml" />
-
     <list destination="paragraphs"   extends="config/paragraphs/add_paragraphs_posrel.xml" />
   </form-schema>
 </wizard-schema>

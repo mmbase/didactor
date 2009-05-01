@@ -38,6 +38,7 @@
   <mm:field name="text" escape="none"/>
   <p/>
 
+  <mm:import id="questiontype"><mm:field name="type"/></mm:import>
   <mm:import id="questionlayout"><mm:field name="layout"/></mm:import>
 
     <div class="images">

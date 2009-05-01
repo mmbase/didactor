@@ -204,6 +204,7 @@ dropnumbers['<mm:write referid="question"/>'] = new Array();
 
   <p/>
 
+  <mm:import id="questiontype"><mm:field name="type"/></mm:import>
 
   <mm:import id="numdragquestions" jspvar="numDragQuestions" vartype="Integer"><mm:countrelations role="dragimagerel"/></mm:import>
 

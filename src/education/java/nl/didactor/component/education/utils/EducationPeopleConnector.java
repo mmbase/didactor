@@ -12,25 +12,23 @@ import org.mmbase.module.core.*;
  * somethings wrong here, and making things less clear in JSP's? (because you need to guess what
  * happens in this class, which btw also lacks javadoc).
  *
- * @version $Id: EducationPeopleConnector.java,v 1.7 2007-06-08 14:03:33 michiel Exp $
+ * @version $Id: EducationPeopleConnector.java,v 1.5 2006-12-04 19:03:35 mmeeuwissen Exp $
  */
 public class EducationPeopleConnector {
-    private Cloud cloud;
+    final Cloud cloud;
 
-    private Node node;
-
-    public void setNode(Node n) {
-        node = n;
-        cloud = n.getCloud();
+    public EducationPeopleConnector(Cloud cloud) {
+        this.cloud = cloud;
     }
 
+    public Set relatedPersons(String educationNumber) {
+        Set hsetResult = new HashSet();
 
-    public Set<Node> relatedPersons() {
-        Node nodeEducation = node;
-        Set<Node> hsetResult = new HashSet<Node>();
+        Node nodeEducation = cloud.getNode((new Integer(educationNumber)).intValue());
+
         NodeList nodelistPeople = nodeEducation.getRelatedNodes("people", "classrel", "destination");
         for(NodeIterator it = nodelistPeople.nodeIterator(); it.hasNext(); ) {
-            hsetResult.add(it.nextNode());
+            hsetResult.add("" + it.nextNode().getNumber());
         }
 
         NodeList nodelistClasses = nodeEducation.getRelatedNodes("classes", "classrel", "destination");
@@ -38,19 +36,20 @@ public class EducationPeopleConnector {
             Node nodeClass = it.nextNode();
             nodelistPeople = nodeClass.getRelatedNodes("people", "classrel", "source");
             for(NodeIterator it2 = nodelistPeople.nodeIterator(); it2.hasNext();) {
-                hsetResult.add(it2.nextNode());
+                hsetResult.add("" + it2.nextNode().getNumber());
             }
         }
         return hsetResult;
     }
 
-    public Set<Node> relatedEducations() {
-        Node nodePerson = node;
-        Set<Node> hsetResult = new HashSet<Node>();
+    public Set relatedEducations(String personNumber) {
+
+        Set hsetResult = new HashSet();
+        Node nodePerson = cloud.getNode((new Integer(personNumber)).intValue());
 
         NodeList nodelistEducations = nodePerson.getRelatedNodes("educations", "classrel", "source");
         for(NodeIterator it = nodelistEducations.nodeIterator(); it.hasNext(); ) {
-            hsetResult.add(it.nextNode());
+            hsetResult.add("" + it.nextNode().getNumber());
         }
 
         NodeList nodelistClasses = nodePerson.getRelatedNodes("classes", "classrel", "destination");
@@ -58,11 +57,10 @@ public class EducationPeopleConnector {
             Node nodeClass = it.nextNode();
             NodeList nodelistPeople = nodeClass.getRelatedNodes("educations", "classrel", "source");
             for(NodeIterator it2 = nodelistPeople.nodeIterator(); it2.hasNext();) {
-                hsetResult.add(it2.nextNode());
+                hsetResult.add("" + it2.nextNode().getNumber());
             }
         }
         return hsetResult;
     }
-
 
 }

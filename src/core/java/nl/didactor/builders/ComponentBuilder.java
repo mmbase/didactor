@@ -9,14 +9,13 @@ import org.mmbase.module.database.MultiConnection;
 import org.mmbase.bridge.*;
 import org.mmbase.storage.search.*;
 import org.mmbase.storage.search.implementation.*;
-import org.mmbase.util.xml.applicationdata.ApplicationReader;
+import org.mmbase.util.xml.ApplicationReader;
 import org.mmbase.util.xml.BuilderReader;
 
 import java.util.*;
 import java.io.File;
 
 import java.sql.*;
-import java.lang.reflect.*;
 
 import nl.didactor.component.Component;
 import nl.didactor.component.BasicComponent;
@@ -24,9 +23,9 @@ import nl.didactor.component.BasicComponent;
 /**
  *
  * @author Johannes Verelst &lt;johannes.verelst@eo.nl&gt;
- * @version $Id: ComponentBuilder.java,v 1.15 2008-09-04 09:49:14 michiel Exp $
+ * @version $Id: ComponentBuilder.java,v 1.10 2006-12-06 14:35:02 mmeeuwissen Exp $
  */
-public class ComponentBuilder extends DidactorBuilder {
+public class ComponentBuilder extends AbstractSmartpathBuilder {
 
     private static final Logger log = Logging.getLoggerInstance(ComponentBuilder.class);
 
@@ -35,10 +34,8 @@ public class ComponentBuilder extends DidactorBuilder {
      */
     public boolean init() {
         super.init();
-
-        log.info("Registering didactor components");
         NodeSearchQuery query = new NodeSearchQuery(this);
-        List<Component> v = new ArrayList<Component>();
+        List v = new ArrayList();
 
         //register all components
         try {
@@ -54,18 +51,15 @@ public class ComponentBuilder extends DidactorBuilder {
         }
 
         // Make sure that all builders are correct.
-        // initBuilders(); // i
+        initBuilders();
 
         // Make sure that all applications are correct.
         initApplications();
 
         // Initialize all the components
-        for (Component c : v) {
-            try {
-                c.init();
-            } catch (Exception e) {
-                log.error(e.getMessage(), e);
-            }
+        for (int i=0; i<v.size(); i++) {
+            Component c = (Component)v.get(i);
+            c.init();
         }
         return true;
     }
@@ -93,15 +87,17 @@ public class ComponentBuilder extends DidactorBuilder {
             comp = new BasicComponent(componentname);
         } else {
             try {
-                Class clazz  = Class.forName(classname);
-                try {
-                    Constructor c = clazz.getConstructor(MMObjectNode.class);
-                    comp = (Component) c.newInstance(component);
-                } catch (NoSuchMethodException  nsme) {
-                    comp = (Component) clazz.newInstance();
+                Class c = Class.forName(classname);
+                if (c == null) {
+                    comp = new BasicComponent(componentname);
+                } else {
+                    comp = (Component)c.newInstance();
+                    if (comp == null) {
+                        comp = new BasicComponent(componentname);
+                    }
                 }
             } catch (ClassNotFoundException e) {
-                log.info("Class not found: " + classname);
+                log.error("Class not found: " + classname);
             } catch (Exception e) {
                 log.error("Exception while initializing (" + component + "): " + e);
             }
@@ -118,7 +114,6 @@ public class ComponentBuilder extends DidactorBuilder {
      * This method will do a sanity check between the XML files that define the builders,
      * and the tables in the database. If fields are missing on database level, they will be added.
      * Note: inheritance will make this a little hard!.
-     * @todo currently unused
      */
     private void initBuilders() {
         Iterator i = MMBase.getMMBase().getBuilderLoader().getResourcePaths(ResourceLoader.XML_PATTERN, true).iterator();
@@ -137,7 +132,6 @@ public class ComponentBuilder extends DidactorBuilder {
     /**
      * This method will verify that all the fields specified in the builder XML
      * are also in the database. If not, the field will be created in the database.
-     * @todo currently unused
      */
     private void initBuilder(String path, String builderName) throws java.io.IOException {
         if (!getMMBase().getBuilder(builderName).created()) {
@@ -263,14 +257,14 @@ public class ComponentBuilder extends DidactorBuilder {
                 String appname = appNode.getStringValue("name");
                 String path = "applications/";
                 if (! ResourceLoader.getConfigurationRoot().getResource(path + appname + ".xml").openConnection().getDoInput()) {
-                    log.warn("Application '" +  appname + "' is in the Versions table, but application XML file cannot be loaded.");
+                    log.warn("Application '" + appname + "' is in the Versions table, but application XML file cannot be loaded.");
                     continue;
                 }
                 ApplicationReader app = new ApplicationReader(ResourceLoader.getConfigurationRoot().getInputSource(path + appname + ".xml"));
 
-                List neededRelDefs = app.getNeededRelDefs();
+                Vector neededRelDefs = app.getNeededRelDefs();
                 for (int i=0; i<neededRelDefs.size(); i++) {
-                    Map rd = (Map)neededRelDefs.get(i);
+                    Hashtable rd = (Hashtable)neededRelDefs.get(i);
                     String sname = (String)rd.get("source");
                     String dname = (String)rd.get("target");
                     String direction = (String)rd.get("direction");
@@ -309,10 +303,10 @@ public class ComponentBuilder extends DidactorBuilder {
                     }
                 }
 
-                List allowedRelations = app.getAllowedRelations();
+                Vector allowedRelations = app.getAllowedRelations();
                 for (int i=0; i<allowedRelations.size(); i++) {
                     boolean error = false;
-                    Map tr = (Map)allowedRelations.get(i);
+                    Hashtable tr = (Hashtable)allowedRelations.get(i);
                     String sname = (String)tr.get("from");
                     String dname = (String)tr.get("to");
                     String rname = (String)tr.get("type");
@@ -347,7 +341,7 @@ public class ComponentBuilder extends DidactorBuilder {
                 }
             }
         } catch (Exception e) {
-            log.error(e.getMessage(), e);
+            e.printStackTrace();
         }
     }
 }

@@ -31,7 +31,10 @@ public class DidactorCompetence extends Component {
         return new Component[] {Component.getComponent("education")};
     }
 
-    @Override
+    public boolean[] may (String operation, Cloud cloud, Map context, String[] arguments) {
+        return new boolean[]{true, true};
+    }
+
     public String getValue(String setting, Cloud cloud, Map context, String[] arguments) {
         if ("showlo".equals(setting)) {
             return "" + showLo(cloud, context, Integer.parseInt(arguments[0]), Integer.parseInt(arguments[1]));

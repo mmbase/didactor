@@ -1,19 +1,14 @@
 package nl.didactor.taglib;
-import org.mmbase.util.*;
-import org.mmbase.util.transformers.*;
-
+import org.mmbase.util.FileWatcher;
 import java.util.*;
 import java.io.*;
-import java.text.*;
-
-
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 
 /**
  * This class implements a translation table. This table contains
  * translations for a namespace with different locales.
- * It reads the files in the translation path, and parses them. Based on the
+ * It reads the files in the translation path, and parses them. Based on the 
  * filenames, the namespace and locale are interpreted. For example:
  * <ul>
  *  <li> core.properties, contains the base translations for the 'core' namespace.
@@ -24,55 +19,54 @@ import org.mmbase.util.logging.Logging;
  * be queried instead, going to the root.
  * <p>
  * The translationtable will walk the current directory and
- * read all files found in it.
- * @version $Id: TranslateTable.java,v 1.20 2008-08-06 17:14:47 michiel Exp $
+ * read all files found in it. 
  */
 public class TranslateTable {
-    private static final Logger log = Logging.getLoggerInstance(TranslateTable.class);
-    private static final Map<String, String>  translationTable = Collections.synchronizedMap(new HashMap<String, String>());
+    private static Logger log = Logging.getLoggerInstance(TranslateTable.class.getName());
+    private static Map translationTable = Collections.synchronizedMap(new HashMap());
     private static boolean initialized = false;
     private static TranslationFileWatcher watcher;
-
-    private static TranslateTable defaultTable = null;
-
-    private static TranslateTable getDefault() {
-        if (defaultTable == null) defaultTable = new TranslateTable(null);
-        return defaultTable;
-    }
-
-    private final Locale translationLocale;
+    private String translationlocale;
 
     /**
-     * Inner class that watches the translation files and
+     * Inner class that watches the translation files and 
      * reloads them into the translation table in case they are
-     * changed
-     */
-    static class TranslationFileWatcher extends ResourceWatcher {
-        public TranslationFileWatcher(ResourceLoader rl) {
-            super(rl);
-        }
-
+     * changed */
+    static class TranslationFileWatcher extends FileWatcher { 
+        public String basepath;
+        /**
+         * Constructor
+         */
+        public TranslationFileWatcher(String path) { 
+            super(true); 
+            this.basepath = path;
+        } 
+        
         /**
          * Change event. Read the file and process it.
          */
-        public void onChange(String resource) {
-            readResource(resourceLoader, resource);
-        }
-    }
+        public void onChange(File file) { 
+            readFile(file);
+        } 
+    } 
 
     /**
      * Initialize the entire Translation Table. This may only be done
      * once. The method is synchronized to prevent concurrent thread
      * to accessing it simultaniously.
      */
-    public static synchronized void init() {
+    public static synchronized void init(String path) {
         if (initialized) {
             return;
         }
-        ResourceLoader loader =  ResourceLoader.getConfigurationRoot().getChildResourceLoader("translations");
-        watcher = new TranslationFileWatcher(loader);
+
+        try {
+            path = (new File(path)).getCanonicalPath();
+        } catch (IOException e) {}
+
+        watcher = new TranslationFileWatcher(path);
         watcher.setDelay(10 * 1000);
-        addResources(watcher);
+        addFiles(new File(path), watcher);
 
         watcher.start();
         initialized = true;
@@ -81,11 +75,18 @@ public class TranslateTable {
     /**
      * Read a given directory and add all files to the filewatcher
      */
-    private static void addResources(TranslationFileWatcher watcher) {
-        Set<String> subs =  watcher.getResourceLoader().getResourcePaths(java.util.regex.Pattern.compile(".*\\.properties"), false);
-        for (String sub : subs) {
-            readResource(watcher.getResourceLoader(), sub);
-            watcher.add(sub);
+    private static void addFiles(File path, TranslationFileWatcher watcher) {
+        if (!path.exists()) {
+            return;
+        }
+        File[] files = path.listFiles();
+        for (int i=0; i<files.length; i++) {
+            if (files[i].isDirectory()) {
+                // ignore
+            } else {
+                readFile(files[i]);
+                watcher.add(files[i]);
+            }
         }
     }
 
@@ -93,9 +94,10 @@ public class TranslateTable {
      * Read a file into the inner data structures.
      * @param file the file to read
      */
-    protected static synchronized void readResource(ResourceLoader loader, String resource) {
+    protected static synchronized void readFile(File file) {
         // filename has the form: namespace.locale.properties
-        StringTokenizer st = new StringTokenizer(resource, ".");
+        String filename = file.getName();
+        StringTokenizer st = new StringTokenizer(filename, ".");
         String namespace = st.nextToken();
 
         // If there is no '.' in the filename then it's not a valid translation file
@@ -112,19 +114,20 @@ public class TranslateTable {
         }
 
         try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.startsWith("#")) {
+                    continue;
+                }
 
-            // we want to profit from Properties#load (all kind of handy features),
-            // but we also want the property files to be in unicode.
-            // Following trick with Transforming readers and so on, arranges that.
-            Properties props = new Properties();
-            InputStream in = new ReaderInputStream(new TransformingReader(new InputStreamReader(loader.getResourceAsStream(resource), "UTF-8"),
-                                                                          new UnicodeEscaper()),
-                                                   "ISO-8859-1");
-            props.load(in);
+                int equalsign = line.indexOf("=");
+                if (equalsign == -1) {
+                    continue;
+                }
 
-            for (Map.Entry entry : props.entrySet()) {
-                String key = (String) entry.getKey();
-                String value = (String) entry.getValue();
+                String key = line.substring(0, equalsign).trim();
+                String value = line.substring(equalsign + 1, line.length()).trim();
 
                 String fkey = namespace;
                 if (!"".equals(locale)) {
@@ -134,9 +137,7 @@ public class TranslateTable {
 
                 if (translationTable.containsKey(fkey)) {
                     translationTable.remove(fkey);
-                    if (log.isDebugEnabled()) {
-                        log.debug("removed previous definition for '" + fkey + "'");
-                    }
+                    log.debug("removed previous definition for '" + fkey + "'");
                 }
                 translationTable.put(fkey, value);
                 log.debug("added translation value for '" + fkey + "': '" + value + "'");
@@ -150,17 +151,19 @@ public class TranslateTable {
      * Sync the entire translation tables to disk. This is done by iterating
      * over the (sorted) set of translation keys, and parsing them into component,
      * locale and messagekey. The file for this component+locale is emptied, the new
-     * keys are saved to that file. During this process the file is unsubscribed from
+     * keys are saved to that file. During this process the file is unsubscribed from 
      * the filewatcher, to make sure that there are no re-reads of the translation table
      * when we are writing it to disk.
      */
     public static void save() {
-        Map<String, PrintWriter> seenFiles = new HashMap<String, PrintWriter>();
+        Vector seenFiles = new Vector();
         synchronized(translationTable) {
-            TreeSet<String> ts = new TreeSet<String>(translationTable.keySet());
+            TreeSet ts = new TreeSet(translationTable.keySet());
             String previousFilename = "";
+            Iterator i = ts.iterator();
             PrintWriter out = null;
-            for (String key : ts) {
+            while (i.hasNext()) {
+                String key = (String)i.next();
                 StringTokenizer st = new StringTokenizer(key, ".");
                 String component = st.nextToken();
                 String locale = st.nextToken();
@@ -185,120 +188,52 @@ public class TranslateTable {
                         out.close();
                     }
                     try {
+                        String fname = watcher.basepath + File.separator + filename;
 
                         // If we have written to this file before, we must append to it!
-                        out = seenFiles.get(filename);
-                        if (out == null) {
+                        if (seenFiles.contains(fname)) {
+                            out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fname, true), "UTF-8")));
+                        } else {
                             // New file, remove it from the filewatcher (so we are sure that there is nobody
                             // reading the file when we are writing it.
-                            watcher.remove(filename);
-                            out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(watcher.getResourceLoader().createResourceAsStream(filename), "UTF-8")));
-                            seenFiles.put(filename, out);
+                            watcher.remove(new File(fname));
+                            out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fname, false), "UTF-8")));
+                            seenFiles.add(fname);
                         }
                     } catch (IOException e) {
-                        log.error("Exception while trying to write resource '" +  watcher.getResourceLoader() + " " + filename + "': " + e, e);
+                        log.error("Exception while trying to write file '" + watcher.basepath + File.separator + filename + "': " + e);
+                        log.error(e);
                     }
                 }
                 previousFilename = filename;
                 out.println(key + "=" + translationTable.get(completekey));
             }
-            for (PrintWriter o : seenFiles.values()) {
-                o.flush();
-                o.close();
+            if (out != null) {
+                out.flush();
+                out.close();
             }
         }
 
         // Final step: add the files to the filewatcher again
-        for (String fn : seenFiles.keySet()) {
-            watcher.add(fn);
+        for (int i=0; i<seenFiles.size(); i++) {
+            watcher.add(new File((String)seenFiles.get(i)));
         }
     }
-
+    
     /**
      * Public constructor, it initializes the internal data structures.
      */
-    public TranslateTable(Locale translationLocale) {
-        this.translationLocale = translationLocale == null ? org.mmbase.module.core.MMBase.getMMBase().getLocale() : translationLocale;
+    public TranslateTable(String translationlocale) {
+        this.translationlocale = translationlocale;
     }
-
-
-
-
-    protected  static Locale degrade(Locale locale, Locale originalLocale) {
-        String language = locale.getLanguage();
-        String country  = locale.getCountry();
-        String variant  = locale.getVariant();
-        if (variant != null && ! "".equals(variant)) {
-            String[] var = variant.split("_");
-            if (var.length > 1) {
-                StringBuilder v = new StringBuilder(var[0]);
-                for (int i = 1; i < var.length - 1; i++) {
-                    v.append('_');
-                    v.append(var[i]);
-                }
-                return new Locale(language, country, v.toString());
-            } else {
-                return new Locale(language, country);
-            }
-        }
-        if (! "".equals(country)) {
-            String originalVariant = originalLocale.getVariant();
-            if (originalVariant  != null && ! "".equals(originalVariant)) {
-                return new Locale(language, "", originalVariant);
-            } else {
-                return new Locale(language);
-            }
-        }
-        // cannot be degraded any more.
-        return null;
-    }
-
+   
     /**
-     * A bit different then Locale#toString, because country can be skipped.
-     */
-    protected String toString(Locale locale) {
-        StringBuilder loc = new StringBuilder(locale.getLanguage());
-        String country = locale.getCountry();
-        if (! "".equals(country)) {
-            loc.append('_');
-            loc.append(country);
-        }
-        String variant = locale.getVariant();
-        if (variant != null && ! "".equals(variant)) {
-            loc.append('_');
-            loc.append(variant);
-        }
-        return loc.toString();
-    }
-
-    /**
-       Default ResourceBundle#getBundle
-       # baseName + "_" + language1 + "_" + country1 + "_" + variant1
-       # baseName + "_" + language1 + "_" + country1
-       # baseName + "_" + language1
-
-       Didactor:
-
-       #0 baseName + "_" + language1 + "_" + country1 + "_" + variant1_variant2
-       #1 baseName + "_" + language1 + "_" + country1 + "_" + variant1
-       #2 baseName + "_" + language1 + "_" + country1
-       #3 baseName + "_" + language1 + "_" + variant1_variant2
-       #4 baseName + "_" + language1 + "_" + variant1
-       #5 baseName + "_" + language1
-       #6 baseName + "_" + language1
-
      * Fetch a translation from the translation tables.
      */
     public String translate(String tkey) {
-        if (log.isDebugEnabled()) {
-            log.debug("translate('" + tkey + "')");
-        }
-        Locale locale = translationLocale;
+        log.debug("translate('" + tkey + "')");
+        String locale = translationlocale;
         StringTokenizer st = new StringTokenizer(tkey, ".");
-
-        if (! st.hasMoreTokens()) {
-            return "???[" + tkey + "]";
-        }
         String namespace = st.nextToken();
         if (!st.hasMoreTokens()) {
             log.error("Cannot translate key with no namespace: '" + tkey + "'");
@@ -307,38 +242,25 @@ public class TranslateTable {
         String key = st.nextToken();
 
         while (true) {
-            String gkey = namespace + "." + toString(locale) + "." + key;
-            if (log.isTraceEnabled()) {
-                log.trace("Looking for translation for [" + gkey + "] in " + translationTable);
+            String gkey = namespace;
+            if (locale != null && !"".equals(locale)) {
+                gkey += "." + locale;
             }
-            String translation = translationTable.get(gkey);
-            if (translation != null) {
-                return translation;
+            gkey += "." + key;
+            log.debug("Looking for translation for [" + gkey + "]");
+            if (translationTable.containsKey(gkey)) {
+                return (String)translationTable.get(gkey);
             } else {
-                Locale prev = locale;
-                locale = degrade(locale, translationLocale);
-                log.debug("degraded " + prev + " to " + locale + " because '" + gkey + "' not found");
-            }
-            if (locale == null) {
-                TranslateTable def = getDefault();
-                if (def != this) {
-                    return def.translate(tkey);
-                } else {
-                    String t = translationTable.get(namespace + "." + key);
-                    return t != null ? t : key;
+                if (locale == null || "".equals(locale)) {
+                    return null;
                 }
             }
+            if (locale.lastIndexOf("_") > -1) {
+                locale = locale.substring(0, locale.lastIndexOf("_"));
+            } else {
+                locale = "";
+            }
         }
-    }
-    public String translate(String tkey, Object... args) {
-        String translation = translate(tkey);
-        if (translation == null) return tkey;
-        MessageFormat message = new MessageFormat(translation, translationLocale);
-        String res = message.format(args, new StringBuffer(), null).toString();
-        if (log.isDebugEnabled()) {
-            log.debug("Formatting " + translation + " " + Arrays.asList(args) + " (" + translationLocale + ") -> " + res);
-        }
-        return res;
     }
 
     /**

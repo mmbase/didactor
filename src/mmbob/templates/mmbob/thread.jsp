@@ -11,7 +11,7 @@
 <head>
    <link rel="stylesheet" type="text/css" href="<mm:write referid="style_default" />" />
    <link rel="stylesheet" type="text/css" href="<mm:treefile page="/css/base.css" objectlist="$includePath" referids="$referids" />" />
-   <title>MMBob - THREAD</title>
+   <title>MMBob</title>
    <script language="JavaScript1.1" type="text/javascript" src="js/smilies.js"></script>
 </head>
 <mm:import externid="forumid" />
@@ -149,34 +149,36 @@
 
 
       <tr>
-         <td class="${tdvar}" valign="top" align="left">
-           <mm:field name="posterid">
-             <mm:isnotempty>
-               <mm:node number="${_}">
-                 <mm:relatednodes type="people">
-                   <mm:treefile page="/portfolio/index.jsp" objectlist="$includePath" referids="$referids,_node@contact" write="false">
-                     <a href="${_}" target="_top">
-                       <mm:relatednodes type="images">
-                         <mm:image template="s(80x80)" mode="img" />
-                       </mm:relatednodes>
-                     </a>
-                   </mm:treefile>
-                 </mm:relatednodes>
-               </mm:node>
-             </mm:isnotempty>
-           </mm:field>
-           <p /> <!-- wtf -->
+         <td class="<mm:write referid="tdvar" />" valign="top" align="left">
+            <mm:import id="dummyposterid" reset="true"><mm:field name="posterid"/></mm:import>
+<mm:isnotempty referid="dummyposterid">
+            <mm:list nodes="$dummyposterid" path="posters,people,images">
+               <a href="<mm:treefile page="/portfolio/index.jsp" objectlist="$includePath" referids="$referids">
+                           <mm:param name="contact"><mm:field name="people.number"/></mm:param>
+                        </mm:treefile>" target="_top">
+                  <mm:node element="images">
+                     <img src="<mm:image template="s(80x80)" />" width="80" border="0">
+                  </mm:node>
+               </a>
+            </mm:list>
+</mm:isnotempty>
+            <p />
 
 
-           <mm:field name="guest">
-             <mm:compare value="true" inverse="true">
-               <di:translate key="mmbob.numberofposts" /> : <mm:field name="accountpostcount" /><br />
-               <di:translate key="mmbob.membersince" /> : <mm:field name="firstlogin"><mm:time format="${timeFormat}" /></mm:field><br />
-               <di:translate key="mmbob.lastvisit" /> : <mm:field name="lastseen"><mm:time format="${timeFormat}" /> </mm:field><br />
-             </mm:compare>
-           </mm:field>
-           <br /><br /><br /><br /><br /><!-- wtf, wtf -->
-         </td>
+         <mm:field name="guest">
+         <mm:compare value="true" inverse="true">
+<%-- hh            Level : <mm:field name="level" /><br /> --%>
+            <di:translate key="mmbob.numberofposts" /> : <mm:field name="accountpostcount" /><br />
+<%-- hh            Geslacht : <mm:field name="gender" /><br />
+      Lokatie : <mm:field name="location" /><br /> --%>
+      <di:translate key="mmbob.membersince" /> : <mm:field name="firstlogin"><mm:time format="${timeFormat}" /></mm:field><br />
+      <di:translate key="mmbob.lastvisit" /> : <mm:field name="lastseen"><mm:time format="${timeFormat}" /> </mm:field><br />
+      </mm:compare>
+      <mm:compare value="true">
+      </mm:compare>
+      </mm:field>
+      <br /><br /><br /><br /><br />
+      </td>
 
 
       <td class="<mm:write referid="tdvar" />" valign="top" align="left">
@@ -242,7 +244,7 @@
         </td>
     </tr>
     <tr><td colspan="3"><input type="hidden" name="action" value="postreply">
-    <center><input type="submit" value="<di:translate key="mmbob.placeresponse" />"></center>
+    <center><input type="submit" value="       <di:translate key="mmbob.placeresponse" />"></center>
     </td></tr>
   </form>
 </table>

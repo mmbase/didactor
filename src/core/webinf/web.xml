@@ -10,58 +10,26 @@
   <display-name>Didactor</display-name>
 
   <context-param>
+    <param-name>filemanagementBaseUrl</param-name>
+    <param-value>${filemanagement.data.url}</param-value>
+  </context-param>
+  <context-param>
+    <param-name>filemanagementBaseDirectory</param-name>
+    <param-value>${filemanagement.data.directory}</param-value>
+  </context-param>
+  <context-param>
     <param-name>mmbase.taglib.eval_body_include</param-name>
     <param-value>true</param-value>
   </context-param>
 
-  <context-param>
-    <param-name>mmbase.taglib.smartpath_backwards_compatible</param-name>
-    <param-value>false</param-value>
-  </context-param>
 
-  <context-param>
-    <param-name>mmbase.servlet.images.addfilename</param-name>
-    <param-value>yes</param-value>
-  </context-param>
-  <!-- some for attachments -->
-  <context-param>
-    <param-name>mmbase.servlet.attachments.addfilename</param-name>
-    <param-value>yes</param-value>
-  </context-param>
-
-  <filter>
-    <filter-name>Didactor Filter</filter-name>
-    <display-name>Didactor</display-name>
-    <description></description>
-    <filter-class>nl.didactor.filter.ProviderFilter</filter-class>
-  </filter>
-
+  <!-- Filter for jumpers -->
   <filter>
     <filter-name>Jumpers Filter</filter-name>
     <display-name>Jumpers Filter</display-name>
     <description>Filter used for jumpers</description>
     <filter-class>org.mmbase.servlet.JumpersFilter</filter-class>
   </filter>
-
-  <filter>
-    <filter-name>FrameworkFilter</filter-name>
-    <filter-class>org.mmbase.framework.FrameworkFilter</filter-class>
-    <init-param>
-      <param-name>excludes</param-name>
-      <param-value>([.]ico$|[.]jpg$|[.]gif$|[.]png$|[.]css$|[.]js$|[.]jsp$|[.]do$)|/errorpages|/editors</param-value>
-    </init-param>
-  </filter>
-
-
-
-  <filter-mapping>
-    <filter-name>Didactor Filter</filter-name>
-    <url-pattern>/*</url-pattern>
-  </filter-mapping>
-  <filter-mapping>
-    <filter-name>FrameworkFilter</filter-name>
-    <url-pattern>/*</url-pattern>
-  </filter-mapping>
 
   <filter-mapping>
     <filter-name>Jumpers Filter</filter-name>
@@ -114,20 +82,7 @@
     <load-on-startup>3</load-on-startup>
   </servlet>
 
-  <servlet>
-    <servlet-name>files</servlet-name>
-    <servlet-class>org.mmbase.servlet.FileServlet</servlet-class>
-    <init-param>
-      <param-name>listings</param-name>
-      <param-value>true</param-value>
-    </init-param>
-    <init-param>
-      <param-name>ignore</param-name>
-      <param-value>.*/CVS/.*|.*/\.svn/.*|.*~$|^\.\#.*|.*/tomcat-users.xml$</param-value>
-    </init-param>
-    <load-on-startup>4</load-on-startup>
-  </servlet>
-
+  <!-- EXTRASERVLETS -->
 
   <servlet-mapping>
     <servlet-name>version</servlet-name>
@@ -137,19 +92,14 @@
   <!-- mapping for image-requests -->
   <servlet-mapping>
     <servlet-name>images</servlet-name>
-    <url-pattern>/images/*</url-pattern>
+    <url-pattern>/img.db</url-pattern>
   </servlet-mapping>
+
   <!-- mapping for attachment requests -->
   <servlet-mapping>
     <servlet-name>attachments</servlet-name>
-    <url-pattern>/attachments/*</url-pattern>
+    <url-pattern>/attachment.db/*</url-pattern>
   </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>files</servlet-name>
-    <url-pattern>/files/*</url-pattern>
-  </servlet-mapping>
-
-
 
   <!-- Mime mappings for Apache Axis -->
   <mime-mapping>
@@ -227,25 +177,32 @@
     <welcome-file>welcome.html</welcome-file>
   </welcome-file-list>
 
+  <taglib>
+    <taglib-uri>http://www.didactor.nl/ditaglib_1.0</taglib-uri>
+    <taglib-location>/WEB-INF/taglib.tld</taglib-location>
+  </taglib>
 
+  <!--
+       EXTRATAGLIB
+  -->
   <error-page>
     <error-code>400</error-code>
-    <location>/errorpages/_400.jsp</location>
+    <location>/mmbase/errorpages/400.jsp</location>
   </error-page>
   <error-page>
     <error-code>403</error-code>
-    <location>/errorpages/_403.jsp</location>
+    <location>/mmbase/errorpages/403.jsp</location>
   </error-page>
   <error-page>
     <error-code>404</error-code>
-    <location>/errorpages/_404.jsp</location>
+    <location>/mmbase/errorpages/404.jsp</location>
   </error-page>
   <error-page>
     <exception-type>java.lang.Exception</exception-type>
-    <location>/errorpages/_500.jsp</location>
+    <location>/mmbase/errorpages/500.jsp</location>
   </error-page>
   <error-page>
     <error-code>503</error-code>
-    <location>/errorpages/_503.jsp</location>
+    <location>/mmbase/errorpages/503.jsp</location>
   </error-page>
 </web-app>
