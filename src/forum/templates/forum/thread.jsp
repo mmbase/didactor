@@ -5,24 +5,19 @@ This message is also create by this page.
 --%>
 <%@ page import="java.text.SimpleDateFormat,
                  java.util.Calendar"%>
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.0" prefix="mm" %>
 <%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
 <%@taglib uri="oscache" prefix="os" %>
-
 <mm:content postprocessor="none" expires="0"><%-- postprocess="none" because of textarea interaction --%>
 
 <mm:cloud name="mmbase" loginpage="/login.jsp" jspvar="cloud">
   <%@ include file="/shared/setImports.jsp"%>
 
-  <%@include file="/education/wizards/roles_defs.jsp" %>
-  <mm:import id="editcontextname" reset="true">docent schermen</mm:import>
-  <%@include file="/education/wizards/roles_chk.jsp" %>
-
-  <mm:treeinclude page="/cockpit/cockpit_header.jsp" objectlist="$includePath" referids="$referids">
-    <mm:param name="extraheader">
-      <title>Forum</title>
-    </mm:param>
-  </mm:treeinclude>
+<mm:treeinclude page="/cockpit/cockpit_header.jsp" objectlist="$includePath" referids="$referids">
+  <mm:param name="extraheader">
+    <title>Forum</title>
+  </mm:param>
+</mm:treeinclude>
 
   <mm:import id="forum" externid="forum" jspvar="forum"/>
   <mm:import id="thread" externid="thread" jspvar="thread"/>
@@ -33,12 +28,12 @@ This message is also create by this page.
   </mm:present>
 
   
-  <mm:islessthan referid="rights" referid2="RIGHTS_RW" inverse="true">
+  <di:hasrole role="teacher">
     <mm:import id="isTeacher">true</mm:import>
-  </mm:islessthan>
-  <mm:islessthan referid="rights" referid2="RIGHTS_RW">
+  </di:hasrole>
+  <di:hasrole role="teacher" inverse="true">
     <mm:import id="isTeacher">false</mm:import>
-  </mm:islessthan>
+  </di:hasrole>
 
   <mm:import id="insertedmessageok"></mm:import>
   <mm:import id="message" externid="message" />
@@ -81,12 +76,25 @@ This message is also create by this page.
 
 <div class="navigationbar">
   <div class="titlebar">
-  <img src="<mm:treefile write="true" page="/gfx/icon_forum.gif" objectlist="$includePath" />" width="25" height="13" border="0" title="forum" alt="forum" /> Forum
+  <img src="<mm:treefile write="true" page="/gfx/icon_forum.gif" objectlist="$includePath" />" width="25" height="13" border="0" alt="forum" /> Forum
   </div>
 </div>
 <div class="folders">
   <div class="folderHeader">
         <!-- kop -->
+        <mm:node referid="forum">
+            <a href="<mm:treefile write="true" page="/forum/forum.jsp"
+			objectlist="$includePath" referids="$referids">
+                  <mm:param name="forum"><mm:write referid="forum" /></mm:param>
+               </mm:treefile>" class="tableheader">
+              <mm:field name="name" /></a>
+            <mm:field name="name" />
+        </mm:node>
+        &gt;
+        <mm:node referid="thread">
+          <mm:field name="name" />
+        </mm:node>
+
   </div>
   <div class="folderBody">
     <mm:notpresent referid="print">
@@ -99,7 +107,10 @@ This message is also create by this page.
                   method="post">
             <input type="hidden" name="delthread" value="<mm:write referid="thread" />">
             <input type="hidden" name="forum" value="<mm:write referid="forum" />">
-              <input type="submit" value="<di:translate key="forum.remove_thread" />" class="formbutton">
+            <mm:treeinclude write="true" page="/forum/default.jsp" objectlist="$includePath" referids="$referids">
+              <mm:param name="caption"><di:translate id="remove_thread" >Remove All</di:translate></mm:param>
+              <mm:param name="onclick">javascript:submitForm('delthread<mm:write referid="thread" />');</mm:param>
+            </mm:treeinclude>
             </form>
           </mm:compare>
         </td>
@@ -113,23 +124,9 @@ This message is also create by this page.
 
 <div class="mainContent">
   <div class="contentHeader">
-
-        <mm:node referid="forum">
-            <a href="<mm:treefile write="true" page="/forum/forum.jsp"
-			objectlist="$includePath" referids="$referids">
-                  <mm:param name="forum"><mm:write referid="forum" /></mm:param>
-               </mm:treefile>" class="tableheader">
-              <mm:field name="name" /></a>
-        </mm:node>
-        &gt;
-        <mm:node referid="thread">
-          <mm:field name="name" />
-        </mm:node>
-
-
     &nbsp;
   </div>
-  <div class="contentBodywit" style="padding-top: 5.2em">
+  <div class="contentBody">
 
    <mm:node referid="thread">
       <mm:import jspvar="includePath" vartype="String"><mm:write referid="includePath"/></mm:import>
@@ -166,9 +163,11 @@ This message is also create by this page.
 	      </em>
               <mm:compare referid="isTeacher" value="true">
                 <form name="del<mm:field name="number" />" method="post">
-                <input type="hidden" name="forum" value="<mm:write referid="forum"/>">
-               <input type="hidden" name="delnr" value="<mm:field name="number" />">
-                <input type="submit" value="<di:translate key="forum.remove" />" class="formbutton">
+                <input type="hidden" name="delnr" value="<mm:field name="number" />">
+                <mm:treeinclude write="true" page="/forum/default.jsp" objectlist="$includePath" referids="$referids">
+                  <mm:param name="caption"><di:translate id="remove" >Remove</di:translate></mm:param>
+                  <mm:param name="onclick">javascript:submitForm('del<mm:field name="number" />');</mm:param>
+                </mm:treeinclude>
                 </form>
               </mm:compare>
     
@@ -177,14 +176,12 @@ This message is also create by this page.
       </os:cache>
 --%>
       <mm:notpresent referid="print">
-            <form method="post" name="newmessage" action="<mm:treefile page="/forum/thread.jsp" objectlist="$includePath" referids="$referids"/>">
-                 <input type="hidden" name="thread" value="<mm:write referid="thread"/>">
-               <input type="hidden" name="forum" value="<mm:write referid="forum"/>">
-	      <input type="text" name="title" value="<mm:isempty referid="insertedmessageok"><mm:write referid="title"/></mm:isempty>" size="40"><di:translate key="forum.title" /><br>
-              <textarea cols=60 rows=6 name="message"><mm:isempty referid="insertedmessageok"><mm:write referid="message"/></mm:isempty></textarea><di:translate key="forum.message" />
+            <form method="post" name="newmessage">
+	      <input type="text" name="title" value="<mm:isempty referid="insertedmessageok"><mm:write referid="title"/></mm:isempty>" size="40"><di:translate id="title">Title</di:translate><br>
+              <textarea cols=60 rows=6 name="message"><mm:isempty referid="insertedmessageok"><mm:write referid="message"/></mm:isempty></textarea><di:translate id="message">Message</di:translate>
 	      <br clear="all">
-	      <input type="submit" value="<di:translate key="forum.post" />" class="formbutton" name="action_submit">
-	      <input type="submit" value="<di:translate key="forum.back" />" class="formbutton" name="action_back">
+	      <input type="submit" value="<di:translate id="post" >Plaats</di:translate>" class="formbutton" name="action_submit">
+	      <input type="submit" value="<di:translate id="back">Terug</di:translate>" class="formbutton" name="action_back">
           </form>
       </mm:notpresent>
     </mm:node>

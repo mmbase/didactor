@@ -1,7 +1,6 @@
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm"%>
-<%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.0" prefix="mm"%>
 <mm:content postprocessor="reducespace">
-<mm:cloud method="delegate" jspvar="cloud">
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
 
 <mm:import externid="question" required="true"/>
 
@@ -25,11 +24,7 @@
 
 <mm:node number="$question">
 
-  <mm:field name="showtitle">
-    <mm:compare value="1">
-      <b><mm:field name="title"/></b><br>
-    </mm:compare>
-  </mm:field>
+  <h2><mm:field name="title"/></h2>
   <p/>
   <mm:field name="text" escape="none"/>
   <p/>
@@ -56,7 +51,7 @@
     <mm:compare referid="questionlayout" valueset="0,1,3,4">
       <mm:relatednodes referid="answerlist">
         <input type="radio" name="<mm:write referid="question" />" value="<mm:field name="text"/>"/>
-        <mm:field name="text" escape="none"/>
+        <mm:field name="text"/>
 
         <%-- Each answer on a new line --%>
         <mm:compare referid="questionlayout" valueset="0,3">
@@ -70,7 +65,7 @@
     <mm:compare referid="questionlayout" valueset="2,5">
       <mm:relatednodes referid="answerlist">
         <mm:first><select name="<mm:write referid="question"/>"</mm:first>
-        <option><mm:field name="text" escape="none"/></option>
+        <option><mm:field name="text"/></option>
         <mm:last></select></mm:last>
       </mm:relatednodes>
     </mm:compare>
@@ -80,8 +75,8 @@
   <%-- Generate layout for checkboxes (multiple correct answers to be chosen) --%>
   <mm:compare referid="questiontype" value="1">
     <mm:relatednodes referid="answerlist">
-      <input type="checkbox" name="<mm:write referid="question"/>_<mm:field name="number"/>" value="<mm:field name="text" escape="none"/>"/>
-        <mm:field name="text" escape="none"/>
+      <input type="checkbox" name="<mm:write referid="question"/>_<mm:field name="number"/>" value="<mm:field name="text"/>"/>
+        <mm:field name="text"/>
 
         <%-- Each answer on a new line --%>
         <mm:compare referid="questionlayout" valueset="0,3">

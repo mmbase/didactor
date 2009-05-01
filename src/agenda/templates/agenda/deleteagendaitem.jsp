@@ -1,15 +1,16 @@
-<%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" 
-%><%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.0" prefix="mm" %>
 <%@page import="java.util.Calendar, java.util.Date"%>
 
 <%-- expires is set so renaming a folder does not show the old name --%>
 <mm:content postprocessor="reducespace" expires="0">
-<mm:cloud method="delegate" jspvar="cloud">
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
 
 <%@include file="/shared/setImports.jsp" %>
+<fmt:bundle basename="nl.didactor.component.agenda.AgendaMessageBundle">
 <mm:treeinclude page="/cockpit/cockpit_header.jsp" objectlist="$includePath" referids="$referids">
   <mm:param name="extraheader">
-    <title><di:translate key="agenda.deleteappointment" /></title>
+    <title><fmt:message key="DELETEAPPOINTMENT" /></title>
   </mm:param>
 </mm:treeinclude>
 
@@ -18,7 +19,7 @@
 <mm:import externid="action1"/>
 <mm:import externid="action2"/>
 <mm:import externid="year" jspvar="year" vartype="Integer"/>
-<mm:import externid="month" jspvar="month" vartype="Integer"/>
+<mm:import externid="month"jspvar="month" vartype="Integer"/>
 <mm:import externid="day" jspvar="day" vartype="Integer"/>
 <mm:import externid="ids" vartype="List"/>
 
@@ -78,7 +79,7 @@
 
 
 <%-- Check if the no button is pressed --%>
-<mm:import id="action2text"><di:translate key="agenda.no" /></mm:import>
+<mm:import id="action2text"><fmt:message key="NO" /></mm:import>
 <mm:compare referid="action2" referid2="action2text">
   <mm:present referid="year">
   <mm:redirect referids="$referids,year,month,day" page="$callerpage"/>
@@ -117,7 +118,7 @@
 <div class="mainContent">
 
   <div class="contentHeader">
-    <di:translate key="agenda.deleteappointment" />
+    <fmt:message key="DELETEAPPOINTMENT" />
   </div>
 
   <div class="contentBodywit">
@@ -125,7 +126,7 @@
     <%-- Show the form --%>
     <form name="deletecontact" class="formInput" method="post" action="<mm:treefile page="/agenda/deleteagendaitem.jsp" objectlist="$includePath" referids="$referids"/>">
 
-      <di:translate key="agenda.deleteselectedappointmentsyesno" />
+      <fmt:message key="DELETESELECTEDAPPOINTMENTSYESNO" />
       <p/>
       <table class="font">
       </table>
@@ -139,18 +140,17 @@
       <input type="hidden" name="ids" value="<mm:write referid="ids"/>"/>
       
       <mm:present referid="hasseries">
-	  <di:translate key="agenda.seriesfound" />
-          <p>
-       <input type="submit" class="formbutton" name="action0" value="<di:translate key="agenda.deleteone" />"/>
+	  <fmt:message key="SERIESFOUND"/>
+       <input type="submit" class="formbutton" name="action0" value="<fmt:message key="DELETEONE" />"/>
        
-      <input type="submit" class="formbutton" name="action1" value="<di:translate key="agenda.deleteall" />"/>
+      <input type="submit" class="formbutton" name="action1" value="<fmt:message key="DELETEALL" />"/>
       </mm:present>
 
       <mm:notpresent referid="hasseries">
-      <input type="submit" class="formbutton" name="action1" value="<di:translate key="agenda.yes" />"/>
+      <input type="submit" class="formbutton" name="action1" value="<fmt:message key="YES" />"/>
       </mm:notpresent>
 
-      <input type="submit" class="formbutton" name="action2" value="<di:translate key="agenda.no" />"/>
+      <input type="submit" class="formbutton" name="action2" value="<fmt:message key="NO" />"/>
 
     </form>
 
@@ -158,5 +158,6 @@
 </div>
 </div>
 
+</fmt:bundle>
 </mm:cloud>
 </mm:content>

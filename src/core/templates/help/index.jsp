@@ -1,11 +1,11 @@
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" %>
-<%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.0" prefix="mm" %>
 <mm:content postprocessor="reducespace">
-<mm:cloud method="delegate" jspvar="cloud">
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
 <%@include file="/shared/setImports.jsp" %>
 <mm:treeinclude page="/cockpit/cockpit_header.jsp" objectlist="$includePath" referids="$referids">
   <mm:param name="extraheader">
-    <title><di:translate key="core.help" /></title>
+    <title><fmt:message key="HELP" /></title>
   </mm:param>
 </mm:treeinclude>
 
@@ -13,8 +13,8 @@
 
 <div class="navigationbar">
   <div class="titlebar">
-    <img src="<mm:treefile write="true" page="/gfx/icon_help.gif" objectlist="$includePath" />" width="25" height="13" border="0" title="<di:translate key="core.help" />" alt="<di:translate key="core.help" />" />
-    <di:translate key="core.help" />
+    <img src="<mm:treefile write="true" page="/gfx/icon_help.gif" objectlist="$includePath" />" width="25" height="13" border="0" alt="<fmt:message key="HELP" />" />
+    <fmt:message key="HELP" />
   </div>
 </div>
 
@@ -37,8 +37,9 @@
   </div>
 
   <div class="contentBodywit">
-    <iframe src="<mm:url page="/help/helptop.jsp"/>" height="50" width="100%"></iframe>
-    <iframe name="helpcontent" height="100%" width="100%"></iframe>
+  <mm:treeinclude page="/help/didactor_help.htm" objectlist="$includePath" referids="$referids"/>
+
+
   </div>
 
 </div>

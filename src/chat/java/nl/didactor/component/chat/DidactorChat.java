@@ -1,13 +1,9 @@
 package nl.didactor.component.chat;
-import nl.didactor.builders.DidactorBuilder;
 import nl.didactor.component.Component;
 import nl.didactor.component.core.*;
 import org.mmbase.bridge.Cloud;
 import org.mmbase.module.core.*;
 import org.mmbase.module.corebuilders.*;
-import org.mmbase.storage.search.SearchQueryException;
-import org.mmbase.storage.search.implementation.NodeSearchQuery;
-import java.util.List;
 import java.util.Map;
 
 public class DidactorChat extends Component {
@@ -20,7 +16,7 @@ public class DidactorChat extends Component {
      * Returns the name of the component
      */
     public String getName() {
-        return "chat";
+        return "DidactorChat";
     }
 
     /**
@@ -31,34 +27,27 @@ public class DidactorChat extends Component {
         return components;
     }
 
-    public void init() {
-        super.init();
-        MMBase mmbase = MMBase.getMMBase();
-        DidactorBuilder classes = (DidactorBuilder)mmbase.getBuilder("classes");
-        classes.registerPostInsertComponent(this, 10);
+    /**
+     * Permission framework: indicate whether or not a given operation may be done, with the
+     * given arguments. The return value is a list of 2 booleans; the first boolean indicates
+     * whether or not the operation is allowed, the second boolean indicates whether or not
+     * this result may be cached.
+     */
+    public boolean[] may (String operation, Cloud cloud, Map context, String[] arguments) {
+        return new boolean[]{true, true};
     }
 
-    public void install() {
-        MMBase mmbase = MMBase.getMMBase();
-        DidactorBuilder classes = (DidactorBuilder)mmbase.getBuilder("classes");
-        try {
-            List nodes = classes.getNodes(new NodeSearchQuery(classes));
-            for (int i=0; i<nodes.size(); i++) {
-                postInsert((MMObjectNode)nodes.get(i));
-            }
-        } catch (SearchQueryException e) {
-        }
+    public String getSetting(String setting, Cloud cloud, Map context, String[] arguments) {
+        throw new IllegalArgumentException("Unknown setting '" + setting + "'");
     }
-
 
     /**
      * This method is called when a new object is added to Didactor. If the component
      * needs to insert objects for this object, it can do so. 
      */
-    public boolean postCommit(MMObjectNode node) {
-        if (node.getBuilder().getTableName().equals("classes")) {
+    public boolean notifyCreate(MMObjectNode node) {
+        if (node.getBuilder().getTableName().equals("classes"))
             return createClass(node);
-        }
 
         return true;
     }
