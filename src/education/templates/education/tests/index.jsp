@@ -1,81 +1,189 @@
-<jsp:root
-    xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0"
-    xmlns:mm="http://www.mmbase.org/mmbase-taglib-2.0"
-    xmlns:c="http://java.sun.com/jsp/jstl/core"
-    xmlns:di="http://www.didactor.nl/ditaglib_1.0" >
-  <mm:content postprocessor="none" type="application/xml" expires="0">
-    <mm:cloud rank="didactor user">
-
-<di:background>
-      <mm:import id="testNo" externid="learnobject" required="true"/>
-      <jsp:directive.include file="/education/tests/definitions.jsp"  />
-
-      <!-- remember this page -->
-      <mm:treeinclude page="/education/storebookmarks.jsp" objectlist="$includePath" referids="$referids">
-        <mm:param name="learnobject"><mm:write referid="testNo"/></mm:param>
-        <mm:param name="learnobjecttype">tests</mm:param>
-      </mm:treeinclude>
-
-      <di:copybook><mm:node id="copybookNo" /></di:copybook>
-
-      <mm:node number="$testNo">
-
-        <mm:function name="online" write="false">
-          <c:choose>
-            <c:when test="${_ eq false}">
-              <!-- Test not online, show that -->
-              <div class="learnenvironment copybook_${copybookNo}">
-                <di:translate key="education.testnotyetavailable" />
-                <mm:field name="online_date">
-                  <mm:time format=":FULL" /></mm:field> - <mm:field name="offline_date"><mm:time format=":FULL" />
-                </mm:field>
-                <di:blocks classification="after_test" />
-              </div>
-            </c:when>
-            <c:otherwise>
-              <!-- Test is indeed online -->
-
-              <mm:present referid="copybookNo">
-                <!-- Determin wether test was made already -->
-                <mm:relatednodescontainer path="madetests,copybooks" element="madetests">
-                  <mm:constraint field="score"  referid="TESTSCORE_INCOMPLETE" inverse="true"/>
-                  <mm:constraint field="copybooks.number"  value="$copybookNo" />
-                  <mm:relatednodes>
-                    <mm:node id="madetest" />
-                  </mm:relatednodes>
-                </mm:relatednodescontainer>
-              </mm:present>
-
-              <jsp:text>&lt;!-- made test no: ${madetestNo} --&gt;</jsp:text>
-
-              <mm:present referid="madetest">
-                <!-- Made already, show the result -->
-                <mm:treeinclude
-                    debug="html"
-                    page="/education/tests/buildtestresult.jsp" objectlist="$includePath"
-                    referids="$referids,testNo@learnobject,madetest" />
-              </mm:present>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.0" prefix="mm"%>
+<%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
 
 
-              <mm:present referid="madetest" inverse="true">
-                <!-- Not made already, build the test, and let the user make it -->
-                <mm:treeinclude
-                    debug="html"
-                    page="/education/tests/buildtest.jsp" objectlist="$includePath"
-                    referids="$referids,testNo@learnobject" />
-              </mm:present>
-
-            </c:otherwise>
-          </c:choose>
-        </mm:function>
-      </mm:node>
+<mm:content postprocessor="reducespace" expires="0">
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
 
 
-      <mm:node number="$testNo">
-        <jsp:directive.include file="../includes/component_link.jsp" />
-      </mm:node>
-</di:background>
+<mm:import id="testNo" externid="learnobject" required="true"/>
 
-    </mm:cloud>
-  </mm:content>
-</jsp:root>
+
+
+<%@include file="/shared/setImports.jsp" %>
+<%@include file="/education/tests/definitions.jsp" %>
+
+
+<%-- remember this page --%>
+<mm:treeinclude page="/education/storebookmarks.jsp" objectlist="$includePath" referids="$referids">
+   <mm:param name="learnobject"><mm:write referid="testNo"/></mm:param>
+   <mm:param name="learnobjecttype">tests</mm:param>
+</mm:treeinclude>
+
+
+<%-- find user's copybook --%>
+<mm:node number="$user">
+   <%@include file="find_copybook.jsp"%>
+</mm:node>
+
+
+<mm:node number="$testNo">
+  <mm:relatednodescontainer path="madetests,copybooks" element="madetests">
+
+    <mm:constraint field="madetests.score" referid="TESTSCORE_INCOMPLETE" inverse="true"/>
+
+    <mm:constraint field="copybooks.number" referid="copybookNo"/>
+
+    <mm:relatednodes>
+
+       <mm:field id="madetestNo" name="number" write="false"/>
+
+       <mm:field id="madetestscore" name="score" write="false"/>
+
+    </mm:relatednodes>
+
+  </mm:relatednodescontainer>
+
+
+
+  <mm:present referid="madetestNo">
+
+    <html>
+
+      <head>
+
+        <title>Toets</title>
+
+        <link rel="stylesheet" type="text/css" href="<mm:treefile page="/css/base.css" objectlist="$includePath" />" />
+
+      </head>
+
+      <body>
+
+<div class="learnenvironment">
+
+
+        <mm:field name="showtitle">
+          <mm:compare value="1">
+            <h1><mm:field name="name"/></h1>
+          </mm:compare>
+        </mm:field>
+
+        <mm:field id="maychange" name="maychange" write="false"/>
+
+        <mm:field id="mayview" name="mayview" write="false"/>
+
+        <mm:field id="feedback" name="feedbackpage" write="false"/>
+
+
+
+        <mm:compare referid="madetestscore" referid2="TESTSCORE_TBS">
+
+     De toets is reeds gemaakt. De antwoorden moeten nog worden nagekeken.<p/>
+
+        </mm:compare>
+
+        <mm:compare referid="madetestscore" referid2="TESTSCORE_TBS" inverse="true">
+
+          <%-- if madestestscore larger or equal than requiredscore --%>
+
+          <mm:field id="requiredscore" name="requiredscore" write="false"/>
+
+
+
+         <mm:islessthan referid="feedback" value="1">
+
+          <mm:islessthan referid="madetestscore" referid2="requiredscore" inverse="true">
+
+            De toets is reeds gemaakt en behaald.<p/>
+
+          </mm:islessthan>
+
+
+
+          <mm:islessthan referid="madetestscore" referid2="requiredscore">
+
+            De toets is reeds gemaakt en niet behaald.<p/>
+
+          </mm:islessthan>
+
+         </mm:islessthan>
+
+
+
+          <mm:compare referid="feedback" value="1">
+
+            Deze oefentoets is reeds gemaakt.<p/>
+
+          </mm:compare>
+
+
+
+
+
+         <mm:compare referid="mayview" value="1">
+
+              <table><tr>
+
+                 <td><div class="button1">
+
+                   <a href="<mm:treefile page="/education/tests/viewanswersframe.jsp" objectlist="$includePath" referids="$referids">
+
+                   <mm:param name="testNo"><mm:write referid="testNo"/></mm:param>
+
+                   <mm:param name="madetestNo"><mm:write referid="madetestNo"/></mm:param>
+
+                   <mm:param name="userNo"><mm:write referid="user"/></mm:param>
+
+                   </mm:treefile>"><di:translate id="view">Inzien</di:translate></a>
+
+               </div></td>
+
+            </mm:compare>
+
+            <mm:compare referid="maychange" value="1">
+
+               <td><div class="button1">
+
+                    <a href="<mm:treefile page="/education/tests/buildtest.jsp" objectlist="$includePath" referids="$referids">
+
+                 <mm:param name="learnobject"><mm:write referid="testNo"/></mm:param>
+
+                </mm:treefile>"><mm:compare referid="feedback" value="1"><di:translate id="again">Opnieuw maken</di:translate></mm:compare><mm:compare referid="feedback" value="0"><di:translate id="retry">Herkans</di:translate></a></mm:compare></a>
+
+               </div></td>
+
+               </tr></table>
+
+               </mm:compare>
+
+            </mm:compare>
+
+</div>
+
+      </body>
+
+    </html>
+
+  </mm:present>
+
+</mm:node>
+
+
+
+<mm:present referid="madetestNo" inverse="true">
+
+  <mm:treeinclude page="/education/tests/buildtest.jsp" objectlist="$includePath" referids="$referids">
+
+    <mm:param name="learnobject"><mm:write referid="testNo"/></mm:param>
+
+   </mm:treeinclude>
+
+</mm:present>
+
+
+
+</mm:cloud>
+
+</mm:content>
+

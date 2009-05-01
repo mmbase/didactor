@@ -1,8 +1,9 @@
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.0" prefix="mm" %>
 <%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
 <%@page import="java.util.*" %>
 <mm:content postprocessor="reducespace" expires="0">
-<mm:cloud method="delegate" jspvar="cloud">
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
 
 <mm:import externid="intakes" jspvar="intakes" required="true"/>
 
@@ -14,6 +15,25 @@
 <%@include file="/education/wizards/roles_chk.jsp" %>
 
 <mm:import externid="student" reset="true"><mm:write referid="user"/></mm:import>
+
+   <%
+
+      String bundlePOP = null;
+
+   %>
+
+   <mm:write referid="lang_code" jspvar="sLangCode" vartype="String" write="false">
+
+      <%
+
+         bundlePOP = "nl.didactor.component.pop.PopMessageBundle_" + sLangCode;
+
+      %>
+
+   </mm:write>
+
+<fmt:bundle basename="<%= bundlePOP %>">
+
   <mm:treeinclude page="/cockpit/cockpit_header.jsp" objectlist="$includePath" referids="$referids">
     <mm:param name="extraheader">
       <title>POP</title>
@@ -28,13 +48,7 @@
   <%@ include file="getids.jsp" %>
 
   <div class="rows">
-    <div class="navigationbar">
-      <div class="titlebar">
-        <img src="<mm:treefile write="true" page="/gfx/icon_pop.gif" objectlist="$includePath" />" 
-            width="25" height="13" border="0" title="<di:translate key="pop.popfull" />" alt="<di:translate key="pop.popfull" />" /> <di:translate key="pop.popfull" />
-      </div>		
-    </div>
-    <%@include file="leftpanel.jsp" %> 
+    <%@ include file="leftpanel.jsp" %>
 
 <%-- find student's copybook --%>
 <mm:node number="$student">
@@ -44,7 +58,7 @@
 
     <%-- right section --%>
     <div class="mainContent">
-<div class="contentHeader"><di:translate key="pop.progressmonitor" />
+<div class="contentHeader"><fmt:message key="Progressmonitor"/>
   <%@include file="nameintitle.jsp" %>
 </div>
   <div class="contentBody">
@@ -145,11 +159,12 @@
 
   <%@ include file="intakecheck.jsp" %>
 
-  <p><di:translate key="pop.intakemsgyouready" /></p>
+  <p><fmt:message key="IntakeMsgYouReady"/></p>
   <input type="button" class="formbutton" onClick="top.location.href='<mm:treefile page="/education/index.jsp" objectlist="$includePath" referids="$popreferids">
-      </mm:treefile>'" value="start" title="<di:translate key="pop.begincoursebutton" />">
+      </mm:treefile>'" value="start" title="<fmt:message key="BeginCourseButton"/>">
   </div>
 </div>
   <mm:treeinclude page="/cockpit/cockpit_footer.jsp" objectlist="$includePath" referids="$popreferids" />
+</fmt:bundle>
 </mm:cloud>
 </mm:content>

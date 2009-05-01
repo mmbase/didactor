@@ -1,11 +1,9 @@
 <!DOCTYPE list PUBLIC "-//MMBase/DTD editwizard 1.0//EN" "http://www.mmbase.org/dtd/wizard-schema_1_0.dtd">
 <list fdatapath="object/relation[@role='related']/object[@type='roles']" minoccurs="0" maxoccurs="*" hidecommand="delete-item">
-  <title xml:lang="nl">Bijbehorende rollen</title>
-  <title xml:lang="en">Related roles</title>
+  <title>Bijbehorende Rollen</title>
   <item>
     <field fdatapath="field[@name='name']" ftype="data">
-      <prompt xml:lang="nl">Rol naam</prompt>
-      <prompt xml:lang="en">Role name</prompt>
+      <prompt>Rol naam</prompt>
     </field>
   </item>
 

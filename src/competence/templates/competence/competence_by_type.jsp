@@ -4,16 +4,17 @@
 <%@ page import = "java.util.TreeMap" %>
 
 
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm" %>
-<%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.0" prefix="mm" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
-<mm:cloud method="delegate" jspvar="cloud">
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
 <%@include file="/shared/setImports.jsp"%>
 <%@include file="/education/wizards/roles_defs.jsp" %>
 <mm:import id="editcontextname" reset="true">competentie</mm:import>
 <%@include file="/education/wizards/roles_chk.jsp" %>
 
 <mm:import id="wizardjsp"><mm:treefile write="true" page="/editwizards/jsp/wizard.jsp" objectlist="$includePath" /></mm:import>
+<mm:import id="listjsp"><mm:treefile write="true" page="/editwizards/jsp/list.jsp" objectlist="$includePath" /></mm:import>
 
 <%
    String sSearchValue = request.getParameter("searchvalue");
@@ -21,7 +22,16 @@
    String sSearchAge = request.getParameter("age");
    if(sSearchAge == null) sSearchAge = "-1";
    String sDeleteNode = request.getParameter("delete_node");
+   String bundleCompetence = null;
 %>
+<mm:write referid="lang_code" jspvar="sLangCode" vartype="String" write="false">
+   <%
+      bundleCompetence = "nl.didactor.component.competence.CompetenceMessageBundle_" + sLangCode;
+   %>
+</mm:write>
+
+
+<fmt:bundle basename="<%= bundleCompetence %>">
 <html>
 <head>
    <link rel="stylesheet" type="text/css" href='<mm:treefile page="/css/base.css" objectlist="$includePath" referids="$referids" />' />
@@ -73,13 +83,13 @@
          <%
             String sResults = "";
          %>
-         <mm:import id="SearchResultsItems" reset="true"><di:translate key="competence.competencetypesmatrixsearchresultsitems" /></mm:import>
+         <mm:import id="SearchResultsItems" reset="true"><fmt:message key="CompetenceTypesMatrixSearchResultsItems"/></mm:import>
          <mm:write referid="SearchResultsItems" write="false" jspvar="sTemplate" vartype="String">
             <%
                sResults = sTemplate.replaceAll("\\{\\$\\$\\$\\}", "" + hsetCompetences.size());
             %>
          </mm:write>
-         <div title="<di:translate key="competence.competencetypesmatrixsearchresultsitemsdescription" />"><%= sResults %></div>
+         <div title="<fmt:message key="CompetenceTypesMatrixSearchResultsItemsDescription"/>"><%= sResults %></div>
       </td>
    </tr>
 </table>
@@ -97,7 +107,7 @@
                <td>
                   <form>
                      <input type="hidden" id="delete_node" name="delete_node" value=""/>
-                     <span class="header"><di:translate key="competence.competencetypesmatrixsearchresultstitle" /></span>
+                     <span class="header"><fmt:message key="CompetenceTypesMatrixSearchResultsTitle"/></span>
                      <br>
                      <select class="input" name="age">
                         <option value="-1"
@@ -107,7 +117,7 @@
                                  %> selected="selected" <%
                               }
                            %>
-                        ><di:translate key="competence.competencetypesmatrixsearchtimeall" /></option>
+                        ><fmt:message key="CompetenceTypesMatrixSearchTimeAll"/></option>
                         <option value="0"
                            <%
                               if((sSearchAge != null) && (sSearchAge.equals("0")))
@@ -115,7 +125,7 @@
                                  %> selected="selected" <%
                               }
                            %>
-                        ><di:translate key="competence.competencetypesmatrixsearchtimetoday" /></option>
+                        ><fmt:message key="CompetenceTypesMatrixSearchTimeToday"/></option>
                         <option value="1"
                            <%
                               if((sSearchAge != null) && (sSearchAge.equals("1")))
@@ -123,7 +133,7 @@
                                  %> selected="selected" <%
                               }
                            %>
-                        ><di:translate key="competence.competencetypesmatrixsearchtimeday" /></option>
+                        ><fmt:message key="CompetenceTypesMatrixSearchTimeDay"/></option>
                         <option value="7"
                            <%
                               if((sSearchAge != null) && (sSearchAge.equals("7")))
@@ -131,7 +141,7 @@
                                  %> selected="selected" <%
                               }
                            %>
-                        ><di:translate key="competence.competencetypesmatrixsearchtimeweek" /></option>
+                        ><fmt:message key="CompetenceTypesMatrixSearchTimeWeek"/></option>
                         <option value="31"
                            <%
                               if((sSearchAge != null) && (sSearchAge.equals("31")))
@@ -139,7 +149,7 @@
                                  %> selected="selected" <%
                               }
                            %>
-                        ><di:translate key="competence.competencetypesmatrixsearchtimemonth" /></option>
+                        ><fmt:message key="CompetenceTypesMatrixSearchTimeMonth"/></option>
                         <option value="365"
                            <%
                               if((sSearchAge != null) && (sSearchAge.equals("365")))
@@ -147,7 +157,7 @@
                                  %> selected="selected" <%
                               }
                            %>
-                        ><di:translate key="competence.competencetypesmatrixsearchtimeyear" /></option>
+                        ><fmt:message key="CompetenceTypesMatrixSearchTimeYear"/></option>
                      </select>
 
 
@@ -159,7 +169,7 @@
                                  %> selected="selected" <%
                               }
                            %>
-                        ><di:translate key="competence.competencetypesmatrixsearchbyname" /></option>
+                        ><fmt:message key="CompetenceTypesMatrixSearchByName"/></option>
                         <option value="number"
                            <%
                               if((sRealSearchField != null) && (sRealSearchField.equals("number")))
@@ -167,7 +177,7 @@
                                  %> selected="selected" <%
                               }
                            %>
-                        ><di:translate key="competence.competencetypesmatrixsearchbynumber" /></option>
+                        ><fmt:message key="CompetenceTypesMatrixSearchByNumber"/></option>
                         <option value="owner"
                            <%
                               if((sRealSearchField != null) && (sRealSearchField.equals("owner")))
@@ -175,7 +185,7 @@
                                  %> selected="selected" <%
                               }
                            %>
-                        ><di:translate key="competence.competencetypesmatrixsearchbyowner" /></option>
+                        ><fmt:message key="CompetenceTypesMatrixSearchByOwner"/></option>
                      </select>
 
 
@@ -188,8 +198,8 @@
                      </a>
                      <br>
                      <span class="subscript">
-                        <di:translate key="competence.competencetypesmatrixsearchtime" />
-                        <di:translate key="competence.competencetypesmatrixsearchterms" />
+                        <fmt:message key="CompetenceTypesMatrixSearchTime"/>
+                        <fmt:message key="CompetenceTypesMatrixSearchTerms"/>
                      </span>
                   </form>
                </td>
@@ -239,7 +249,7 @@
 
 
 <%//         ------------------ MAIN TABLE ------------------              %>
-<table border="1" cellpadding="0" cellspacing="0" style="border:0px; width:100%; text-align:left" class="titlefield2">
+<table border="1" cellpadding="0" cellspacing="0" style="border:0px; width:100%" class="titlefield2">
    <tr>
       <%
          int iCounter = 1;
@@ -315,4 +325,5 @@
 
 </body>
 </html>
+</fmt:bundle>
 </mm:cloud>

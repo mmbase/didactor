@@ -1,7 +1,7 @@
-<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm"%>
+<%@taglib uri="http://www.mmbase.org/mmbase-taglib-1.0" prefix="mm"%>
 <%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di" %>
 <mm:content postprocessor="reducespace" expires="0">
-<mm:cloud method="delegate" jspvar="cloud">
+<mm:cloud loginpage="/login.jsp" jspvar="cloud">
 
 <mm:import externid="testNo" required="true"/>
 <mm:import externid="studentNo" required="true"/>
@@ -10,7 +10,7 @@
 <%@include file="/shared/setImports.jsp" %>
 <%@include file="/education/tests/definitions.jsp" %>
 
-<di:may component="education" action="rate" referids="studentNo@subject">
+<di:may component="education" action="isTeacherOf" arguments="studentNo">
 
 <mm:import id="correctiontext">
   <mm:node number="$madetest">
@@ -29,8 +29,8 @@
           <mm:present referid="answer" inverse="true">
             Score voor vraag <mm:write referid="questiontext" escape="none"/> niet gegeven.<br/>
             <mm:import id="incompleterating"/>
-          </mm:present>
-          <mm:present referid="answer">
+          </mm:present>            
+          <mm:present referid="answer"> 
             <mm:setfield name="score"><mm:write referid="answer"/></mm:setfield>
             <mm:remove referid="answer"/>
           </mm:present>
@@ -67,7 +67,6 @@
 
 <mm:treeinclude page="/cockpit/cockpit_header.jsp" objectlist="$includePath" referids="$referids">
   <mm:param name="extraheader">
-    <!-- TODO, this is dutch -->
     <title>Voortgang -> Correctie</title>
   </mm:param>
 </mm:treeinclude>
@@ -82,7 +81,7 @@
                   <a href="<mm:treefile page="/education/tests/rateopen.jsp" objectlist="$includePath" referids="$referids">
                <mm:param name="testNo"><mm:write referid="testNo"/></mm:param>
                <mm:param name="studentNo"><mm:write referid="studentNo"/></mm:param>
-              </mm:treefile>"><di:translate key="education.complete" /></a>
+              </mm:treefile>"><di:translate id="complete">Voltooien</di:translate></a>
               </div>
 </div>
 </div>
@@ -92,7 +91,6 @@
 </html>
 </mm:present>
 
-<!-- aarch, how can there follow code after </html> ? -->
 <mm:notpresent referid="incompleterating">
   <mm:treeinclude page="/progress/index.jsp" objectlist="$includePath" referids="$referids"/>
 </mm:notpresent>
