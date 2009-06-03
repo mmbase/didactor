@@ -7,7 +7,8 @@ import org.mmbase.bridge.*;
 import org.mmbase.storage.search.RelationStep;
 import org.mmbase.core.event.*;
 
-import org.mmbase.module.core.MMObjectNode;
+import org.mmbase.module.core.*;
+import org.mmbase.storage.search.implementation.*;
 import java.util.*;
 
 /**
@@ -54,7 +55,22 @@ public class UserContext extends org.mmbase.security.BasicUser implements WeakNo
         this.identifier = identifier;
         this.owner = owner;
         this.rank = rank;
-        wrappedNode = 0;
+        MMObjectBuilder people = MMBase.getMMBase().getBuilder("people");
+        NodeSearchQuery query = new NodeSearchQuery(people);
+        BasicFieldValueConstraint constraint = new BasicFieldValueConstraint(query.getField(people.getField("username")), identifier);
+        query.setConstraint(constraint);
+        int nodeNumber = 0;
+        try {
+            Iterator<MMObjectNode> i = people.getNodes(query).iterator();
+            if (i.hasNext()) {
+                nodeNumber = i.next().getNumber();
+            } else {
+                log.warn("No people object with username '" + identifier + "'");
+            }
+        } catch (Exception e) {
+            log.error(e);
+        }
+        wrappedNode = nodeNumber;
         roles = new HashSet<String>();
     }
 
