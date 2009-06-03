@@ -11,15 +11,21 @@
   <mm:import externid="source" required="true" />
   <mm:import externid="confirm" />
   <mm:import externid="icondir" />
+ 	<mm:import id="currentlesson" from="session" externid="currentlesson_${user}_${education}" />
 
   <mm:node id="problem">
-    <mm:fieldlist fields="name,type">
+    
+    <mm:field name="name" />
+		
+    
+    <div class="problemItemCategories">
+    <mm:field name="type">
+    	<mm:locale language="nl">
       <mm:fieldinfo type="input" />
       <mm:fieldinfo type="errors" />
-    </mm:fieldlist>
-
-    <mm:import id="currentlesson" from="session" externid="currentlesson_${user}_${education}" />
-
+      </mm:locale>
+    </mm:field>
+    
     <mm:present referid="currentlesson">
 		<mm:isnotempty referid="currentlesson">
       <mm:relation to="${currentlesson}" role="posrel" notfound="null">
@@ -29,12 +35,12 @@
             <mm:node number="${problem}"    id="dest" />
             <mm:createrelation id="new" source="ll" destination="dest" role="posrel" commitonclose="true">
               <!-- default value of how much trouble -->
-              <mm:setfield name="pos">4</mm:setfield>
+              <mm:setfield name="pos">2</mm:setfield>
             </mm:createrelation>
           </mm:cloud>
         </c:if>
       </mm:relation>
-
+		
       <mm:listrelationscontainer type="learnobjects" role="posrel">
         <mm:addnode element="learnobjects" number="${currentlesson}" />
         <mm:listrelations id="relation">
@@ -45,8 +51,11 @@
         </mm:listrelations>
       </mm:listrelationscontainer>
       </mm:isnotempty>
+    <mm:isempty referid="currentlesson">
+    	<div class="selectTroublesSpacer">&amp;nbsp;</div>
+    </mm:isempty>
     </mm:present>
-
-    <mm-sr:delete source="${source}" confirm="${confirm}" icondir="${icondir}" />
+		</div>   
   </mm:node>
+  
 </jsp:root>
