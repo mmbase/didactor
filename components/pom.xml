@@ -38,6 +38,7 @@
     <module>address</module>
     <module>agenda</module>
     <module>progress</module>
+    <module>report</module>
   </modules>
   <build>
     <defaultGoal>install</defaultGoal>
