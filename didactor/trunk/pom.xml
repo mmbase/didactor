@@ -13,7 +13,9 @@
 
   <modules>
     <module>src</module>
+    <!--
     <module>distro</module>
+    -->
   </modules>
   <repositories>
     <repository>

@@ -4,6 +4,12 @@
                       http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.mmbase</groupId>
+    <artifactId>mmbase-application-parent</artifactId>
+    <version>1.9-SNAPSHOT</version>
+  </parent>
+
   <groupId>nl.didactor</groupId>
   <artifactId>didactor-components</artifactId>
   <packaging>pom</packaging>
@@ -15,13 +21,18 @@
     <module>core</module>
     <module>education</module>
   </modules>
+  <build>
+    <defaultGoal>install</defaultGoal>
+  </build>
+
   <repositories>
     <repository>
       <id>mmbase</id>
       <url>http://www.mmbase.org/maven2</url>
     </repository>
+    <repository>
+      <id>snapshots</id>
+      <url>http://www.mmbase.org/snapshots</url>
+    </repository>
   </repositories>
-  <build>
-    <defaultGoal>install</defaultGoal>
-  </build>
 </project>
