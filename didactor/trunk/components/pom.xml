@@ -37,6 +37,7 @@
     <module>portal</module>
     <module>address</module>
     <module>agenda</module>
+    <module>progress</module>
   </modules>
   <build>
     <defaultGoal>install</defaultGoal>
