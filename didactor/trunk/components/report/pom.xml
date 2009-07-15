@@ -21,6 +21,20 @@
       <scope>provided</scope>
     </dependency>
 
+    <dependency>
+      <groupId>nl.didactor</groupId>
+      <artifactId>didactor-education</artifactId>
+      <version>${didactor.version}</version>
+      <classifier>classes</classifier>
+      <scope>provided</scope>
+    </dependency>
+
+
+    <dependency>
+      <groupId>com.lowagie</groupId>
+      <artifactId>itext</artifactId>
+      <version>2.1.4</version>
+    </dependency>
 
   </dependencies>
 
