@@ -39,6 +39,7 @@
     <module>agenda</module>
     <module>progress</module>
     <module>report</module>
+    <module>aselect</module>
   </modules>
   <build>
     <defaultGoal>install</defaultGoal>
