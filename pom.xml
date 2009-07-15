@@ -12,7 +12,7 @@
   <url>http://www.mmbase.org</url>
 
   <modules>
-    <module>src</module>
+    <module>components</module>
     <module>distro</module>
   </modules>
 
