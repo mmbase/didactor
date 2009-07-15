@@ -81,6 +81,13 @@
       <type>war</type>
     </dependency>
 
+    <dependency>
+      <groupId>nl.didactor</groupId>
+      <artifactId>didactor-agenda</artifactId>
+      <version>${didactor.version}</version>
+      <type>war</type>
+    </dependency>
+
 
     <dependency>
       <groupId>hsqldb</groupId>
