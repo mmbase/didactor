@@ -35,6 +35,8 @@
     <module>competence</module>
     <module>register</module>
     <module>portal</module>
+    <module>address</module>
+    <module>agenda</module>
   </modules>
   <build>
     <defaultGoal>install</defaultGoal>
