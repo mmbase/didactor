@@ -62,6 +62,25 @@
       <type>war</type>
     </dependency>
 
+    <dependency>
+      <groupId>nl.didactor</groupId>
+      <artifactId>didactor-links</artifactId>
+      <version>${didactor.version}</version>
+      <type>war</type>
+    </dependency>
+    <dependency>
+      <groupId>nl.didactor</groupId>
+      <artifactId>didactor-register</artifactId>
+      <version>${didactor.version}</version>
+      <type>war</type>
+    </dependency>
+    <dependency>
+      <groupId>nl.didactor</groupId>
+      <artifactId>didactor-faq</artifactId>
+      <version>${didactor.version}</version>
+      <type>war</type>
+    </dependency>
+
 
     <dependency>
       <groupId>hsqldb</groupId>
