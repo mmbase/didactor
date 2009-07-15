@@ -33,6 +33,7 @@
     <module>shoutbox</module>
     <module>links</module>
     <module>competence</module>
+    <module>register</module>
   </modules>
   <build>
     <defaultGoal>install</defaultGoal>
