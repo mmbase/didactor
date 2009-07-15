@@ -13,16 +13,9 @@
 
   <modules>
     <module>src</module>
-    <!--
     <module>distro</module>
-    -->
   </modules>
-  <repositories>
-    <repository>
-      <id>mmbase</id>
-      <url>http://www.mmbase.org/maven2</url>
-    </repository>
-  </repositories>
+
   <build>
     <defaultGoal>install</defaultGoal>
   </build>

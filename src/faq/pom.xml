@@ -7,8 +7,8 @@
     <version>2.3-SNAPSHOT</version>
   </parent>
 
-  <artifactId>didactor-education</artifactId>
-  <name>Didactor Education</name>
+  <artifactId>didactor-faq</artifactId>
+  <name>Didactor FAQ</name>
   <packaging>war</packaging>
 
 
@@ -22,12 +22,13 @@
     </dependency>
 
     <dependency>
-      <groupId>org.mmbase</groupId>
-      <artifactId>mmbase-taglib</artifactId>
-      <version>${mmbase.version}</version>
+      <groupId>nl.didactor</groupId>
+      <artifactId>didactor-portalpages</artifactId>
+      <version>${didactor.version}</version>
       <classifier>classes</classifier>
       <scope>provided</scope>
     </dependency>
+
   </dependencies>
 
 </project>

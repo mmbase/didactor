@@ -17,9 +17,22 @@
   <name>Didactor Components</name>
   <url>http://www.mmbase.org</url>
 
+  <properties>
+    <mmbase.version>1.9-SNAPSHOT</mmbase.version>
+    <didactor.version>2.3-SNAPSHOT</didactor.version>
+  </properties>
+
   <modules>
     <module>core</module>
     <module>education</module>
+    <module>portalpages</module>
+    <module>email</module>
+    <module>richtext</module>
+    <module>faq</module>
+    <module>assessment</module>
+    <module>shoutbox</module>
+    <module>links</module>
+    <module>competence</module>
   </modules>
   <build>
     <defaultGoal>install</defaultGoal>

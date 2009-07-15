@@ -11,8 +11,122 @@
   <name>Didactor Core</name>
   <packaging>war</packaging>
 
+  <properties>
+    <mmbase.version.number>1.9</mmbase.version.number>
+    <mmbase.version.postfix>-SNAPSHOT</mmbase.version.postfix>
+    <mmbase.version>${mmbase.version.number}${mmbase.version.postfix}</mmbase.version>
+    <my.postfix>-servlet25${mmbase.version.postfix}</my.postfix>
+    <base.version>${mmbase.version.number}${my.postfix}</base.version>
+  </properties>
 
   <dependencies>
+
+    <dependency>
+      <groupId>org.mmbase</groupId>
+      <artifactId>base-webapp</artifactId>
+      <version>${base.version}</version>
+      <type>war</type>
+    </dependency>
+
+
+    <dependency>
+      <groupId>org.mmbase</groupId>
+      <artifactId>mmbase-taglib</artifactId>
+      <version>${mmbase.version}</version>
+      <classifier>classes</classifier>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mmbase</groupId>
+      <artifactId>mmbase-editwizard</artifactId>
+      <version>${mmbase.version}</version>
+      <classifier>classes</classifier>
+      <scope>provided</scope>
+    </dependency>
+
+
+    <dependency>
+      <groupId>org.mmbase.editwizards</groupId>
+      <artifactId>htmlarea</artifactId>
+      <version>3.0-rc1-mm19</version>
+      <type>war</type>
+    </dependency>
+
+
+    <dependency>
+      <groupId>org.mmbase</groupId>
+      <artifactId>mmbase-jumpers</artifactId>
+      <version>${mmbase.version}</version>
+      <type>war</type>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mmbase</groupId>
+      <artifactId>mmbase-editwizard</artifactId>
+      <version>${mmbase.version}</version>
+      <type>war</type>
+    </dependency>
+    <dependency>
+      <groupId>org.mmbase</groupId>
+      <artifactId>mmbase-resources</artifactId>
+      <version>${mmbase.version}</version>
+      <type>war</type>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mmbase</groupId>
+      <artifactId>mmbase-statistics</artifactId>
+      <version>0.2</version>
+      <type>war</type>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mmbase</groupId>
+      <artifactId>mmbase-searchrelate</artifactId>
+      <version>${mmbase.version}</version>
+      <type>war</type>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mmbase</groupId>
+      <artifactId>mmbase-crontab</artifactId>
+      <version>${mmbase.version}</version>
+      <type>war</type>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mmbase</groupId>
+      <artifactId>mmbase-clustering</artifactId>
+      <version>${mmbase.version}</version>
+      <type>war</type>
+    </dependency>
+
+    <dependency>
+      <groupId>opensymphony</groupId>
+      <artifactId>oscache</artifactId>
+      <version>2.4</version>
+      <exclusions>
+        <exclusion>
+          <!-- provided by base-webapp -->
+          <groupId>log4j</groupId>
+          <artifactId>log4j</artifactId>
+        </exclusion>
+        <!-- would also be provided by e.g. lucene
+        <exclusion>
+
+          <groupId>commons-logging</groupId>
+          <artifactId>commons-logging</artifactId>
+        </exclusion>
+        -->
+        <exclusion>
+          <!-- this is a bug in the oscache pom, if you ask me -->
+          <groupId>javax.servlet</groupId>
+          <artifactId>servlet-api</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
 
   </dependencies>
 
