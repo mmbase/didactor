@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>nl.didactor</groupId>
+  <artifactId>distro</artifactId>
+  <packaging>war</packaging>
+  <name>Didactor Demo Distro</name>
+  <version>2.3-SNAPSHOT</version>
+
+  <properties>
+    <didactor.version>${project.version}</didactor.version>
+    <mmbase.version.number>1.9</mmbase.version.number>
+    <mmbase.version.postfix>-SNAPSHOT</mmbase.version.postfix>
+    <mmbase.version>${mmbase.version.number}${mmbase.version.postfix}</mmbase.version>
+    <my.postfix>-servlet25${mmbase.version.postfix}</my.postfix>
+    <base.version>${mmbase.version.number}${my.postfix}</base.version>
+  </properties>
+
+  <build>
+    <defaultGoal>install</defaultGoal>
+  </build>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>nl.didactor</groupId>
+      <artifactId>didactor-core</artifactId>
+      <version>${didactor.version}</version>
+      <type>war</type>
+    </dependency>
+
+    <dependency>
+      <groupId>nl.didactor</groupId>
+      <artifactId>didactor-education</artifactId>
+      <version>${didactor.version}</version>
+      <type>war</type>
+    </dependency>
+    <dependency>
+      <groupId>nl.didactor</groupId>
+      <artifactId>didactor-portalpages</artifactId>
+      <version>${didactor.version}</version>
+      <type>war</type>
+    </dependency>
+    <dependency>
+      <groupId>nl.didactor</groupId>
+      <artifactId>didactor-richtext</artifactId>
+      <version>${didactor.version}</version>
+      <type>war</type>
+    </dependency>
+    <dependency>
+      <groupId>nl.didactor</groupId>
+      <artifactId>didactor-email</artifactId>
+      <version>${didactor.version}</version>
+      <type>war</type>
+    </dependency>
+    <dependency>
+      <groupId>nl.didactor</groupId>
+      <artifactId>didactor-assessment</artifactId>
+      <version>${didactor.version}</version>
+      <type>war</type>
+    </dependency>
+
+
+    <dependency>
+      <groupId>hsqldb</groupId>
+      <artifactId>hsqldb</artifactId>
+      <version>1.8.0.7</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mmbase.editwizards</groupId>
+      <artifactId>htmlarea</artifactId>
+      <version>3.0-rc1-mm19</version>
+      <type>war</type>
+    </dependency>
+
+  </dependencies>
+
+
+  <repositories>
+    <repository>
+      <id>mmbase</id>
+      <url>http://www.mmbase.org/maven2</url>
+    </repository>
+    <repository>
+      <id>snapshots</id>
+      <url>http://www.mmbase.org/snapshots</url>
+    </repository>
+  </repositories>
+
+</project>
+
