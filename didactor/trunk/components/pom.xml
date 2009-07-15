@@ -34,6 +34,7 @@
     <module>links</module>
     <module>competence</module>
     <module>register</module>
+    <module>portal</module>
   </modules>
   <build>
     <defaultGoal>install</defaultGoal>
