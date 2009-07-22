@@ -50,6 +50,7 @@
     <module>portfolio</module>
     <module>workspace</module>
     <module>redspider</module>
+    <module>mailform</module>
   </modules>
   <build>
     <defaultGoal>install</defaultGoal>
