@@ -58,6 +58,8 @@
     <module>scorm</module>
     <module>versioning</module>
     <module>search</module>
+    <module>virtualclassroom</module>
+    <module>projectgroup</module>
     <!--
     <module>pdf</module>
     -->
