@@ -7,8 +7,8 @@
     <version>2.3-SNAPSHOT</version>
   </parent>
 
-  <artifactId>didactor-proactiveemail</artifactId>
-  <name>Didactor Proactive Email</name>
+  <artifactId>didactor-proactivemail</artifactId>
+  <name>Didactor Proactive Mail</name>
   <packaging>war</packaging>
 
 
