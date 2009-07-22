@@ -4,6 +4,7 @@ import org.mmbase.util.logging.Logging;
 import org.mmbase.util.ResourceLoader;
 import org.mmbase.storage.implementation.database.DatabaseStorageManagerFactory;
 import org.mmbase.module.core.*;
+import org.mmbase.core.CoreField;
 import org.mmbase.module.corebuilders.*;
 import org.mmbase.module.database.MultiConnection;
 import org.mmbase.bridge.*;
@@ -192,15 +193,12 @@ public class ComponentBuilder extends DidactorBuilder {
                 try {if (stmt != null) stmt.close();} catch (Exception e) {}
             }
 
-            Collection fields = parser.getFields();
-            Iterator it = fields.iterator();
-            while (it.hasNext()) {
-                FieldDefs fdef = (FieldDefs) it.next();
-                if (fdef.getDBState() == FieldDefs.DBSTATE_VIRTUAL) {
+            for (CoreField fdef : parser.getFields()) {
+                if (fdef.getState() == FieldDefs.DBSTATE_VIRTUAL) {
                     continue;
                 }
 
-                String id = fdef.getDBName();
+                String id = fdef.getName();
 
                 if (getMMBase().getStorageManagerFactory() != null) {
                     if (fdef.getParent() == null) {
