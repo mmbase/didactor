@@ -40,6 +40,9 @@
     <module>progress</module>
     <module>report</module>
     <module>aselect</module>
+    <module>cms</module>
+    <module>drm</module>
+    <module>chat</module>
   </modules>
   <build>
     <defaultGoal>install</defaultGoal>
