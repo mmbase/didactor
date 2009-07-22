@@ -43,6 +43,8 @@
     <module>cms</module>
     <module>drm</module>
     <module>chat</module>
+    <module>cmshelp</module>
+    <module>pop</module>
   </modules>
   <build>
     <defaultGoal>install</defaultGoal>
