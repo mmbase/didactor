@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>nl.didactor</groupId>
+    <artifactId>didactor-components</artifactId>
+    <version>2.3-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>didactor-mmbob</artifactId>
+  <name>Didactor MMBob</name>
+  <packaging>war</packaging>
+
+
+  <dependencies>
+
+    <dependency>
+      <groupId>org.mmbase</groupId>
+      <artifactId>mmbase-mmbob</artifactId>
+      <version>${mmbase.version}</version>
+      <type>war</type>
+    </dependency>
+
+  </dependencies>
+
+</project>
