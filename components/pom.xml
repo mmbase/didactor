@@ -48,6 +48,7 @@
     <module>forum</module>
     <module>isbo</module>
     <module>portfolio</module>
+    <module>workspace</module>
   </modules>
   <build>
     <defaultGoal>install</defaultGoal>
