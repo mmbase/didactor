@@ -49,6 +49,7 @@
     <module>isbo</module>
     <module>portfolio</module>
     <module>workspace</module>
+    <module>redspider</module>
   </modules>
   <build>
     <defaultGoal>install</defaultGoal>
