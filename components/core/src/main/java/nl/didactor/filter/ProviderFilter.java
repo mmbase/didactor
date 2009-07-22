@@ -184,7 +184,13 @@ public class ProviderFilter implements Filter, MMBaseStarter, NodeEventListener,
             Object c = session.getAttribute(getSessionName());
             if (c != null) {
                 if (c instanceof Cloud) {
-                    return (Cloud) c;
+                    Cloud cloud = (Cloud) c;
+                    if (cloud.getUser() != null && cloud.getUser().isValid()) {
+                        return cloud;
+                    } else {
+                        log.service("" + c + " is not a valid Cloud");
+                        return ContextProvider.getDefaultCloudContext().getCloud("mmbase");
+                    }
                 } else {
                     log.warn("" + c + " is not a Cloud, but a " + c.getClass());
                     return ContextProvider.getDefaultCloudContext().getCloud("mmbase");
@@ -324,7 +330,7 @@ public class ProviderFilter implements Filter, MMBaseStarter, NodeEventListener,
 
         log.debug("Provider found from request " + parameterProvider);
 
-        Cloud cloud = getCloud(req);
+        final Cloud cloud = getCloud(req);
         Map<String, Serializable> userAttributes;
         if (session == null) {
             log.debug("no session");
