@@ -51,6 +51,8 @@
     <module>workspace</module>
     <module>redspider</module>
     <module>mailform</module>
+    <module>metadata</module>
+    <module>news</module>
   </modules>
   <build>
     <defaultGoal>install</defaultGoal>
