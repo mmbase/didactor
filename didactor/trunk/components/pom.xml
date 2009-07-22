@@ -60,6 +60,8 @@
     <module>search</module>
     <module>virtualclassroom</module>
     <module>projectgroup</module>
+    <module>mmbob</module>
+    <module>sources</module>
     <!--
     <module>pdf</module>
     -->
