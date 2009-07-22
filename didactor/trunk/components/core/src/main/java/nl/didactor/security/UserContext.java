@@ -65,7 +65,7 @@ public class UserContext extends org.mmbase.security.BasicUser implements WeakNo
             if (i.hasNext()) {
                 nodeNumber = i.next().getNumber();
             } else {
-                log.warn("No people object with username '" + identifier + "'");
+                log.debug("No people object with username '" + identifier + "'", new Exception());
             }
         } catch (Exception e) {
             log.error(e);
