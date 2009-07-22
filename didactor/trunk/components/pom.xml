@@ -46,6 +46,7 @@
     <module>cmshelp</module>
     <module>pop</module>
     <module>forum</module>
+    <module>isbo</module>
   </modules>
   <build>
     <defaultGoal>install</defaultGoal>
