@@ -53,8 +53,14 @@
     <module>mailform</module>
     <module>metadata</module>
     <module>news</module>
-    <module>proactiveemail</module>
+    <module>proactivemail</module>
     <module>utils</module>
+    <module>scorm</module>
+    <module>versioning</module>
+    <module>search</module>
+    <!--
+    <module>pdf</module>
+    -->
   </modules>
   <build>
     <defaultGoal>install</defaultGoal>
