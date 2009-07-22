@@ -392,6 +392,7 @@ public class Authentication extends org.mmbase.security.Authentication {
 
     }
     @Override public int getNode(org.mmbase.security.UserContext userContext) throws SecurityException {
+        if (userContext == null) return -1;
         String id = userContext.getIdentifier();
         Node n = getUserNode(ContextProvider.getDefaultCloudContext().getCloud("mmbase", "class", null), id);
         return n == null ? -1 : n.getNumber();
