@@ -47,6 +47,7 @@
     <module>pop</module>
     <module>forum</module>
     <module>isbo</module>
+    <module>portfolio</module>
   </modules>
   <build>
     <defaultGoal>install</defaultGoal>
