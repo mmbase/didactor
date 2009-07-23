@@ -11,7 +11,6 @@
   <name>Didactor News</name>
   <packaging>war</packaging>
 
-
   <dependencies>
     <dependency>
       <groupId>nl.didactor</groupId>
