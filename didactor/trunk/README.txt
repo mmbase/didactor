@@ -2,9 +2,8 @@ DIDACTOR 2.3
 
 This is the Didactor 2.3 distribution, released on .....
 
-There are two ways to build the software: building it in this directory
-based on the 'build.xml' file, or creating a custom build including custom
-templates and components. These two processes will be described below.
+Didactor is released as a bunch of war overlays, plus a 'distro' which combines some of them into an
+actual example war. Every war overlay represents one Didactor 'component' and/or MMBase components.
 
 Note: use Maven 2.1
 
@@ -16,14 +15,17 @@ To build the didactor distro, do the following:
 
 This results in a war in distro/target (and in your maven repository).
 
-This war can be deployed like an mmbase war.
+This war can be deployed and configured like an mmbase war. E.g. the database may be configured in
+the 'context xml'.
+
+TODO: Perhaps look into jetty:run and tomcat:run for a fully fledged running example.
 
 === CUSTOM BUILD ===
 
 - Take the distro/pom.xml as an example, and make something like that for your own site.
 
 - For more complicated sites, with customized 'components' and perhaps 'providers' you can also take
-  pom.xml as an example, and a make a build with more stages.
+  pom.xml in this directory as an example, and a make a build with more stages.
 
 
 Didactor support 'tree-including' to override virtually any JSP in the components with your own
@@ -95,4 +97,5 @@ michiel@mitulo:~/vu/didactor/trunk/providers/vu$ tree -d
 
 
 here for  provider 'vu' and several educations all kind of stuff is overrriden.
-This is build as a war overlay and included in the 'vu' didactor distro.
+This is build as a war overlay and included in the 'vu' didactor distro, together with a selection
+of the didactor overlays.
