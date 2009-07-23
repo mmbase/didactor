@@ -9,7 +9,7 @@
 
   <neededbuilderlist>
     <builder maintainer="didactor.nl" version="2">folders</builder>
-    <builder maintainer="didactor.nl" version="2">chatlogs/builder>
+    <builder maintainer="didactor.nl" version="2">chatlogs</builder>
   </neededbuilderlist>
 
   <neededreldeflist>
