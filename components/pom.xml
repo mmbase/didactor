@@ -71,6 +71,7 @@
     <pluginManagement>
       <plugins>
         <plugin>
+          <!-- this is a version of the war plugin compiled by Michiel. See http://jira.codehaus.org/browse/MWAR-205 -->
           <artifactId>maven-war-plugin</artifactId>
           <version>2.1-beta-2-20090723.092931-2</version>
         </plugin>
