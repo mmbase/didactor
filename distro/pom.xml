@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>nl.didactor</groupId>
-  <artifactId>distro</artifactId>
+  <artifactId>didactor-distro</artifactId>
   <packaging>war</packaging>
   <name>Didactor Demo Distro</name>
   <version>2.3-SNAPSHOT</version>
@@ -20,6 +20,44 @@
 
   <build>
     <defaultGoal>install</defaultGoal>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>2.1-beta-2-SNAPSHOT</version>
+        <configuration>
+          <useDefaultExcludes>false</useDefaultExcludes>
+        </configuration>
+      </plugin>
+      <!--
+      <plugin>
+        <groupId>org.codehaus.cargo</groupId>
+        <artifactId>cargo-maven2-plugin</artifactId>
+        <extensions>true</extensions>
+        <configuration>
+          <descriptor>src/assemble/merge.xml</descriptor>
+        </configuration>
+      </plugin>
+      -->
+      <!-- needing something like this
+      <plugin>
+        <groupId>org.mmbase.maven</groupId>
+        <artifactId>maven-mmbase-plugin</artifactId>
+        <version>1.9-SNAPSHOT</version>
+        <executions>
+          <execution>
+            <id>merge-webxml</id>
+            <goals>
+              <goal>merge-web.xml</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <extraWebXml>${basedir}/src/main/webapp/WEB-INF/web-extra.xml</extraWebXml>
+        </configuration>
+      </plugin>
+      -->
+    </plugins>
   </build>
 
   <dependencies>
@@ -84,6 +122,13 @@
     <dependency>
       <groupId>nl.didactor</groupId>
       <artifactId>didactor-agenda</artifactId>
+      <version>${didactor.version}</version>
+      <type>war</type>
+    </dependency>
+
+    <dependency>
+      <groupId>nl.didactor</groupId>
+      <artifactId>didactor-news</artifactId>
       <version>${didactor.version}</version>
       <type>war</type>
     </dependency>
