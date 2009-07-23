@@ -21,6 +21,12 @@
       <scope>provided</scope>
     </dependency>
 
+    <dependency>
+      <groupId>nl.didactor</groupId>
+      <artifactId>didactor-workspace</artifactId>
+      <version>${didactor.version}</version>
+      <type>war</type>
+    </dependency>
 
   </dependencies>
 

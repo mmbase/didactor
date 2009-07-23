@@ -5,7 +5,7 @@
         <requires name="DidactorCore" maintainer="didactor.nl" version="8" />
         <requires name="DidactorComponent" maintainer="didactor.nl" version="2" />
         <requires name="DidactorResources" maintainer="didactor.nl" version="2" />
-    </requirements>  
+    </requirements>
 
     <neededbuilderlist>
         <builder maintainer="didactor.nl" version="2">mailboxes</builder>
@@ -20,15 +20,15 @@
     </neededreldeflist>
 
     <allowedrelationlist>
-        <relation from="people" to="mailboxes" type="related" />
-        <relation from="mailboxes" to="emails" type="related" />
-        <relation from="emails" to="attachments" type="related"/>
-	<relation from="mailboxes" to="mailboxes" type="subjectmailrule"/>
-	<relation from="mailboxes" to="mailboxes" type="sendermailrule"/>
+      <relation from="people" to="mailboxes" type="related" />
+      <relation from="mailboxes" to="emails" type="related" />
+      <relation from="emails" to="attachments" type="related"/>
+      <relation from="mailboxes" to="mailboxes" type="subjectmailrule"/>
+      <relation from="mailboxes" to="mailboxes" type="sendermailrule"/>
     </allowedrelationlist>
 
     <datasourcelist>
-        <datasource builder="components" path="DidactorEmail/components.xml" />
+      <datasource builder="components" path="DidactorEmail/components.xml" />
     </datasourcelist>
 
     <relationsourcelist />
