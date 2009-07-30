@@ -1,5 +1,5 @@
 <jsp:root version="2.0"
-          xmlns:t="urn:jsptagdir:/WEB-INF/tags/mm/u"
+          xmlns:t="http://www.mmbase.org/tags/mm/searchrelate"
           xmlns:jsp="http://java.sun.com/JSP/Page"
           xmlns:mm="http://www.mmbase.org/mmbase-taglib-2.0"
           xmlns:di="http://www.didactor.nl/ditaglib_1.0"
