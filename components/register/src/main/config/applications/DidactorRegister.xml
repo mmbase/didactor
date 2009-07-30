@@ -2,9 +2,9 @@
 <!DOCTYPE application PUBLIC "-//MMBase//DTD application config 1.1//EN" "http://www.mmbase.org/dtd/application_1_1.dtd">
 <application name="DidactorRegister" maintainer="didactor.nl" version="2" auto-deploy="true">
   <requirements>
-    <requires name="DidactorCore" maintainer="didactor.nl" version="8" />
-    <requires name="DidactorComponent" maintainer="didactor.nl" version="2" />
-  </requirements>  
+    <requires name="DidactorCore" maintainer="didactor.nl"  />
+    <requires name="DidactorComponent" maintainer="didactor.nl"  />
+  </requirements>
 
   <neededbuilderlist />
 
