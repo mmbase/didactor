@@ -18,6 +18,30 @@
     <my.postfix>-servlet25${mmbase.version.postfix}</my.postfix>
     <base.version>${mmbase.version.number}${my.postfix}</base.version>
   </properties>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <configuration>
+          <overlays>
+            <overlay>
+              <groupId>org.xinha</groupId>
+              <artifactId>xinha</artifactId>
+              <type>zip</type>
+              <targetPath>mmbase/edit/wizard/xinha</targetPath>
+              <excludes>
+                <exclude>plugins/InsertSmiley/**/*</exclude>
+                <exclude>plugins/ExtendedFileManager/**/*</exclude>
+                <exclude>plugins/ImageManager/**/*</exclude>
+              </excludes>
+            </overlay>
+          </overlays>
+        </configuration>
+      </plugin>
+    </plugins>
+
+  </build>
 
   <dependencies>
 
@@ -47,10 +71,10 @@
 
 
     <dependency>
-      <groupId>org.mmbase.editwizards</groupId>
-      <artifactId>htmlarea</artifactId>
-      <version>3.0-rc1-mm19</version>
-      <type>war</type>
+      <groupId>org.xinha</groupId>
+      <artifactId>xinha</artifactId>
+      <version>0.96beta2</version>
+      <type>zip</type>
     </dependency>
 
 
