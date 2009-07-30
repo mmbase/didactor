@@ -3,7 +3,7 @@
 <application name="DidactorResources" maintainer="didactor.nl" version="2" auto-deploy="true">
 
   <requirements>
-    <requires name="Resources" maintainer="mmbase.org" version="1" />
+    <requires name="Resources" maintainer="mmbase.org"  />
   </requirements>
 
   <neededbuilderlist>

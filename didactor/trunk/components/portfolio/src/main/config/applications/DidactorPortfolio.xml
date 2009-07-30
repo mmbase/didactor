@@ -2,19 +2,19 @@
 <!DOCTYPE application PUBLIC "-//MMBase//DTD application config 1.1//EN" "http://www.mmbase.org/dtd/application_1_1.dtd">
 <application name="DidactorPortfolio" maintainer="didactor.nl" version="9" auto-deploy="true">
   <requirements>
-    <requires name="DidactorWorkspace" maintainer="didactor.nl" version="5" />
-  </requirements>  
-  
+    <requires name="DidactorWorkspace" maintainer="didactor.nl"  />
+  </requirements>
+
   <neededbuilderlist>
     <builder maintainer="didactor.nl" version="2">portfolios</builder>
     <builder maintainer="didactor.nl" version="2">portfoliopermissions</builder>
     <builder maintainer="didactor.nl" version="2">folders</builder>
   </neededbuilderlist>
-  
+
   <neededreldeflist>
     <reldef source="related" target="related" direction="bidirectional" guisourcename="Related" guitargetname="Related" builder="insrel" />
   </neededreldeflist>
-  
+
   <allowedrelationlist>
     <relation from="people"      to="portfolios"  type="related" />
     <relation from="people"      to="images"      type="related" />
@@ -38,9 +38,9 @@
     <relation from="urls"        to="portfoliopermissions" type="related"/>
     <relation from="pages"       to="portfoliopermissions" type="related"/>
     <relation from="attachments" to="portfoliopermissions" type="related"/>
-    
+
   </allowedrelationlist>
-  
+
   <datasourcelist>
     <datasource builder="components" path="DidactorPortfolio/components.xml" />
   </datasourcelist>

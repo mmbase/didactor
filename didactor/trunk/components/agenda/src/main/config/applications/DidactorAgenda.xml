@@ -2,10 +2,10 @@
 <!DOCTYPE application PUBLIC "-//MMBase//DTD application config 1.1//EN" "http://www.mmbase.org/dtd/application_1_1.dtd">
 <application name="DidactorAgenda" maintainer="didactor.nl" version="5" auto-deploy="true">
     <requirements>
-        <requires name="DidactorCore" maintainer="didactor.nl" version="8" />
-        <requires name="DidactorComponent" maintainer="didactor.nl" version="2" />
-        <requires name="DidactorResources" maintainer="didactor.nl" version="2" />
-    </requirements>  
+        <requires name="DidactorCore" maintainer="didactor.nl"  />
+        <requires name="DidactorComponent" maintainer="didactor.nl"  />
+        <requires name="DidactorResources" maintainer="didactor.nl"  />
+    </requirements>
 
     <neededbuilderlist>
         <builder maintainer="didactor.nl" version="2">agendas</builder>
@@ -18,8 +18,8 @@
         <reldef source="related" target="related" direction="bidirectional" guisourcename="Related" guitargetname="Related" builder="insrel" />
 	<reldef source="invitationrel" target="invitationrel" direction="bidirectional" guisourcename="Invitation" guitargetname="Invitation"/>
 	<reldef source="eventrel" target="eventrel" direction="bidirectional" guisourcename="Timerelation" guitargetname="Timerelation" builder="eventrel"/>
-	
-	
+
+
     </neededreldeflist>
 
     <allowedrelationlist>
