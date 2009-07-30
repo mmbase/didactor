@@ -18,12 +18,14 @@
     <ul class="${_node.time ge previous ? 'new' : 'old'}">
       <mm:fieldlist type="edit" varStatus="status">
         <li>
-          <label><mm:fieldinfo type="guiname"/>:</label>
-          <span>
-            <mm:fieldinfo type="${empty new ? 'guivalue' : 'input'}"/>
-            <mm:fieldinfo type="errors"/>
-
-          </span>
+          <mm:fieldinfo type="forid">
+            <label for="${_}"><mm:fieldinfo type="guiname"/>:</label>
+          </mm:fieldinfo>
+          <pre>
+            <mm:fieldinfo type="${empty new ? 'guivalue' : 'input'}"
+                        />
+          </pre>
+          <mm:fieldinfo type="errors"/>
         </li>
       </mm:fieldlist>
       <c:if test="${new ge ''}" >
