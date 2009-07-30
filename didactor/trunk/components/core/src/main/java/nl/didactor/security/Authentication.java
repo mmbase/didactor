@@ -321,6 +321,15 @@ public class Authentication extends org.mmbase.security.Authentication {
                 log.debug("" + ac + ".getLoginPage() -> " + loginPage);
             }
             if (loginPage != null) {
+                if (loginPage.endsWith("/")) {
+                    // Sigh
+                    loginPage = loginPage + "index.jspx";
+                }
+                if (request.getServletPath().equals(loginPage)) {
+                    log.debug("This _is_ the login page");
+                    return null;
+                }
+                log.debug("lp:" + loginPage + " " + request.getServletPath());
                 try {
                     StringBuilder referUrl = new StringBuilder(loginPage);
                     if (referUrl.indexOf("?") > -1) {
