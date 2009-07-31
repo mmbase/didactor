@@ -43,6 +43,7 @@
       </editor>
       <datatype base="eline" xmlns="http://www.mmbase.org/xmlns/datatypes">
         <class name="nl.didactor.datatypes.UserName" />
+        <property name="collator" value=":IDENTICAL" />
         <unique value="true" />
         <required value="false" />
         <minLength value="5" />
