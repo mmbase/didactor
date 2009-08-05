@@ -21,33 +21,34 @@
   </mm:link>
 
   <mm:node referid="problem">
-	<p>
-	<mm:link page="/homework/">
-		<mm:param name="sub">assessment_coach</mm:param>
-		<a href="${_}">&amp;lt;&amp;lt; terug naar studentenoverzicht</a>
-	</mm:link>
-	</p>
-	<p>
-		<mm:link page="/homework/">
-			<mm:param name="subsub">coach_student_overview</mm:param>
-			<mm:param name="student_id">${student_id}</mm:param>
-			<a href="${_}">&amp;lt; terug naar probleemlijst van <mm:node number="${student_id}"><mm:field id="studentName" name="firstname"/></mm:node></a>
-		</mm:link>
-	</p>
-
-
+    <p>
+      <mm:link page="/homework/">
+        <mm:param name="sub">assessment_coach</mm:param>
+        <a href="${_}">&amp;lt;&amp;lt; terug naar studentenoverzicht</a>
+      </mm:link>
+    </p>
+    <p>
+      <mm:link page="/homework/">
+        <mm:param name="subsub">coach_student_overview</mm:param>
+        <mm:param name="student_id">${student_id}</mm:param>
+        <a href="${_}">&amp;lt; terug naar probleemlijst van <mm:node number="${student_id}"><mm:field id="studentName" name="firstname"/></mm:node></a>
+      </mm:link>
+    </p>
+    
+    
     <div id="contentFrame" style="clear: both;">
       <mm:include page="/education/tests/viewanswers.jsp"
                   referids="test@learnobject" />
     </div>
-
-
+    
+    <!-- This is not a form, so it does not need commit
     <mm:link page="/assessment/stage5.js.jsp">
       <script type="text/javascript" src="${_}">
         <jsp:text> </jsp:text>
       </script>
     </mm:link>
-
+    -->
+    
   </mm:node>
 
 
