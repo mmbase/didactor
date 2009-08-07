@@ -36,6 +36,9 @@ public class Education extends NodeDataType  {
             }
         }
         Node user =  nl.didactor.security.Authentication.getCurrentUserNode(cloud);
+        if (user == null) {
+            return null;
+        }
         Collection<Node> relatedEducations = (Collection<Node>) user.getFunctionValue("educations", null).get();
         if (relatedEducations != null && relatedEducations.size() > 0) {
             return relatedEducations.iterator().next();
