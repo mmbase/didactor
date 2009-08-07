@@ -1,9 +1,8 @@
 package nl.didactor.security;
 
 import java.util.*;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
+
 
 import org.mmbase.bridge.*;
 import org.mmbase.bridge.util.Queries;
@@ -113,7 +112,9 @@ public class Authentication extends org.mmbase.security.Authentication {
      * @since Didactor-2.3
      */
     protected void logout(HttpServletRequest request, HttpServletResponse response) {
-        log.debug("Processing didactor logout because ", new Exception());
+        if (log.isDebugEnabled()) {
+            log.debug("Processing didactor logout because ", new Exception());
+        }
         HttpSession session = request == null ? null : request.getSession(false);
         if (session != null) {
             session.removeAttribute(nl.didactor.filter.ProviderFilter.USER_KEY);
@@ -338,6 +339,9 @@ public class Authentication extends org.mmbase.security.Authentication {
                         referUrl.append('?');
                     }
                     referUrl.append("referrer=");
+                    while (request instanceof HttpServletRequestWrapper) {
+                        request = (HttpServletRequest) ((HttpServletRequestWrapper) request).getRequest();
+                    }
                     String q = request.getQueryString();
                     String referrer = PARAM_ESCAPER.transform(request.getServletPath() + (q != null ? ("?" + q) : ""));
                     referUrl.append(referrer);
