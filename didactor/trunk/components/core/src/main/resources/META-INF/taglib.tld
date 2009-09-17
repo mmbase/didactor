@@ -7,16 +7,6 @@
   <uri>http://www.didactor.nl/ditaglib_1.0</uri>
 
   <tag>
-   <name>shuffledlist</name>
-   <tag-class>nl.didactor.taglib.ShuffledListTag</tag-class>
-   <attribute>
-     <name>referid</name>
-     <required>true</required>
-     <rtexprvalue>true</rtexprvalue>
-   </attribute>
-  </tag>
-
-  <tag>
     <name>translate</name>
     <tag-class>nl.didactor.taglib.TranslateTag</tag-class>
     <!-- bodycontent>JSP</bodycontent -->
