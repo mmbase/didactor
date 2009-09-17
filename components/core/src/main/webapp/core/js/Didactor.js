@@ -84,6 +84,9 @@ function Didactor() {
 
 
         $(document).bind("didactorContent", function(ev, data) {
+
+            $("ul.navigation li:last-child").addClass("last"); // There is a horrible browser which does not understand last-child itself
+
             // Arrange active class of sublearnblock divs.
             if (self.sublearnblock != null) {
                 $(self.sublearnblock).removeClass("active");
