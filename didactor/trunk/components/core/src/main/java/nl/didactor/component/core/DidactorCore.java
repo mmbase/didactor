@@ -66,43 +66,51 @@ public class DidactorCore extends Component {
     }
 
     private static final Action RO = new Action("core","ro", new ActionChecker() {
+            @Override
+            public Parameter[] getParameterDefinition() {
+                return PARAMS;
+            }
+            @Override
             public boolean check(UserContext user, Action ac, Parameters parameters) {
                 Cloud cloud = (Cloud) parameters.get(Parameter.CLOUD);
                 String editContext = (String) parameters.get(EDITCONTEXT);
                 return DidactorCore.check(1, cloud, user, editContext);
             }
         }) {
-            public Parameters createParameters() {
-                return new Parameters(PARAMS);
-            }
             public String toString() {
                 return "RO";
             }
         };
     private static final Action RW = new Action("core","rw", new ActionChecker() {
+            @Override
+            public Parameter[] getParameterDefinition() {
+                return PARAMS;
+            }
+
+            @Override
             public boolean check(UserContext user, Action ac, Parameters parameters) {
                 Cloud cloud = (Cloud) parameters.get(Parameter.CLOUD);
                 String editContext = (String) parameters.get(EDITCONTEXT);
                 return DidactorCore.check(2, cloud, user, editContext);
             }
         }) {
-            public Parameters createParameters() {
-                return new Parameters(PARAMS);
-            }
             public String toString() {
                 return "RW";
             }
         };
     private static final Action RWD = new Action("core","rwd", new ActionChecker() {
+            @Override
+            public Parameter[] getParameterDefinition() {
+                return PARAMS;
+            }
+            @Override
             public boolean check(UserContext user, Action ac, Parameters parameters) {
                 Cloud cloud = (Cloud) parameters.get(Parameter.CLOUD);
                 String editContext = (String) parameters.get(EDITCONTEXT);
                 return DidactorCore.check(3, cloud, user, editContext);
             }
         }) {
-            public Parameters createParameters() {
-                return new Parameters(PARAMS);
-            }
+
             public String toString() {
                 return "RWD";
             }
