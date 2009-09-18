@@ -7,12 +7,14 @@
   <di:html
       rank="anonymous"
       title="Didactor version">
-
-    <p><b>Didactor version:</b> 2.3.0</p>
-    <p><b>CVS version:</b> $Name: not supported by cvs2svn $ </p>
-    <p><b>Build name:</b> ${war.name}</p>
-    <p><b>Build date:</b> ${war.time}</p>
-    <p><b>Components:</b> ${components}</p>
+    <mm:functioncontainer>
+      <mm:param name="name">didactor_core</mm:param>
+      <mm:function set="components" name="get" id="c">
+        <c:forEach items="${c.manifest.entries['org/mmbase']}" var="e">
+          <p><b>${e.key}</b> ${e.value}</p>
+        </c:forEach>
+      </mm:function>
+    </mm:functioncontainer>
     <p><b>Provider:</b> ${provider}</p>
     <p><b>Education:</b> ${education}</p>
   </di:html>
