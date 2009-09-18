@@ -70,6 +70,12 @@ public class DidactorEducation extends Component {
      * you can principally per answer node calculate whether you may see it or not.
      */
     private static final Action VIEW_ANSWERS = new Action("education","viewAnswers", new ActionChecker() {
+
+            @Override
+            public Parameter[] getParameterDefinition() {
+                return PARAMS;
+            }
+            @Override
             public boolean check(UserContext user, Action ac, Parameters parameters) {
                 if (user.getRank() == org.mmbase.security.Rank.ADMIN) return true;
                 Node subject = (Node) parameters.get(SUBJECT);
@@ -79,12 +85,7 @@ public class DidactorEducation extends Component {
                 return u == subject.getNumber() ||
                     isTeacherOf(subject.getCloud(), u, subject.getNumber(), education.getNumber(), clazz == null ? -1 : clazz.getNumber());
             }
-        }) {
-            public Parameters createParameters() {
-                return new Parameters(PARAMS);
-            }
-        };
-
+        });
 
 
     /**
@@ -92,6 +93,11 @@ public class DidactorEducation extends Component {
      * nodes. So we need something special. 'Action' framework is used.
      */
     private static final Action RATE         = new Action("education", "rate", new ActionChecker() {
+            @Override
+            public Parameter[] getParameterDefinition() {
+                return PARAMS;
+            }
+            @Override
             public boolean check(UserContext user, Action ac, Parameters parameters) {
                 if (user.getRank() == org.mmbase.security.Rank.ADMIN) return true;
                 Node subject = (Node) parameters.get(SUBJECT);
@@ -99,11 +105,8 @@ public class DidactorEducation extends Component {
                 Node clazz = (Node) parameters.get(CLASS);
                 return isTeacherOf(subject.getCloud(), Integer.parseInt(user.getIdentifier()), subject.getNumber(), education.getNumber(), clazz == null ? -1 : clazz.getNumber());
             }
-        }) {
-            public Parameters createParameters() {
-                return new Parameters(PARAMS);
-            }
-        };
+        });
+
     private static final Map<String, Action> actions = new HashMap<String, Action>();
 
     static {
