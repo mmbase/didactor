@@ -11,6 +11,8 @@
   <name>Didactor Core</name>
   <packaging>war</packaging>
 
+  <description>Didactor Core</description>
+
 
   <build>
     <plugins>
