@@ -68,7 +68,9 @@
 
     <relation from="popfeedback" to="folders" type="related" />
     <relation from="popfeedback" to="attachments" type="related" />
+    <!--
     <relation from="popfeedback" to="chatlogs" type="related" />
+    -->
     <relation from="popfeedback" to="pages" type="related" />
     <relation from="popfeedback" to="urls" type="related" />
 
