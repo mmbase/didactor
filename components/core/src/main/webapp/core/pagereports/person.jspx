@@ -27,7 +27,7 @@
             <mm:listnodes referid="lessons" id="lesson">
               <mm:tree id="lessonobjects" type="learnobjects" searchdir="destination" role="posrel" />
               <h4><mm:field name="name" /></h4>
-              <mm:listnodescontainer type="pagestays" id="q">
+              <mm:listnodescontainer type="pagestays">
                 <mm:constraint field="user" value="${person}" />
                 <mm:constraint field="content" operator="in" value="${lessonobjects}" />
                 <mm:listnodes id="pagestays" />
@@ -45,6 +45,11 @@
               </mm:listnodescontainer>
             </mm:listnodes>
 
+            <mm:write request="totalmean" referid="totalmean" />
+
+            <di:blocks classification="pagestays" />
+
+            <h4>Totaal</h4>
             <p>
               <di:translate key="core.pagereports_average" />
               <jsp:text>:  ${mmstats:times(totalmean, 1 / 60000)} </jsp:text>
@@ -52,11 +57,12 @@
             </p>
 
 
+
             <p>
-            <mm:field name="lastactivity">
-              <mm:fieldinfo type="guiname" />:
-              <mm:time format=":FULL.MEDIUM" />
-            </mm:field>
+              <mm:field name="lastactivity">
+                <mm:fieldinfo type="guiname" />:
+                <mm:time format=":FULL.MEDIUM" />
+              </mm:field>
             </p>
             <mm:listnodescontainer type="pagestays">
               <mm:constraint field="user" value="${person}" />
