@@ -94,19 +94,13 @@ public class Authentication extends org.mmbase.security.Authentication {
      * @since Didactor-2.3
      */
     protected org.mmbase.security.UserContext request(org.mmbase.security.UserContext uc, HttpServletRequest req) {
-        Node n = getUserNode(ContextProvider.getDefaultCloudContext().getCloud("mmbase"), uc.getIdentifier());
-        req.setAttribute("user", n == null ? "0" : n.getNumber());
-        log.debug("Found user " + (n == null ? "NULL" :  n.getNumber()) + " " + uc);
-        Object education = req.getAttribute("education");
-        if (education != null && n != null) {
-            Function fun = n.getFunction("class");
-            Parameters params = fun.createParameters();
-            params.set("education", Casting.toInt(education));
-            Node claz = (Node) fun.getFunctionValue(params);
-            req.setAttribute("class", claz);
+        try {
+            req.getSession().setAttribute(nl.didactor.filter.ProviderFilter.getSessionName(), (LocalContext.getCloudContext().getCloud("mmbase", uc)));
+            nl.didactor.filter.ProviderFilter.decorateRequest(req, null);
+            return uc;
+        } catch (java.io.IOException io) {
+            throw new RuntimeException(io);
         }
-
-        return uc;
     }
     /**
      * @since Didactor-2.3
@@ -289,7 +283,11 @@ public class Authentication extends org.mmbase.security.Authentication {
                 }
             } catch (SecurityException se) {
                 HttpSession session = request.getSession(true);
-                session.setAttribute(REASON_KEY, se.getMessage());
+                Locale locale = (Locale) request.getAttribute("locale");
+                if (locale == null) {
+                    locale = ContextProvider.getDefaultCloudContext().getDefaultLocale();
+                }
+                session.setAttribute(REASON_KEY, se.getMessage(locale));
                 log.service("For ac " + se.getMessage());
             }
         }
@@ -404,7 +402,8 @@ public class Authentication extends org.mmbase.security.Authentication {
         return getUserNode(cloud, cloud.getUser().getIdentifier());
 
     }
-    @Override public int getNode(org.mmbase.security.UserContext userContext) throws SecurityException {
+    @Override
+    public int getNode(org.mmbase.security.UserContext userContext) throws SecurityException {
         if (userContext == null) return -1;
         String id = userContext.getIdentifier();
         Node n = getUserNode(ContextProvider.getDefaultCloudContext().getCloud("mmbase", "class", null), id);

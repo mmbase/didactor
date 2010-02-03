@@ -99,14 +99,14 @@ public class PlainSecurityComponent implements AuthenticationComponent {
             log.debug("No user found for " + login);
             user = users.getUser(login);
             if (user == null) {
-                throw new SecurityException("No such user '" + login + "'");
+                throw new SecurityException("nl.didactor.security", "nosuchuser", login);
             } else {
-                throw new SecurityException("Wrong password");
+                throw new SecurityException("nl.didactor.security", "wrongpassword");
             }
         }
 
         if ("".equals(user.getStringValue("password"))) {
-            throw new SecurityException("User '" + login + "' has an empty password");
+            throw new SecurityException("nl.didactor.security", "emptypassword", login);
         }
 
         log.debug("Found matching credentials, so user is now logged in.");
@@ -116,7 +116,7 @@ public class PlainSecurityComponent implements AuthenticationComponent {
         UserContext uc = new UserContext(user, application);
         if (! uc.getRank().equals(Rank.ADMIN)) {
             if (! user.getBooleanValue("person_status")) {
-                throw new SecurityException("User '" + login + "' is disabled");
+                throw new SecurityException("nl.didactor.security", "disabled", login);
             }
         }
         return uc;
