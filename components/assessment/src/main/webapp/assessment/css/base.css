@@ -53,7 +53,7 @@ div.goals,div.problems {
 	padding-left: 5px;
   padding-top:5px;;
   margin-bottom: 17px;
-  
+
 }
 
 div.goals, div.problems {
@@ -63,10 +63,10 @@ div.goals, div.problems {
 div.student div.problems li,div.student div.goals li, div.problemsListCategorize li {
   width:100%;
   display:block;
- 
+
   list-style-type:none;
   margin-bottom: 5px;
-  
+
 }
 
 div.problemsListCategorize a.create {
@@ -77,8 +77,9 @@ div.problemsListCategorize {
 
 }
 div.problemsListCategorize li {
-	height: 40px;
-	font-weight: bold;
+  float: left;
+  height: 100%;
+  font-weight: bold;
 }
 
 div.student a.create {
@@ -89,7 +90,7 @@ div.problemsListCategorize select, div.selectTroublesSpacer {
 	float: left;
 	width: 222px;
 	margin-bottom: 5px;
-	
+
 }
 
 div.selectTroublesSpacer {
@@ -98,9 +99,9 @@ div.selectTroublesSpacer {
 
 div.problemItemCategories {
 	display: block;
-	
+
 	margin-top: 2px;
-	
+
 }
 
 div.editDifficulties {
@@ -127,7 +128,7 @@ div.problems.stage3 .list ol li input,div.problems.stage3 .list ol li select {
 div.problems .mm_f_name,div.goals .mm_f_name {
 	background-color: white;
   width:440px;
- 	
+
 }
 
 div.problems.stage3 .mm_f_name {
@@ -173,7 +174,7 @@ td.problemHeader {
 
 td.problemTypes {
   font-weight: bold;
-  
+
 }
 
 #problemEvaluateTest div.content.tests {
@@ -186,7 +187,7 @@ td.problemTypes {
 }
 
 #problemEvaluateTest div.content.tests div.text {
-	
+
 	width: 600px;
 }
 
@@ -212,7 +213,7 @@ div.problems_evaluate div.submitItems {
 }
 
 .closelesson input.formbutton {
- 
+
 }
 
 .mm_dt_didactor_assessment_troubles {
