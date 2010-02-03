@@ -19,7 +19,7 @@
 	</div>
   <mm:node number="$user">
     <mm:treefile write="false" page="/mmbase/style/images/" objectlist="${includePath}" absolute="context">
-      
+
       <mm-sr:relatednodes type="goals"
                           icondir="${_}"
                           role="posrel" orderby="posrel.pos" />
@@ -27,7 +27,7 @@
   </mm:node>
     <a href="#" class="formActionLinks">opslaan</a>
   <!-- problems -->
-  
+
   <h2>2. Uw problemen</h2>
   <div class="mmxf">
   	<div id="" class="float left note">
@@ -41,19 +41,19 @@
         page="/mmbase/style/images/" objectlist="${includePath}" absolute="context">
       <mm-sr:relatednodes
           icondir="${_}"
-          
+
           path="posrel,problems"
           orderby="posrel.pos" type="problems">
       </mm-sr:relatednodes>
     </mm:treefile>
-  </mm:node>  
+  </mm:node>
  	<mm:link>
  		<c:if test="${!empty sub}">
  			<mm:param name="sub" referid="sub"/>
  		</c:if>
   	<a href="${_}" class="formActionLinks">opslaan</a>
  	</mm:link>
-  
+
   <!-- categorize problems -->
   <h2>3. Soort probleem en hoeveel last heeft u er van</h2>
   <div class="mmxf">
@@ -66,15 +66,12 @@
 	<div class="problemsListCategorize">
 	<ol>
   <mm:node number="${user}">
-   <mm:treefile write="false" page="/mmbase/style/images/" objectlist="${includePath}" absolute="context">
-     <mm-sr:relatednodes type="problems" 
-     										 role="posrel" 
-     										 orderby="posrel.pos"
-     										 item="/assessment/problem.item.jspx">
-          	<mm:param name="source">${_node}</mm:param>
-   
-       </mm-sr:relatednodes>
-    </mm:treefile>
+    <mm-sr:relatednodes type="problems"
+                        role="posrel"
+                        orderby="posrel.pos"
+                        create="false"
+                        item="/assessment/problem.item.jspx">
+    </mm-sr:relatednodes>
   </mm:node>
   </ol>
   </div>
