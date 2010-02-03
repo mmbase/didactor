@@ -29,7 +29,7 @@
       </mm:function>
     </mm:node>
   </c:if>
-  
+
   <form name="closelessonform" action="${formAction}"   method="post">
  	<mm:link>
  		<c:if test="${!empty sub}">
@@ -49,8 +49,8 @@
       	<c:if test="${!justclosed}">
       		<a href="#" onclick="document.closelessonform.submit()" class="formActionLinks">${_}</a><jsp:text> | </jsp:text>
       	</c:if>
-      	
-			</di:translate>				 
+
+			</di:translate>
 		</c:if>
 		<c:if test="${!empty feedback}">
 			${feedback}<jsp:text> | </jsp:text>
@@ -60,23 +60,23 @@
  			 	<c:if test="${!empty currentlesson}">
  			 		<mm:node number="${currentlesson}">
  			 		<c:set var="learnobject" value="${currentlesson}" />
- 			 		
+
  			 		<c:if test="${!justclosed}">
  			 			<c:set var="target" value="opdrachten" />
  			 			<!-- TODO: find a nicer/proper way to do this -->
  			 			<mm:relatednodes type="learnobjects" constraints="lower(name) = 'opdrachten'">
  			 					<mm:node>
- 			 						<c:set var="learnobject" value="${_node}" />			
+ 			 						<c:set var="learnobject" value="${_node}" />
  			 					</mm:node>
  			 			</mm:relatednodes>
- 			 		</c:if>	
+ 			 		</c:if>
  			 		</mm:node>
  			 		<mm:param name="learnobject">${learnobject}</mm:param>
  			 	</c:if>
- 			   <a href="${_}\#${learnobject}" class="formActionLinks">terug naar de ${target}</a>
+ 			   <a href="${_}#${learnobject}" class="formActionLinks">terug naar de ${target}</a>
  			 </mm:link>
-                   
-  </form>            
+
+  </form>
   <p><jsp:text> </jsp:text></p>
   <p><jsp:text> </jsp:text></p>
 </div>
