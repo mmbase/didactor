@@ -8,9 +8,9 @@
     >
   <jsp:output omit-xml-declaration="true" />
 
-  <mm:import externid="source" required="true" />
-  <mm:import externid="confirm" />
-  <mm:import externid="icondir" />
+
+  <jsp:directive.include file="/mmbase/searchrelate/list/parameters.jspf" />
+
  	<mm:import id="currentlesson" from="session" externid="currentlesson_${user}_${education}" />
 
   <mm:node id="problem">
