@@ -9,7 +9,7 @@
 
   <mm:import id="currentlesson" from="session" externid="currentlesson_${user}_${education}" />
   <!-- goals -->
-  <h2>1. Wat is voor u echt belangrijk in uw leven?</h2>
+  <h2><di:translate key="assessment.stage1_important" /></h2>
   <div class="mmxf">
   	<div id="" class="float left note">
 		 <mm:node number="vu_homework_assessment_note_importantthings" notfound="skipbody">
@@ -28,7 +28,7 @@
     <a href="#" class="formActionLinks">opslaan</a>
   <!-- problems -->
 
-  <h2>2. Uw problemen</h2>
+  <h2><di:translate key="assessment.stage1_problems" /></h2>
   <div class="mmxf">
   	<div id="" class="float left note">
 			 <mm:node number="vu_homework_assessment_note_problems" notfound="skipbody">
@@ -55,7 +55,7 @@
  	</mm:link>
 
   <!-- categorize problems -->
-  <h2>3. Soort probleem en hoeveel last heeft u er van</h2>
+  <h2><di:translate key="assessment.stage1_problems_categorize" /></h2>
   <div class="mmxf">
   	<div id="" class="float left note">
 		 <mm:node number="vu_homework_assessment_note_problemtypes" notfound="skipbody">
