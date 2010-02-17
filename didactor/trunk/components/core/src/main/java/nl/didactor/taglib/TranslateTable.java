@@ -96,18 +96,15 @@ public class TranslateTable {
     protected static synchronized void readResource(ResourceLoader loader, String resource) {
         // filename has the form: namespace.locale.properties
         StringTokenizer st = new StringTokenizer(resource, ".");
-        String namespace = st.nextToken();
+        final String namespace = st.nextToken();
 
         // If there is no '.' in the filename then it's not a valid translation file
         if (!st.hasMoreTokens()) {
+            log.debug("Ignored " + resource);
             return;
         }
         String locale = st.nextToken();
-        String properties = "";
-        if (st.hasMoreTokens()) {
-            properties = st.nextToken();
-        } else {
-            properties = locale;
+        if (! st.hasMoreTokens()) {
             locale = "";
         }
 
@@ -121,7 +118,7 @@ public class TranslateTable {
                                                                           new UnicodeEscaper()),
                                                    "ISO-8859-1");
             props.load(in);
-
+            log.debug("Read " + resource + " from (" + namespace + ") for " + locale);
             for (Map.Entry entry : props.entrySet()) {
                 String key = (String) entry.getKey();
                 String value = (String) entry.getValue();

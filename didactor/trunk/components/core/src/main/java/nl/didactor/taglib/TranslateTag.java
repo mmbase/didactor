@@ -16,6 +16,7 @@ import org.mmbase.util.Casting;
 /**
  * Translate tag: it will figure out a translation for a given
  * abstract locale.
+ * @TODO This is absolutely the same as fmt:message. It should be dropped
  * @author Johannes Verelst &lt;johannes.verelst@eo.nl&gt;
  */
 public class TranslateTag extends ContextReferrerTag implements Writer { //, ParamHandler {
