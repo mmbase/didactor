@@ -53,7 +53,7 @@
 			</di:translate>
 		</c:if>
 		<c:if test="${!empty feedback}">
-			${feedback}<jsp:text> | </jsp:text>
+      <jsp:text>${feedback} | </jsp:text>
 		</c:if>
     <mm:link page="/education/">
       <c:set var="target" value="lessen" />
@@ -73,7 +73,7 @@
         </mm:node>
         <mm:param name="learnobject">${learnobject}</mm:param>
       </c:if>
-      <a href="${_}#${learnobject}" class="formActionLinks">terug naar de ${target}</a>
+      <a href="${_}" class="formActionLinks">terug naar de ${target}</a>
     </mm:link>
 
   </form>
