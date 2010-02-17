@@ -5,6 +5,7 @@
     xmlns:mmstats="http://www.mmbase.org/mmbase-statistics"
     xmlns:c="http://java.sun.com/jsp/jstl/core"
     xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+    unacceptable="CRIPPLE"
     postprocessor="none" expires="0" type="application/xhtml+xml">
   <html xmlns="http://www.w3.org/1999/xhtml">
     <mm:cloud method="asis">
