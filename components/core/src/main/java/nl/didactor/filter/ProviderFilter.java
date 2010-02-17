@@ -545,6 +545,14 @@ public class ProviderFilter implements Filter, MMBaseStarter, NodeEventListener,
 
     }
 
+    // all kind of generic jsp's can be there. reuest parameters can be used for something  else.
+    private static final String[] IGNORE_DIRS = new String[] {
+        "/images/",
+        "/attachments",
+        "/mmbase/edit/",
+        "/mmbase/admin/"
+    };
+
     /**
      * Filters the request: tries to find a jumper and redirects to this url when found, otherwise the
      * request will be handled somewhere else in the filterchain.
@@ -575,28 +583,23 @@ public class ProviderFilter implements Filter, MMBaseStarter, NodeEventListener,
             res.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE, this.getClass().getName() + ". MMBase not yet sucessfully initialized (check mmbase log)");
             return;
         }
-        if (sp.startsWith("/images/") ||
-            sp.startsWith("/attachments/")) {
-            // no jsps here, these are blobs.
-            log.debug("No need to filter for " + sp);
-            filterChain.doFilter(request, response);
-            return;
+
+        for (String ignoreStart : IGNORE_DIRS) {
+            if (sp.startsWith(ignoreStart)) {
+                log.debug("No need to filter for " + sp + " (because of " + ignoreStart + ")");
+                filterChain.doFilter(request, response);
+                return;
+            }
         }
 
+        if (decorateRequest(req, res)) {
 
-        if(sp.startsWith("/mmbase/")) {
-            // all kind of generic jsp's can be there. reuest parameters can be used for something  else.
-            filterChain.doFilter(request, response);
-        } else {
-            if (decorateRequest(req, res)) {
-
-                if (request.getAttribute("includePath") == null) {
-                    res.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE, "Didactor not yet initialized");
-                    return;
-                }
-
-                filterChain.doFilter(request, response);
+            if (request.getAttribute("includePath") == null) {
+                res.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE, "Didactor not yet initialized");
+                return;
             }
+
+            filterChain.doFilter(request, response);
         }
 
     }
