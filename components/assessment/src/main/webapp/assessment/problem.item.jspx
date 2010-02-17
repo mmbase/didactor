@@ -10,6 +10,8 @@
 
 
   <jsp:directive.include file="/mmbase/searchrelate/list/parameters.jspf" />
+  <mm:import externid="fieldlistid" />
+
 
  	<mm:import id="currentlesson" from="session" externid="currentlesson_${user}_${education}" />
 
@@ -19,7 +21,7 @@
 
 
     <div class="problemItemCategories">
-      <mm:field name="type">
+      <mm:field id="${fieldlistid}_type" name="type">
         <mm:fieldinfo type="input" />
         <mm:fieldinfo type="errors" />
       </mm:field>
@@ -41,11 +43,11 @@
 
           <mm:listrelationscontainer type="learnobjects" role="posrel">
             <mm:addnode element="learnobjects" number="${currentlesson}" />
-            <mm:listrelations id="relation">
-              <mm:field name="pos" id="pos${relation}">
-                <mm:fieldinfo field="pos${_node}" datatype="didactor_assessment_troubles" type="input" />
-                <mm:fieldinfo field="pos${_node}" datatype="didactor_assessment_troubles" type="errors" />
-              </mm:field>
+            <mm:listrelations>
+              <mm:fieldlist fields="pos" id="${fieldlistid}_rel">
+                <mm:fieldinfo  datatype="didactor_assessment_troubles" type="input" />
+                <mm:fieldinfo  datatype="didactor_assessment_troubles" type="errors" />
+              </mm:fieldlist>
             </mm:listrelations>
           </mm:listrelationscontainer>
         </mm:isnotempty>
