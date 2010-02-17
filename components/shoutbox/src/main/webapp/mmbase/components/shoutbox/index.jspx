@@ -8,7 +8,6 @@
     xmlns:di="http://www.didactor.nl/ditaglib_1.0"
     version="2.0">
 
-
   <!-- TODO this is didactor specific -->
 	<mm:node number="Default.Background" notfound="skip">
 		<mm:import id="background">url('<mm:image template="${di:setting('education', 'background_image_template')}"/>')</mm:import>
@@ -41,7 +40,7 @@
         </c:if>
 
 
-        <mm:node number="${source}">
+        <mm:node number="${source}" emptynumberiscurrentnode="true">
           <!-- source may be empty, in which case it will be the current node, as provided by the framework. -->
 
 
@@ -55,7 +54,7 @@
               <mm:param name="key">shouts.previous_check</mm:param>
               <mm:function name="set" write="false" />
             </mm:functioncontainer>
-            
+
             <mm:functioncontainer nodemanager="properties">
               <mm:param name="node" referid="_node" />
               <mm:param name="value"><mm:time time="now" /></mm:param>
@@ -71,15 +70,15 @@
               <mm:param name="key">shouts.previous_check_source${source}</mm:param>
               <mm:function name="set" write="false" />
             </mm:functioncontainer>
-            
+
             <mm:functioncontainer nodemanager="properties">
               <mm:param name="node" referid="_node" />
               <mm:param name="value"><mm:time time="now" /></mm:param>
               <mm:function name="set" referids="key" write="false" />
             </mm:functioncontainer>
-            
+
             </c:if>
-            
+
           </mm:hasnodemanager>
 
 
@@ -90,7 +89,7 @@
             </fmt:message>
           </h2>
 					</c:if>
-					
+
           <form action="index">
             <c:if test="${! empty source}">
               <input type="hidden" name="source" value="${source}" />
@@ -115,6 +114,7 @@
             <mm-sr:relatednodes
                 type="shouts"
                 role="posrel"
+                create="${self eq 'only'}"
                 item="/mmbase/components/shoutbox/item.jspx" orderby="posrel.pos" direction="down"
                 createposition="top">
               <jsp:attribute name="constraints">

@@ -5,15 +5,13 @@
           xmlns:mm="http://www.mmbase.org/mmbase-taglib-2.0"
           version="2.0">
 	<jsp:output omit-xml-declaration="true"/>
-	<mm:import externid="source" required="true"/>
-	<mm:import externid="confirm"/>
-	<mm:import externid="icondir"/>
-	<mm:import externid="new"/>
+  <jsp:directive.include file="/mmbase/searchrelate/list/parameters.jspf" />
+  <mm:import externid="new" />
 	<fieldset>
     <legend><mm:nodeinfo type="guinodemanager" /></legend>
     <mm:hasnodemanager name="properties">
       <mm:import id="key">shouts.previous_check</mm:import>
-      <mm:function id="previous" nodemanager="properties" name="get" referids="key,source@node" write="false" />
+      <mm:function id="previous" nodemanager="properties" name="get" referids="key,parameters.source@node" write="false" />
     </mm:hasnodemanager>
     <ul class="${_node.time ge previous ? 'new' : 'old'}">
       <mm:fieldlist type="edit" varStatus="status">
@@ -22,16 +20,16 @@
             <label for="${_}"><mm:fieldinfo type="guiname"/>:</label>
           </mm:fieldinfo>
           <pre>
-            <mm:fieldinfo type="${empty new ? 'guivalue' : 'input'}"
+            <mm:fieldinfo type="${empty new ?  'guivalue' : 'input'}"
                         />
           </pre>
           <mm:fieldinfo type="errors"/>
         </li>
       </mm:fieldlist>
-      <c:if test="${new ge ''}" >
+      <c:if test="${! empty new}" >
       	<li><a class="create" href="">verstuur</a></li>
       </c:if>
     </ul>
-		<mm-sr:delete source="${source}" confirm="${confirm}" icondir="${icondir}"/>
+		<mm-sr:delete />
 	</fieldset>
 </jsp:root>
