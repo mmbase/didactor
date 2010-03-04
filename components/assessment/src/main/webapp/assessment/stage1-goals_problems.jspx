@@ -11,30 +11,31 @@
   <!-- goals -->
   <h2><di:translate key="assessment.stage1_important" /></h2>
   <div class="mmxf">
-      <div id="" class="float left note">
-         <mm:node number="vu_homework_assessment_note_importantthings" notfound="skipbody">
-                 <mm:field name="body" escape="none" />
-         </mm:node>
-        </div>
+    <div id="" class="float left note">
+      <mm:node number="vu_homework_assessment_note_importantthings" notfound="skipbody">
+        <mm:field name="body" escape="none" />
+      </mm:node>
     </div>
+  </div>
   <mm:node number="$user">
     <mm:treefile write="false" page="/mmbase/style/images/" objectlist="${includePath}" absolute="context">
 
-      <mm-sr:relatednodes type="goals"
-                          icondir="${_}"
-                          role="posrel" orderby="posrel.pos" />
+      <mm-sr:relatednodes
+          type="goals"
+          icondir="${_}"
+          role="posrel" orderby="posrel.pos" />
     </mm:treefile>
   </mm:node>
-    <a href="#" class="formActionLinks">opslaan</a>
+  <a href="#" class="formActionLinks">opslaan</a>
   <!-- problems -->
 
   <h2><di:translate key="assessment.stage1_problems" /></h2>
   <div class="mmxf">
-      <div id="" class="float left note">
-        <mm:node number="vu_homework_assessment_note_problems" notfound="skipbody">
-          <mm:field name="body" escape="none" />
-        </mm:node>
-      </div>
+    <div id="" class="float left note">
+      <mm:node number="vu_homework_assessment_note_problems" notfound="skipbody">
+        <mm:field name="body" escape="none" />
+      </mm:node>
+    </div>
   </div>
   <mm:node number="${user}">
     <mm:treefile
@@ -47,12 +48,12 @@
       </mm-sr:relatednodes>
     </mm:treefile>
   </mm:node>
-     <mm:link>
-         <c:if test="${!empty sub}">
-             <mm:param name="sub" referid="sub"/>
-         </c:if>
-      <a href="${_}" class="formActionLinks">opslaan</a>
-     </mm:link>
+  <mm:link>
+    <c:if test="${!empty sub}">
+      <mm:param name="sub" referid="sub"/>
+    </c:if>
+    <a href="${_}" class="formActionLinks">opslaan</a>
+  </mm:link>
 
   <!-- categorize problems -->
   <h2><di:translate key="assessment.stage1_problems_categorize" /></h2>
