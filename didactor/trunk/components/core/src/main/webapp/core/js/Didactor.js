@@ -12,127 +12,134 @@
 
 function Didactor() {
     var self = this;
-    $(document).ready(function() {
-        self.onlineReporter = self.getSetting("Didactor-OnlineReporter");
-        self.url            = self.getSetting("Didactor-URL");
-        self.root           = self.getSetting("Didactor-Root");
-        self.lastCheck      = new Date();
-        self.pageReporter   = self.getSetting("Didactor-PageReporter") == "true";
-        self.lastPage       = self.getSetting("Didactor-LastPage"); // not currently used
-        self.usedFrames     = {};
-        self.questions      = {};
+    $(document).ready(
+        function() {
+            self.onlineReporter = self.getSetting("Didactor-OnlineReporter");
+            self.url            = self.getSetting("Didactor-URL");
+            self.root           = self.getSetting("Didactor-Root");
+            self.lastCheck      = new Date();
+            self.pageReporter   = self.getSetting("Didactor-PageReporter") == "true";
+            self.lastPage       = self.getSetting("Didactor-LastPage"); // not currently used
+            self.usedFrames     = {};
+            self.questions      = {};
 
-        self.fragments      = [];
-        {
-            self.fillFragments();
-            if (self.fragments.length > 0) {
-                self.openContent(self.fragments[0]);
-            }
-        }
+            self.fragments      = [];
 
-        $.timer(500, function(timer) {
-	        self.reportOnline();
-            var interval = self.getSetting("Didactor-PageReporterInterval");
-            interval = interval == "" ? 10000 : interval * 1000;
-            if (interval < 10000) interval = 10000;
-	        timer.reset(self.pageReporter ? interval : 1000 * 60 * 2);
-        });
-        if (self.pageReporter) {
+            $.timer(500, function(timer) {
+	                self.reportOnline();
+                        var interval = self.getSetting("Didactor-PageReporterInterval");
+                        interval = interval == "" ? 10000 : interval * 1000;
+                        if (interval < 10000) interval = 10000;
+	                timer.reset(self.pageReporter ? interval : 1000 * 60 * 2);
+                    });
+            if (self.pageReporter) {
 	        $(window).bind("beforeunload", function() {
-	            self.reportOnline(null, false);
-	        });
-        }
+	                           self.reportOnline(null, false);
+	                       });
+            }
 
-        self.content = null;
-        for (var i = 0; i < Didactor.contentParameters.length; i++) {
+            self.content = null;
+            for (var i = 0; i < Didactor.contentParameters.length; i++) {
 	        var param = Didactor.contentParameters[i];
 	        self.content = $.query.get(param);
 	        $.query.REMOVE(param);
 	        if (self.content != null) break;
-        }
-        self.block = self.content; // This is the content as defined by the URL. 'block' will not be changed.
-        for (var i = 0; i < Didactor.ignoredParameters.length; i++) {
+            }
+            self.block = self.content; // This is the content as defined by the URL. 'block' will not be changed.
+            for (var i = 0; i < Didactor.ignoredParameters.length; i++) {
 	        var param = Didactor.ignoredParameters[i];
 	        $.query.REMOVE(param);
-        }
-        self.q = $.query.toString();
+            }
+            self.q = $.query.toString();
 
 
-        for (var i = 0; i < Didactor.welcomeFiles.length; i++) {
+            for (var i = 0; i < Didactor.welcomeFiles.length; i++) {
 	        var welcomeFile = Didactor.welcomeFiles[i];
 	        self.url = self.url.replace(new RegExp(welcomeFile + "$"), "");
-        }
-
-        $(document).bind("didactorContentLoaded",  function(ev, data) {
-            self.setContent(data.number);
-            self.resolveQuestions(data.loaded);
-        });
-        $(document).bind("didactorContent",  function(ev, data) {
-            self.setContent(data.number);
-            self.setUpQuestionEvents(data.loaded);
-        });
-
-        $(document).bind("didactorContentBeforeUnload",  function(ev, el) {
-            self.saveQuestions();
-        });
-        $(window).bind("beforeunload", function() {
-            self.saveQuestions();
-        });
-        // if this is a staticly loaded piece of html, there may be some questions already
-        self.resolveQuestions(document);
-
-
-
-        $(document).bind("didactorContent", function(ev, data) {
-
-            $("ul.navigation li:last-child").addClass("last"); // There is a horrible browser which does not understand last-child itself
-
-            // Arrange active class of sublearnblock divs.
-            if (self.sublearnblock != null) {
-                $(self.sublearnblock).removeClass("active");
-                $(self.sublearnblock_navigation).removeClass("active");
             }
-            self.sublearnblock            = null;
-            self.sublearnblock_navigation = null;
-            self.fillFragments();
-            if (self.fragments.length > 1) {
-                self.sublearnblock = "#" + self.fragments[0] + "_" + self.fragments[1] + "_block";
-                $(self.sublearnblock).addClass("active");
+
+            $(document).bind("didactorContentLoaded",  function(ev, data) {
+                                 self.setContent(data.number);
+                                 self.resolveQuestions(data.loaded);
+                             });
+            $(document).bind("didactorContent",  function(ev, data) {
+                                 self.setContent(data.number);
+                                 self.setUpQuestionEvents(data.loaded);
+                             });
+
+            // if content is replaced, then first save question
+            $(document).bind("didactorContentBeforeUnload",  function(ev, el) {
+                                 self.saveQuestions();
+                             });
+            // if browsing away, then too
+            $(window).bind("beforeunload", function() {
+                               self.saveQuestions();
+                           });
+
+
+
+            $(document).bind("didactorContent",
+                             function(ev, data) {
+
+                                 $("ul.navigation li:last-child").addClass("last"); // There is a horrible browser which does not understand last-child itself
+
+                                 // Arrange active class of sublearnblock divs.
+                                 if (self.sublearnblock != null) {
+                                     $(self.sublearnblock).removeClass("active");
+                                     $(self.sublearnblock_navigation).removeClass("active");
+                                 }
+                                 self.sublearnblock            = null;
+                                 self.sublearnblock_navigation = null;
+                                 self.fillFragments();
+                                 if (self.fragments.length > 1) {
+                                     self.sublearnblock = "#" + self.fragments[0] + "_" + self.fragments[1] + "_block";
+                                     $(self.sublearnblock).addClass("active");
+                                 }
+                                 $(".subnavigationPage  ul.navigation li").each(
+                                     function() {
+                                         var li = this;
+                                         var a = $(li).find("a")[0];
+                                         var href = a.href;
+                                         var i = href.indexOf('#');
+                                         var div = href.substring(i) + "_block";
+                                         if (self.sublearnblock == null) {
+                                             // if no explict sub fragment on the URL, take the first one.
+                                             self.sublearnblock = div;
+                                             self.sublearnblock_navigation = li;
+                                         }
+
+                                         if (self.sublearnblock == div) {
+                                             // if this is the active sub fragment, make it active
+                                             $(li).addClass("active");                  // both the navigation item
+                                             $(self.sublearnblock).addClass("active");     // as the block itself
+                                         }
+
+                                         $(this).click(function() {
+                                                           $(".subnavigationPage  ul.navigation li").removeClass("active");
+                                                           $(this).addClass("active");
+                                                           $(self.sublearnblock).removeClass("active");
+                                                           self.sublearnblock = div;
+                                                           self.sublearnblock_navigation = li;
+                                                           $(self.sublearnblock).addClass("active");
+                                                           document.location.href = href;
+                                                           return false;
+                                                       });
+
+                                     });
+                             });
+            // Now load content
+            {
+                self.fillFragments();
+                if (self.fragments.length > 0) {
+                    self.openContent(self.fragments[0]);
+                }
             }
-            $(".subnavigationPage  ul.navigation li").each(function() {
-                var li = this;
-                var a = $(li).find("a")[0];
-                var href = a.href;
-                var i = href.indexOf('#');
-                var div = href.substring(i) + "_block";
-                if (self.sublearnblock == null) {
-                    // if no explict sub fragment on the URL, take the first one.
-                    self.sublearnblock = div;
-                    self.sublearnblock_navigation = li;
-                }
 
-                if (self.sublearnblock == div) {
-                    // if this is the active sub fragment, make it active
-                    $(li).addClass("active");                  // both the navigation item
-                    $(self.sublearnblock).addClass("active");     // as the block itself
-                }
+            // if this is a staticly loaded piece of html, there may be some questions already
+            self.resolveQuestions(document);
 
-                var li = this;
-                $(this).click(function() {
-                    $(".subnavigationPage  ul.navigation li").removeClass("active");
-                    $(this).addClass("active");
-                    $(self.sublearnblock).removeClass("active");
-                    self.sublearnblock = div;
-                    self.sublearnblock_navigation = li;
-                    $(self.sublearnblock).addClass("active");
-                    document.location.href = href;
-                    return false;
-                });
 
-            });
         });
-
-    });
 }
 
 Didactor.contentParameters = ["learnobject", "openSub" ];
@@ -167,7 +174,7 @@ Didactor.prototype.reportOnline = function (timer, async) {
 
 Didactor.prototype.setContent = function(c) {
     if (this.pageReporter) {
-	    this.reportOnline();
+	this.reportOnline();
     }
     this.content = c;
 }
@@ -182,56 +189,65 @@ Didactor.prototype.fillFragments = function() {
 
 Didactor.prototype.setUpQuestionEvents = function(div) {
     var did = this;
-    $(div).find("div.question").each(function() {
-        var qdiv = this;
-        var a = qdiv.a;
-        $(qdiv).find("textarea").keyup(function() {
-            did.questions[a][0] = true;
+    $(div).find("div.question").each(
+        function() {
+            var qdiv = this;
+            var a = qdiv.a;
+            $(qdiv).find("textarea").keyup(function() {
+                                               did.questions[a][0] = true;
+                                           });
+            $(qdiv).find("input").change(function() {
+                                             did.questions[a][0] = true;
+                                         });
+            $(qdiv).find(".answerquestion").click(
+                function() {
+                    var params = {};
+                    $(qdiv).find("textarea").each(function() {
+                                                      params[this.name] = this.value;
+                                                  });
+                    $(qdiv).find("input").each(function() {
+                                                   if (this.type == "checkbox" && ! this.checked) {
+                                                   } else {
+                                                       params[this.name] = this.value;
+                                                   }
+                                               });
+
+                    $.ajax({url: this.href, async: false, type: "POST", dataType: "xml", data: params,
+                            complete: function(res, status) {
+                                if (status == "success") {
+                                    $(div).append(res.responseText);
+                                } else {
+                                    alert(status);
+                                }
+                            }
+                           });
+                    return false;
+                });
         });
-        $(qdiv).find("input").change(function() {
-            did.questions[a][0] = true;
-        });
-        $(qdiv).find(".answerquestion").click(function() {
-            var params = {};
-            $(qdiv).find("textarea").each(function() {
-                params[this.name] = this.value;
-            });
-            $(qdiv).find("input").each(function() {
-                if (this.type == "checkbox" && ! this.checked) {
-                } else {
-                    params[this.name] = this.value;
-                }
-            });
-            $.ajax({url: this.href, async: false, type: "POST", dataType: "xml", data: params,
-                    complete: function(res, status) {
-                        if (status == "success") {
-                            $(div).append(res.responseText);
-                        } else {
-                            alert(status);
-                        }
-                    }
-                   });
-            return false;
-        });
-    });
 }
 
 Didactor.prototype.resolveQuestions = function(el) {
     var did = this;
-    $(el).find(".nm_questions").each(function() {
-        var div = $("<div  />");
-        var d = div[0];
-        var a = this;
-        if (did.questions[a] == null) {
-            did.questions[a] = [false, d];
-        }
-        div.load(a.href + "&learnobject=" + did.content, null, function() {
-            div.find("div.question")[0].a = a;
-            did.setUpQuestionEvents(d);
+    self.loadIconOn();
+    $(el).find(".nm_questions").each(
+        function() {
+            var div = $("<div  />");
+            var d = div[0];
+            var a = this;
+            if (did.questions[a] == null) {
+                did.questions[a] = [false, d];
+            }
+            var href = a.href + "&learnobject=" + did.content;
+            $.ajax({async: false, url: href, type: "GET", dataType: "xml", data: null,
+                    complete: function(res, status){
+                        div.append(res.responseText);
+                        div.find("div.question")[0].a = a;
+                        did.setUpQuestionEvents(d);
+                    }});
+            $(this).after(div);
+            $(this).remove();
         });
-        $(this).after(div);
-        $(this).remove();
-    });
+    self.loadIconOff();
 
 }
 
@@ -259,7 +275,7 @@ Didactor.prototype.requestContent = function(href, number) {
     var self = this;
     if (content == null) {
         self.loadIconOn();
-        $.ajax({async: true, url: href, type: "GET", dataType: "xml", data: null,
+        $.ajax({async: false, url: href, type: "GET", dataType: "xml", data: null,
                 complete: function(res, status){
                     self.loadIconOff();
                     if (status == "success") {
