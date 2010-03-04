@@ -228,7 +228,7 @@ Didactor.prototype.setUpQuestionEvents = function(div) {
 
 Didactor.prototype.resolveQuestions = function(el) {
     var did = this;
-    self.loadIconOn();
+    this.loadIconOn();
     $(el).find(".nm_questions").each(
         function() {
             var div = $("<div  />");
@@ -247,7 +247,7 @@ Didactor.prototype.resolveQuestions = function(el) {
             $(this).after(div);
             $(this).remove();
         });
-    self.loadIconOff();
+    this.loadIconOff();
 
 }
 
