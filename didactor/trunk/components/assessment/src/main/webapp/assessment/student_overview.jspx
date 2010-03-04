@@ -4,18 +4,15 @@
     xmlns:mm="http://www.mmbase.org/mmbase-taglib-2.0"
     xmlns:di="http://www.didactor.nl/ditaglib_1.0"
     class="student">
-<div class="overview">
-  <jsp:output omit-xml-declaration="true" />
+  <div class="overview">
+    <jsp:output omit-xml-declaration="true" />
 
 
-  <mm:import externid="stage">stage2-overview</mm:import>
+    <mm:import externid="stage">stage2-overview</mm:import>
 
-	<di:include page="/homework/currentlesson.jspx" />
+    <di:include page="/homework/currentlesson.jspx" />
 
-  <di:include page="/assessment/${stage}.jspx" />
-	
-  	
-	
-	<p><jsp:text> </jsp:text></p>
-</div>
+    <di:include page="/assessment/${stage}.jspx" />
+
+  </div>
 </div>
