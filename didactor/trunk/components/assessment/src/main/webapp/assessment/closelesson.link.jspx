@@ -6,9 +6,10 @@
     xmlns:mm-sr="http://www.mmbase.org/tags/mm/searchrelate"
     class="submitItems">
   <jsp:output omit-xml-declaration="true" />
-	<mm:import externid="sub" />
+  <mm:import externid="sub" />
   <mm:import id="currentlesson" from="session" externid="currentlesson_${user}_${education}" />
-	  <c:if test="${! empty currentlesson}">
+
+  <c:if test="${! empty currentlesson}">
     <mm:node referid="currentlesson" id="currentlesson" />
     <mm:node number="$user">
       <mm:function name="canCloseLesson"
@@ -29,29 +30,29 @@
       </mm:function>
     </mm:node>
   </c:if>
-
   <form name="closelessonform" action="${formAction}"   method="post">
- 	<mm:link>
- 		<c:if test="${!empty sub}">
- 			<mm:param name="sub" referid="sub"/>
- 		</c:if>
-  	<a href="${_}" class="formActionLinks">opslaan</a>
- 	</mm:link>
-   	<jsp:text>&amp;nbsp;|&amp;nbsp;</jsp:text>
-		<input type="hidden" name="coachmode" value="false"  />
+    <mm:link>
+      <c:if test="${!empty sub}">
+        <mm:param name="sub" referid="sub"/>
+      </c:if>
+      <a href="${_}" class="formActionLinks">opslaan</a>
+    </mm:link>
+    <jsp:text>&amp;nbsp;|&amp;nbsp;</jsp:text>
+    <input type="hidden" name="coachmode" value="false"  />
     <input type="hidden" name="lesson" value="${currentlesson}"  />
     <c:if test="${empty feedback and ! empty currentlesson}">
-    	<di:translate key="assessment.close_and_send_to_coach" arg0="${currentlesson.name}">
-    		<mm:import externid="justclosed">false</mm:import>
-    		<c:if test="${justclosed}">
-    			<a href="#" class="formActionLinks">je les is verstuurd</a><jsp:text> | </jsp:text>
-    		</c:if>
-      	<c:if test="${!justclosed}">
-      		<a href="#" onclick="document.closelessonform.submit()" class="formActionLinks">${_}</a><jsp:text> | </jsp:text>
+      <di:translate key="assessment.close_and_send_to_coach" arg0="${currentlesson.name}">
+        <mm:import externid="justclosed">false</mm:import>
+        <c:if test="${justclosed}">
+          <a href="#" class="formActionLinks">je les is verstuurd</a><jsp:text> | </jsp:text>
+        </c:if>
+        <c:if test="${!justclosed}">
+          <a href="#" 
+             onclick="document.forms.closelessonform.submit()" class="formActionLinks">${_}</a><jsp:text> | </jsp:text>
       	</c:if>
 
-			</di:translate>
-		</c:if>
+      </di:translate>
+    </c:if>
 		<c:if test="${!empty feedback}">
       <jsp:text>${feedback} | </jsp:text>
 		</c:if>
