@@ -17,7 +17,7 @@
     <mm:import externid="student_id" required="true"/>
 
   <mm:link page="/content/js/open.jsp">
-    <script type="text/javascript" src="${_}"> </script>
+    <script type="text/javascript" src="${_}"><jsp:text><!-- btw, IE sucks --></jsp:text></script>
   </mm:link>
 
   <mm:node referid="problem">
@@ -34,13 +34,13 @@
         <a href="${_}">&amp;lt; terug naar probleemlijst van <mm:node number="${student_id}"><mm:field id="studentName" name="firstname"/></mm:node></a>
       </mm:link>
     </p>
-    
-    
+
+
     <div id="contentFrame" style="clear: both;">
       <mm:include page="/education/tests/viewanswers.jsp"
                   referids="test@learnobject" />
     </div>
-    
+
     <!-- This is not a form, so it does not need commit
     <mm:link page="/assessment/stage5.js.jsp">
       <script type="text/javascript" src="${_}">
@@ -48,7 +48,7 @@
       </script>
     </mm:link>
     -->
-    
+
   </mm:node>
 
 
