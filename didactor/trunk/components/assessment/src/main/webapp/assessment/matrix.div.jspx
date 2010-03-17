@@ -69,7 +69,8 @@
 
         <mm:listrelationscontainer type="problems" role="posrel">
           <mm:addnode element="problems" number="${problem}" />
-
+          <mm:sortorder field="number" />
+          <mm:maxnumber value="1" />
           <mm:listrelations id="relation">
             <mm:field name="pos" write="false">
               <!-- See MMB-1770 -->

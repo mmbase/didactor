@@ -52,7 +52,7 @@
           </mm:listrelationscontainer>
         </mm:isnotempty>
         <mm:isempty referid="currentlesson">
-          <div class="selectTroublesSpacer">&amp;nbsp;</div>
+          <div class="selectTroublesSpacer"><jsp:text> </jsp:text></div>
         </mm:isempty>
       </mm:present>
 		</div>
