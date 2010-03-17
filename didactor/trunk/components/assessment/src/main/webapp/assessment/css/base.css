@@ -48,8 +48,8 @@ div.student ol {
 }
 
 div.goals,div.problems {
- padding-right: 0px;
- margin-left: 0px;
+  padding-right: 0px;
+  margin-left: 0px;
 	padding-left: 5px;
   padding-top:5px;;
   margin-bottom: 17px;
@@ -84,6 +84,10 @@ div.problemsListCategorize li {
 
 div.student a.create {
 
+}
+
+div.student div.mm_field.name label {
+  display: none;
 }
 
 div.problemsListCategorize select, div.selectTroublesSpacer {
