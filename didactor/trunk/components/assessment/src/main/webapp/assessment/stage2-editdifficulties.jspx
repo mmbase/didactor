@@ -1,4 +1,3 @@
-
 <div
     xmlns:jsp="http://java.sun.com/JSP/Page"
     xmlns:c="http://java.sun.com/jsp/jstl/core"
@@ -22,18 +21,18 @@
         </mm:nodelistfunction>
         </tr>
         <tr>
-    
+
           <input type="hidden" name="problem" value="${problem}" />
           <mm:nodelistfunction name="lessons">
             <mm:relation to="${problem}">
               <td colspan="${colspan}">
-              <mm:field name="pos" id="pos${_node}">
-                <mm:fieldinfo field="pos${_node}" datatype="didactor_assessment_troubles" type="input" />
-                <mm:present referid="submit">
-                  <mm:fieldinfo field="pos${_node}" datatype="didactor_assessment_troubles" type="useinput" />
-                </mm:present>
-              </mm:field>
-              <jsp:text> </jsp:text>
+                <mm:field name="pos" id="pos${_node}">
+                  <mm:fieldinfo field="pos${_node}" datatype="didactor_assessment_troubles" type="input" />
+                  <mm:present referid="submit">
+                    <mm:fieldinfo field="pos${_node}" datatype="didactor_assessment_troubles" type="useinput" />
+                  </mm:present>
+                </mm:field>
+                <jsp:text> </jsp:text>
               </td>
             </mm:relation>
           </mm:nodelistfunction>
