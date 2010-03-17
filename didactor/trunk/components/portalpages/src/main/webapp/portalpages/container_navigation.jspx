@@ -57,7 +57,7 @@
                      class="${object eq _node.number ? 'active' : ''}${status.first ? ' first active' : ''}${status.last ? ' last' :''}"
                      onclick="didactor.openContent('${_node}'); document.location.href = '${bookmark}'; return false;"
                      >
-                    <mm:field name="title"/>
+                    <mm:field name="title" write="true"><mm:isempty>${_node}</mm:isempty></mm:field>
                   </a>
                 </mm:link>
               </mm:relatednodes>
@@ -68,7 +68,7 @@
               <mm:constraint referid="today" field="offline_date" operator="GREATER" />
 
               <mm:sortorder field="posrel.pos" />
-              <mm:relatednodes>
+              <mm:relatednodes varStatus="status2">
                 <mm:import id="firstItem" reset="true"></mm:import>
                 <mm:first>
                   <mm:isempty referid="object">
@@ -84,7 +84,7 @@
                 <mm:link referids="_node@object,n?">
                   <a href="${_}"
                      id="a_${_node}"
-                     class="${firstItem ne '' ? ' first active' : ''}"
+                     class="${firstItem ne '' ? ' first active' : ''} ${status2.last ? 'last' : ''}"
                      onclick="didactor.openContent('${_node}'); document.location.href = '${bookmark}'; return false;"
                      >
                     <mm:field name="title"/>
