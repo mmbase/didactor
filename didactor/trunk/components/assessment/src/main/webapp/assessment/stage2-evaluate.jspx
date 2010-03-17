@@ -13,7 +13,7 @@
       <mm:import externid="sub" />
 
       <mm:link page="/content/js/open.jsp">
-        <script type="text/javascript" src="${_}"><jsp:text> </jsp:text>/script>
+        <script type="text/javascript" src="${_}"><jsp:text> </jsp:text></script>
       </mm:link>
 
       <mm:node referid="problem">
@@ -35,13 +35,14 @@
           <mm:node referid="test">
             <di:copybook><mm:node id="copybookNo" /></di:copybook>
             <mm:relatednodescontainer path="madetests,copybooks" element="madetests">
-              <mm:constraint field="copybooks.number" referid="copybookNo"/>
-              <mm:relatednodes>
-                <mm:field name="number" jspvar="this_madetest" vartype="String" write="false">
-                  <mm:related path="related,problems" constraints="problems.number=$problem"> <!-- WTF WTF WTF -->
+              <mm:addnode element="copybooks" number="${copybookNo}"/>
+              <mm:relatednodes id="this_madetest">
+                <mm:relatednodescontainer role="related" type="problems">
+                  <mm:addnode number="${problem}" />
+                  <mm:relatednodes>
                     <mm:import id="madetest" reset="true">${this_madetest}</mm:import>
-                  </mm:related>
-                </mm:field>
+                  </mm:relatednodes>
+                </mm:relatednodescontainer>
               </mm:relatednodes>
             </mm:relatednodescontainer>
 
@@ -62,7 +63,6 @@
             </mm:notpresent>
 
           </mm:node>
-
 
           <mm:treeinclude page="/assessment/stage2-evaluate-buildtest.jspx"
                           referids="test@learnobject,madetest"  objectlist="$includePath"/>
