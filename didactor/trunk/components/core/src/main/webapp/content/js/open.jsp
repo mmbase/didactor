@@ -194,7 +194,9 @@ function postContent(href, form, async) {
                     usedFrames[document.href_frame] = null;
                     document.href_frame = href;
                     //console.log("Found result " + contentEl);
-                    usedFrames[href] = contentEl.childNodes;
+                    if (contentEl != null) {
+                        usedFrames[href] = contentEl.childNodes;
+                    }
                 } else {
                     alert(status);
                 }
