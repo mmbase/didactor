@@ -6,7 +6,8 @@
     >
   <jsp:output omit-xml-declaration="yes" />
 
-  <di:title field="name" />
-  <di:rich field="body" />
-
+  <di:background styleClass="xmlcontent" id="xmlcontent_${_node}">
+    <di:title field="name" />
+    <di:rich field="body" />
+  </di:background>
 </mm:node>
