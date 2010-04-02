@@ -60,8 +60,10 @@
 
             <p>
               <mm:field name="lastactivity">
-                <mm:fieldinfo type="guiname" />:
-                <mm:time format=":FULL.MEDIUM" />
+                <mm:isnotempty>
+                  <mm:fieldinfo type="guiname" />:
+                  <mm:time format=":FULL.MEDIUM" />
+                </mm:isnotempty>
               </mm:field>
             </p>
             <mm:listnodescontainer type="pagestays">
