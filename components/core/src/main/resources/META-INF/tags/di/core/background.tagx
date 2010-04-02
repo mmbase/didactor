@@ -8,6 +8,7 @@
       description="This tag produces 1 div, perhaps with a background image, defined by the current node (related to by role 'background')" />
 
   <jsp:directive.attribute name="styleClass"        />
+  <jsp:directive.attribute name="id"        />
 
   <mm:hasrelationmanager sourcemanager="${_node}" destinationmanager="images" role="background">
     <mm:relatednodescontainer type="images" role="background">
@@ -35,6 +36,7 @@
     </mm:relatednodescontainer>
   </mm:hasrelationmanager>
   <div
+      id="${id}"
       style="${empty background ? '' : 'background-image:'}${empty background ? '' : background}"
       class="${empty styleClass ? 'learnenvironment' : styleClass}">
 	<jsp:doBody />
