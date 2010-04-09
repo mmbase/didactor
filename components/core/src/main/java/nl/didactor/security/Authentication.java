@@ -39,6 +39,7 @@ public class Authentication extends org.mmbase.security.Authentication {
     private static final Logger log = Logging.getLoggerInstance(Authentication.class);
 
     public static String REASON_KEY = "nl.didactor.security.reason";
+    public static String TRYCOUNT_KEY = "nl.didactor.security.trycount";
 
     final List<AuthenticationComponent> securityComponents = new CopyOnWriteArrayList<AuthenticationComponent>();
 
@@ -288,7 +289,7 @@ public class Authentication extends org.mmbase.security.Authentication {
                     locale = ContextProvider.getDefaultCloudContext().getDefaultLocale();
                 }
                 session.setAttribute(REASON_KEY, se.getMessage(locale));
-                log.service("For ac " + se.getMessage());
+                log.service("For ac " + se.getMessage(locale) + " set in " + session);
             }
         }
 
@@ -346,9 +347,16 @@ public class Authentication extends org.mmbase.security.Authentication {
                     if (referUrl.toString().startsWith("/")) {
                         referUrl.insert(0, request.getContextPath());
                     }
+                    HttpSession session = request.getSession(true);
+                    Integer trycount = (Integer) session.getAttribute(TRYCOUNT_KEY);
+                    if (trycount == null) {
+                        trycount = 0;
+                    }
+                    session.setAttribute(TRYCOUNT_KEY, ++trycount);
+                    referUrl.append("&try=").append(trycount); // make sure we are not redirecting to where we already are. That won't work.
                     // how about the paramters already present. This seems to be too simple. Escaping?
                     String redirect = response.encodeRedirectURL(referUrl.toString());
-                    log.debug("Redirecting to " + redirect);
+                    log.debug("Redirecting to " + redirect + " with " + response);
                     response.sendRedirect(redirect);
                 } catch (Exception e) {
                     throw new SecurityException("Can't redirect to login page(" + loginPage + ") because " + e.getClass() + ":" + e.getMessage(), e);
@@ -364,7 +372,9 @@ public class Authentication extends org.mmbase.security.Authentication {
     public  boolean isValid(org.mmbase.security.UserContext userContext) throws org.mmbase.security.SecurityException {
         if (userContext instanceof UserContext) {
             UserContext uc = (UserContext) userContext;
-            log.debug("found " + uc);
+            if (log.isTraceEnabled()) {
+                log.trace("found " + uc);
+            }
             if (uc.getRank().equals(Rank.ADMIN)) return true;
             if (uc.getRank().equals(Rank.ANONYMOUS)) return true;
             checkBuilder();
