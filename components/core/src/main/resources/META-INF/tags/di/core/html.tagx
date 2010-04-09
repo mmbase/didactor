@@ -35,7 +35,11 @@
     <mm:cloud rank="${empty rank ? 'didactor user' : rank}">
       <html  debug="true"
              xmlns="http://www.w3.org/1999/xhtml">
-        <mm:import escape="trimmer" id="validatemessage"><mm:treeinclude page="/shared/validateUser.jsp" objectlist="$includePath" referids="$referids" /></mm:import>
+
+        <!-- extremely stupid, but I think it is not much used any more. User validation is done by security implementation now. -->
+        <mm:import escape="trimmer" id="validatemessage">
+          <mm:treeinclude page="/shared/validateUser.jsp" objectlist="$includePath" referids="$referids" />
+        </mm:import>
         <c:choose>
           <c:when test="${! empty validatemessage}">
             <mm:cloud method="logout" />
@@ -99,9 +103,9 @@
 
               <div class="componentBody">
                 <mm:write request="component" value="${component}" />
-                <di:include page="/cockpit/applicationbar.jsp" />
-                <di:include page="/cockpit/providerbar.jsp" />
-                <di:include page="/cockpit/educationbar.jsp" />
+                <di:include debug="xml" page="/cockpit/applicationbar.jsp" />
+                <di:include debug="xml" page="/cockpit/providerbar.jsp" />
+                <di:include debug="xml" page="/cockpit/educationbar.jsp" />
                 <div class="di_body mm_c_${component}">
                   <jsp:doBody />
                 </div>
