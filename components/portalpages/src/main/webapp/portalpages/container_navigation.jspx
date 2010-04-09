@@ -60,6 +60,7 @@
                     <mm:field name="title" write="true"><mm:isempty>${_node}</mm:isempty></mm:field>
                   </a>
                 </mm:link>
+                <jsp:text> </jsp:text>
               </mm:relatednodes>
             </mm:relatednodescontainer>
             <mm:relatednodescontainer type="simplexmlcontents"
@@ -90,6 +91,7 @@
                     <mm:field name="title"/>
                   </a>
                 </mm:link>
+                <jsp:text> </jsp:text>
               </mm:relatednodes>
             </mm:relatednodescontainer>
           </div>
