@@ -36,7 +36,23 @@
     <maxLength value="1024" />
   </datatype>
 
-  <datatype id="didactor_verify_email" base="verify_email" />
+  <datatype base="eline" id="didactor_verify_email" >
+    <setprocessor>
+      <class name="org.mmbase.datatypes.VerifyEmailProcessor">
+        <param name="emailField" value="email" />
+        <param name="textBundle" value="org.mmbase.datatypes.resources.verifyemailtemplate" />
+      </class>
+    </setprocessor>
+    <commitprocessor>
+      <class name="org.mmbase.datatypes.VerifyEmailProcessor">
+        <param name="emailField" value="email" />
+        <param name="textBundle" value="org.mmbase.datatypes.resources.verifyemailtemplate" />
+        <param name="url"        value="/mmbase/email/verify/" />
+        <param name="includeUrl"  value="" />
+        <param name="onlyForSelf"  value="true" />
+      </class>
+    </commitprocessor>
+  </datatype>
 
   <datatype id="didactor_people_country" base="eline">
     <required value="false" />

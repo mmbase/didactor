@@ -25,7 +25,7 @@
     <dependency>
       <groupId>org.mmbase</groupId>
       <artifactId>mmbase-email</artifactId>
-      <version>${mmbase.version}</version>
+      <version>1.9-SNAPSHOT</version>
       <type>war</type>
     </dependency>
 
