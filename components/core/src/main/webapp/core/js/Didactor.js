@@ -183,7 +183,7 @@ Didactor.prototype.fillFragments = function() {
     var url = document.location.href;
     var fragmentIndex = url.indexOf('#');
     if (fragmentIndex > 0) {
-        this.fragments = url.substring(fragmentIndex + 1).split('_');
+        this.fragments = url.substring(fragmentIndex + 1).split(/[_#]/);
     }
 }
 
