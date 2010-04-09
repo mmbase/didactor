@@ -26,13 +26,13 @@
               <mm:fieldlist nodetype="people" fields="username">
                 <mm:fieldinfo type="guiname" />
               </mm:fieldlist>
-              <input id="loginUsername" type="text" size="20" name="username" value="${sessionScope.registerPerson.username}" />
+              <input id="loginUsername" type="text" size="20" name="username" value="${sessionScope.registerPerson.username}${sessionScope['nl.didactor.security.parameters'].username[0]}" />
               <mm:fieldlist nodetype="people" fields="password">
                 <mm:fieldinfo type="guiname" />
               </mm:fieldlist>
               <input id="loginPassword" type="password" size="20" name="password" value="${sessionScope.registerPassword}" />
               <input class="formbutton" id="loginSubmit" type="submit" value="${di:translate('core.login')}" />
-              ${sessionScope["nl.didactor.security.reason"]}
+              <jsp:text>${sessionScope["nl.didactor.security.reason"]}</jsp:text>
             </p>
           </form>
           <!-- WTF WTF WTF WTF, all this explicit mentioning of 'components' is a bit silly -->
