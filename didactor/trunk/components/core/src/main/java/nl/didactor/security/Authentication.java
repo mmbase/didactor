@@ -40,6 +40,7 @@ public class Authentication extends org.mmbase.security.Authentication {
 
     public static String REASON_KEY = "nl.didactor.security.reason";
     public static String TRYCOUNT_KEY = "nl.didactor.security.trycount";
+    public static String PARAMETERS_KEY = "nl.didactor.security.parameters";
 
     final List<AuthenticationComponent> securityComponents = new CopyOnWriteArrayList<AuthenticationComponent>();
 
@@ -259,6 +260,16 @@ public class Authentication extends org.mmbase.security.Authentication {
             application = "login";
         }
 
+        HttpSession session = request.getSession(true);
+        Map map = (Map) session.getAttribute(PARAMETERS_KEY);
+        if (map == null) {
+            map = new HashMap();
+            session.setAttribute(PARAMETERS_KEY, map);
+        }
+        map.putAll(request.getParameterMap());
+        map.putAll(loginInfo);
+
+
         // Apparently not, so we ask the components if they can process the login,
         // maybe there was a post to the current page?
         for (AuthenticationComponent ac : securityComponents) {
@@ -268,9 +279,9 @@ public class Authentication extends org.mmbase.security.Authentication {
                     log.debug("" + ac + ".processLogin() -> " + uc);
                 }
                 if (uc != null) {
-                    HttpSession session = request.getSession(true);
-                    session.setAttribute(REASON_KEY, null);
-                    request.getSession(true).setAttribute("didactor-logincomponent", ac.getName());
+                    session.removeAttribute(PARAMETERS_KEY);
+                    session.removeAttribute(REASON_KEY);
+                    session.setAttribute("didactor-logincomponent", ac.getName());
                     Integer usernumber = uc.getUserNumber();
                     Event event = new Event(uc.getIdentifier(), request, null, null, null,
                                             "LOGIN", usernumber != null ? usernumber.toString() : null,
@@ -283,7 +294,6 @@ public class Authentication extends org.mmbase.security.Authentication {
                     }
                 }
             } catch (SecurityException se) {
-                HttpSession session = request.getSession(true);
                 Locale locale = (Locale) request.getAttribute("locale");
                 if (locale == null) {
                     locale = ContextProvider.getDefaultCloudContext().getDefaultLocale();
@@ -347,7 +357,7 @@ public class Authentication extends org.mmbase.security.Authentication {
                     if (referUrl.toString().startsWith("/")) {
                         referUrl.insert(0, request.getContextPath());
                     }
-                    HttpSession session = request.getSession(true);
+
                     Integer trycount = (Integer) session.getAttribute(TRYCOUNT_KEY);
                     if (trycount == null) {
                         trycount = 0;
