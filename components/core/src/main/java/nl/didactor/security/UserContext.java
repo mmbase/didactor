@@ -65,7 +65,11 @@ public class UserContext extends org.mmbase.security.BasicUser implements WeakNo
             if (i.hasNext()) {
                 nodeNumber = i.next().getNumber();
             } else {
-                log.debug("No people object with username '" + identifier + "'", new Exception());
+                if (log.isTraceEnabled()) {
+                    log.trace("No people object with username '" + identifier + "'", new Exception());
+                } else {
+                    log.debug("No people object with username '" + identifier + "'");
+                }
             }
         } catch (Exception e) {
             log.error(e);
@@ -111,14 +115,15 @@ public class UserContext extends org.mmbase.security.BasicUser implements WeakNo
 
     }
 
+    @Override
     protected void finalize() throws Throwable {
         identifier = "FINALIZED " + identifier;
         log.debug("Finalizing " + this);
         super.finalize();
     }
 
-    public static Set<String> getRoles(MMObjectNode node) {
-        Set<String> result = new HashSet<String>();
+    public static Set<String> getRoles(final MMObjectNode node) {
+        final Set<String> result = new HashSet<String>();
         if (node != null) {
             List<MMObjectNode> roles = node.getRelatedNodes("roles", RelationStep.DIRECTIONS_DESTINATION);
             for (MMObjectNode role : roles) {
@@ -143,14 +148,16 @@ public class UserContext extends org.mmbase.security.BasicUser implements WeakNo
     /**
      * From the org.mmbase.security.UserContext interface
      */
-    @Override public String getIdentifier() {
+    @Override
+    public String getIdentifier() {
         return identifier;
     }
 
     /**
      * From the org.mmbase.security.UserContext interface
      */
-    @Override public String getOwnerField() {
+    @Override
+    public String getOwnerField() {
         return owner;
     }
 
@@ -165,6 +172,7 @@ public class UserContext extends org.mmbase.security.BasicUser implements WeakNo
         return Integer.valueOf(wrappedNode);
     }
 
+    @Override
     public String toString() {
         return count + ":" + super.toString();
     }
