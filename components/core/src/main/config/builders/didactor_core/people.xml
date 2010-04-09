@@ -46,9 +46,9 @@
         <property name="collator" value=":IDENTICAL" />
         <unique value="true" />
         <required value="false" />
-        <minLength value="5" />
+        <minLength value="5" enforce="never" /> <!-- because the editwizards suck -->
         <maxLength value="32" />
-        <pattern value="\S{5,32}" enforce="oncreate" />
+        <pattern value="\S{5,32}" enforce="never" />
         <commitprocessor>
           <class name="org.mmbase.datatypes.processors.FunctionValueIfEmptyCommitProcessor">
             <param name="functionName">generateUserName</param>
