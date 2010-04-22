@@ -14,7 +14,7 @@
     <!-- Direct relation people->classrel->education -->
     <c:choose>
       <c:when test="${empty class and empty classNumber}">
-        <mm:relation role="classrel" to="${education}">
+        <mm:relation role="classrel" to="${education}" notfound="create">
           <mm:relatednodes type="copybooks">
             <jsp:doBody />
           </mm:relatednodes>
@@ -22,7 +22,7 @@
       </c:when>
       <c:otherwise>
         <!-- people->classrel->class->related->education -->
-        <mm:relation role="classrel" to="${empty classNumber ? requestScope['class'].number : classNumber}">
+        <mm:relation role="classrel" to="${empty classNumber ? requestScope['class'].number : classNumber}" notfound="create">
           <mm:relatednodes type="copybooks">
             <jsp:doBody />
           </mm:relatednodes>
