@@ -8,6 +8,8 @@ import java.util.*;
 import org.mmbase.util.*;
 import java.io.InputStream;
 
+import org.mmbase.module.core.MMObjectNode;
+import org.mmbase.module.core.MMBase;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 import org.mmbase.security.*;
@@ -80,10 +82,21 @@ public class PropertiesSecurityComponent implements AuthenticationComponent {
         password = password.trim();
 
         if (password.equals(properties.get(login))) {
-            UserContext uc =  new UserContext(login, login, Rank.ADMIN, application);
+
+            PeopleBuilder users = (PeopleBuilder) MMBase.getMMBase().getBuilder("people");
+            MMObjectNode user = users.getUser(login);
+            UserContext uc;
             HttpSession session = request.getSession(true);
             session.setAttribute("didactor-propertieslogin-userid", "" + login);
             session.setAttribute("didactor-prpertieslogin-application", application);
+            if (user != null) {
+                session.setAttribute("didactor-plainlogin-userid", "" + user.getNumber());
+                session.setAttribute("didactor-plainlogin-application", application);
+                uc = new UserContext(user, application);
+            } else {
+                log.debug("No user found for " + login);
+                uc =  new UserContext(login, login, Rank.ADMIN, application);
+            }
             return uc;
         } else {
             throw new SecurityException("Cannot login");
