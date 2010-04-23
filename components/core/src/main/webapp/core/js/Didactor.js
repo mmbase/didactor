@@ -46,17 +46,27 @@ function Didactor() {
 	        if (self.content != null) break;
             }
             self.block = self.content; // This is the content as defined by the URL. 'block' will not be changed.
-            for (var i = 0; i < Didactor.ignoredParameters.length; i++) {
-	        var param = Didactor.ignoredParameters[i];
+            for (var j = 0; j < Didactor.ignoredParameters.length; j++) {
+	        var param = Didactor.ignoredParameters[j];
 	        $.query.REMOVE(param);
             }
             self.q = $.query.toString();
+
+	    /* Anchors are used for navigation too, so need to refresh the page also if only anchor changed */
+	    $("div.mmxf a").live(
+		"click",
+		function() {
+		    document.location.href = this.href;
+		    document.location.reload(true);
+		});
 
 
             for (var i = 0; i < Didactor.welcomeFiles.length; i++) {
 	        var welcomeFile = Didactor.welcomeFiles[i];
 	        self.url = self.url.replace(new RegExp(welcomeFile + "$"), "");
             }
+
+
 
             $(document).bind("didactorContentLoaded",  function(ev, data) {
                                  self.setContent(data.number);
