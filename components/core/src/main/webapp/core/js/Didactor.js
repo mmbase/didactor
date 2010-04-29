@@ -34,7 +34,7 @@ function Didactor() {
                     });
             if (self.pageReporter) {
 	        $(window).bind("beforeunload", function() {
-	                           self.reportOnline(null, false);
+				   self.reportOnline(null, false);
 	                       });
             }
 
@@ -56,8 +56,11 @@ function Didactor() {
 	    $("div.mmxf a").live(
 		"click",
 		function() {
+		    var reload = document.location.href == this.href;
 		    document.location.href = this.href;
-		    document.location.reload(true);
+		    if (reload) {
+			document.location.reload(true);
+		    }
 		});
 
 
@@ -83,7 +86,7 @@ function Didactor() {
                              });
             // if browsing away, then too
             $(window).bind("beforeunload", function() {
-                               self.saveQuestions();
+			       self.saveQuestions();
                            });
 
 
