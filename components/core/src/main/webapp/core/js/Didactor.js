@@ -56,11 +56,19 @@ function Didactor() {
 	    $("div.mmxf a").live(
 		"click",
 		function() {
-		    var reload = document.location.href == this.href;
-		    document.location.href = this.href;
-		    if (reload) {
-			document.location.reload(true);
+		    var href = this.href;
+		    var hashIndex = href.indexOf("#");
+		    var hash = "";
+		    if (hashIndex > 0) {
+			hash = href.substring(hashIndex);
+			href = href.substring(0, hashIndex);
+			if (document.location.href == href) {
+			    var append = href.indexOf("?") > 0 ? "&" : "?";
+			    href = href + append + "reload";
+			}
 		    }
+		    document.location.href = href + hash;
+
 		});
 
 
