@@ -30,17 +30,19 @@ public class DidactorUrlConverter extends DirectoryUrlConverter {
         setDirectory("c");
     }
 
-    @Override public int getDefaultWeight() {
+    @Override
+    public int getDefaultWeight() {
         int q = super.getDefaultWeight();
         return Math.max(q, q + 10000);
     }
 
 
-    @Override protected void getNiceDirectoryUrl(StringBuilder b,
-                                                   Block block,
-                                                   Parameters blockParameters,
-                                                   Parameters frameworkParameters,
-                                                   boolean action) throws FrameworkException {
+    @Override
+    protected void getNiceDirectoryUrl(StringBuilder b,
+                                       Block block,
+                                       Parameters blockParameters,
+                                       Parameters frameworkParameters,
+                                       boolean action) throws FrameworkException {
         log.debug("Found block " + block);
         //Node n = (Node) parameters.get(Framework.N.getName());
         b.append(block.getComponent().getName());
@@ -51,8 +53,11 @@ public class DidactorUrlConverter extends DirectoryUrlConverter {
         }
     }
 
+    static void decorateRequest(HttpServletRequest req) {
+    }
 
-    @Override protected Url getFilteredInternalDirectoryUrl(List<String> path, Map<String, ?> blockParameters, Parameters frameworkParameters) throws FrameworkException {
+    @Override
+    protected Url getFilteredInternalDirectoryUrl(List<String> path, Map<String, ?> blockParameters, Parameters frameworkParameters) throws FrameworkException {
         StringBuilder result = new StringBuilder("/shared/render.jspx");
         // article mode
         if (path.size() == 0) {
