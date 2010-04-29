@@ -42,7 +42,6 @@ public class ProviderFilter implements Filter, MMBaseStarter, NodeEventListener,
 
 
     public static String USER_KEY = "nl.didactor.user_attributes";
-    public static String EDUCATION_KEY = "nl.didactor.education";
 
     private static Map<String, Map<String, Object>> providerCache = new HashMap<String, Map<String, Object>>();
 
@@ -123,7 +122,6 @@ public class ProviderFilter implements Filter, MMBaseStarter, NodeEventListener,
 
     protected static NodeList selectForUser(Cloud cloud, NodeList nodes) {
         int userNode = cloud.getCloudContext().getAuthentication().getNode(cloud.getUser());
-        log.debug("Fitering for user " + cloud.getUser());
         if (cloud.hasNode(userNode)) {
             Node user = cloud.getNode(userNode);
             Set<Node> related = (Set<Node>) user.getFunctionValue("educations", null).get();
@@ -135,8 +133,13 @@ public class ProviderFilter implements Filter, MMBaseStarter, NodeEventListener,
                     result.add(e);
                 }
             }
+            if (log.isDebugEnabled()) {
+                log.debug("Fitered for user " + userNode + " " + related + " -> " + result);
+            }
+
             return result;
         } else {
+            log.debug("No such user " + userNode);
             return nodes;
         }
     }
@@ -311,10 +314,7 @@ public class ProviderFilter implements Filter, MMBaseStarter, NodeEventListener,
         if (parameterEducation != null && parameterEducation.length() == 0) {
             parameterEducation = null;
         }
-        if (parameterEducation == null && session != null) {
-            parameterEducation = (String) session.getAttribute(EDUCATION_KEY);
-            log.debug("education found from session " + parameterEducation);
-        }
+
 
         String parameterProvider  = req.getParameter("provider");
 
@@ -324,12 +324,6 @@ public class ProviderFilter implements Filter, MMBaseStarter, NodeEventListener,
 
         final Map<String, Serializable> userAttributes = getUserAttributes(cloud, req);
         final int userNumber = (Integer) userAttributes.get("user");
-        if (session != null) {
-            if (parameterEducation != null && userNumber > 0) {
-                // remember some explicit education parameter in the session.
-                session.setAttribute(EDUCATION_KEY, parameterEducation);
-            }
-        }
 
         String key = serverName + contextPath + ':' + parameterEducation + ':' + parameterProvider  + ":" + cloud.getUser().getIdentifier();
 
