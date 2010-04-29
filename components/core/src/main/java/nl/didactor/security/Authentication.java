@@ -114,7 +114,6 @@ public class Authentication extends org.mmbase.security.Authentication {
         HttpSession session = request == null ? null : request.getSession(false);
         if (session != null) {
             session.removeAttribute(nl.didactor.filter.ProviderFilter.USER_KEY);
-            session.removeAttribute(nl.didactor.filter.ProviderFilter.EDUCATION_KEY);
             String loginComponent = (String)session.getAttribute("didactor-logincomponent");
             if (loginComponent != null) {
                 for (AuthenticationComponent ac : securityComponents) {
@@ -153,11 +152,21 @@ public class Authentication extends org.mmbase.security.Authentication {
     @Override
     public org.mmbase.security.UserContext login(String application, Map loginInfo, Object[] parameters) throws org.mmbase.security.SecurityException {
 
+        HttpServletRequest request = loginInfo == null ? null : (HttpServletRequest) loginInfo.get(Parameter.REQUEST.getName());
+        if (request != null) {
+            HttpSession session = request.getSession(false);
+            if (session != null) {
+                log.info("Removing keys from session");
+                session.removeAttribute(nl.didactor.filter.ProviderFilter.USER_KEY);
+            }
+        }
+
         // Always allow anonymous access instantly
         if ("anonymous".equals(application)) {
             log.trace("Anonymous application: returning anonymous cloud ");
             if (loginInfo != null && Boolean.TRUE.equals(loginInfo.get("logout"))) {
-                logout((HttpServletRequest) loginInfo.get(Parameter.REQUEST.getName()),
+
+                logout(request,
                        (HttpServletResponse) loginInfo.get(Parameter.RESPONSE.getName())
                        );
             }
@@ -215,11 +224,9 @@ public class Authentication extends org.mmbase.security.Authentication {
 
         }
 
-        HttpServletRequest request = null;
         HttpServletResponse response = null;
         Rank desiredRank = null;
         if (loginInfo != null) {
-            request = (HttpServletRequest) loginInfo.get(Parameter.REQUEST.getName());
             response = (HttpServletResponse) loginInfo.get(Parameter.RESPONSE.getName());
             desiredRank = (Rank) loginInfo.get("rank");
         }
@@ -266,6 +273,8 @@ public class Authentication extends org.mmbase.security.Authentication {
             map = new HashMap();
             session.setAttribute(PARAMETERS_KEY, map);
         }
+        //
+        session.removeAttribute(nl.didactor.filter.ProviderFilter.USER_KEY);
         map.putAll(request.getParameterMap());
         map.putAll(loginInfo);
 
