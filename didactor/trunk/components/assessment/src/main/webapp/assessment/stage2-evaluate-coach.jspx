@@ -23,13 +23,13 @@
   <h3><mm:node number="${student_id}"><mm:field id="studentname" name="firstname"/></mm:node></h3>
   <mm:node referid="problem">
     <p>
-      <mm:link page="/homework/">
+      <mm:link page="/homework/" referids="sub">
         <mm:param name="sub">assessment_coach</mm:param>
         <a href="${_}">&amp;lt;&amp;lt; terug naar studentenoverzicht</a>
       </mm:link>
     </p>
     <p>
-      <mm:link page="/homework/">
+      <mm:link page="/homework/" referids="sub">
         <mm:param name="subsub">coach_student_overview</mm:param>
         <mm:param name="student_id">${student_id}</mm:param>
         <a href="${_}">&amp;lt; terug naar probleemlijst van <mm:write referid="studentname" /></a>
