@@ -42,6 +42,7 @@ public class ProviderFilter implements Filter, MMBaseStarter, NodeEventListener,
 
 
     public static String USER_KEY = "nl.didactor.user_attributes";
+    public static String EDUCATION_KEY = "nl.didactor.education";
 
     private static Map<String, Map<String, Object>> providerCache = new HashMap<String, Map<String, Object>>();
 
@@ -313,6 +314,14 @@ public class ProviderFilter implements Filter, MMBaseStarter, NodeEventListener,
         String parameterEducation = req.getParameter("education");
         if (parameterEducation != null && parameterEducation.length() == 0) {
             parameterEducation = null;
+        }
+        if (session != null) {
+            if (parameterEducation == null) {
+                parameterEducation = (String) session.getAttribute(EDUCATION_KEY);
+                log.debug("education found from session " + parameterEducation);
+            } else {
+                session.setAttribute(EDUCATION_KEY, parameterEducation);
+            }
         }
 
 
