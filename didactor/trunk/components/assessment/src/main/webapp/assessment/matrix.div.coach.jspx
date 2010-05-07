@@ -63,11 +63,6 @@
             </c:if>
           </mm:relation>
 
-          <!-- now let the user _edit_ (if first 'open' lesson)
-               this relation, or only _see_ (if 'closed' lesson).
-               That is, inidcate how much trouble the problem is now causing.
-          -->
-
 
           <mm:listrelationscontainer type="problems" role="posrel">
             <mm:addnode element="problems" number="${problem}" />
@@ -92,24 +87,23 @@
       <mm:import externid="subsub" />
 
 
-      <mm:relatednodes max="1" path="problemtypes,tests" element="tests">
+      <mm:relatednodes  max="1" path="problemtypes,tests" element="tests">
         <mm:node id="test" />
       </mm:relatednodes>
+
       <mm:present referid="test">
-        <di:copybook student="${student_nr}">
-          <mm:node>
-            <mm:list path="madetests,tests" constraints="tests.number = ${test}" fields="madetests.number">
-    					<mm:field name="madetests.number" id="madeTest" write="false"/>
-            </mm:list>
-          </mm:node>
+        <di:copybook student="${student_id}">
+          <mm:relatednodescontainer path="madetests,tests" element="madetests" id="q">
+            <mm:constraint field="tests.number" value="${test}" />
+            <mm:sortorder field="number" direction="down" />
+            <mm:relatednodes max="1">
+              <mm:node id="madeTest" />
+            </mm:relatednodes>
+          </mm:relatednodescontainer>
         </di:copybook>
 
-
-
-        <mm:link referids="test,_node@problem,student_id,sub?">
+        <mm:link referids="test,_node@problem,student_id,sub?,madeTest@madetestNo">
           <mm:param name="subsub">stage2-evaluate-coach</mm:param>
-          <mm:param name="testNo">${test}</mm:param>
-          <mm:param name="madetestNo">${madeTest}</mm:param>
           <td colspan="${fn:length(learnBlock) - blockCount}" class="learnblockItems" align="right">
             <a href="${_}">bekijk uitwerking</a>
           </td>

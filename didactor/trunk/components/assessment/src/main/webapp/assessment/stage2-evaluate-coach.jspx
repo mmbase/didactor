@@ -21,7 +21,9 @@
   </mm:link>
 
   <h3><mm:node number="${student_id}"><mm:field id="studentname" name="firstname"/></mm:node></h3>
+
   <mm:node referid="problem">
+    <h4><mm:field name="name" /></h4>
     <p>
       <mm:link page="/homework/" referids="sub">
         <mm:param name="sub">assessment_coach</mm:param>
@@ -39,7 +41,7 @@
 
     <div id="contentFrame" style="clear: both;">
       <mm:include page="/education/tests/viewanswers.jsp"
-                  referids="test@learnobject,student_id@userNo" />
+                  referids="test@learnobject,test@testNo,student_id@userNo" />
     </div>
 
     <!-- This is not a form, so it does not need commit
