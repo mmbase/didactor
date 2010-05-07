@@ -20,7 +20,7 @@
     <script type="text/javascript" src="${_}"><jsp:text><!-- btw, IE sucks --></jsp:text></script>
   </mm:link>
 
-  <h3><mm:node number="${student_id}"><mm:field name="firstname"/></mm:node></h3>
+  <h3><mm:node number="${student_id}"><mm:field id="studentname" name="firstname"/></mm:node></h3>
   <mm:node referid="problem">
     <p>
       <mm:link page="/homework/">
@@ -32,7 +32,7 @@
       <mm:link page="/homework/">
         <mm:param name="subsub">coach_student_overview</mm:param>
         <mm:param name="student_id">${student_id}</mm:param>
-        <a href="${_}">&amp;lt; terug naar probleemlijst van <mm:node number="${student_id}"><mm:field id="studentName" name="firstname"/></mm:node></a>
+        <a href="${_}">&amp;lt; terug naar probleemlijst van <mm:write referid="studentname" /></a>
       </mm:link>
     </p>
 
