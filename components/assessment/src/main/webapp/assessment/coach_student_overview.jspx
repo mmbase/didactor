@@ -7,43 +7,47 @@
     class="problems">
   <jsp:output omit-xml-declaration="true" />
 
+  <mm:import externid="sub" />
+  <mm:import externid="subsub" />
   <!--
       Now the problems, divided per type.
-  -->	
-<di:hasrole role="teacher">
-  <mm:import externid="student_id" from="parameters" />
-	<mm:link page="/homework/">
-		<mm:param name="sub">assessment_coach</mm:param>
-		<a href="${_}">&amp;lt; terug naar studentenoverzicht</a>
-	</mm:link>
-	
-	
-  <h2>Probleemlijst overzicht <mm:node number="${student_id}"><mm:field id="studentName" name="firstname"/></mm:node> </h2>
-  <div>
-    <p>Dit is een overzicht van de problemenlijst van  ${studentName}</p>
-  </div>
-	
-	
-	<div class="list goals">
-	<h2>Belangrijke dingen</h2>
-	<ol>
-	<mm:node number="${student_id}">
-      <mm:relatednodes type="goals" role="posrel" orderby="posrel.pos">
-      	<mm:node>
-      		<li><mm:field name="name" /></li>
-      	</mm:node>	
-      </mm:relatednodes>
-   </mm:node>
-   </ol>
-  </div>
+  -->
+  <di:hasrole role="teacher">
+    <mm:import externid="student_id" from="parameters" />
+    <mm:link page="/homework/" referids="sub?" >
+      <a href="${_}">&amp;lt; terug naar studentenoverzicht</a>
+    </mm:link>
 
-  <table>
 
-    <mm:node number="${education}">
-      <mm:import id="blocknames" escape="text/plain">
-        <!-- cache the block names, because they are repeated for every problem type -->
+    <h2>
+      <jsp:text>Probleemlijst overzicht </jsp:text>
+      <mm:node number="${student_id}"><mm:field id="studentName" name="firstname"/></mm:node>
+    </h2>
+    <div>
+      <p>Dit is een overzicht van de problemenlijst van  ${studentName}</p>
+    </div>
 
-        <mm:nodelistfunction name="lessons" id="learnBlock">
+
+    <div class="list goals">
+      <h2>Belangrijke dingen</h2>
+      <ol>
+        <mm:node number="${student_id}">
+          <mm:relatednodes type="goals" role="posrel" orderby="posrel.pos">
+            <mm:node>
+              <li><mm:field name="name" /></li>
+            </mm:node>
+          </mm:relatednodes>
+        </mm:node>
+      </ol>
+    </div>
+
+    <table>
+
+      <mm:node number="${education}">
+        <mm:import id="blocknames" escape="text/plain">
+          <!-- cache the block names, because they are repeated for every problem type -->
+
+          <mm:nodelistfunction name="lessons" id="learnBlock">
             <!--
                 If a relation learnBlock -classrel->user exists, then that means that this lesson is marked 'closed' (by this module)
             -->
@@ -64,7 +68,6 @@
         <td><h2 class="problemTypes"><di:translate key="assessment.${_node.key}" /></h2></td>
         <mm:write referid="blocknames" escape="text/plain"/>
       </tr>
-      <mm:import externid="sub" />
       <mm:import externid="stage" />
 
       <mm:relatednodescontainer path="related,problems,posrel,people" element="problems">
@@ -75,7 +78,7 @@
           <tr class="problemItem"><td colspan="7">--</td></tr>
         </c:if>
         <mm:relatednodes>
-          <mm:include page="/assessment/matrix.div.coach.jspx" referids="sub?,stage?,_node@source">
+          <mm:include page="/assessment/matrix.div.coach.jspx" referids="sub?,subsub?,stage?,_node@source">
 						<mm:param name="student_id">${student_id}</mm:param>
 					</mm:include>
          <tr><td colspan="7"><jsp:text> </jsp:text></td></tr>
