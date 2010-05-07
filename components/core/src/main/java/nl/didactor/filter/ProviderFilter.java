@@ -309,7 +309,7 @@ public class ProviderFilter implements Filter, MMBaseStarter, NodeEventListener,
 
         String serverName = req.getServerName();
         String contextPath = req.getContextPath();
-        HttpSession session = req.getSession(false);
+        HttpSession session = req.getSession(true);
 
         String parameterEducation = req.getParameter("education");
         if (parameterEducation != null && parameterEducation.length() == 0) {
@@ -457,6 +457,7 @@ public class ProviderFilter implements Filter, MMBaseStarter, NodeEventListener,
             }
 
             attributes.put("referids", "class?,workgroup?,student?,c?" + ((education != null && defaultEducation != null && education.getNumber() != defaultEducation.getNumber()) ? ",education" : ""));
+
 
             providerCache.put(key, attributes);
 
