@@ -139,7 +139,7 @@ public class TranslateTable {
                 log.debug("added translation value for '" + fkey + "': '" + value + "'");
             }
         } catch (Exception e) {
-            log.error("Exception: " + e);
+            log.error("Exception: " + e, e);
         }
     }
 
