@@ -102,12 +102,18 @@
           </mm:relatednodescontainer>
         </di:copybook>
 
-        <mm:link referids="test,_node@problem,student_id,sub?,madeTest@madetestNo">
-          <mm:param name="subsub">stage2-evaluate-coach</mm:param>
-          <td colspan="${fn:length(learnBlock) - blockCount}" class="learnblockItems" align="right">
-            <a href="${_}">bekijk uitwerking</a>
-          </td>
-        </mm:link>
+        <td colspan="${fn:length(learnBlock) - blockCount}" class="learnblockItems" align="right">
+          <c:choose>
+            <c:when test="${! empty madeTest}">
+              <mm:link referids="test,_node@problem,student_id,sub?,madeTest@madetestNo">
+                <mm:param name="subsub">stage2-evaluate-coach</mm:param>
+                <a href="${_}">bekijk uitwerking</a>
+              </mm:link>
+            </c:when>
+            <c:otherwise>nog niet uitgewerkt</c:otherwise>
+          </c:choose>
+        </td>
+
       </mm:present>
     </tr>
 
