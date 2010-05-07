@@ -14,12 +14,13 @@
   <mm:import externid="problem" required="true" />
   <mm:import externid="test"    required="true" />
   <mm:import externid="sub" />
-    <mm:import externid="student_id" required="true"/>
+  <mm:import externid="student_id" required="true"/>
 
   <mm:link page="/content/js/open.jsp">
     <script type="text/javascript" src="${_}"><jsp:text><!-- btw, IE sucks --></jsp:text></script>
   </mm:link>
 
+  <h3><mm:node number="${student_id}"><mm:field name="firstname"/></mm:node></h3>
   <mm:node referid="problem">
     <p>
       <mm:link page="/homework/">
@@ -38,7 +39,7 @@
 
     <div id="contentFrame" style="clear: both;">
       <mm:include page="/education/tests/viewanswers.jsp"
-                  referids="test@learnobject" />
+                  referids="test@learnobject,student_id@userNo" />
     </div>
 
     <!-- This is not a form, so it does not need commit
