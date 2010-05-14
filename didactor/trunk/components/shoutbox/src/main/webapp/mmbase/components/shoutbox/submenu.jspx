@@ -22,7 +22,7 @@
       </mm:link>
       <mm:link page="/c/shoutbox/index" referids="_reference?,source?">
         <mm:param name="self">only</mm:param>
-        <a href="${_}" class="${self eq 'only' ? 'active' : ''}">
+        <a href="${_}" class="last ${self eq 'only' ? 'active' : ''}">
           <jsp:text>Berichten verzenden</jsp:text>
         </a>
       </mm:link>
