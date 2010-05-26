@@ -13,8 +13,9 @@
       Now the problems, divided per type.
   -->
   <di:hasrole role="teacher">
-    <mm:import externid="student_id" from="parameters" />
-    <mm:link page="/homework/" referids="sub?" >
+    <mm:import externid="student_id" from="parameters" required="true" />
+    <mm:import externid="class" from="parameters" required="true" />
+    <mm:link page="/homework/" referids="sub?,class" >
       <a href="${_}">&amp;lt; terug naar studentenoverzicht</a>
     </mm:link>
 
@@ -78,7 +79,7 @@
           <tr class="problemItem"><td colspan="7">--</td></tr>
         </c:if>
         <mm:relatednodes>
-          <mm:include page="/assessment/matrix.div.coach.jspx" referids="sub?,subsub?,stage?,_node@source">
+          <mm:include page="/assessment/matrix.div.coach.jspx" referids="sub?,subsub?,stage?,_node@source,class">
 						<mm:param name="student_id">${student_id}</mm:param>
 					</mm:include>
          <tr><td colspan="7"><jsp:text> </jsp:text></td></tr>

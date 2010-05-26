@@ -12,10 +12,9 @@
 
   <di:hasrole role="teacher">
     <mm:import externid="source" required="true" />
+    <mm:import externid="class" required="true" />
     <mm:import externid="icondir" />
     <mm:import externid="student_id" required="true"/>
-
-
     <!-- Display the problem itself -->
     <tr class="problemItem">
       <td class="problemName"><mm:field name="name" /> </td>
@@ -56,7 +55,6 @@
                         </mm:createrelation>
                       </mm:context>
                     </mm:cloud>
-
                   </c:if>
                 </mm:relation>
               </mm:node>
@@ -91,21 +89,15 @@
         <mm:node id="test" />
       </mm:relatednodes>
 
+      <mm:relatednodes path="madetests,givenanswers" element="madetests" max="1" orderby="number" directions="down">
+        <mm:node id="madeTest" />
+      </mm:relatednodes>
       <mm:present referid="test">
-        <di:copybook student="${student_id}">
-          <mm:relatednodescontainer path="madetests,tests" element="madetests" id="q">
-            <mm:constraint field="tests.number" value="${test}" />
-            <mm:sortorder field="number" direction="down" />
-            <mm:relatednodes max="1">
-              <mm:node id="madeTest" />
-            </mm:relatednodes>
-          </mm:relatednodescontainer>
-        </di:copybook>
 
         <td colspan="${fn:length(learnBlock) - blockCount}" class="learnblockItems" align="right">
           <c:choose>
             <c:when test="${! empty madeTest}">
-              <mm:link referids="test,_node@problem,student_id,sub?,madeTest@madetestNo">
+              <mm:link referids="test,_node@problem,student_id,sub?,madeTest@madetestNo,class">
                 <mm:param name="subsub">stage2-evaluate-coach</mm:param>
                 <a href="${_}">bekijk uitwerking</a>
               </mm:link>
