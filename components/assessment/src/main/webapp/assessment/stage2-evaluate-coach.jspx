@@ -13,6 +13,7 @@
   -->
   <mm:import externid="problem" required="true" />
   <mm:import externid="test"    required="true" />
+  <mm:import externid="class"    required="true" />
   <mm:import externid="sub" />
   <mm:import externid="student_id" required="true"/>
 
@@ -31,7 +32,7 @@
       </mm:link>
     </p>
     <p>
-      <mm:link page="/homework/" referids="sub">
+      <mm:link page="/homework/" referids="sub,class">
         <mm:param name="subsub">coach_student_overview</mm:param>
         <mm:param name="student_id">${student_id}</mm:param>
         <a href="${_}">&amp;lt; terug naar probleemlijst van <mm:write referid="studentname" /></a>

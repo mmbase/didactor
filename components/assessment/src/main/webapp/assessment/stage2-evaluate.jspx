@@ -64,6 +64,8 @@
 
           </mm:node>
 
+
+          MADETEST: ${madetest}
           <mm:treeinclude page="/assessment/stage2-evaluate-buildtest.jspx"
                           referids="test@learnobject,madetest"  objectlist="$includePath"/>
 
