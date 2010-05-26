@@ -25,7 +25,16 @@
       <mm:node number="${student_id}"><mm:field id="studentName" name="firstname"/></mm:node>
     </h2>
     <div>
-      <p>Dit is een overzicht van de problemenlijst van  ${studentName}</p>
+      <p>
+        <jsp:text>Dit is een overzicht van de problemenlijst van  ${studentName}, </jsp:text>
+        <jsp:text>uit de klas </jsp:text>
+        <mm:node number="${class}">
+          <mm:field name="name"  />
+          <jsp:text> (</jsp:text>
+          <mm:node element="education"><mm:field name="name" /></mm:node>
+          <jsp:text>).</jsp:text>
+        </mm:node>
+      </p>
     </div>
 
 
