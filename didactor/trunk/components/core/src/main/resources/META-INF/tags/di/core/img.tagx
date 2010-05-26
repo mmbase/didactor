@@ -9,13 +9,16 @@
   <jsp:directive.attribute name="title"    />
   <jsp:directive.attribute name="onclick"    />
   <jsp:directive.attribute name="id"    />
+  <jsp:directive.attribute name="style"    />
 
-  <img src="${mm:treelink(src, includePath)}"
-       border="0"
-       title="${di:translate(title)}"
-       alt="${di:translate(title)}"
-       onclick="${onclick}"
-       id="${id}"
-       />
+  <img
+      src="${mm:treelink(src, includePath)}"
+      border="0"
+      title="${di:translate(title)}"
+      alt="${di:translate(title)}"
+      onclick="${onclick}"
+      id="${id}"
+      style="${style}"
+      />
 
 </jsp:root>
