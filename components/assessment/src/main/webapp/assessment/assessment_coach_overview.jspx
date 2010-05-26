@@ -11,6 +11,10 @@
   <mm:import externid="subsub" />
   <mm:import externid="lesson" />
 
+  <!--
+       shows an overview of classes of this coach
+  -->
+
   <mm:node number="$user" notfound="skip">
     <div>
       <table class="poplistTable">
@@ -33,6 +37,7 @@
               </mm:relatednodes>
             </mm:relatednodescontainer>
           </mm:node>
+          <th class="listHeader" />
         </tr>
         <mm:relatednodes type="classes" path="classrel,classes" id="class">
           <mm:relatednodescontainer
@@ -41,25 +46,35 @@
             <mm:constraint field="roles.name" value="student" />
             <mm:distinct />
             <mm:sortorder field="${di:setting('core', 'personorderfield')}" casesensitive="false" />
-            <mm:relatednodes id="student">
-
-              <mm:first>
+            <mm:size>
+              <mm:isgreaterthan value="0">
                 <tr>
-                  <th class="listHeader">
+                  <th class="listHeader" colspan="${fn:length(learnblocks) + 2}">
                     <di:img src="/assessment/gfx/minus.gif"
                             title="assessment.show.problems"
-                            onclick="toggle(${class})"
-                            id="toggle_image${class}" />
+                            style="${education eq class.education.number ? '' : 'display: none;'}"
+                            onclick="$('.toggle_div${class}').toggle(); $(this).hide(); $(this).next().show();"
+                            />
+                    <di:img src="/assessment/gfx/plus.gif"
+                            title="assessment.hide.problems"
+                            style="${education eq class.education.number ? 'display: none;' : ''}"
+                            onclick="$('.toggle_div${class}').toggle(); $(this).hide(); $(this).prev().show()"
+                             />
                     <jsp:text> </jsp:text>
                     <mm:field name="name" node="class" />
+                    <mm:node node="class" element="education">
+                      <jsp:text> (</jsp:text>
+                      <mm:field name="name" />
+                      <jsp:text>) </jsp:text>
+                    </mm:node>
                   </th>
-                  <c:forEach begin="1" end="${fn:length(learnblocks)}">
-                    <th class="listHeader">&amp;nbsp;</th>
-                  </c:forEach>
                 </tr>
-              </mm:first>
-
-              <tr class="toggle_div${class}" id="toggle_div${class}_${_node}">
+              </mm:isgreaterthan>
+            </mm:size>
+            <mm:relatednodes id="student">
+              <tr class="toggle_div${class}"
+                  style="${education ne class.education.number ? 'display: none;' : ''}"
+                  id="toggle_div${class}_${_node}">
                 <td class="listItem">
                   <mm:node>
                     <mm:link referids="sub?,class">
