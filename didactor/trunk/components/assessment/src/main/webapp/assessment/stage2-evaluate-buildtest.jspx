@@ -18,7 +18,6 @@
       <mm:node id="learnobject" referid="learnobject" />
       <di:copybook><mm:node id="copybookNo" /></di:copybook>
 
-
       <div class="content learnenvironment tests">
         <!-- Take care: form name is used in JavaScript of the specific question jsp pages! -->
         <mm:treefile id="post" page="/assessment/stage2-evaluate-save.jspx" objectlist="$includePath" referids="$referids,learnobject,madetest" write="false"/>

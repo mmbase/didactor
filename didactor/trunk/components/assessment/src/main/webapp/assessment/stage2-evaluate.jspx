@@ -36,6 +36,7 @@
             <di:copybook><mm:node id="copybookNo" /></di:copybook>
             <mm:relatednodescontainer path="madetests,copybooks" element="madetests">
               <mm:addnode element="copybooks" number="${copybookNo}"/>
+              <mm:sortorder field="number" />
               <mm:relatednodes id="this_madetest">
                 <mm:relatednodescontainer role="related" type="problems">
                   <mm:addnode number="${problem}" />
@@ -45,7 +46,6 @@
                 </mm:relatednodescontainer>
               </mm:relatednodes>
             </mm:relatednodescontainer>
-
             <mm:notpresent referid="madetest">
               <mm:createnode type="madetests" id="madetest">
                 <mm:setfield name="date"><mm:time time="now"/></mm:setfield>
@@ -65,7 +65,6 @@
           </mm:node>
 
 
-          MADETEST: ${madetest}
           <mm:treeinclude page="/assessment/stage2-evaluate-buildtest.jspx"
                           referids="test@learnobject,madetest"  objectlist="$includePath"/>
 

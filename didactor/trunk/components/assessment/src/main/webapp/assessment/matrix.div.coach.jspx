@@ -25,17 +25,18 @@
       <c:set var="blockCount" value="0" />
 
       <!-- And, per lesson, how much trouble it gave -->
-      <mm:node number="${education}">
-        <mm:nodelistfunction name="lessons" id="learnBlock">
-          <!--
-              Create the relation problem-posrel->learnBlock if that does not exist yet.  The
-              'position' field is abused to indicate how much trouble the problem gave after this
-              lesson.  Really, there should not have been used 'posrel' here. Because _pos_rel is of
-              course for _position_, and is not some generic integer which can be used for whatever one
-              likes.
-              Only for closed lessons, and the first open one.
-              _I_ did not come up with this.
-          -->
+      <mm:node number="${class}">
+        <mm:node element="education">
+          <mm:nodelistfunction name="lessons" id="learnBlock">
+            <!--
+                Create the relation problem-posrel->learnBlock if that does not exist yet.  The
+                'position' field is abused to indicate how much trouble the problem gave after this
+                lesson.  Really, there should not have been used 'posrel' here. Because _pos_rel is of
+                course for _position_, and is not some generic integer which can be used for whatever one
+                likes.
+                Only for closed lessons, and the first open one.
+                _I_ did not come up with this.
+            -->
           <mm:relation to="${student_id}" notfound="null">
             <c:if test="${! empty _node or empty firstopenlesson}">
               <c:if test="${empty _node}">
@@ -78,8 +79,8 @@
           </mm:listrelationscontainer>
         </mm:nodelistfunction>
 
+        </mm:node>
       </mm:node>
-
       <mm:import externid="stage" />
       <mm:import externid="sub" />
       <mm:import externid="subsub" />
@@ -89,10 +90,27 @@
         <mm:node id="test" />
       </mm:relatednodes>
 
-      <mm:relatednodes path="madetests,givenanswers" element="madetests" max="1" orderby="number" directions="down">
-        <mm:node id="madeTest" />
-      </mm:relatednodes>
+      <di:copybook student="${student_id}" classNumber="${class}"><mm:node id="copybook" /></di:copybook>
+
       <mm:present referid="test">
+
+        <!-- following code is like in stage2-evaluate.jspx (should this be generalized) -->
+        <mm:node referid="test">
+          <mm:relatednodescontainer path="madetests,copybooks" element="madetests">
+            <mm:addnode element="copybooks" number="${copybook}"/>
+            <mm:sortorder field="number" />
+            <mm:relatednodes id="this_madetest">
+              <mm:relatednodescontainer role="related" type="problems">
+                <mm:addnode number="${problem}" />
+                <mm:relatednodes>
+                  <mm:import id="madeTest" reset="true">${this_madetest}</mm:import>
+                </mm:relatednodes>
+              </mm:relatednodescontainer>
+            </mm:relatednodes>
+          </mm:relatednodescontainer>
+        </mm:node>
+
+
 
         <td colspan="${fn:length(learnBlock) - blockCount}" class="learnblockItems" align="right">
           <c:choose>
