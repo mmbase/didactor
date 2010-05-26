@@ -25,7 +25,7 @@
       Didactor used to have an email builder that automaticly sends on creation of the node (just as mmbase used to be).
       I think this functionlaity perished now.
       The gain is that didactor does not have it's own implemetnation any more.
-      If mmbase could do that transaction (suddenly requiring 'startmail' to be called), so why not didactor.
+      If mmbase could do that transistion (suddenly requiring 'startmail' to be called), so why not didactor.
   -->
 
 

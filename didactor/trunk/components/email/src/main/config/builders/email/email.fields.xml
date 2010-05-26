@@ -72,8 +72,8 @@
     </editor>
     <datatype base="internetaddress" xmlns="http://www.mmbase.org/xmlns/datatypes">
       <property name="local" value="false" />
+      <property name="restrictionEnforceStrength" value="onvalidate" />
       <required value="true" />
-
     </datatype>
     <db>
       <type state="persistent" size="255" notnull="false" key="false">STRING</type>
