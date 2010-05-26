@@ -52,12 +52,12 @@
     </div>
 
     <table>
+      <mm:node number="${class}">
+        <mm:node element="education">
+          <mm:import id="blocknames" escape="text/plain">
+            <!-- cache the block names, because they are repeated for every problem type -->
 
-      <mm:node number="${education}">
-        <mm:import id="blocknames" escape="text/plain">
-          <!-- cache the block names, because they are repeated for every problem type -->
-
-          <mm:nodelistfunction name="lessons" id="learnBlock">
+            <mm:nodelistfunction name="lessons" id="learnBlock">
             <!--
                 If a relation learnBlock -classrel->user exists, then that means that this lesson is marked 'closed' (by this module)
             -->
@@ -66,11 +66,12 @@
                 <mm:field name="name" node="learnBlock" />
               </td>
             </mm:relation>
-        </mm:nodelistfunction>
-        <td><jsp:text> </jsp:text></td>
+            </mm:nodelistfunction>
+            <td><jsp:text> </jsp:text></td>
 
-      </mm:import>
-    </mm:node>
+          </mm:import>
+        </mm:node>
+      </mm:node>
 
 
     <mm:listnodes orderby="pos" type="problemtypes">
