@@ -307,8 +307,8 @@ public class ProviderFilter implements Filter, MMBaseStarter, NodeEventListener,
     }
     public static boolean decorateRequest(HttpServletRequest req, HttpServletResponse res) throws IOException {
 
-        String serverName = req.getServerName();
-        String contextPath = req.getContextPath();
+        String serverName   = req.getServerName();
+        String contextPath  = req.getContextPath();
         HttpSession session = req.getSession(true);
 
         String parameterEducation = req.getParameter("education");
@@ -321,6 +321,7 @@ public class ProviderFilter implements Filter, MMBaseStarter, NodeEventListener,
                 log.debug("education found from session " + parameterEducation);
             } else {
                 session.setAttribute(EDUCATION_KEY, parameterEducation);
+                log.debug("education found on request put on session " + parameterEducation + " for " + req + " " + req.getRequestURL());
             }
         }
 
@@ -602,7 +603,12 @@ public class ProviderFilter implements Filter, MMBaseStarter, NodeEventListener,
                 res.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE, "Didactor not yet initialized");
                 return;
             }
+            HttpSession session = req.getSession(false);
+            if (session != null) {
 
+                res.setHeader("X-Didactor-Education", "" + session.getAttribute(EDUCATION_KEY));
+                res.setHeader("X-Didactor-User", "" + session.getAttribute(USER_KEY));
+            }
             filterChain.doFilter(request, response);
         }
 
