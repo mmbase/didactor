@@ -605,8 +605,7 @@ public class ProviderFilter implements Filter, MMBaseStarter, NodeEventListener,
             }
             HttpSession session = req.getSession(false);
             if (session != null) {
-
-                res.setHeader("X-Didactor-Education", "" + session.getAttribute(EDUCATION_KEY));
+                res.setHeader("X-Didactor-Education", "" + session.getAttribute(EDUCATION_KEY) + "/" + req.getAttribute("education"));
                 res.setHeader("X-Didactor-User", "" + session.getAttribute(USER_KEY));
             }
             filterChain.doFilter(request, response);
