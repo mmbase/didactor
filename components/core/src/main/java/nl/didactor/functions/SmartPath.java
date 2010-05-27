@@ -9,7 +9,7 @@ import org.mmbase.module.core.MMObjectNode;
 import org.mmbase.util.logging.*;
 
 /**
- * This builder implements the 'getSmartPath()' method (used by 
+ * This builder implements the 'getSmartPath()' method (used by
  * TreeInclude / Leafinclude) by using values in the fields that
  * are specified in the builder XML file.
  *
@@ -30,12 +30,15 @@ public class SmartPath extends org.mmbase.module.core.SmartPathFunction {
 
         if (spFieldName == null || spFieldName.equals("")) {
             throw new RuntimeException("You must specify the 'smartpathfield' property in your <properties> block for this builder " + parent);
-        } 
+        }
         spFieldNames = spFieldName.split("\\s*,\\s*");
 
         String p = parent.getInitParameter("pathprefix");
         if (p == null) p = "";
         spPathPrefix = p;
+        if (log.isDebugEnabled()) {
+            log.debug("Instantiated " + this + " for " + parent + " " + Arrays.asList(spFieldNames));
+        }
     }
 
     public void setDidactor(String test) {
@@ -44,6 +47,7 @@ public class SmartPath extends org.mmbase.module.core.SmartPathFunction {
 
     /**
      */
+    @Override
     protected String getSmartPath() {
         if (log.isDebugEnabled()) {
             log.debug("starting getSmartPath(" + webRoot + "," + path + "," + nodeNumber + "," + version + ")");
@@ -61,7 +65,7 @@ public class SmartPath extends org.mmbase.module.core.SmartPathFunction {
         ResourceLoader child = webRoot.getChildResourceLoader(path);
 
         String n = nodeNumber;
-        if (version != null && ! version.equals("")) n += "\\." + version;       
+        if (version != null && ! version.equals("")) n += "\\." + version;
         MMObjectNode node = parent.getNode(n);
 
         String magName = null;
