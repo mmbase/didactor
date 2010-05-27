@@ -454,6 +454,16 @@
       <datatype base="boolean" xmlns="http://www.mmbase.org/xmlns/datatypes" />
     </field>
 
+    <field name="context" state="virtual" readonly="true">
+      <datatype base="eline" xmlns="http://www.mmbase.org/xmlns/datatypes">
+        <getprocessor>
+          <class name="org.mmbase.datatypes.processors.OtherField$Getter">
+            <param name="field">username</param>
+          </class>
+        </getprocessor>
+      </datatype>
+    </field>
+
   </fieldlist>
 
   <functionlist>

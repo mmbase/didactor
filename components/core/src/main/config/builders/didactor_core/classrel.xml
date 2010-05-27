@@ -91,5 +91,16 @@
       <datatype base="node" xmlns="http://www.mmbase.org/xmlns/datatypes" />
     </field>
 
+    <field name="context" state="virtual" readonly="true">
+      <datatype base="node" xmlns="http://www.mmbase.org/xmlns/datatypes">
+        <getprocessor>
+          <class name="org.mmbase.datatypes.processors.OtherField$Getter">
+            <param name="field">snumber</param>
+          </class>
+        </getprocessor>
+      </datatype>
+    </field>
+
   </fieldlist>
+
 </builder>
