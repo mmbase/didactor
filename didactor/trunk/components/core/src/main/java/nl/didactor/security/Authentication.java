@@ -68,12 +68,15 @@ public class Authentication extends org.mmbase.security.Authentication {
         }
     }
     static final UserContext ANONYMOUS;
+    static final Rank        UNPARTICIPANT;
+    static final Rank        DIDACTOR_USER;
+    static final Rank        DIDACTOR_EDITOR;
     static {
         ANONYMOUS  = new UserContext("anonymous", "anonymous", Rank.ANONYMOUS, "anonymous");
-        Rank.createRank(20,  "unparticipant");
-        Rank.createRank(50,  "didactor user"); // lower than 'basic' user, because normally didactor
+        UNPARTICIPANT = Rank.createRank(20,  "unparticipant");
+        DIDACTOR_USER = Rank.createRank(50,  "didactor user"); // lower than 'basic' user, because normally didactor
                                                // users may not enter generic editors.
-        Rank.createRank(200, "editor");
+        DIDACTOR_EDITOR = Rank.createRank(200, "editor");
     }
 
     private PeopleBuilder users;
