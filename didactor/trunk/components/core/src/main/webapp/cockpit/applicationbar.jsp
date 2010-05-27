@@ -21,12 +21,10 @@
             <p>
               <input type="hidden" name="authenticate"  value="plain"  />
               <input type="hidden" name="command"       value="login" />
-              <input type="hidden" name="provider"       value="${provider}" />
-              <input type="hidden" name="education"       value="${education}" />
               <mm:fieldlist nodetype="people" fields="username">
                 <mm:fieldinfo type="guiname" />
               </mm:fieldlist>
-              <input id="loginUsername" type="text" size="20" name="username" value="${sessionScope.registerPerson.username}${sessionScope['nl.didactor.security.parameters'].username[0]}" />
+              <input id="loginUsername" type="text" size="20" name="username" value="${sessionScope.registerPerson.username}${sessionScope['nl.didactor.security.parameters'].username}" />
               <mm:fieldlist nodetype="people" fields="password">
                 <mm:fieldinfo type="guiname" />
               </mm:fieldlist>
