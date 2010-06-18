@@ -36,6 +36,10 @@
       <entry value="problemtype_solvable"    xml:lang="nl" display="Oplosbaar" />
       <entry value="problemtype_notsolvable" xml:lang="nl" display="Onoplosbaar" />
 
+      <entry value="problemtype_unimportant" xml:lang="tr" display="Önemsiz problemler" />
+      <entry value="problemtype_solvable"    xml:lang="tr" display="Çözülebilir problemler" />
+      <entry value="problemtype_notsolvable" xml:lang="tr" display="Çözülemez problemler" />
+
     </enumeration>
   </datatype>
 
