@@ -22,8 +22,8 @@
 
     <div class="problemItemCategories">
       <mm:field id="${fieldlistid}_type" name="type">
-        <mm:fieldinfo datatype="didactor_assessment_problemtypes" type="input" />
-        <mm:fieldinfo datatype="didactor_assessment_problemtypes" type="errors" />
+        <mm:fieldinfo type="input" />
+        <mm:fieldinfo type="errors" />
       </mm:field>
 
       <mm:present referid="currentlesson">
