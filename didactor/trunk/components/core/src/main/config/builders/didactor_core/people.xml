@@ -35,6 +35,7 @@
         <guiname xml:lang="bg">Потребителско име</guiname>
         <guiname xml:lang="ro">Utilizator</guiname>
         <guiname xml:lang="eo">Uzulo</guiname>
+        <guiname xml:lang="tr">Kullanıcı adı</guiname>
       </gui>
       <editor>
         <positions>
@@ -335,6 +336,7 @@
         <guiname xml:lang="bg">Парола</guiname>
         <guiname xml:lang="ro">Parola</guiname>
         <guiname xml:lang="eo">Pasvorto</guiname>
+        <guiname xml:lang="tr">Şifre</guiname>
       </gui>
       <datatype base="eline" xmlns="http://www.mmbase.org/xmlns/datatypes">
         <required value="false" />
