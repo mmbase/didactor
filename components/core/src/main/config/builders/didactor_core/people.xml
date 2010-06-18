@@ -306,6 +306,7 @@
       <gui>
         <guiname xml:lang="en">Age</guiname>
         <guiname xml:lang="nl">Leeftijd</guiname>
+        <guiname xml:lang="eo">Aĝo</guiname>
       </gui>
       <datatype base="didactor_people_age" xmlns="http://www.mmbase.org/xmlns/datatypes" />
     </field>
