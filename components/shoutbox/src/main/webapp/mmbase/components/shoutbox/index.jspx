@@ -105,8 +105,8 @@
 
             <select name="self" id="self">
               <mm:option value=""     compare="${self}">--</mm:option>
-              <mm:option value="only" compare="${self}">Only from myself</mm:option>
-              <mm:option value="not"  compare="${self}">Not from myself </mm:option>
+              <mm:option value="only" compare="${self}"><fmt:message key="only_from_self" /></mm:option>
+              <mm:option value="not"  compare="${self}"><fmt:message key="not_from_myself" /></mm:option>
             </select>
           </form>
 
