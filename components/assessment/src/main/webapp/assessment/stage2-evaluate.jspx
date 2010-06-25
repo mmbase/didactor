@@ -18,13 +18,11 @@
 
       <mm:node referid="problem">
 
-
-
-        <h2>Probleem:</h2>
+        <h2><di:translate key="assessment.problem" />:</h2>
         <h4><mm:field name="name" /></h4>
 
         <div class="problemImpact">
-          <h2>Wijzig eventueel per les hoeveel last je van dit probleem had</h2>
+          <h2><di:translage key="assessment.stage2_change" /></h2>
 
           <mm:include page="/assessment/stage2-editdifficulties.jspx" />
 
@@ -81,10 +79,10 @@
     </div>
 
     <div class="submitItems">
-      <a href="#" class="formActionLinks" onclick="window.location.reload()">opslaan</a><jsp:text>&amp;nbsp;|&amp;nbsp;</jsp:text>
+      <a href="#" class="formActionLinks" onclick="window.location.reload()"><di:translate key="assessment.save" /></a><jsp:text>&amp;nbsp;|&amp;nbsp;</jsp:text>
       <mm:link page="/homework/">
         <mm:param name="sub">assessment_overview</mm:param>
-        <a href="#" class="formActionLinks" onclick="window.location='${_}'">terug naar problemen aanpakken</a>
+        <a href="#" class="formActionLinks" onclick="window.location='${_}'"><di:translate key="assessment.back_to_problems" /></a>
       </mm:link>
     </div>
   </div>

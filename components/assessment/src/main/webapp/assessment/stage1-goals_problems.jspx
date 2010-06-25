@@ -26,7 +26,7 @@
           role="posrel" orderby="posrel.pos" />
     </mm:treefile>
   </mm:node>
-  <a href="#" class="formActionLinks">opslaan</a>
+  <a href="#" class="formActionLinks"><di:translate key="assessment.save" /></a>
   <!-- problems -->
 
   <h2><di:translate key="assessment.stage1_problems" /></h2>
@@ -52,7 +52,7 @@
     <c:if test="${!empty sub}">
       <mm:param name="sub" referid="sub"/>
     </c:if>
-    <a href="${_}" class="formActionLinks">opslaan</a>
+    <a href="${_}" class="formActionLinks"><di:translate key="assessment.save" /></a>
   </mm:link>
 
   <!-- categorize problems -->

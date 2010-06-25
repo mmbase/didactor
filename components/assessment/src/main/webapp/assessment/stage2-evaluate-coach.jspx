@@ -39,14 +39,14 @@
     <p>
       <mm:link page="/homework/" referids="sub">
         <mm:param name="sub">assessment_coach</mm:param>
-        <a href="${_}">&amp;lt;&amp;lt; terug naar studentenoverzicht</a>
+        <a href="${_}">&amp;lt;&amp;lt; <di:translate key="assessment.back_to_overview_students" /></a>
       </mm:link>
     </p>
     <p>
       <mm:link page="/homework/" referids="sub,class">
         <mm:param name="subsub">coach_student_overview</mm:param>
         <mm:param name="student_id">${student_id}</mm:param>
-        <a href="${_}">&amp;lt; terug naar probleemlijst van <mm:write referid="studentname" /></a>
+        <a href="${_}">&amp;lt; <di:translate key="assessment.problemlist_back" arg0="${studentname}" /></a>
       </mm:link>
     </p>
 

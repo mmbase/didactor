@@ -93,7 +93,7 @@
         <mm:param name="stage">stage2-evaluate</mm:param>
         <td colspan="${fn:length(learnBlock) - blockCount}" class="learnblockItems" align="left">
         	<c:if test="${evaluate}">
-          	<a href="${_}">uitwerken</a>
+          	<a href="${_}"><di:translate key="assessment.elaborate" /></a>
           </c:if>
           <jsp:text> </jsp:text>
         </td>
