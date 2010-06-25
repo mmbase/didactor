@@ -35,7 +35,7 @@
       <c:if test="${!empty sub}">
         <mm:param name="sub" referid="sub"/>
       </c:if>
-      <a href="${_}" class="formActionLinks"><di:translate key="save" /></a>
+      <a href="${_}" class="formActionLinks"><di:translate key="assessment.save" /></a>
     </mm:link>
     <jsp:text>&amp;nbsp;|&amp;nbsp;</jsp:text>
     <input type="hidden" name="coachmode" value="false"  />
