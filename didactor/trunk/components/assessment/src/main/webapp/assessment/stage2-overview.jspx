@@ -8,7 +8,7 @@
   <jsp:output omit-xml-declaration="true" />
 	<mm:import id="currentlesson" from="session" externid="currentlesson_${user}_${education}" />
 
-  <h2>Echt belangrijk in mijn leven is</h2>
+  <h2><di:translate key="assessment.stage2_important" /></h2>
   <div class="goals">
     <mm:node number="$user">
       <ol>
@@ -72,9 +72,7 @@
     <div class="problemTable">
       <table cellspacing="0" class="TDProblem">
         <tr>
-          <td class="problemHeaderLeft"><h2>Mijn zorgen en problemen</h2>
-
-          </td>
+          <td class="problemHeaderLeft"><h2><di:translate key="assessment.stage2-problems" /></h2></td>
           <td class="problemHeaderRight" colspan="7"><h2>Hoeveel last had ik er van</h2></td>
         </tr>
 

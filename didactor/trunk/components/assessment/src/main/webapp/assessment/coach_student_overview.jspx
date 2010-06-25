@@ -16,30 +16,32 @@
     <mm:import externid="student_id" from="parameters" required="true" />
     <mm:import externid="class" from="parameters" required="true" />
     <mm:link page="/homework/" referids="sub?,class" >
-      <a href="${_}">&amp;lt; terug naar studentenoverzicht</a>
+      <a href="${_}">&amp;lt; <di:translate key="assessment.back_to_students_overview" /></a>
     </mm:link>
 
 
     <h2>
-      <jsp:text>Probleemlijst overzicht </jsp:text>
-      <mm:node number="${student_id}"><mm:field id="studentName" name="firstname"/></mm:node>
+      <mm:node number="${student_id}"><mm:field id="studentName" name="firstname" write="false"/></mm:node>
+      <di:translate key="assessment.problemlist_overview" arg0="${studentName}" />
+
     </h2>
     <div>
       <p>
-        <jsp:text>Dit is een overzicht van de problemenlijst van  ${studentName}, </jsp:text>
-        <jsp:text>uit de klas </jsp:text>
-        <mm:node number="${class}">
-          <mm:field name="name"  />
-          <jsp:text> (</jsp:text>
-          <mm:node element="education"><mm:field name="name" /></mm:node>
-          <jsp:text>).</jsp:text>
-        </mm:node>
+        <mm:import id="className">
+          <mm:node number="${class}">
+            <mm:field name="name"  />
+            <jsp:text> (</jsp:text>
+            <mm:node element="education"><mm:field name="name" /></mm:node>
+            <jsp:text>)</jsp:text>
+          </mm:node>
+        </mm:import>
+        <di:translate key="assessment.problemlist_overview_verbose" arg0="${studentName}" arg1="${className}"  />
       </p>
     </div>
 
 
     <div class="list goals">
-      <h2>Belangrijke dingen</h2>
+      <h2><di:message key="important_things" /></h2>
       <ol>
         <mm:node number="${student_id}">
           <mm:relatednodes type="goals" role="posrel" orderby="posrel.pos">

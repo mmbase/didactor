@@ -117,10 +117,10 @@
             <c:when test="${! empty madeTest}">
               <mm:link referids="test,_node@problem,student_id,sub?,madeTest@madetestNo,class">
                 <mm:param name="subsub">stage2-evaluate-coach</mm:param>
-                <a href="${_}">bekijk uitwerking</a>
+                <a href="${_}"><di:translate key="assessment.view_elaboration" /></a>
               </mm:link>
             </c:when>
-            <c:otherwise>nog niet uitgewerkt</c:otherwise>
+            <c:otherwise><di:translate key="assessment.not_yet_elaborated" /></c:otherwise>
           </c:choose>
         </td>
 
