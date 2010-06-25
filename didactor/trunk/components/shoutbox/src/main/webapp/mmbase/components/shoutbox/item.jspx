@@ -28,7 +28,7 @@
         </li>
       </mm:fieldlist>
       <c:if test="${! empty new}" >
-        <li><a class="create" href="" onclick="this.href = document.location.href">verstuur</a></li>
+        <li><a class="create" href="" onclick="this.href = document.location.href"><fmt:message key="send" /></a></li>
       </c:if>
     </ul>
 		<mm-sr:delete />

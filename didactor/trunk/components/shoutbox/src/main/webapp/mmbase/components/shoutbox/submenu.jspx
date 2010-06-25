@@ -17,13 +17,13 @@
       <mm:link page="/c/shoutbox/index" referids="_reference?,source?">
         <mm:param name="self">not</mm:param>
         <a href="${_}" class="first ${self eq 'not' ? 'active' : ''}">
-          <jsp:text>Ontvangen berichten</jsp:text>
+          <fmt:message key="received_messages" />
         </a>
       </mm:link>
       <mm:link page="/c/shoutbox/index" referids="_reference?,source?">
         <mm:param name="self">only</mm:param>
         <a href="${_}" class="last ${self eq 'only' ? 'active' : ''}">
-          <jsp:text>Berichten verzenden</jsp:text>
+          <fmt:message key="send_messages" />
         </a>
       </mm:link>
     </div>
