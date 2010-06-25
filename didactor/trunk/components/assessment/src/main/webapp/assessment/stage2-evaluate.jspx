@@ -22,7 +22,7 @@
         <h4><mm:field name="name" /></h4>
 
         <div class="problemImpact">
-          <h2><di:translage key="assessment.stage2_change" /></h2>
+          <h2><di:translate key="assessment.stage2_change" /></h2>
 
           <mm:include page="/assessment/stage2-editdifficulties.jspx" />
 
