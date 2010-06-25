@@ -9,18 +9,17 @@
 
   <h2><di:translate key="assessment.problems" /></h2>
 
-  <div>
-
-      <p>Maak een lijst van je zorgen en problemen.</p>
+  <div> <!-- does this div makes any sense whatsoever? -->
+    <p><di:translate key="assessment.problemlist_make" /></p>
   </div>
-  
+
   <mm:node number="${user}">
     <mm:treefile
         write="false"
         page="/mmbase/style/images/" objectlist="${includePath}" absolute="context">
       <mm-sr:relatednodes
           icondir="${_}"
-          
+
           path="posrel,problems"
           orderby="posrel.pos" type="problems">
       </mm-sr:relatednodes>

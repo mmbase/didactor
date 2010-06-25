@@ -73,7 +73,7 @@
       <table cellspacing="0" class="TDProblem">
         <tr>
           <td class="problemHeaderLeft"><h2><di:translate key="assessment.stage2-problems" /></h2></td>
-          <td class="problemHeaderRight" colspan="7"><h2>Hoeveel last had ik er van</h2></td>
+          <td class="problemHeaderRight" colspan="7"><h2><di:translate key="assessment.how_much_trouble_pasttense_2" /></h2></td>
         </tr>
 
         <c:set var="problemCount" value="4" />
