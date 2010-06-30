@@ -14,9 +14,13 @@
   <names>
     <singular xml:lang="en">Message</singular>
     <singular xml:lang="nl">Bericht</singular>
+    <singular xml:lang="tr">Mesaj</singular>
+
 
     <plural xml:lang="en">Messages</plural>
     <plural xml:lang="nl">Berichten</plural>
+    <plural xml:lang="tr">Mesajlar</plural>
+
   </names>
 
   <fieldlist>
@@ -25,6 +29,7 @@
       <gui>
         <guiname xml:lang="en">From</guiname>
         <guiname xml:lang="nl">Van</guiname>
+        <guiname xml:lang="tr">Kimden</guiname>
       </gui>
       <editor><positions><list>2</list></positions></editor>
       <datatype base="user" xmlns="http://www.mmbase.org/xmlns/datatypes">
@@ -37,6 +42,7 @@
       <gui>
         <guiname xml:lang="en">Refers</guiname>
         <guiname xml:lang="nl">Behandelt</guiname>
+        <guiname xml:lang="tr">İşleniyor</guiname>
       </gui>
       <descriptions>
         <description xml:lang="en">A node where this shout is about. This normally only further
@@ -50,6 +56,7 @@
       <gui>
         <guiname xml:lang="en">Title</guiname>
         <guiname xml:lang="nl">Titel</guiname>
+        <guiname xml:lang="tr">Başlık</guiname>
       </gui>
       <editor><positions><list>3</list></positions></editor>
       <datatype base="eline" xmlns="http://www.mmbase.org/xmlns/datatypes">
@@ -62,6 +69,7 @@
       <gui>
         <guiname xml:lang="en">Time</guiname>
         <guiname xml:lang="nl">Tijd</guiname>
+        <guiname xml:lang="tr">Zaman</guiname>
       </gui>
       <editor><positions><list>4</list></positions></editor>
       <datatype base="created" xmlns="http://www.mmbase.org/xmlns/datatypes" />
@@ -71,6 +79,7 @@
       <gui>
         <guiname xml:lang="en">Text</guiname>
         <guiname xml:lang="nl">Tekst</guiname>
+        <guiname xml:lang="tr">Metin</guiname>
       </gui>
       <datatype base="field" xmlns="http://www.mmbase.org/xmlns/datatypes">
         <maxLength value="65000" />
