@@ -24,7 +24,12 @@
               <mm:fieldlist nodetype="people" fields="username">
                 <mm:fieldinfo type="guiname" />
               </mm:fieldlist>
-              <input id="loginUsername" type="text" size="20" name="username" value="${sessionScope.registerPerson.username}${sessionScope['nl.didactor.security.parameters'].username}" />
+              <c:catch var="e">
+                <input id="loginUsername" type="text" size="20" name="username" value="${sessionScope.registerPerson.username}${sessionScope['nl.didactor.security.parameters'].username[0]}" />
+              </c:catch>
+              <c:if test="${! empty e}">
+                <input id="loginUsername" type="text" size="20" name="username" value="${sessionScope.registerPerson.username}${sessionScope['nl.didactor.security.parameters'].username}" />
+              </c:if>
               <mm:fieldlist nodetype="people" fields="password">
                 <mm:fieldinfo type="guiname" />
               </mm:fieldlist>
