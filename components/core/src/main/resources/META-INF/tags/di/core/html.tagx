@@ -62,12 +62,22 @@
                     </mm:node>
                   </c:if>
                 </c:forTokens>
-                <jsp:text>${title}</jsp:text>
-                <c:if test="${! empty title_key}">
-                  <di:translate key="${title_key}" />
-                </c:if>
+                <mm:import id="firstpart_title">
+                  <jsp:text>${title}</jsp:text>
+                  <c:if test="${! empty title_key}">
+                    <di:translate key="${title_key}" />
+                  </c:if>
+                </mm:import>
+                <mm:write referid="firstpart_title" escape="none" />
                 <c:if test="${! empty education}">
-                  <mm:node referid="education"><mm:field name="name"><mm:isnotempty> -  <mm:write /></mm:isnotempty></mm:field></mm:node>
+                  <mm:node referid="education">
+                    <mm:field name="name">
+                      <mm:isnotempty>
+                        <c:if test="${! empty firstpart_title}"> -  </c:if>
+                        <mm:write />
+                      </mm:isnotempty>
+                    </mm:field>
+                  </mm:node>
                 </c:if>
               </title>
               <c:if test="${! empty component}">
