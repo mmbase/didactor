@@ -41,7 +41,7 @@
 
 
     <div class="list goals">
-      <h2><di:message key="important_things" /></h2>
+      <h2><di:translate key="important_things" /></h2>
       <ol>
         <mm:node number="${student_id}">
           <mm:relatednodes type="goals" role="posrel" orderby="posrel.pos">
