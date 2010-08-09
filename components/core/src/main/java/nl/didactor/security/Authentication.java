@@ -160,7 +160,7 @@ public class Authentication extends org.mmbase.security.Authentication {
         if (request != null) {
             HttpSession session = request.getSession(false);
             if (session != null) {
-                log.info("Removing keys from session");
+                log.debug("Removing keys from session");
                 session.removeAttribute(nl.didactor.filter.ProviderFilter.USER_KEY);
                 session.removeAttribute(nl.didactor.filter.ProviderFilter.EDUCATION_KEY);
             }
