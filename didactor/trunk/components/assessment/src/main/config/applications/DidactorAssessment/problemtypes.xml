@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <problemtypes exportsource="mmbase://www.didactor.org/version2.0" timestamp="20020516170724">
-    <node number="17001" owner="system">
+    <node number="17001" owner="system" alias="problemtype.default">
         <name>Unimportant problems</name>
         <key>problemtype_unimportant</key>
         <pos>1</pos>
