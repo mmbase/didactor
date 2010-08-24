@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE application PUBLIC "-//MMBase//DTD application config 1.1//EN" "http://www.mmbase.org/dtd/application_1_1.dtd">
-<application name="DidactorEducation" maintainer="didactor.nl" version="22" auto-deploy="true">
+<application name="DidactorEducation" maintainer="didactor.nl" version="23" auto-deploy="true">
   <requirements>
     <requires name="DidactorCore" maintainer="didactor.nl"      />
     <requires name="DidactorComponent" maintainer="didactor.nl"  />
@@ -204,6 +204,7 @@
     <relation from="givenanswers" to="madetests" type="related" />
     <relation from="copybooks"    to="madetests" type="related" />
     <relation from="tests"        to="madetests" type="related" />
+    <relation from="learnblocks"        to="madetests" type="related" />
 
     <!--
     <relation from="learnblocks"  to="madetests" type="related" />
