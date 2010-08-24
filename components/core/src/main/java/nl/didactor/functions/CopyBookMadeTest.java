@@ -58,11 +58,15 @@ public class CopyBookMadeTest {
         return set;
     }
 
-    protected Node getMadeTestHolder(Node test) {
+    protected static Node getMadeTestHolder(Node test) {
         return test.getFunctionValue("madetestholder", null).toNode();
     }
 
 
+    /**
+     * Returns the made tests object related to the givine copy-book,
+     * and optionally to the given test-object
+     */
     public NodeList madetests() {
         Cloud cloud = node.getCloud();
         NodeManager madeTests = cloud.getNodeManager("madetests");
@@ -82,7 +86,9 @@ public class CopyBookMadeTest {
     }
 
     public Node madetest() {
-        if (test == null) throw new IllegalArgumentException("Test parameter is required");
+        if (test == null) {
+            throw new IllegalArgumentException("Test parameter is required");
+        }
         NodeList found = madetests();
 
         if (found.size() > 0) {
@@ -100,11 +106,14 @@ public class CopyBookMadeTest {
         madeTest.commit();
 
         RelationManager rm = cloud.getRelationManager(node.getNodeManager(), madeTests, "related");
-        log.info("" + node.getCloud().equals(cloud) + " " + madeTest.getCloud().equals(cloud) + " " + node.getCloud() + " " + madeTest.getCloud() + " " + cloud + " rm:" + rm.getCloud());
+
+        log.debug("Created a madetests object " + madeTest.getNumber() + " for " + node.getNodeManager().getName() + " " + node.getNumber() + " now relating it");
         Relation rel1 = rm.createRelation(node, madeTest);
         rel1.commit();
-        RelationManager rm2 = cloud.getRelationManager(node.getNodeManager(), madeTests, "related");
-        Relation rel2 = rm2.createRelation(getMadeTestHolder(test), madeTest);
+
+        Node madeTestHolder = getMadeTestHolder(test);
+        RelationManager rm2 = cloud.getRelationManager(madeTestHolder.getNodeManager(), madeTests, "related");
+        Relation rel2 = rm2.createRelation(madeTestHolder, madeTest);
         rel2.commit();
         return madeTest;
     }
