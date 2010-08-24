@@ -132,13 +132,15 @@
         </di:has>
       </c:if>
 
+
       <di:include debug="html"
+                  notfound="skip"
                   page="/education/wizards/menu_items.jspx" />
 
       <di:has editcontext="opleidingen">
         <mm:link page="." referids="e?">
           <mm:param name="mode">educations</mm:param>
-          <a 
+          <a
               class="education_top_menu ${mode eq 'educations' ? 'selected' : ''}"
               href="${_}">
             <di:translate key="education.educationmenueducations" />
