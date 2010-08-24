@@ -36,8 +36,9 @@ public class SmartPath extends org.mmbase.module.core.SmartPathFunction {
         String p = parent.getInitParameter("pathprefix");
         if (p == null) p = "";
         spPathPrefix = p;
-        if (log.isDebugEnabled()) {
-            log.debug("Instantiated " + this + " for " + parent + " " + Arrays.asList(spFieldNames));
+        if (log.isTraceEnabled()) {
+
+            log.trace("Instantiated " + this + " for " + parent + " " + Arrays.asList(spFieldNames));
         }
     }
 
