@@ -8,14 +8,10 @@
       description="Didactor specific (tree) includes" />
   <jsp:directive.attribute name="page"  type="java.lang.String" />
   <jsp:directive.attribute name="debug" type="java.lang.String" />
-  <jsp:directive.attribute name="notfound" type="java.lang.String" />
 
-  <mm:treeinclude debug="${debug}"
+  <mm:treehaspage
                   page="${page}"
-                  notfound="${empty notfound ? 'message' : notfound}"
                   objectlist="${includePath}" >
-    <mm:param name="extraheader">
-      <jsp:doBody />
-    </mm:param>
-  </mm:treeinclude>
+    <jsp:doBody />
+  </mm:treehaspage>
 </jsp:root>
