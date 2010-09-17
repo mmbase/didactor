@@ -187,7 +187,9 @@
   </mm:present>
 
   <mm:notpresent referid="emailNode">
-    <mm:createnode type="emails" id="emailNode" />
+    <mm:createnode type="emails" id="emailNode">
+      <mm:setfield name="subject">subject</mm:setfield>
+    </mm:createnode>
     <mm:remove referid="id" />
     <mm:node id="id" referid="emailNode" />
     <mm:createrelation role="related" source="draftMailboxNode" destination="emailNode"/>
