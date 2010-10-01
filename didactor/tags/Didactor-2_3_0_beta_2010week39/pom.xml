@@ -1,0 +1,49 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                      http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>nl.didactor</groupId>
+  <artifactId>didactor-pom</artifactId>
+  <packaging>pom</packaging>
+  <version>2.3-SNAPSHOT</version>
+  <name>Didactor</name>
+  <url>http://www.mmbase.org</url>
+
+  <modules>
+    <module>components</module>
+    <module>distro</module>
+  </modules>
+
+  <properties>
+    <mmbase.repos>scp://mmbase.org/home/tomcat/downloads/</mmbase.repos>
+  </properties>
+
+  <build>
+    <defaultGoal>install</defaultGoal>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <artifactId>maven-war-plugin</artifactId>
+          <version>2.1-beta-2-20090723.092931-2</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
+  <distributionManagement>
+    <repository>
+      <id>mmbase</id>
+      <name>MMBase maven 2 repository</name>
+      <url>${mmbase.repos}maven2</url>
+    </repository>
+    <snapshotRepository>
+      <id>mmbase-snapshots</id>
+      <name>MMBase Maven2 Snapshot Repository</name>
+      <url>${mmbase.repos}snapshots</url>
+      <uniqueVersion>false</uniqueVersion>
+    </snapshotRepository>
+  </distributionManagement>
+
+</project>

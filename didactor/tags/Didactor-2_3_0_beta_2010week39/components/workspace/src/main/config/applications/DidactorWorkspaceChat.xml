@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE application PUBLIC "-//MMBase//DTD application config 1.1//EN" "http://www.mmbase.org/dtd/application_1_1.dtd">
+<application name="DidactorWorkspaceChat" maintainer="didactor.nl" version="1" auto-deploy="false">
+  <requirements>
+    <requires name="DidactorWorkSpace" maintainer="didactor.nl" />
+    <requires name="DidactorChat"      maintainer="didactor.nl"  />
+
+  </requirements>
+
+  <neededbuilderlist>
+    <builder maintainer="didactor.nl" version="2">folders</builder>
+    <builder maintainer="didactor.nl" version="2">chatlogs</builder>
+  </neededbuilderlist>
+
+  <neededreldeflist>
+    <reldef source="related" target="related" direction="bidirectional" guisourcename="Related" guitargetname="Related" builder="insrel" />
+  </neededreldeflist>
+
+  <allowedrelationlist>
+    <relation from="folders" to="chatlogs" type="related" />
+  </allowedrelationlist>
+
+  <datasourcelist>
+  </datasourcelist>
+
+  <relationsourcelist />
+
+  <contextsourcelist />
+
+  <description><![CDATA[Makes relation folder->chatlogs]]></description>
+
+  <install-notice></install-notice>
+
+</application>
