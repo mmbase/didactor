@@ -112,34 +112,20 @@
           </jsp:attribute>
         </di:blocks>
 
-        <!--
-            WTF WTF, specific code for yet another certain component
-            This must be gone!
-        -->
 
-        <div class="menuSeparatorApplicationMenubar"><jsp:text> </jsp:text></div>
+        <c:if test="${di:setting('core', 'show_configuration')}">
 
+          <div class="menuSeparatorApplicationMenubar"><jsp:text> </jsp:text></div>
+          <div class="menuItemApplicationMenubar">
 
-        <div class="menuItemApplicationMenubar">
-          <mm:hasnode number="component.portfolio">
-            <mm:treefile page="/portfolio/index.jsp?edit=true" objectlist="$includePath" referids="$referids" write="false">
+            <mm:treefile page="/admin/index.jsp"
+                         objectlist="$includePath" referids="$referids" write="false">
               <a title="${di:translate('core.configuration')}"
                  href="${_}" class="menubar"><di:translate key="core.configuration" /></a>
             </mm:treefile>
             <div class="menuSeparatorApplicationMenubar"><jsp:text> </jsp:text></div>
-          </mm:hasnode>
-
-          <mm:hasnode number="component.portfolio" inverse="true">
-            <c:if test="${di:setting('core', 'show_configuration')}">
-              <mm:treefile page="/admin/index.jsp"
-                           objectlist="$includePath" referids="$referids" write="false">
-                <a title="${di:translate('core.configuration')}"
-                   href="${_}" class="menubar"><di:translate key="core.configuration" /></a>
-              </mm:treefile>
-              <div class="menuSeparatorApplicationMenubar"><jsp:text> </jsp:text></div>
-            </c:if>
-          </mm:hasnode>
-        </div>
+          </div>
+        </c:if>
 
 
         <div class="menuItemApplicationMenubar">
