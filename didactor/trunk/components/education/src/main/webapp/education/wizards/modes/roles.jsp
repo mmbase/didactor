@@ -25,7 +25,6 @@
           <!--create new role-->
 
           <li>
-            <di:icon name="menu_root" />
             <di:translate key="education.personstab" />
             <ul>
               <li>
