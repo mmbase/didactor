@@ -8,30 +8,36 @@
 	<jsp:output omit-xml-declaration="true"/>
   <jsp:directive.include file="/mmbase/searchrelate/list/parameters.jspf" />
   <mm:import externid="new" />
-	<fieldset>
-    <legend><mm:nodeinfo type="guinodemanager" /></legend>
-    <mm:hasnodemanager name="properties">
-      <mm:import id="key">shouts.previous_check</mm:import>
-      <mm:function id="previous" nodemanager="properties" name="get" referids="key,parameters.source@node" write="false" />
-    </mm:hasnodemanager>
-    <ul class="${_node.time ge previous ? 'new' : 'old'}">
-      <mm:fieldlist id="flid_${_node}" type="edit" varStatus="status">
-        <li>
-          <mm:fieldinfo type="forid">
-            <label for="${_}"><mm:fieldinfo type="guiname"/>:</label>
-          </mm:fieldinfo>
-          <div class="value">
-            <mm:fieldinfo type="${empty new ?  'guivalue' : 'input'}"
-                          escape="${ empty new ? 'pp,links' : 'none'}"
-                          />
-          </div>
-          <mm:fieldinfo type="errors"/>
-        </li>
-      </mm:fieldlist>
-      <c:if test="${! empty new}" >
-        <li><a class="create" href="" onclick="this.href = document.location.href"><fmt:message key="send" /></a></li>
-      </c:if>
-    </ul>
-		<mm-sr:delete />
-	</fieldset>
+  <fmt:bundle basename="org.mmbase.shoutbox.messages">
+    <fieldset>
+      <legend><mm:nodeinfo type="guinodemanager" /></legend>
+      <mm:hasnodemanager name="properties">
+        <mm:import id="key">shouts.previous_check</mm:import>
+        <mm:function id="previous" nodemanager="properties" name="get" referids="key,parameters.source@node" write="false" />
+      </mm:hasnodemanager>
+      <ul class="${_node.time ge previous ? 'new' : 'old'}">
+        <mm:fieldlist id="flid_${_node}" type="edit" varStatus="status">
+          <li>
+            <mm:fieldinfo type="forid">
+              <label for="${_}"><mm:fieldinfo type="guiname"/>:</label>
+            </mm:fieldinfo>
+            <div class="value">
+              <mm:fieldinfo type="${empty new ?  'guivalue' : 'input'}"
+                            escape="${ empty new ? 'pp,links' : 'none'}"
+                            />
+            </div>
+            <mm:fieldinfo type="errors"/>
+          </li>
+        </mm:fieldlist>
+        <c:if test="${! empty new}" >
+          <li>
+            <a class="create" href="" onclick="this.href = document.location.href">
+              <fmt:message key="send" />
+            </a>
+          </li>
+        </c:if>
+      </ul>
+      <mm-sr:delete />
+    </fieldset>
+  </fmt:bundle>
 </jsp:root>
