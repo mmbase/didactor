@@ -104,7 +104,6 @@
           </c:if>
         </mm:node>
 
-
         <di:blocks styleClass="menuItemApplicationMenubar"
                   classification="applicationbar">
           <jsp:attribute name="separator">
@@ -123,10 +122,11 @@
               <a title="${di:translate('core.configuration')}"
                  href="${_}" class="menubar"><di:translate key="core.configuration" /></a>
             </mm:treefile>
-            <div class="menuSeparatorApplicationMenubar"><jsp:text> </jsp:text></div>
+
           </div>
         </c:if>
 
+        <div class="menuSeparatorApplicationMenubar"><jsp:text>&amp;nbsp;</jsp:text></div>
 
         <div class="menuItemApplicationMenubar">
           <a title="${di:translate('core.print')}"
