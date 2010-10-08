@@ -106,15 +106,15 @@
 
         <di:blocks styleClass="menuItemApplicationMenubar"
                   classification="applicationbar">
-          <jsp:attribute name="separator">
+          <jsp:attribute name="beforefirst">
+            <div class="menuSeparatorApplicationMenubar"><jsp:text> </jsp:text></div>
+          </jsp:attribute>          <jsp:attribute name="separator">
             <div class="menuSeparatorApplicationMenubar"><jsp:text> </jsp:text></div>
           </jsp:attribute>
         </di:blocks>
 
-
         <c:if test="${di:setting('core', 'show_configuration')}">
 
-          <div class="menuSeparatorApplicationMenubar"><jsp:text> </jsp:text></div>
           <div class="menuItemApplicationMenubar">
 
             <mm:treefile page="/admin/index.jsp"
