@@ -44,10 +44,15 @@
           <mm:listrelationscontainer type="learnobjects" role="posrel">
             <mm:addnode element="learnobjects" number="${currentlesson}" />
             <mm:listrelations>
-              <mm:fieldlist fields="pos" id="${fieldlistid}_rel">
-                <mm:fieldinfo  datatype="didactor_assessment_troubles" type="input" />
-                <mm:fieldinfo  datatype="didactor_assessment_troubles" type="errors" />
-              </mm:fieldlist>
+              <mm:first>
+                <mm:fieldlist fields="pos" id="${fieldlistid}_rel">
+                  <mm:fieldinfo  datatype="didactor_assessment_troubles" type="input" />
+                  <mm:fieldinfo  datatype="didactor_assessment_troubles" type="errors" />
+                </mm:fieldlist>
+              </mm:first>
+              <mm:first inverse="true">
+                <mm:deletenode />
+              </mm:first>
             </mm:listrelations>
           </mm:listrelationscontainer>
         </mm:isnotempty>
