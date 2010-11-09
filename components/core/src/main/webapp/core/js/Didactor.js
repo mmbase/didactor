@@ -250,24 +250,28 @@ Didactor.prototype.setUpQuestionEvents = function(div) {
 Didactor.prototype.resolveQuestions = function(el) {
     var did = this;
     this.loadIconOn();
-    $(el).find(".nm_questions").each(
-        function() {
-            var div = $("<div  />");
-            var d = div[0];
-            var a = this;
-            if (did.questions[a] == null) {
-                did.questions[a] = [false, d];
-            }
-            var href = a.href + "&learnobject=" + did.content;
-            $.ajax({async: false, url: href, type: "GET", dataType: "xml", data: null,
-                    complete: function(res, status){
-                        div.append(res.responseText);
-                        div.find("div.question")[0].a = a;
-                        did.setUpQuestionEvents(d);
+    try {
+	$(el).find(".nm_questions").each(
+            function() {
+		var div = $("<div  />");
+		var d = div[0];
+		var a = this;
+		if (did.questions[a] == null) {
+                    did.questions[a] = [false, d];
+		}
+		var href = a.href + "&learnobject=" + did.content;
+		$.ajax({async: false, url: href, type: "GET", dataType: "xml", data: null,
+			complete: function(res, status){
+                            div.append(res.responseText);
+                            div.find("div.question")[0].a = a;
+                            did.setUpQuestionEvents(d);
                     }});
-            $(this).after(div);
-            $(this).remove();
-        });
+		$(this).after(div);
+		$(this).remove();
+            });
+    } catch (e) {
+	alert(e);
+    }
     this.loadIconOff();
 
 }
