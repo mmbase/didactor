@@ -10,7 +10,7 @@
 
     <mm:import externid="stage">stage2-overview</mm:import>
 
-    <di:include page="/homework/currentlesson.jspx" />
+    <di:include page="/assessment/currentlesson.jspx" />
 
     <di:include page="/assessment/${stage}.jspx" />
 
