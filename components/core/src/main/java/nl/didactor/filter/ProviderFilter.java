@@ -288,7 +288,11 @@ public class ProviderFilter implements Filter, MMBaseStarter, NodeEventListener,
             userAttributes = new HashMap<String, Serializable>();
             userAttributes.put("user", 0);
         } else {
-            userAttributes = (Map<String, Serializable>) session.getAttribute(USER_KEY);
+            try {
+                userAttributes = (Map<String, Serializable>) session.getAttribute(USER_KEY);
+            } catch (ClassCastException cce) {
+                userAttributes = null;
+            }
             if (userAttributes == null) {
                 userAttributes = new HashMap<String, Serializable>();
                 session.setAttribute(USER_KEY, userAttributes);
