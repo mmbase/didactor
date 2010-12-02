@@ -8,6 +8,7 @@
   <jsp:output omit-xml-declaration="true" />
   <mm:import externid="sub" />
   <mm:import id="currentlesson" from="session" externid="currentlesson_${user}_${education}" />
+  <mm:import id="currentlearnblock" from="session" externid="currentlearnblock_${user}_${education}" />
 
   <c:if test="${! empty currentlesson}">
     <mm:node referid="currentlesson" id="currentlesson" />
@@ -56,19 +57,24 @@
 		<c:if test="${!empty feedback}">
       <jsp:text>${feedback} | </jsp:text>
 		</c:if>
+
+    <!-- 'back to' link -->
     <mm:link page="/education/">
       <c:set var="target" value="lessons" />
-      <c:if test="${!empty currentlesson}">
-        <mm:node number="${currentlesson}">
- 			 		<c:set var="learnobject" value="${currentlesson}" />
+      <c:if test="${!empty currentlearnblock}">
+        <mm:node number="${currentlearnblock}">
+ 			 		<c:set var="learnobject" value="${_node}" />
 
  			 		<c:if test="${!justclosed}">
- 			 			<c:set var="target" value="assignments" />
- 			 			<!-- TODO: find a nicer/proper way to do this -->
- 			 			<mm:relatednodes type="learnobjects" constraints="lower(name) = 'opdrachten'">
-              <mm:node>
-                <c:set var="learnobject" value="${_node}" />
-              </mm:node>
+            <c:if test="${currentlearnblock eq currentlesson}">
+              <c:set var="target" value="assignments" />
+            </c:if>
+ 			 			<!--
+                 TODO: find a nicer/proper way to do this
+                 WTF
+            -->
+ 			 			<mm:relatednodes type="learnobjects"  constraints="lower(name) = 'opdrachten'">
+              <c:set var="learnobject" value="${_node}" />
  			 			</mm:relatednodes>
  			 		</c:if>
         </mm:node>
