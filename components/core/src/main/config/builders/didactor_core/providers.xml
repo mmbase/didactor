@@ -88,6 +88,11 @@
 
   <functionlist>
     <function name="smartpath">
+      <!--
+      <class name="nl.didactor.functions.SmartPath">
+        <param name="backwardsCompatible">false</param>
+      </class>
+      -->
       <class>nl.didactor.functions.SmartPath</class>
     </function>
     <function name="components">
