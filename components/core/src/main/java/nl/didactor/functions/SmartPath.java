@@ -95,7 +95,9 @@ public class SmartPath extends org.mmbase.module.core.SmartPathFunction {
         Set<String> s = child.getChildContexts(Pattern.compile(".*/" + magName), false);
 
         if (s.size() == 0) {
-            log.debug("Not found " + magName + " in " + child);
+            if (log.isDebugEnabled()) {
+                log.debug("Not found " + magName + " in " + child + " (possibilities: " + child.getChildContexts(java.util.regex.Pattern.compile(".*"), false));
+            }
             return null;
         }
 
