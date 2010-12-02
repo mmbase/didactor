@@ -29,6 +29,11 @@
     <param-value>yes</param-value>
   </context-param>
 
+  <context-param>
+    <param-name>mmbase.defaultRelationStepDirection</param-name>
+    <param-value>DESTINATION</param-value> <!-- Defaults to BOTH in MMBase lt 1.9.4 or this context-param is missing -->
+  </context-param>
+
   <filter>
     <filter-name>Didactor Filter</filter-name>
     <display-name>Didactor</display-name>
