@@ -26,6 +26,11 @@
       <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
+      <name>write</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
       <name>arg0</name>
       <required>false</required>
       <rtexprvalue>true</rtexprvalue>

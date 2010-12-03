@@ -19,13 +19,15 @@ import org.mmbase.util.Casting;
  * @TODO This is absolutely the same as fmt:message. It should be dropped
  * @author Johannes Verelst &lt;johannes.verelst@eo.nl&gt;
  */
-public class TranslateTag extends ContextReferrerTag implements Writer { //, ParamHandler {
+public class TranslateTag extends ContextReferrerTag implements Writer, ParamHandler {
     private static final Logger log = Logging.getLoggerInstance(TranslateTag.class);
 
-    private Map<String, Object> parameters = new HashMap<String, Object>();
+    private TreeMap<Integer, Object> parameters = new TreeMap<Integer, Object>();
 
+    @Override
     public void addParameter(String key, Object value) throws JspTagException {
-        parameters.put(key, value);
+        int k = Integer.parseInt(key);
+        parameters.put(k, value);
     }
 
     // These parameters are set with the different setXyz() methods
@@ -34,12 +36,7 @@ public class TranslateTag extends ContextReferrerTag implements Writer { //, Par
     private String debug;
     private String key;
 
-
-    private String sArg0;
-    private String sArg1;
-    private String sArg2;
-    private String sArg3;
-    private String sArg4;
+    private String arg0, arg1, arg2, arg3, arg4;
 
     public void setKey(String key) {
         if (log.isDebugEnabled()) {
@@ -54,23 +51,23 @@ public class TranslateTag extends ContextReferrerTag implements Writer { //, Par
 
     // It's a giant wtf
     public void setArg0(String value) {
-       this.sArg0 = value;
+        arg0 = value;
     }
 
     public void setArg1(String value) {
-       this.sArg1 = value;
+        arg1 = value;
     }
 
     public void setArg2(String value) {
-       this.sArg2 = value;
+        arg2 = value;
     }
 
     public void setArg3(String value) {
-       this.sArg3 = value;
+        arg3 = value;
     }
 
     public void setArg4(String value) {
-       this.sArg4 = value;
+        arg4 = value;
     }
 
     private String translateDebug  = "";
@@ -90,7 +87,14 @@ public class TranslateTag extends ContextReferrerTag implements Writer { //, Par
                         String translation = "";
 
                         if (key != null) {
-                            translation = tt.translate(key, sArg0, sArg1, sArg2, sArg3, sArg4);
+                            Integer size = parameters.size() == 0 ? 0 : parameters.lastKey() + 1;
+                            String[] params = new String[size];
+                            if (size > 0) {
+                                for (Integer i = parameters.ceilingKey(0); i != null; i = parameters.higherKey(i)) {
+                                    params[i] = Casting.toString(parameters.get(i));
+                                }
+                            }
+                            translation = tt.translate(key, params);
                             if (log.isDebugEnabled()) {
                                 log.debug("Translating '" + key + "' to '" + translation + "' " + tt.translate(key));
                             }
@@ -148,8 +152,14 @@ public class TranslateTag extends ContextReferrerTag implements Writer { //, Par
 
 
     public int doStartTag() throws JspTagException {
+        parameters.clear();
+        parameters.put(0, arg0);
+        parameters.put(1, arg1);
+        parameters.put(2, arg2);
+        parameters.put(3, arg3);
+        parameters.put(4, arg4);
         translateDebug  = "";
-
+        helper.useEscaper(false);
         if (debug == null) {
             // if no debug is given in the tag, then we look it up in the page context
             translateDebug = (String)pageContext.getAttribute("t_debug");
@@ -161,7 +171,6 @@ public class TranslateTag extends ContextReferrerTag implements Writer { //, Par
             pageContext.setAttribute("t_debug", debug);
             translateDebug = debug;
         }
-        helper.useEscaper(false);
         helper.setValue(getTranslation());
         return EVAL_BODY; // lets try _not_ buffering the body.
     }
