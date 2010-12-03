@@ -483,6 +483,13 @@
       <class>nl.didactor.functions.PeopleClassFunction</class>
     </function>
 
+    <function key="peopleTeachers" name="teachers">
+      <class>nl.didactor.functions.PeopleClassFunction</class>
+    </function>
+    <function key="peopleCoaches" name="coaches">
+      <class>nl.didactor.functions.PeopleClassFunction</class>
+    </function>
+
 
     <function key="getBlockedLearnblocksForThisUser" name="blockedLearnBlocks">
       <class>nl.didactor.component.assessment.LessonChecker</class>

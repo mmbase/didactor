@@ -92,6 +92,25 @@ public class PeopleClassFunction {
         return claz;
     }
 
+    public NodeList peopleTeachers() {
+        Node claz = peopleClass();
+
+        if (claz == null) {
+            return node.getCloud().createNodeList();
+        }
+        NodeList teachers = (NodeList) claz.getFunctionValue("teachers", null).get();
+        return teachers;
+    }
+    public NodeList peopleCoaches() {
+        Node claz = peopleClass();
+
+        if (claz == null) {
+            return node.getCloud().createNodeList();
+        }
+        NodeList coaches = (NodeList) claz.getFunctionValue("coaches", null).get();
+        return coaches;
+    }
+
 
 
 

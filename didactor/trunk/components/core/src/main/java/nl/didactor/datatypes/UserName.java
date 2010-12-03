@@ -42,6 +42,7 @@ public class UserName extends StringDataType implements NodeEventListener {
         filled = true;
 
     }
+    @Override
     public void notify(NodeEvent event) {
         if (event.getBuilderName().equals("disallowedusernames")) {
             fillSet();
