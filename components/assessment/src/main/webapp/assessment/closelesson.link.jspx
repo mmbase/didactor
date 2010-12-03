@@ -42,7 +42,8 @@
     <input type="hidden" name="coachmode" value="false"  />
     <input type="hidden" name="lesson" value="${currentlesson}"  />
     <c:if test="${empty feedback and ! empty currentlesson}">
-      <di:translate key="assessment.close_and_send_to_coach" arg0="${currentlesson.name}">
+      <di:translate key="assessment.close_and_send_to_coach">
+        <mm:param name="0">${currentlesson.name}</mm:param>
         <mm:import externid="justclosed">false</mm:import>
         <c:if test="${justclosed}">
           <a href="#" class="formActionLinks"><di:translate key="assessment.sent_lesson" /></a><jsp:text> | </jsp:text>
