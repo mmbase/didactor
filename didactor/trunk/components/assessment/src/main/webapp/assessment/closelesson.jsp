@@ -15,6 +15,8 @@
   -->
   <mm:cloud method="delegate">
 
+
+
     <mm:import externid="lesson" required="true" />
 
     <mm:node number="${lesson}">
@@ -45,18 +47,20 @@
           <mm:import id="from"><mm:field name="email"/></mm:import>
           <mm:import id="subject"><di:translate key="assessment.give_feedback_subj" /> <di:person /></mm:import>
 
-          <mm:nodelistfunction id="teacher" name="teachers">
-            <mm:createnode type="emails">
-              <mm:setfield name="from"><mm:write referid="from"/></mm:setfield>
-              <mm:setfield name="to"><mm:field name="email" node="teacher" /></mm:setfield>
-              <mm:setfield name="subject"><mm:write referid="subject"/></mm:setfield>
-              <mm:setfield name="body">
-                <di:translate key="assessment.give_feedback_body" />
-              </mm:setfield>
-              <mm:setfield name="type">TYPE_ONESHOT</mm:setfield>
-              <mm:function name="startmail" />
-            </mm:createnode>
-          </mm:nodelistfunction>
+          <mm:node number="$class">
+            <mm:nodelistfunction id="teacher" name="teachers">
+              <mm:createnode type="emails">
+                <mm:setfield name="from"><mm:write referid="from"/></mm:setfield>
+                <mm:setfield name="to"><mm:field name="email" node="teacher" /></mm:setfield>
+                <mm:setfield name="subject"><mm:write referid="subject"/></mm:setfield>
+                <mm:setfield name="body">
+                  <di:translate key="assessment.give_feedback_body" />
+                </mm:setfield>
+                <mm:setfield name="type">TYPE_ONESHOT</mm:setfield>
+                <mm:function name="startmail" />
+              </mm:createnode>
+            </mm:nodelistfunction>
+          </mm:node>
         </mm:node>
       </c:if>
 
