@@ -43,25 +43,20 @@
       <c:if test="${di:setting('assessment', 'send_email') eq 'true'}">
         <mm:node number="$user">
           <mm:import id="from"><mm:field name="email"/></mm:import>
-          <mm:import id="subject"><di:translate key="assessment.give_feedback_subj" /> <di:person /> /></mm:import>
-        </mm:node>
+          <mm:import id="subject"><di:translate key="assessment.give_feedback_subj" /> <di:person /></mm:import>
 
-        <mm:node number="$education">
-          <mm:related path="classrel,people">
-            <mm:node element="people" id="teacher">
-
-              <mm:related path="related,roles" constraints="roles.name='teacher'">
-                <mm:createnode type="emails">
-                  <mm:setfield name="from"><mm:write referid="from"/></mm:setfield>
-                  <mm:setfield name="to"><mm:field name="email" node="teacher" /></mm:setfield>
-                  <mm:setfield name="subject"><mm:write referid="subject"/></mm:setfield>
-                  <mm:setfield name="body"><di:translate key="assessment.give_feedback_body" /></mm:setfield>
-                  <mm:setfield name="type">TYPE_ONESHOT</mm:setfield>
-                  <mm:function name="startmail" />
-                </mm:createnode>
-              </mm:related>
-            </mm:node>
-          </mm:related>
+          <mm:nodelistfunction id="teacher" name="teachers">
+            <mm:createnode type="emails">
+              <mm:setfield name="from"><mm:write referid="from"/></mm:setfield>
+              <mm:setfield name="to"><mm:field name="email" node="teacher" /></mm:setfield>
+              <mm:setfield name="subject"><mm:write referid="subject"/></mm:setfield>
+              <mm:setfield name="body">
+                <di:translate key="assessment.give_feedback_body" />
+              </mm:setfield>
+              <mm:setfield name="type">TYPE_ONESHOT</mm:setfield>
+              <mm:function name="startmail" />
+            </mm:createnode>
+          </mm:nodelistfunction>
         </mm:node>
       </c:if>
 
