@@ -45,7 +45,12 @@
       <c:if test="${di:setting('assessment', 'send_email') eq 'true'}">
         <mm:node number="$user">
           <mm:import id="from"><mm:field name="email"/></mm:import>
-          <mm:import id="subject"><di:translate key="assessment.give_feedback_subj" /> <di:person /></mm:import>
+          <mm:import id="subject">
+            <di:translate key="assessment.give_feedback_subj" write="true">
+              <mm:param name="0"><di:person /></mm:param>
+              <mm:param name="1"><mm:node number="$class"><mm:nodeinfo type="gui" /></mm:node></mm:param>
+            </di:translate>
+          </mm:import>
 
           <mm:node number="$class">
             <mm:nodelistfunction id="teacher" name="teachers">
@@ -54,7 +59,17 @@
                 <mm:setfield name="to"><mm:field name="email" node="teacher" /></mm:setfield>
                 <mm:setfield name="subject"><mm:write referid="subject"/></mm:setfield>
                 <mm:setfield name="body">
-                  <di:translate key="assessment.give_feedback_body" />
+                  <di:translate key="assessment.give_feedback_body" write="true">
+                    <mm:param name="0"><mm:node number="$user"><di:person /></mm:node></mm:param>
+                    <mm:param name="1"><mm:node number="$class"><mm:nodeinfo type="gui" /></mm:node></mm:param>
+                    <!-- hmm -->
+                    <mm:param name="2">
+                      <mm:url page="/homework" referids="class,user@student_id" absolute="true" escapeamps="false">
+                        <mm:param name="sub">assessment</mm:param>
+                        <mm:param name="subsub">coach_student_overview</mm:param>
+                      </mm:url>
+                    </mm:param>
+                  </di:translate>
                 </mm:setfield>
                 <mm:setfield name="type">TYPE_ONESHOT</mm:setfield>
                 <mm:function name="startmail" />
