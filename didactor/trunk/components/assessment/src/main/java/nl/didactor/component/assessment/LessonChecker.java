@@ -50,7 +50,7 @@ public class LessonChecker {
     /**
      * Calculates and returns those learnblocks that according to this component are to be considered
      * 'lessons'. These are all learnblocks directly related to the education if the
-     * 'related_learnblocks' setting is false, or all those learnblocsk directly related to the
+     * 'related_learnblocks' setting is false, or all those learnblocks directly related to the
      * education and to this component, if that setting is true.
      */
 
