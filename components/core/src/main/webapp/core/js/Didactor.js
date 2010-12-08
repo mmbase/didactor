@@ -57,12 +57,15 @@ function Didactor() {
 		"click",
 		function() {
 		    var href = this.href;
+
+		    var documentHref = document.location.protocol + "//" + document.location.host + document.location.pathname + document.location.search; // so no hash
+
 		    var hashIndex = href.indexOf("#");
 		    var hash = "";
 		    if (hashIndex > 0) {
 			hash = href.substring(hashIndex);
 			href = href.substring(0, hashIndex);
-			if (document.location.href == href) {
+			if (documentHref == href) {
 			    var append = href.indexOf("?") > 0 ? "&" : "?";
 			    href = href + append + "reload";
 			}
