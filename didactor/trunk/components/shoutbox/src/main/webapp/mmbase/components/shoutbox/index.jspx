@@ -16,19 +16,43 @@
 	<div class="learnenvironment" style="background-image: ${empty background ? '' : background}">
 		<div class="mm_c c_shoutbox b_index ${requestScope['org.mmbase.componentClassName']}"
          id="${requestScope['org.mmbase.componentId']}">
-
       <mm:import id="reference" externid="_reference"  />
       <mm:cloud method="asis">
         <mm:param name="org.mmbase.shoutbox.reference" value="${reference}" />
 
         <mm:import externid="source"/>
+
+        <di:hasrole role="teacher">
+          <!--
+               show a drop down with her students
+               TODO: This is more or less didactor specific
+          -->
+          <mm:node number="${class}">
+            <form action="index">
+              <fmt:message key="relatedperson" />
+              <c:if test="${! empty reference}">
+                <input type="hidden" name="reference" value="${reference}" />
+              </c:if>
+              <c:if test="${! empty self}">
+                <input type="hidden" name="self" value="${self}" />
+              </c:if>
+              <select name="source" id="source">
+                <option value=""><mm:node number="${user}"><di:person /></mm:node></option>
+                <mm:nodelistfunction name="students">
+                  <mm:option value="${_node}" compare="${source}"><di:person /></mm:option>
+                </mm:nodelistfunction>
+              </select>
+            </form>
+          </mm:node>
+        </di:hasrole>
+
         <mm:import externid="self">not</mm:import> <!-- hmm -->
 
 
         <script type="text/javascript">
           $(document).ready(function() {
             $("#mm_reference_search").hide();
-            $("#mm_reference,#self").change(function() {
+            $("#mm_reference,#self,#source").change(function() {
               this.form.submit();
               return false;
             });
@@ -39,43 +63,42 @@
           <h1><mm:node referid="source"><mm:nodeinfo type="gui" /></mm:node></h1>
         </c:if>
 
-
         <mm:node number="${source}" emptynumberiscurrentnode="true">
           <!-- source may be empty, in which case it will be the current node, as provided by the framework. -->
 
 
           <mm:hasnodemanager name="properties">
             <c:if test="${empty source}">
-            <!-- The properties builder is used to store the 'last check' time of this page -->
-            <mm:import id="key">shouts.last_check</mm:import>
-            <mm:functioncontainer nodemanager="properties">
-              <mm:param name="node" referid="_node" />
-              <mm:param name="value"><mm:function name="get" referids="key" /></mm:param>
-              <mm:param name="key">shouts.previous_check</mm:param>
-              <mm:function name="set" write="false" />
-            </mm:functioncontainer>
+              <!-- The properties builder is used to store the 'last check' time of this page -->
+              <mm:import id="key">shouts.last_check</mm:import>
+              <mm:functioncontainer nodemanager="properties">
+                <mm:param name="node" referid="_node" />
+                <mm:param name="value"><mm:function name="get" referids="key" /></mm:param>
+                <mm:param name="key">shouts.previous_check</mm:param>
+                <mm:function name="set" write="false" />
+              </mm:functioncontainer>
 
-            <mm:functioncontainer nodemanager="properties">
-              <mm:param name="node" referid="_node" />
-              <mm:param name="value"><mm:time time="now" /></mm:param>
-              <mm:function name="set" referids="key" write="false" />
-            </mm:functioncontainer>
+              <mm:functioncontainer nodemanager="properties">
+                <mm:param name="node" referid="_node" />
+                <mm:param name="value"><mm:time time="now" /></mm:param>
+                <mm:function name="set" referids="key" write="false" />
+              </mm:functioncontainer>
             </c:if>
             <c:if test="${!empty source}">
-            <!-- The properties builder is used to store the 'last check' time of this page -->
-            <mm:import id="key">shouts.last_check_source${source}</mm:import>
-            <mm:functioncontainer nodemanager="properties">
-              <mm:param name="node" referid="_node" />
-              <mm:param name="value"><mm:function name="get" referids="key" /></mm:param>
-              <mm:param name="key">shouts.previous_check_source${source}</mm:param>
-              <mm:function name="set" write="false" />
-            </mm:functioncontainer>
+              <!-- The properties builder is used to store the 'last check' time of this page -->
+              <mm:import id="key">shouts.last_check_source${source}</mm:import>
+              <mm:functioncontainer nodemanager="properties">
+                <mm:param name="node" referid="_node" />
+                <mm:param name="value"><mm:function name="get" referids="key" /></mm:param>
+                <mm:param name="key">shouts.previous_check_source${source}</mm:param>
+                <mm:function name="set" write="false" />
+              </mm:functioncontainer>
 
-            <mm:functioncontainer nodemanager="properties">
-              <mm:param name="node" referid="_node" />
-              <mm:param name="value"><mm:time time="now" /></mm:param>
-              <mm:function name="set" referids="key" write="false" />
-            </mm:functioncontainer>
+              <mm:functioncontainer nodemanager="properties">
+                <mm:param name="node" referid="_node" />
+                <mm:param name="value"><mm:time time="now" /></mm:param>
+                <mm:function name="set" referids="key" write="false" />
+              </mm:functioncontainer>
 
             </c:if>
 
