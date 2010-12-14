@@ -1,0 +1,105 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                      http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.mmbase</groupId>
+    <artifactId>mmbase-application-parent</artifactId>
+    <version>1.9-SNAPSHOT</version>
+  </parent>
+
+  <groupId>nl.didactor</groupId>
+  <artifactId>didactor-components</artifactId>
+  <packaging>pom</packaging>
+  <version>2.3-SNAPSHOT</version>
+  <name>Didactor Components</name>
+  <url>http://www.mmbase.org</url>
+
+  <properties>
+    <mmbase.version.number>1.9</mmbase.version.number>
+    <mmbase.version.postfix>-SNAPSHOT</mmbase.version.postfix>
+    <mmbase.version>${mmbase.version.number}${mmbase.version.postfix}</mmbase.version>
+    <my.postfix>-servlet25${mmbase.version.postfix}</my.postfix>
+    <base.version>${mmbase.version.number}${my.postfix}</base.version>
+
+    <didactor.version>2.3-SNAPSHOT</didactor.version>
+  </properties>
+
+  <modules>
+    <module>core</module>
+    <module>education</module>
+    <module>portalpages</module>
+    <module>email</module>
+    <module>richtext</module>
+    <module>faq</module>
+    <module>assessment</module>
+    <module>shoutbox</module>
+    <module>links</module>
+    <module>competence</module>
+    <module>register</module>
+    <module>portal</module>
+    <module>address</module>
+    <module>agenda</module>
+    <module>progress</module>
+    <module>report</module>
+    <module>aselect</module>
+    <module>cms</module>
+    <module>drm</module>
+    <module>chat</module>
+    <module>cmshelp</module>
+    <module>pop</module>
+    <module>forum</module>
+    <module>isbo</module>
+    <module>portfolio</module>
+    <module>workspace</module>
+    <module>redspider</module>
+    <module>mailform</module>
+    <module>metadata</module>
+    <module>news</module>
+    <module>proactivemail</module>
+    <module>utils</module>
+    <module>scorm</module>
+    <module>versioning</module>
+    <module>search</module>
+    <module>virtualclassroom</module>
+    <module>projectgroup</module>
+    <module>mmbob</module>
+    <module>sources</module>
+    <!--
+    <module>pdf</module>
+    -->
+  </modules>
+  <build>
+    <defaultGoal>install</defaultGoal>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <!-- this is a version of the war plugin compiled by Michiel. See http://jira.codehaus.org/browse/MWAR-205 -->
+          <artifactId>maven-war-plugin</artifactId>
+          <version>2.1-beta-2-20090723.092931-2</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
+  <repositories>
+    <repository>
+      <id>mmbase</id>
+      <url>http://www.mmbase.org/maven2</url>
+    </repository>
+    <repository>
+      <id>mmbase-snapshots</id>
+      <url>http://www.mmbase.org/snapshots</url>
+    </repository>
+  </repositories>
+  <profiles>
+    <profile>
+      <id>development</id>
+      <properties>
+        <maven.war.useDefaultExcludes>false</maven.war.useDefaultExcludes>
+      </properties>
+    </profile>
+  </profiles>
+</project>
