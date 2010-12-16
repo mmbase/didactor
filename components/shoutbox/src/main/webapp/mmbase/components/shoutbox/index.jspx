@@ -23,27 +23,29 @@
         <mm:import externid="source"/>
 
         <di:hasrole role="teacher">
-          <!--
-               show a drop down with her students
-               TODO: This is more or less didactor specific
-          -->
-          <mm:node number="${class}">
-            <form action="index">
-              <fmt:message key="relatedperson" />
-              <c:if test="${! empty reference}">
-                <input type="hidden" name="reference" value="${reference}" />
-              </c:if>
-              <c:if test="${! empty self}">
-                <input type="hidden" name="self" value="${self}" />
-              </c:if>
-              <select name="source" id="source">
-                <option value=""><mm:node number="${user}"><di:person /></mm:node></option>
-                <mm:nodelistfunction name="students">
+          <c:if test="${! empty class}">
+            <!--
+                show a drop down with her students
+                TODO: This is more or less didactor specific
+            -->
+            <mm:node number="${class}">
+              <form action="index">
+                <fmt:message key="relatedperson" />
+                <c:if test="${! empty reference}">
+                  <input type="hidden" name="reference" value="${reference}" />
+                </c:if>
+                <c:if test="${! empty self}">
+                  <input type="hidden" name="self" value="${self}" />
+                </c:if>
+                <select name="source" id="source">
+                  <option value=""><mm:node number="${user}"><di:person /></mm:node></option>
+                  <mm:nodelistfunction name="students">
                   <mm:option value="${_node}" compare="${source}"><di:person /></mm:option>
-                </mm:nodelistfunction>
+                  </mm:nodelistfunction>
               </select>
-            </form>
-          </mm:node>
+              </form>
+            </mm:node>
+          </c:if>
         </di:hasrole>
 
         <mm:import externid="self">not</mm:import> <!-- hmm -->
