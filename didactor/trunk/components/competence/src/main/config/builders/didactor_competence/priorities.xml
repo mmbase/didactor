@@ -29,6 +29,7 @@
         <required value="true" enforce="never"/>
         <maxLength value="255" enforce="never"/>
       </datatype>
+      <db><type notnull="true" /></db>
     </field>
 
 
@@ -41,6 +42,7 @@
         <required value="true" enforce="never"/>
         <maxLength value="1024" enforce="never"/>
       </datatype>
+      <db><type notnull="true" /></db>
     </field>
 
     <field name="pos">
