@@ -50,7 +50,9 @@
         <guiname xml:lang="nl">Position</guiname>
         <guiname xml:lang="en">Position</guiname>
       </gui>
-      <datatype base="integer" xmlns="http://www.mmbase.org/xmlns/datatypes"  />
+      <datatype base="integer" xmlns="http://www.mmbase.org/xmlns/datatypes">
+        <default value="0" />
+      </datatype>
     </field>
   </fieldlist>
 </builder>
