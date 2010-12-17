@@ -261,7 +261,7 @@ public class ComponentBuilder extends DidactorBuilder {
                 String appname = appNode.getStringValue("name");
                 String path = "applications/";
                 if (! ResourceLoader.getConfigurationRoot().getResource(path + appname + ".xml").openConnection().getDoInput()) {
-                    log.warn("Application '" +  appname + "' is in the Versions table, but application XML file cannot be loaded.");
+                    log.service("Application '" +  appname + "' is in the Versions table, but application XML file cannot be loaded.");
                     continue;
                 }
                 ApplicationReader app = new ApplicationReader(ResourceLoader.getConfigurationRoot().getInputSource(path + appname + ".xml"));
