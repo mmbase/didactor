@@ -274,7 +274,7 @@ public class ProviderFilter implements Filter, MMBaseStarter, NodeEventListener,
 
     private static Set<String> NODE_KEYS = new HashSet<String>();
     static {
-        NODE_KEYS.add("class");
+        //NODE_KEYS.add("class");
         NODE_KEYS.add("classNode");
         NODE_KEYS.add("education");
         NODE_KEYS.add("provider");
@@ -482,7 +482,7 @@ public class ProviderFilter implements Filter, MMBaseStarter, NodeEventListener,
         if (c != null) {
             if (cloud.hasNode(c)) {
                 userAttributes.put("classNode", cloud.getNode(c).getNumber());
-                userAttributes.put("class", cloud.getNode(c).getNumber()); // not compatible with tomcat 7
+                //userAttributes.put("class", cloud.getNode(c).getNumber()); // not compatible with tomcat 7
             }
         } else {
             Integer userClass = (Integer) userAttributes.get("classNode");
@@ -496,7 +496,7 @@ public class ProviderFilter implements Filter, MMBaseStarter, NodeEventListener,
                     if (education != claz.getIntValue("education")) {
                         userClass = null;
                         userAttributes.put("classNode", null);
-                        userAttributes.put("class", null);
+                        //userAttributes.put("class", null);
                     }
                 }
 
@@ -512,13 +512,13 @@ public class ProviderFilter implements Filter, MMBaseStarter, NodeEventListener,
                             params.set("education", education);
                             Node claz = (Node) fun.getFunctionValue(params);
                             userAttributes.put("classNode", claz == null ? null : claz.getNumber());
-                            userAttributes.put("class", claz == null ? null : claz.getNumber());
+                            //userAttributes.put("class", claz == null ? null : claz.getNumber());
                             log.debug("Found " + (claz == null ? "NULL" : claz.getNumber()) + " for user " + (user == null ? "NULL" : user.getNumber()) + " and education " + (education == null ? "NULL" : education));
                         } catch (NotFoundException nfe) {
                             log.warn(nfe);
                             // never mind
                             userAttributes.put("classNode", null);
-                            userAttributes.put("class", null);
+                            // userAttributes.put("class", null);
                         }
                     }
                 } else {
