@@ -49,7 +49,7 @@
       <mm:write request="kupulink_seq" value="${kupulink_seq + 1}" />
     </c:if>
 
-    <!-- support for backgraound -->
+    <!-- support for background -->
     <c:if test="${! empty _node }">
 
       <mm:notpresent referid="sourcemanager">
@@ -59,15 +59,8 @@
       <mm:hasrelationmanager sourcemanager="$sourcemanager"
                              destinationmanager="images"
                              role="background">
-        <mm:relatednodescontainer id="current" type="images" role="background">
-          <mm:maxnumber value="1" />
-        </mm:relatednodescontainer>
-        <mm:listnodescontainer id="repository" type="images" />
 
-        <mm:write session="bg_${node}_current"    referid="current" />
-        <mm:write session="bg_${node}_repository" referid="repository" />
-        <mm:param name="prefix">bg_${node}_</mm:param>
-
+        <mm:param name="repositoryjsp">/education/wizards/repository/background.jspx?node=${node}</mm:param>
         <mm:param name="currentTitle"><di:translate key="rich.backgroundimage" /></mm:param>
         <mm:param name="tools">searchrelate</mm:param>
       </mm:hasrelationmanager>
