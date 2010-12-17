@@ -28,7 +28,7 @@
                 show a drop down with her students
                 TODO: This is more or less didactor specific
             -->
-            <mm:node number="${class}">
+            <mm:node number="${classNode}">
               <form action="index">
                 <fmt:message key="relatedperson" />
                 <c:if test="${! empty reference}">

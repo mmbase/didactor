@@ -53,12 +53,12 @@
                     <di:img src="/assessment/gfx/minus.gif"
                             title="assessment.show.problems"
                             style="${education eq class.education.number ? '' : 'display: none;'}"
-                            onclick="$('.toggle_div${class}').toggle(); $(this).hide(); $(this).next().show();"
+                            onclick="$('.toggle_div${classNode}').toggle(); $(this).hide(); $(this).next().show();"
                             />
                     <di:img src="/assessment/gfx/plus.gif"
                             title="assessment.hide.problems"
                             style="${education eq class.education.number ? 'display: none;' : ''}"
-                            onclick="$('.toggle_div${class}').toggle(); $(this).hide(); $(this).prev().show()"
+                            onclick="$('.toggle_div${classNode}').toggle(); $(this).hide(); $(this).prev().show()"
                              />
                     <jsp:text> </jsp:text>
                     <mm:field name="name" node="class" />
@@ -72,9 +72,9 @@
               </mm:isgreaterthan>
             </mm:size>
             <mm:relatednodes id="student">
-              <tr class="toggle_div${class}"
+              <tr class="toggle_div${classNode}"
                   style="${education ne class.education.number ? 'display: none;' : ''}"
-                  id="toggle_div${class}_${_node}">
+                  id="toggle_div${classNode}_${_node}">
                 <td class="listItem">
                   <mm:node>
                     <mm:link referids="sub?,class">

@@ -80,7 +80,7 @@
               <mm:import id="class" reset="true">calToday <mm:write referid="class"/></mm:import>
             </st:isset>
             <st:data variable="stdate" name="date" />
-            <td onclick="selectDate(${stdate})"  class="${class}" >
+            <td onclick="selectDate(${stdate})"  class="${classNode}" >
               <st:data name="dayofmonth"/>
             </td>
           </st:dataset>

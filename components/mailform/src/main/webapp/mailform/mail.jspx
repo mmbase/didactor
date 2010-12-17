@@ -22,7 +22,7 @@
 
             <mm:import id="tested_coaches" />
             <mm:compare referid="email_from" value="" inverse="true">
-              <mm:node number="${class}">
+              <mm:node number="${classNode}">
                 <mm:nodelistfunction name="teachers" id="list_of_coaches">
                   <mm:field name="email">
 
@@ -59,7 +59,7 @@
                 <form action="mail_send.jspx" method="post">
                   <input type="hidden" name="provider" value="${provider}"/>
                   <input type="hidden" name="education" value="${education}"/>
-                  <input type="hidden" name="class" value="${class}"/>
+                  <input type="hidden" name="class" value="${classNode}"/>
                   <input type="hidden" name="list_of_coaches" value="${tested_coaches}" />
                   <table class="font" width="90%">
                     <tr>

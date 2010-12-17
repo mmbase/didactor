@@ -42,7 +42,7 @@
     <mm:listnodescontainer type="classrel">
       <mm:constraint field="snumber" value="${user}" />
       <mm:composite operator="or">
-        <mm:constraint field="dnumber" value="${class}" />
+        <mm:constraint field="dnumber" value="${classNode}" />
         <mm:constraint field="dnumber" value="${education}" />
       </mm:composite>
       <mm:listnodes>

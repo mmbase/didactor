@@ -43,7 +43,7 @@
           <div class="contentHeader"><jsp:text> </jsp:text></div>
           <div class="contentBodywit">
           <mm:node number="$education">
-            <b title="${class}"><mm:field name="name" /></b>
+            <b title="${classNode}"><mm:field name="name" /></b>
 
             <table class="font">
 

@@ -25,7 +25,7 @@
 
   <p>
     <jsp:text>Voor de klas</jsp:text>
-    <mm:node number="${class}">
+    <mm:node number="${classNode}">
       <mm:field name="name" />
       <jsp:text> (</jsp:text>
       <mm:node element="education"><mm:field name="name" /></mm:node>
