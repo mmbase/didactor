@@ -137,7 +137,7 @@
       <input type="hidden" name="callerpage" value="<mm:write referid="callerpage"/>"/>
       <input type="hidden" name="mailbox" value="${mailbox}" />
       <input type="hidden" name="ids" value="${ids}" />
-      <input type="hidden" name="class" value="${class}" />
+      <input type="hidden" name="class" value="${classNode}" />
       <mm:present referid="so">
         <input type="hidden" name="so" value="${so}" />
       </mm:present>

@@ -102,7 +102,7 @@
                     <fmt:formatNumber value="${progress}" type="percent" />
                   </td>
                 </tr>
-                <mm:import externid="c">${class}</mm:import>
+                <mm:import externid="c">${classNode}</mm:import>
 
                 <mm:log>Using class: ${c}</mm:log>
 

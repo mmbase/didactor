@@ -30,7 +30,7 @@
               </mm:compare>
               <mm:compare referid="class" value="" inverse="true">
                 <mm:list fields="classrel.number,classrel.lastlogin" path="people,classrel,classes"
-                         max="1" constraints="people.number=${user} and classes.number=${class}"
+                         max="1" constraints="people.number=${user} and classes.number=${classNode}"
                          orderby="classrel.lastlogin" directions="down">
                   <jsp:directive.include file="onlineStat.jsp" />
                 </mm:list>

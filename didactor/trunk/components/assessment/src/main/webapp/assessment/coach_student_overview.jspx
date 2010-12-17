@@ -28,7 +28,7 @@
     <div>
       <p>
         <mm:import id="className">
-          <mm:node number="${class}">
+          <mm:node number="${classNode}">
             <mm:field name="name"  />
             <jsp:text> (</jsp:text>
             <mm:node element="education"><mm:field name="name" /></mm:node>
@@ -54,7 +54,7 @@
     </div>
 
     <table>
-      <mm:node number="${class}">
+      <mm:node number="${classNode}">
         <mm:node element="education">
           <mm:import id="blocknames" escape="text/plain">
             <!-- cache the block names, because they are repeated for every problem type -->

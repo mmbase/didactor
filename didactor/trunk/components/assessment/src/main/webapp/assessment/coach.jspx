@@ -46,8 +46,8 @@
                   <th class="listHeader">
                     <di:img src="/assessment/gfx/minus.gif"
                             title="assessment.show.problems"
-                            onclick="toggle(${class})"
-                            id="toggle_image${class}" />
+                            onclick="toggle(${classNode})"
+                            id="toggle_image${classNode}" />
                     <jsp:text> </jsp:text>
                     <mm:field name="name" node="class" />
                   </th>
@@ -57,7 +57,7 @@
                 </tr>
               </mm:first>
 
-              <tr class="toggle_div${class}" id="toggle_div${class}_${_node}">
+              <tr class="toggle_div${classNode}" id="toggle_div${classNode}_${_node}">
                 <td class="listItem">
                 <mm:node>
                 <mm:link>

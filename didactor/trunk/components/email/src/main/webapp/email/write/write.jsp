@@ -404,7 +404,7 @@
                     <input type="hidden" name="provider" value="${provider}" />
                   </mm:notpresent>
                   <mm:present referid="class">
-                    <input type="hidden" name="class" value="${class}" />
+                    <input type="hidden" name="class" value="${classNode}" />
                   </mm:present>
                   <mm:present referid="id">
                     <input type="hidden" name="id" value="${id}" />
