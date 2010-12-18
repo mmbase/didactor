@@ -36,6 +36,7 @@
       </gui>
       <editor><positions><list>2</list></positions></editor>
       <datatype base="eline" xmlns="http://www.mmbase.org/xmlns/datatypes">
+        <required value="true" enforce="never" />
         <maxLength value="255" />
       </datatype>
     </field>
@@ -43,10 +44,11 @@
 
     <field name="description">
       <descriptions>
-        <description xml:lang="nl"></description>
-        <description xml:lang="en"></description>
+        <description xml:lang="nl">Beschrijving</description>
+        <description xml:lang="en">Description</description>
       </descriptions>
       <datatype base="field" xmlns="http://www.mmbase.org/xmlns/datatypes">
+        <required value="true" enforce="never" />
         <maxLength value="1024" />
       </datatype>
     </field>
@@ -57,7 +59,10 @@
         <guiname xml:lang="en">Position</guiname>
       </gui>
       <editor><positions><list>3</list></positions></editor>
-      <datatype base="integer" xmlns="http://www.mmbase.org/xmlns/datatypes" />
+      <datatype base="integer" xmlns="http://www.mmbase.org/xmlns/datatypes">
+        <default value="0" />
+        <required value="true" enforce="never" />
+      </datatype>
     </field>
 
   </fieldlist>

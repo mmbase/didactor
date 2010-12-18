@@ -25,6 +25,7 @@
       <datatype base="eline" xmlns="http://www.mmbase.org/xmlns/datatypes">
         <maxLength value="255" />
       </datatype>
+      <db><type notnull="true" /></db>
     </field>
     <field name="description">
       <gui>
@@ -34,6 +35,7 @@
       <datatype base="field" xmlns="http://www.mmbase.org/xmlns/datatypes">
         <maxLength value="65535" />
       </datatype>
+      <db><type notnull="true" /></db>
     </field>
 
     <field name="type" state="virtual">
