@@ -43,6 +43,7 @@
         <guiname xml:lang="en">Text</guiname>
       </gui>
       <datatype base="field" xmlns="http://www.mmbase.org/xmlns/datatypes" >
+        <required value="true" enforce="never" />
         <maxLength value="65535" />
       </datatype>
     </field>
@@ -57,6 +58,7 @@
       </gui>
       <datatype base="integer" xmlns="http://www.mmbase.org/xmlns/datatypes" >
         <default value="1" />
+        <required value="true" />
         <minInclusive value="0" />
       </datatype>
     </field>

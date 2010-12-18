@@ -60,6 +60,7 @@
       <datatype base="integer" xmlns="http://www.mmbase.org/xmlns/datatypes">
         <default value="0" />
         <!-- I do not know what values this field can take -->
+        <required value="true" />
       </datatype>
     </field>
   </fieldlist>

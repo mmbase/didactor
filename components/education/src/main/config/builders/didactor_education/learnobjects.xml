@@ -48,6 +48,7 @@
         <required value="false" />
         <maxLength value="255" enforce="never"/>
       </datatype>
+      <db><type notnull="true" /></db>
     </field>
 
     <field name="showtitle">
