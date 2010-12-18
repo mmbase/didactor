@@ -53,6 +53,7 @@
       <datatype base="integer" xmlns="http://www.mmbase.org/xmlns/datatypes">
         <default value="0" />
       </datatype>
+      <db><type notnull="true" /></db>
     </field>
   </fieldlist>
 </builder>
