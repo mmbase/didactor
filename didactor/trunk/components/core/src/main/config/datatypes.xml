@@ -56,6 +56,7 @@
 
   <datatype id="didactor_people_country" base="eline">
     <required value="false" />
+    <maxLength value="12" />
     <enumeration enforce="oncreate">
       <entry sorterclass="org.mmbase.util.SortedBundle$ValueWrapper"
              basename="org.mmbase.datatypes.resources.iso3166" />
@@ -123,6 +124,7 @@
 
   <datatype base="integer" id="didactor_flashortext">
     <default value="1" />
+    <required value="true" />
     <enumeration>
       <entry value="0" xml:lang="nl" display="Tekst" />
       <entry value="0" xml:lang="en" display="Text" />

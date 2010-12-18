@@ -30,6 +30,7 @@
     <field name="layout">
       <datatype base="integer" xmlns="http://www.mmbase.org/xmlns/datatypes">
         <default value="0" />
+        <required value="true" />
         <enumeration>
           <entry value="0" xml:lang="en" display="All answers below eachother, in random order" />
           <entry value="1" xml:lang="en" display="All answers besides eachother, in random order" />
