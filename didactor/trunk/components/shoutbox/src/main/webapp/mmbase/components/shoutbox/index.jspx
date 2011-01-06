@@ -23,7 +23,7 @@
         <mm:import externid="source"/>
 
         <di:hasrole role="teacher">
-          <c:if test="${! empty class}">
+          <c:if test="${! empty classNode}">
             <!--
                 show a drop down with her students
                 TODO: This is more or less didactor specific
