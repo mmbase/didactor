@@ -7,7 +7,7 @@
           version="2.0">
 	<jsp:output omit-xml-declaration="true"/>
   <jsp:directive.include file="/mmbase/searchrelate/list/parameters.jspf" />
-  <mm:import externid="new" />
+  <mm:import id="newNode" externid="new" />
   <fmt:bundle basename="org.mmbase.shoutbox.messages">
     <fieldset>
       <legend><mm:nodeinfo type="guinodemanager" /></legend>
@@ -22,14 +22,14 @@
               <label for="${_}"><mm:fieldinfo type="guiname"/>:</label>
             </mm:fieldinfo>
             <div class="value">
-              <mm:fieldinfo type="${empty new ?  'guivalue' : 'input'}"
-                            escape="${ empty new ? 'pp,links' : 'none'}"
+              <mm:fieldinfo type="${empty newNode ?  'guivalue' : 'input'}"
+                            escape="${ empty newNode ? 'pp,links' : 'none'}"
                             />
             </div>
             <mm:fieldinfo type="errors"/>
           </li>
         </mm:fieldlist>
-        <c:if test="${! empty new}" >
+        <c:if test="${! empty newNode}" >
           <li>
             <a class="create" href="" onclick="this.href = document.location.href">
               <fmt:message key="send" />
