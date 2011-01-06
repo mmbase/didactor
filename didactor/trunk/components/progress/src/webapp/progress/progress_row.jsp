@@ -16,7 +16,7 @@
       <mm:import externid="student"           required="true"/>
       <mm:import externid="startAt"           jspvar="startAt" vartype="Integer" required="true"/>
       <mm:import externid="direct_connection" required="true"/>
-      <mm:import externid="class" reset="true">${requestScope.class}</mm:import>
+      <mm:import externid="class" reset="true">${requestScope.classNode}</mm:import>
 
 
       <mm:node number="$student">
