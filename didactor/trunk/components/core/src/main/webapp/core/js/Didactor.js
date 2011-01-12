@@ -189,10 +189,20 @@ Didactor.prototype.reportOnline = function (timer, async) {
 	    params = {};
     }
 
+    params.user = this.getSetting("Didactor-User");
+    var self = this;
+
     $.ajax({async: (async == null ? true : async),
             url: this.onlineReporter,
             type: "GET",
-            data: params});
+            data: params,
+	    complete: function(res, status) {
+                var xml = res.responseXML;
+		if (xml != null && "offline" == xml.firstChild.nodeName) {
+		    window.location.href = this.getSetting("Didactor-Root");
+		}
+	    }
+	   });
     this.lastCheck = thisCheck;
 }
 
