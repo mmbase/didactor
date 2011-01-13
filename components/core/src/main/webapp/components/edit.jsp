@@ -15,7 +15,7 @@
             <di:hasrole role="systemadministrator">
               <di:component number="${component}">
                 <h1>${_component.name}</h1>
-                <p>Implementing class: ${_component.class}</p>
+                <p>Implementing class: ${_component['class']}</p>
                 <c:choose>
                   <c:when test="${empty _component.templateBar}">
                     <p>This component is not shown in the navigation bars.</p>
