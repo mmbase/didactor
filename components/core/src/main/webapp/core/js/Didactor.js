@@ -225,6 +225,8 @@ Didactor.prototype.setUpQuestionEvents = function(div) {
     var did = this;
     $(div).find("div.question").each(
         function() {
+	    if (this.alreadySetUpQuestionEvents) return;
+	    this.alreadySetUpQuestionEvents = true;
             var qdiv = this;
             var a = qdiv.a;
             $(qdiv).find("textarea").keyup(function() {
@@ -240,12 +242,11 @@ Didactor.prototype.setUpQuestionEvents = function(div) {
                                                       params[this.name] = this.value;
                                                   });
                     $(qdiv).find("input").each(function() {
-                                                   if (this.type == "checkbox" && ! this.checked) {
+                                                   if ((this.type == "checkbox" || this.type == "radio") && ! this.checked) {
                                                    } else {
                                                        params[this.name] = this.value;
                                                    }
                                                });
-
                     $.ajax({url: this.href, async: false, type: "POST", dataType: "xml", data: params,
                             complete: function(res, status) {
                                 if (status == "success") {
