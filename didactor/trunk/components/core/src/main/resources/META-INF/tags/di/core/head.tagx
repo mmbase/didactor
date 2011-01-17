@@ -20,19 +20,10 @@
       <link href="${_}" rel="stylesheet" type="text/css"  media="print"/>
     </mm:treefile>
 
-
-    <jsp:directive.include file="/mmbase/validation/javascript.jspxf" />
-    <di:script src="/mmbase/jquery/jquery.timer.js" />
-    <di:script src="/core/js/utils.js" />
-    <di:script src="/core/js/jquery.query.js" />
-    <di:script src="/core/js/Didactor.js" />
-    <mm:treefile page="/core/js/specific.js"
-                 objectlist="$includePath" write="false">
-      <script type="text/javascript" src="${_}">
-        <jsp:text><!-- help IE --> </jsp:text>
-      </script>
-    </mm:treefile>
-
+    <di:script src="/core/js/combined.js.jsp" />
+    <mm:write request="org.mmbase.validation" value="yes" />
+    <mm:write request="org.mmbase.jquery" value="yes" />
+    <mm:write request="org.mmbase.jquery.form" value="yes" />
 
     <meta name="Didactor-Provider"     content="${provider}" />
     <meta name="Didactor-Education"    content="${education}" />
