@@ -13,7 +13,7 @@
 
     <!-- Direct relation people->classrel->education -->
     <c:choose>
-      <c:when test="${empty class and empty classNumber}">
+      <c:when test="${empty requestScope['class'] and empty classNumber}">
         <mm:relation role="classrel" to="${education}" notfound="create">
           <mm:relatednodes type="copybooks">
             <jsp:doBody />
