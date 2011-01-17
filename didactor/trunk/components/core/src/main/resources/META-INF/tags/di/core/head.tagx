@@ -6,18 +6,6 @@
     version="2.0">
   <jsp:directive.tag description="Didactor head" />
   <head>
-    <jsp:directive.include file="/mmbase/validation/javascript.jspxf" />
-    <di:script src="/mmbase/jquery/jquery.timer.js" />
-    <di:script src="/core/js/utils.js" />
-    <di:script src="/core/js/jquery.query.js" />
-    <di:script src="/core/js/Didactor.js" />
-    <mm:treefile page="/core/js/specific.js"
-                 objectlist="$includePath" write="false">
-      <script type="text/javascript" src="${_}">
-        <jsp:text><!-- help IE --> </jsp:text>
-      </script>
-    </mm:treefile>
-
 
     <link rel="stylesheet" type="text/css" href="${mm:treelink('/css/base.css', includePath)}" />
 
@@ -31,6 +19,20 @@
       <link href="${_}" rel="alternate stylesheet" title="Printer friendly" type="text/css" media="screen" />
       <link href="${_}" rel="stylesheet" type="text/css"  media="print"/>
     </mm:treefile>
+
+
+    <jsp:directive.include file="/mmbase/validation/javascript.jspxf" />
+    <di:script src="/mmbase/jquery/jquery.timer.js" />
+    <di:script src="/core/js/utils.js" />
+    <di:script src="/core/js/jquery.query.js" />
+    <di:script src="/core/js/Didactor.js" />
+    <mm:treefile page="/core/js/specific.js"
+                 objectlist="$includePath" write="false">
+      <script type="text/javascript" src="${_}">
+        <jsp:text><!-- help IE --> </jsp:text>
+      </script>
+    </mm:treefile>
+
 
     <meta name="Didactor-Provider"     content="${provider}" />
     <meta name="Didactor-Education"    content="${education}" />
