@@ -7,7 +7,9 @@
     version="2.0">
   <jsp:directive.tag description="" />
   <jsp:directive.attribute name="field"    />
+  <jsp:directive.attribute name="timer"    />
+  <jsp:directive.attribute name="time"    type="java.lang.Integer" />
 
-  <rich:field name="${field}" />
+  <rich:field name="${field}" time="${time}" timer="${timer}" />
 
 </jsp:root>
