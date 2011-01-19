@@ -2,7 +2,11 @@
           xmlns:c="http://java.sun.com/jsp/jstl/core"
           xmlns:jsp="http://java.sun.com/JSP/Page"
           xmlns:mm="http://www.mmbase.org/mmbase-taglib-2.0"
+          xmlns:os="http://www.opensymphony.com/oscache"
+
           xmlns:di="http://www.didactor.nl/ditaglib_1.0">
+
+  <os:cache refresh="true">
   <div>
     <mm:cloud method="asis">
       <!--
@@ -23,11 +27,13 @@
           </c:when>
           <c:otherwise>
             <mm:treehaspage page="${domain}${type}/index.jsp" objectlist="$includePath">
-              <mm:treeinclude debug="xml" page="${domain}${type}/index.jsp" objectlist="$includePath" referids="object@learnobject,$referids,fb_madetest?,justposted?" />
+              <mm:treeinclude  debug="${applicationScope.includeDebug}"
+                              page="${domain}${type}/index.jsp" objectlist="$includePath" referids="object@learnobject,$referids,fb_madetest?,justposted?" />
             </mm:treehaspage>
             <mm:treehaspage page="${domain}${type}/index.jsp"
                             objectlist="$includePath" inverse="true">
-              <mm:treeinclude debug="xml" page="${domain}learnblocks/index.jsp" objectlist="$includePath" referids="object@learnobject,$referids,fb_madetest?" />
+              <mm:treeinclude debug="${applicationScope.includeDebug}"
+                              page="${domain}learnblocks/index.jsp" objectlist="$includePath" referids="object@learnobject,$referids,fb_madetest?" />
             </mm:treehaspage>
           </c:otherwise>
         </c:choose>
@@ -37,4 +43,5 @@
       </mm:node>
     </mm:cloud>
   </div>
+  </os:cache>
 </jsp:root>
