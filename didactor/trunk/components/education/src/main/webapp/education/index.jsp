@@ -20,7 +20,9 @@
         </mm:haspage>
       </mm:hasnode>
 
-      <di:include page="/education/bookmark.jspx" />
+      <di:include
+          debug="${applicationScope.includeDebug}"
+          page="/education/bookmark.jspx" />
 
       <div class="rows" id="rows">
         <c:choose>
@@ -29,8 +31,10 @@
           </c:when>
           <c:otherwise>
             <di:script  src="/content/js/open.jsp" />
-            <di:include debug="html" page="/education/navigation.jspx" />
-            <di:include debug="html" page="/education/main.jspx" />
+            <di:include debug="${applicationScope.includeDebug}"
+                        page="/education/navigation.jspx" />
+            <di:include debug="${applicationScope.includeDebug}"
+                        page="/education/main.jspx" />
           </c:otherwise>
         </c:choose>
       </div>
