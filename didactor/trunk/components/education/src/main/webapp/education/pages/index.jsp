@@ -20,12 +20,14 @@
         <!-- TODO How to display objects -->
         <div class="learnenvironment">
           <mm:treeinclude
-              debug="html"
+              debug="${applicationScope.includeDebug}"
               page="/education/pages/content.jsp" objectlist="$includePath"
               referids="$referids,learnobject" />
 
           <mm:node number="$learnobject">
-            <mm:treeinclude page="/education/paragraph/paragraph.jsp" objectlist="$includePath" referids="$referids,learnobject@node_id">
+            <mm:treeinclude
+                debug="${applicationScope.includeDebug}"
+                page="/education/paragraph/paragraph.jsp" objectlist="$includePath" referids="$referids,learnobject@node_id">
               <mm:param name="path_segment">${pageContext.request.contextPath}/education/</mm:param>
             </mm:treeinclude>
           </mm:node>
@@ -41,7 +43,9 @@
           -->
 
 
-          <mm:treeinclude page="/education/prev_next.jsp" referids="includePath,provider" objectlist="$includePath" />
+          <mm:treeinclude
+              debug="${applicationScope.includeDebug}"
+              page="/education/prev_next.jsp" referids="includePath,provider" objectlist="$includePath" />
 
         </div>
       </mm:cloud>
