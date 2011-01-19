@@ -34,6 +34,7 @@ function Didactor() {
                     });
             if (self.pageReporter) {
 	        $(window).bind("beforeunload", function() {
+				   self.loadIconOn();
 				   self.reportOnline(null, false);
 	                       });
             }
@@ -274,7 +275,7 @@ Didactor.prototype.resolveQuestions = function(el) {
                     did.questions[a] = [false, d];
 		}
 		var href = a.href + "&learnobject=" + did.content;
-		$.ajax({async: false, url: href, type: "GET", dataType: "xml", data: null,
+		$.ajax({async: true, url: href, type: "GET", dataType: "xml", data: null,
 			complete: function(res, status){
                             div.append(res.responseText);
                             div.find("div.question")[0].a = a;
@@ -314,9 +315,10 @@ Didactor.prototype.requestContent = function(href, number) {
     var self = this;
     if (content == null) {
         self.loadIconOn();
-        $.ajax({async: false, url: href, type: "GET", dataType: "xml", data: null,
+        $.ajax({async: true, url: href, type: "GET", dataType: "xml", data: null,
                 complete: function(res, status){
                     self.loadIconOff();
+		    $(contentEl).css({opacity: 1.0});
                     if (status == "success") {
                         $(contentEl).empty();
                         $(document).trigger("didactorContentBeforeLoaded",  { response: res, number: number });
@@ -426,10 +428,19 @@ Didactor.prototype.openContent = function(type, number) {
 Didactor.prototype.loadIconOn = function()  {
     var ajax = document.getElementById("ajax_loader");
     if (ajax) ajax.style.display = "inline";
+    var contentEls = $("#contentFrame").find("> *");
+    contentEls.css({opacity: 0.3});
+    contentEls.bind("click.loading", 
+		    function() {
+			return false;
+		    });
 }
 Didactor.prototype.loadIconOff = function() {
     var ajax = document.getElementById("ajax_loader");
     if (ajax) ajax.style.display = "none";
+    var contentEls = $("#contentFrame").find("> *");
+    contentEls.css({opacity: 1});
+    contentEls.unbind("click.loading");
 }
 
 
