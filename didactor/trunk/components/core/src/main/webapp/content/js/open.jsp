@@ -1,8 +1,9 @@
-// -*- mode: java; -*-
+/* -*- mode: javascript; -*-
 <%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm"
 %><%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di"
-%><mm:content type="text/javascript" expires="300" postprocessor="none">
-    <mm:cloud>
+%>
+*///<mm:content type="text/javascript" expires="0" postprocessor="none">
+<mm:cloud>
 
 var ITEM_NONE   = '${mm:treefile("/gfx/icon_arrow_tab_none.gif", pageContext, includePath)}';
 var ITEM_OPENED = '${mm:treefile("/gfx/icon_arrow_tab_open.gif", pageContext, includePath)}';
@@ -385,5 +386,4 @@ function scrollToTop() {
 
 
 
-</mm:cloud>
-</mm:content>
+//</mm:cloud></mm:content>
