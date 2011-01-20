@@ -6,7 +6,6 @@
 
           xmlns:di="http://www.didactor.nl/ditaglib_1.0">
 
-  <os:cache refresh="true">
   <div>
     <mm:cloud method="asis">
       <!--
@@ -43,5 +42,5 @@
       </mm:node>
     </mm:cloud>
   </div>
-  </os:cache>
+
 </jsp:root>
