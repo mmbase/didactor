@@ -7,13 +7,18 @@ function WizardTree() {
 }
 
 WizardTree.prototype.reloadMode = function () {
-    var url = $("#mode_url")[0].href;
+    var a = $("#mode_url");
+    var url = a[0].href;
     var self = this;
     var data = [];
     data.expires = 0;
-    $('#mode-' + this.mode).load(url, data, function() {
-        self.setupTree();
-    });
+    a.next("div").css("opacity", "0.5");
+    a.next("div").find("a").click(function() {});
+    a.next("div").load(url, data, 
+		       function() {
+			   self.setupTree();
+			   a.next("div").css("opacity", "1.0");
+		       });
     return false;
 }
 
