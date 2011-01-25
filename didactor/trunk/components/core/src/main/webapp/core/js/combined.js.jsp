@@ -1,7 +1,7 @@
 /*<%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm"
 %><%@ taglib uri="http://www.opensymphony.com/oscache" prefix="os"
 %><jsp:directive.page session="false" />
-*///<mm:content type="text/javascript" expires="3600" postprocessor="none"><os:cache refresh="${param.refresh eq 'true' ? 'true' : 'false'}" time="3600"><mm:escape escape="javascript-compress">
+*///<mm:content type="text/javascript" expires="3600" postprocessor="none"><os:cache key="combinedjs" refresh="${param.refresh eq 'true' ? 'true' : 'false'}" time="3600"><mm:escape escape="javascript-compress">
   <jsp:directive.include file="/mmbase/jquery/jquery-1.4.4.min.js" />
   <jsp:directive.include file="/mmbase/jquery/jquery.form.js" />
   <jsp:directive.include file="/mmbase/validation/validation.js.jsp" />

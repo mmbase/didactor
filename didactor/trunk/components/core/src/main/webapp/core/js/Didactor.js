@@ -250,7 +250,8 @@ Didactor.prototype.setUpQuestionEvents = function(div) {
                                                        params[this.name] = this.value;
                                                    }
                                                });
-                    $.ajax({url: this.href, async: false, type: "POST", dataType: "xml", data: params,
+                    $.ajax({url: this.href, async: true,  // I think asynchronous should work, but we did it sometime with false
+			    type: "POST", dataType: "xml", data: params,
                             complete: function(res, status) {
                                 if (status == "success") {
                                     $(div).append(res.responseText);
