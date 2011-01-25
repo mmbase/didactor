@@ -34,8 +34,7 @@
               language="${requestScope.language}" expires="${expires}">
     <mm:cloud
         rank="${empty rank ? 'didactor user' : rank}">
-      <html  debug="true"
-             xmlns="http://www.w3.org/1999/xhtml">
+      <html xmlns="http://www.w3.org/1999/xhtml">
 
         <!-- extremely stupid, but I think it is not much used any more. User validation is done by security implementation now. -->
         <mm:import escape="trimmer" id="validatemessage">
