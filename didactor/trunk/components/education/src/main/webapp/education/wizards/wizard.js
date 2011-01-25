@@ -44,7 +44,10 @@ WizardTree.prototype.setupTree = function() {
 }
 
 
-var wizardtree = new WizardTree();
+var wizardtree;
+$(document).ready(function() {
+			  wizardtree = new WizardTree();
+		      });
 
 
 
