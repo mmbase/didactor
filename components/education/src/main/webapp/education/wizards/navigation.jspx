@@ -4,7 +4,6 @@
     xmlns:fn="http://java.sun.com/jsp/jstl/functions"
     xmlns:mm="http://www.mmbase.org/mmbase-taglib-2.0"
     xmlns:di="http://www.didactor.nl/ditaglib_1.0"
-    xmlns:dit="urn:jsptagdir:/WEB-INF/tags/di/core"
     class="navigationbar">
   <jsp:output omit-xml-declaration="true" />
 
@@ -120,7 +119,7 @@
         </di:has>
       </mm:hasnode>
 
-      <dit:blocks classification="editor.menuitem" surrounding_div="false" />
+      <di:blocks classification="editor.menuitem" surrounding_div="false" />
 
       <di:getsetting setting="new_learnobjects" component="core" vartype="list" id="new_learnobjects" write="false" />
       <c:if test="${mm:contains(new_learnobjects, 'tests')}">
