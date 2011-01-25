@@ -19,7 +19,7 @@
     <mm:listnodes>
       <li>
         <span class="folder">
-          <mm:link referid="listjsp" referids="containernode@origin,referrer">
+          <mm:link referid="listjsp" referids="_node@origin,referrer">
             <mm:param name="wizard">config/portalpages/rootportalpagesnodes</mm:param>
             <mm:param name="nodepath">portalpagesnodes</mm:param>
             <mm:param name="fields">name</mm:param>
