@@ -4,15 +4,17 @@
     xmlns:fn="http://java.sun.com/jsp/jstl/functions"
     xmlns:mm="http://www.mmbase.org/mmbase-taglib-2.0"
     xmlns:di="http://www.didactor.nl/ditaglib_1.0"
+    xmlns:dit="urn:jsptagdir:/WEB-INF/tags/di/core"
     class="navigationbar">
   <jsp:output omit-xml-declaration="true" />
+
   <mm:content>
+
     <mm:cloud rank="editor">
 
-      <mm:import externid="e" jspvar="chosen_education" vartype="string">${education}</mm:import>
-
-
+      <mm:import externid="e">${education}</mm:import>
       <mm:import externid="mode">educations</mm:import>
+
 
       <mm:node number="$user" >
         <mm:hasrank value="administrator">
@@ -118,7 +120,7 @@
         </di:has>
       </mm:hasnode>
 
-      <di:blocks classification="editor.menuitem" surrounding_div="false" />
+      <dit:blocks classification="editor.menuitem" surrounding_div="false" />
 
       <di:getsetting setting="new_learnobjects" component="core" vartype="list" id="new_learnobjects" write="false" />
       <c:if test="${mm:contains(new_learnobjects, 'tests')}">
@@ -133,10 +135,6 @@
       </c:if>
 
 
-      <di:include debug="html"
-                  notfound="skip"
-                  page="/education/wizards/menu_items.jspx" />
-
       <di:has editcontext="opleidingen">
         <mm:link page="." referids="e?">
           <mm:param name="mode">educations</mm:param>
@@ -146,32 +144,6 @@
             <di:translate key="education.educationmenueducations" />
           </a>
         </mm:link>
-        <!-- I think this is made superflouus by a more general education-selector in the application bar.
-
-            <c:if test="${fn:length(educations) ge 2}">
-            <script>
-              function chooseEducation(eid) {
-              if (eid != 0) {
-              document.location.href = "?mode=educations&amp;amp;e=" + eid;
-              }
-              }
-            </script>
-            <select name="course" id="course"
-                    onchange="chooseEducation(this.value);">
-              <option value="0">-</option>
-              <mm:listnodes referid="educations">
-                <c:choose>
-                  <c:when test="${_node eq e}">
-                    <option selected="selected" value="${_node}"><mm:field name="name" /></option>
-                  </c:when>
-                  <c:otherwise>
-                    <option value="${_node}"><mm:field name="name" /></option>
-                  </c:otherwise>
-                </c:choose>
-              </mm:listnodes>
-            </select>
-          </c:if>
-          -->
       </di:has>
     </mm:cloud>
   </mm:content>
