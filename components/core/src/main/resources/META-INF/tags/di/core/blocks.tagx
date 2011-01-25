@@ -20,31 +20,36 @@
     </c:if>
     <mm:functioncontainer>
       <mm:param name="id">didactor.${classification}</mm:param>
+
+      <c:set var="count" value="0" />
       <mm:listfunction set="components" name="blockClassification">
         <mm:stringlist referid="_.blocks">
-          <span class="di_c c_${_.component.name} b_${_.name}">
-            <di:component name="${_.component.name}">
-              <c:choose>
-                <c:when test="${! empty  _component.scopesMap.educations}">
-                  <mm:node number="${_component.number}">
-                    <mm:relation role="settingrel" to="${education}">
-                      <mm:import id="do" />
-                    </mm:relation>
-                  </mm:node>
-                </c:when>
-                <c:otherwise>
-                  <mm:import id="do" />
-                </c:otherwise>
-              </c:choose>
-            </di:component>
+          <di:component name="${_.component.name}">
+            <c:choose>
+              <c:when test="${! empty  _component.scopesMap.educations}">
+                <mm:node number="${_component.number}">
+                  <mm:relation role="settingrel" to="${education}">
+                    <mm:import id="do" />
+                  </mm:relation>
+                </mm:node>
+              </c:when>
+              <c:otherwise>
+                <mm:import id="do" />
+              </c:otherwise>
+            </c:choose>
+          </di:component>
 
 
-            <mm:present referid="do">
-              <mm:first>
-                <jsp:invoke fragment="beforefirst" />
-              </mm:first>
+          <mm:present referid="do">
+            <c:if test="${count gt 0}">
+              <jsp:invoke fragment="separator" />
+            </c:if>
+            <c:if test="${count eq 0}">
+              <jsp:invoke fragment="beforefirst" />
+            </c:if>
+            <c:set var="count" value="${count + 1}" />
+            <span class="di_c c_${_.component.name} b_${_.name}">
               <jsp:doBody />
-
               <mm:hassetting component="${_.component.name}" name="didactor_nodeprovider">
                 <mm:setting id="np" component="${_.component.name}" name="didactor_nodeprovider" write="false" />
                 <mm:node number="${requestScope[np]}">
@@ -54,18 +59,13 @@
               <mm:hassetting component="${_.component.name}" name="didactor_nodeprovider" inverse="true">
                 <mm:component name="${_.component.name}" block="${_.name}" />
               </mm:hassetting>
-
-
-              <mm:last inverse="true">
-                <jsp:invoke fragment="separator" />
-              </mm:last>
-              <mm:last>
-                <jsp:invoke fragment="afterlast" />
-              </mm:last>
-            </mm:present>
-            <mm:remove referid="do" />
-          </span>
+            </span>
+          </mm:present>
+          <mm:remove referid="do" />
         </mm:stringlist>
+        <c:if test="${count gt 0}">
+          <jsp:invoke fragment="afterlast" />
+        </c:if>
 
       </mm:listfunction>
     </mm:functioncontainer>
