@@ -34,13 +34,6 @@
 
     <div class="rows" id="rows">
 
-      <mm:treefile
-          write="false"
-          objectlist="${includePath}"
-          page="/education/wizards/modes/${mode}.jsp"
-          referids="education_topmenu_course?">
-        <a href="${_}" id="mode_url" style="display: none;">Mode url</a>
-      </mm:treefile>
 
       <di:include debug="html" page="/education/wizards/navigation.jspx" />
 
@@ -48,6 +41,13 @@
         <table class="layout">
           <tr>
             <td id="left_menu">
+              <mm:treefile
+                  write="false"
+                  objectlist="${includePath}"
+                  referids="e,mode" page="/education/wizards/modes/${mode}.jsp">
+                <!-- used in wizards.js -->
+                <a href="${_}" id="mode_url" />
+              </mm:treefile>
               <div id="mode-${mode}">
                 <di:include debug="html" page="/education/wizards/modes/${mode}.jsp" />
               </div>
