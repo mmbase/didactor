@@ -12,10 +12,6 @@
       <mm:import externid="test"    required="true" />
       <mm:import externid="sub" />
 
-      <mm:link page="/content/js/open.jsp">
-        <script type="text/javascript" src="${_}"><jsp:text> </jsp:text></script>
-      </mm:link>
-
       <mm:node referid="problem">
 
         <h2><di:translate key="assessment.problem" />:</h2>
