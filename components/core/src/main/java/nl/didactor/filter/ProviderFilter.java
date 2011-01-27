@@ -559,12 +559,14 @@ public class ProviderFilter implements Filter, MMBaseStarter, NodeEventListener,
 
     }
 
-    // all kind of generic jsp's can be there. reuest parameters can be used for something  else.
+    // all kind of generic jsp's can be there. request parameters can be used for something  else.
     private static final String[] IGNORE_DIRS = new String[] {
         "/images/",
         "/attachments",
         "/mmbase/edit/",
-        "/mmbase/admin/"
+        "/mmbase/admin/",
+        "/mmbase/kupu/",
+        "/core/js/",
     };
 
     /**
