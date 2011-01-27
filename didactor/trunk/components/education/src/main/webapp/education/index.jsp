@@ -30,7 +30,6 @@
             NO EDUCATION YET
           </c:when>
           <c:otherwise>
-            <di:script  src="/content/js/open.jsp" />
             <di:include debug="${applicationScope.includeDebug}"
                         page="/education/navigation.jspx" />
             <di:include debug="${applicationScope.includeDebug}"
