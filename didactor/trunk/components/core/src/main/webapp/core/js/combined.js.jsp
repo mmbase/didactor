@@ -11,4 +11,6 @@
    <jsp:directive.include file="/core/js/Didactor.js" />
   <mm:treeinclude page="/core/js/specific.js"
                   objectlist="$includePath" write="false" />
+  <mm:treeinclude page="/content/js/open.jsp"
+                  objectlist="$includePath" write="false" />
 </mm:escape></os:cache></mm:content>
