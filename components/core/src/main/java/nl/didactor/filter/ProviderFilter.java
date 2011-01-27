@@ -179,9 +179,9 @@ public class ProviderFilter implements Filter, MMBaseStarter, NodeEventListener,
         return "cloud_mmbase";
     }
 
-    protected static Cloud getCloud(HttpServletRequest req) {
+    protected static Cloud getCloud(HttpServletRequest req, boolean anonymous) {
         HttpSession session = req.getSession(false); // false: do not create a session, only use it
-        if (session == null) {
+        if (anonymous || session == null) {
             return ContextProvider.getDefaultCloudContext().getCloud("mmbase");
         } else {
             log.trace("from session");
@@ -310,11 +310,22 @@ public class ProviderFilter implements Filter, MMBaseStarter, NodeEventListener,
         }
         return userAttributes;
     }
+    protected static boolean isAnonymous(HttpServletRequest req) {
+        String sp = req.getServletPath();
+        for (String ignoreStart : ANONYMOUS_DIRS) {
+            if (sp.startsWith(ignoreStart)) {
+                return true;
+            }
+        }
+        return false;
+
+    }
     public static boolean decorateRequest(HttpServletRequest req, HttpServletResponse res) throws IOException {
 
+        boolean anonymous   = isAnonymous(req);
         String serverName   = req.getServerName();
         String contextPath  = req.getContextPath();
-        HttpSession session = req.getSession(true);
+        HttpSession session = anonymous ? null : req.getSession(true);
 
         String parameterEducation = req.getParameter("education");
         if (parameterEducation != null && parameterEducation.length() == 0) {
@@ -335,8 +346,7 @@ public class ProviderFilter implements Filter, MMBaseStarter, NodeEventListener,
 
         log.debug("Provider found from request " + parameterProvider);
 
-        final Cloud cloud = getCloud(req);
-
+        final Cloud cloud = getCloud(req, anonymous);
         final Map<String, Serializable> userAttributes = getUserAttributes(cloud, req);
         final int userNumber = (Integer) userAttributes.get("user");
 
@@ -390,8 +400,9 @@ public class ProviderFilter implements Filter, MMBaseStarter, NodeEventListener,
                 parameterEducation != null ?
                 cloud.getNode(parameterEducation) : // explicit education always takes preference
                 defaultEducation;
-
-            log.debug("Default education " + defaultEducation + " education " + education);
+            if (log.isDebugEnabled()) {
+                log.debug("Default education " + defaultEducation + " education " + education);
+            }
 
 
             // try determining provider if education found, but not yet a provider
@@ -565,8 +576,11 @@ public class ProviderFilter implements Filter, MMBaseStarter, NodeEventListener,
         "/attachments",
         "/mmbase/edit/",
         "/mmbase/admin/",
-        "/mmbase/kupu/",
-        "/core/js/",
+        "/mmbase/kupu/"
+    };
+    private static final String[] ANONYMOUS_DIRS = new String[] {
+        "/core/",
+        "/login/"
     };
 
     /**
@@ -580,7 +594,7 @@ public class ProviderFilter implements Filter, MMBaseStarter, NodeEventListener,
         HttpServletResponse res = (HttpServletResponse) response;
         HttpServletRequest req = (HttpServletRequest) request;
 
-        String sp = req.getServletPath();
+        final String sp = req.getServletPath();
         if (sp.endsWith(".css") ||
             sp.endsWith(".png") ||
             sp.endsWith(".gif") ||
