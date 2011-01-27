@@ -43,6 +43,13 @@
     <meta name="Didactor-Provider"     content="${provider}" />
     <meta name="Didactor-Education"    content="${education}" />
     <meta name="Didactor-User"         content="${user}" />
+    <meta name="Didactor-MayOpenFuture" content="${di:setting('core', 'may_open_future')}" />
+    <di:hasrole role="coach">
+      <meta name="Didactor-Role-Teacher"    content="yes" />
+    </di:hasrole>
+    <di:hasrole role="systemadministrator">
+      <meta name="Didactor-Role-SystemAdministrator"    content="yes" />
+    </di:hasrole>
     <meta name="Didactor-PageReporter" content="${di:setting('core', 'pagereporter')}" />
 
     <!-- The page marked as 'lastpage'
