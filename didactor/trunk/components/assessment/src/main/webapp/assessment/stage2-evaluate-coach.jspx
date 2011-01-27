@@ -17,9 +17,6 @@
   <mm:import externid="sub" />
   <mm:import externid="student_id" required="true"/>
 
-  <mm:link page="/content/js/open.jsp">
-    <script type="text/javascript" src="${_}"><jsp:text><!-- btw, IE sucks --></jsp:text></script>
-  </mm:link>
 
   <h3><mm:node number="${student_id}"><mm:field id="studentname" name="firstname"/></mm:node></h3>
 
