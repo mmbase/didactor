@@ -8,9 +8,10 @@
   <jsp:directive.include file="/mmbase/jquery/jquery.timer.js" />
   <jsp:directive.include file="/core/js/utils.js" />
   <jsp:directive.include file="/core/js/jquery.query.js" />
-   <jsp:directive.include file="/core/js/Didactor.js" />
-  <mm:treeinclude page="/core/js/specific.js"
-                  objectlist="$includePath" write="false" />
+  <jsp:directive.include file="/core/js/Didactor.js" />
   <mm:treeinclude page="/content/js/open.jsp"
-                  objectlist="$includePath" write="false" />
+                  objectlist="$includePath"  />
+  <mm:treeinclude page="/core/js/specific.js"
+                  objectlist="$includePath"  />
+
 </mm:escape></os:cache></mm:content>
