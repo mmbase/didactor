@@ -1,19 +1,18 @@
 /* -*- mode: javascript; -*-
 <%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm"
 %><%@taglib uri="http://www.didactor.nl/ditaglib_1.0" prefix="di"
-%>
-*///<mm:content type="text/javascript" expires="0" postprocessor="none">
-<mm:cloud>
-
+%><%@page session="false" %>
+*///<mm:content type="text/javascript" expires="3600" postprocessor="none">
+<mm:cloud method="anonymous">
 var ITEM_NONE   = '${mm:treefile("/gfx/icon_arrow_tab_none.gif", pageContext, includePath)}';
 var ITEM_OPENED = '${mm:treefile("/gfx/icon_arrow_tab_open.gif", pageContext, includePath)}';
 var ITEM_CLOSED = '${mm:treefile("/gfx/icon_arrow_tab_closed.gif", pageContext, includePath)}';
 
 var may_open_future =
-    <di:hasrole role="coach">true || //coach</di:hasrole>
-    <di:hasrole role="teacher">true || // teacher</di:hasrole>
-    <di:hasrole role="systemadministrator">true || //system administrator </di:hasrole>
-    <di:getsetting component="core" setting="may_open_future" />; // may_open_future setting
+    "true" == Didactor.prototype.getSetting("Didactor-Role-Teacher") ||
+    "true" == Didactor.prototype.getSetting("Didactor-Role-SystemAdministrator") ||
+    "true" == Didactor.prototype.getSetting("Didactor-Role-Coach") ||
+    "true" == Didactor.prototype.getSetting("Didactor-MayOpenFuture");
 
 // IE does not even support indexOf, fixing that here..
 [].indexOf || (Array.prototype.indexOf = function(v,n){
