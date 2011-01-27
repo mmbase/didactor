@@ -9,12 +9,6 @@
 
     <link rel="stylesheet" type="text/css" href="${mm:treelink('/css/base.css', includePath)}" />
 
-    <mm:haspage page="/mmbase/style/css/mmxf.css">
-      <mm:link page="/mmbase/style/css/mmxf.css">
-        <link rel="stylesheet" type="text/css" href="${_}" />
-      </mm:link>
-    </mm:haspage>
-
     <mm:treefile page="/css/print.css"  objectlist="$includePath" write="false">
       <!--
       <link href="${_}" rel="alternate stylesheet" title="Printer friendly" type="text/css" media="screen" />
@@ -32,6 +26,7 @@
     <di:script src="/core/js/utils.js" />
     <di:script src="/core/js/jquery.query.js" />
     <di:script src="/core/js/Didactor.js" />
+    <di:script src="/content/js/open.jsp" />
     <mm:treefile page="/core/js/specific.js"
                  objectlist="$includePath" write="false">
       <script type="text/javascript" src="${_}">
@@ -49,6 +44,9 @@
     </di:hasrole>
     <di:hasrole role="systemadministrator">
       <meta name="Didactor-Role-SystemAdministrator"    content="yes" />
+    </di:hasrole>
+    <di:hasrole role="coache">
+      <meta name="Didactor-Role-Coach"    content="yes" />
     </di:hasrole>
     <meta name="Didactor-PageReporter" content="${di:setting('core', 'pagereporter')}" />
 
