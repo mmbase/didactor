@@ -2,7 +2,7 @@
 %><%@ taglib uri="http://www.opensymphony.com/oscache" prefix="os"
 %><jsp:directive.page session="false" />
 */
-<mm:content type="text/css" expires="604800" postprocessor="none"><os:cache key="combinedcss" refresh="${param.refresh eq 'true' ? 'true' : 'false'}" time="3600"><mm:escape escape="css-compress">
+<mm:content type="text/css" expires="604800" postprocessor="none"><os:cache key="combinedprintcss" refresh="${param.refresh eq 'true' ? 'true' : 'false'}" time="3600"><mm:escape escape="css-compress">
 
   <mm:treeinclude page="/css/print.css"
                   objectlist="$includePath"  />
