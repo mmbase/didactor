@@ -35,9 +35,8 @@ function Didactor() {
             if (self.pageReporter) {
 	        $(window).bind("beforeunload", function() {
 				   self.loadIconOn();
-				   self.reportOnline(null, true); 
-				   // we are leaving the page, so I think asynchronous may give problems?
-				   // but I don't quite understand that, so trying it anyways for now, for performance reasons
+				   self.reportOnline(null, false); 
+				   // we are leaving the page, asynchronous gives 'aborted' in FF
 	                       });
             }
 
