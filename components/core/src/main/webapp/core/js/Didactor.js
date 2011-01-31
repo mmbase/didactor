@@ -194,7 +194,6 @@ Didactor.prototype.reportOnline = function (timer, async) {
 
     params.user = this.getSetting("Didactor-User");
     var self = this;
-
     $.ajax({async: (async == null ? true : async),
             url: this.onlineReporter,
             type: "GET",
@@ -250,13 +249,13 @@ Didactor.prototype.setUpQuestionEvents = function(div) {
                                                        params[this.name] = this.value;
                                                    }
                                                });
-                    $.ajax({url: this.href, async: true,  // I think asynchronous should work, but we did it sometime with false
+                    $.ajax({url: this.href, async: false,  // Does work very well on unload if async (at least not in FF)
 			    type: "POST", dataType: "xml", data: params,
-                            complete: function(res, status) {
+                            complete: function(res, status) { 
                                 if (status == "success") {
                                     $(div).append(res.responseText);
                                 } else {
-                                    alert(status);
+                                    alert(status + " " + res.responseText);
                                 }
                             }
                            });
