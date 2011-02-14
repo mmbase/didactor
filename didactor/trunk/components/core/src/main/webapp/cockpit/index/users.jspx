@@ -1,0 +1,31 @@
+<jsp:root
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:mm="http://www.mmbase.org/mmbase-taglib-2.0"
+    xmlns:jsp="http://java.sun.com/JSP/Page"
+    xmlns:dit="urn:jsptagdir:/WEB-INF/tags/di/core"
+    xmlns:di="http://www.didactor.nl/ditaglib_1.0"
+    version="2.0">
+  <jsp:output omit-xml-declaration="true" />
+  <!-- list of all teachers that are online for a specific class -->
+  <div class="titlefield2">
+    <di:translate key="core.teacherheader" />
+  </div>
+  <div class="ListTeachers">
+
+    <mm:treeinclude write="true" page="/users/users.jsp" objectlist="$includePath" referids="$referids">
+      <mm:param name="mode">teachers</mm:param>
+    </mm:treeinclude>
+    <mm:treeinclude write="true" page="/users/users.jsp" objectlist="$includePath" referids="$referids">
+      <mm:param name="mode">coaches</mm:param>
+    </mm:treeinclude>
+  </div>
+  <!-- list of all students that are online for a specific class -->
+  <div class="titlefield">
+    <di:translate key="core.studentheader" />
+  </div>
+  <div class="ListStudents">
+    <mm:treeinclude write="true" page="/users/users.jsp" objectlist="$includePath" referids="$referids">
+      <mm:param name="mode">students</mm:param>
+    </mm:treeinclude>
+  </div>
+</jsp:root>
