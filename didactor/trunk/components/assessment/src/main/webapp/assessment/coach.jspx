@@ -7,9 +7,11 @@
     class="coach">
 
   <jsp:output omit-xml-declaration="true" />
-
   <mm:import externid="lesson" />
   <mm:node number="$user" notfound="skip">
+    <mm:link page="/assessment/javascript.js.jsp">
+      <script type="text/javascript" src="${_}"><!-- --></script>
+    </mm:link>
     <div>
       <table class="poplistTable">
         <tr>
@@ -32,7 +34,7 @@
             </mm:relatednodescontainer>
           </mm:node>
         </tr>
-        <mm:relatednodes type="classes" path="classrel,classes" id="class">
+        <mm:relatednodes type="classes" path="classrel,classes" id="currentclass">
           <mm:relatednodescontainer
               path="classrel,people,related,roles"
               element="people">
@@ -46,10 +48,10 @@
                   <th class="listHeader">
                     <di:img src="/assessment/gfx/minus.gif"
                             title="assessment.show.problems"
-                            onclick="toggle(${classNode})"
-                            id="toggle_image${classNode}" />
+                            onclick="toggle(${currentclass})"
+                            id="toggle_image${currentclass}" />
                     <jsp:text> </jsp:text>
-                    <mm:field name="name" node="class" />
+                    <mm:field name="name" node="currentclass" />
                   </th>
                   <c:forEach begin="1" end="${fn:length(learnblocks)}">
                     <th class="listHeader">&amp;nbsp;</th>
@@ -57,15 +59,16 @@
                 </tr>
               </mm:first>
 
-              <tr class="toggle_div${classNode}" id="toggle_div${classNode}_${_node}">
+              <tr class="toggle_div${currentclass}" id="toggle_div${currentclass}_${_node}">
                 <td class="listItem">
-                <mm:node>
-                <mm:link>
-                	<mm:param name="subsub">coach_student_overview</mm:param>
-                	<mm:param name="student_id">${_node}</mm:param>
-                  <a href="${_}"><mm:field name="firstname"/></a>
-                </mm:link>
-                </mm:node>
+                  <mm:node>
+                    <mm:link referids="currentclass@class">
+                      <mm:param name="subsub">coach_student_overview</mm:param>
+                      <mm:param name="subsub_back">coach</mm:param>
+                      <mm:param name="student_id">${_node}</mm:param>
+                      <a href="${_}"><mm:field name="firstname"/></a>
+                    </mm:link>
+                  </mm:node>
                 </td>
                 <mm:relatednodes referid="learnblocks" id="learnblock">
                   <td class="listItem">
