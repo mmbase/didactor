@@ -9,13 +9,14 @@
 
   <mm:import externid="sub" />
   <mm:import externid="subsub" />
+  <mm:import externid="subsub_back" />
   <!--
       Now the problems, divided per type.
   -->
   <di:hasrole role="teacher">
     <mm:import externid="student_id" from="parameters" required="true" />
     <mm:import externid="class" from="parameters" required="true" />
-    <mm:link page="/homework/" referids="sub?,class" >
+    <mm:link page="/homework/" referids="sub?,class,subsub_back?@subsub" >
       <a href="${_}">&amp;lt; <di:translate key="assessment.back_to_students_overview" /></a>
     </mm:link>
 

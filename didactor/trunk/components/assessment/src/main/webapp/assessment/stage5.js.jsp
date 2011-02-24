@@ -1,6 +1,6 @@
 // -*- mode: JavaScript; -*-
 <%@taglib uri="http://www.mmbase.org/mmbase-taglib-2.0" prefix="mm"
-    %><mm:content type="text/javascript">
+    %><mm:content type="text/javascript" expires="3600" postprocesser="javascript-compress">
 
 
 

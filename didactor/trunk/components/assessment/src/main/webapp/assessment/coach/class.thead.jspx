@@ -1,0 +1,39 @@
+<jsp:root
+    version="2.0"
+    xmlns:jsp="http://java.sun.com/JSP/Page"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:mm="http://www.mmbase.org/mmbase-taglib-2.0"
+    xmlns:di="http://www.didactor.nl/ditaglib_1.0"
+    xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+    >
+  <jsp:output omit-xml-declaration="true" />
+  <mm:import externid="learnblocks"  from="request" required="true" />
+  <mm:import externid="currentclass" from="request" required="true" />
+  <mm:size>
+    <thead class="togglehead">
+      <mm:isgreaterthan value="0">
+        <tr>
+          <th class="listHeader" colspan="${fn:length(learnblocks) + 2}">
+            <di:img src="/assessment/gfx/minus.gif"
+                    title="assessment.show.problems"
+                    style="${education eq class.education.number ? '' : 'display: none;'}"
+                    />
+            <di:img src="/assessment/gfx/plus.gif"
+                    title="assessment.hide.problems"
+                    style="${education eq class.education.number ? 'display: none;' : ''}"
+                    />
+            <jsp:text> </jsp:text>
+            <mm:node referid="currentclass">
+              <mm:field name="name"  />
+              <mm:node element="education">
+                <jsp:text> (</jsp:text>
+              <mm:field name="name" />
+              <jsp:text>) </jsp:text>
+              </mm:node>
+            </mm:node>
+          </th>
+        </tr>
+      </mm:isgreaterthan>
+    </thead>
+  </mm:size>
+</jsp:root>

@@ -5,101 +5,19 @@
     xmlns:di="http://www.didactor.nl/ditaglib_1.0"
     xmlns:fn="http://java.sun.com/jsp/jstl/functions"
     class="coach">
-
+  <!--
+      shows an overview of classes of this coach
+  -->
   <jsp:output omit-xml-declaration="true" />
-  <mm:import externid="lesson" />
   <mm:node number="$user" notfound="skip">
-    <mm:link page="/assessment/javascript.js.jsp">
-      <script type="text/javascript" src="${_}"><!-- --></script>
-    </mm:link>
+	<script type="text/javascript" src="${mm:link('/assessment/coach/javascript.js.jsp')}">
+		<jsp:text> </jsp:text>
+	</script>
     <div>
       <table class="poplistTable">
-        <tr>
-          <th class="listHeader">&amp;nbsp;</th>
-          <mm:node number="$education">
-            <mm:relatednodescontainer element="learnblocks"  path="posrel,learnblocks${di:setting('assessment', 'relate_learnblocks') ? ',related,components' : ''}">
-              <mm:sortorder field="posrel.pos" />
-              <c:if test="${di:setting('assessment', 'relate_learnblocks')}">
-                <mm:addnode element="components" number="component.assessment" />
-              </c:if>
-              <mm:relatednodes id="learnblocks">
-                <th class="listHeader">
-                  <mm:field name="name" />
-                  <!--
-                      <br />
-                      <di:translate key="assessment.period" /><jsp:text> </jsp:text><mm:index />
-                  -->
-                </th>
-              </mm:relatednodes>
-            </mm:relatednodescontainer>
-          </mm:node>
-        </tr>
-        <mm:relatednodes type="classes" path="classrel,classes" id="currentclass">
-          <mm:relatednodescontainer
-              path="classrel,people,related,roles"
-              element="people">
-            <mm:constraint field="roles.name" value="student" />
-            <mm:distinct />
-            <mm:sortorder field="${di:setting('core', 'personorderfield')}" casesensitive="false" />
-            <mm:relatednodes id="student">
-
-              <mm:first>
-                <tr>
-                  <th class="listHeader">
-                    <di:img src="/assessment/gfx/minus.gif"
-                            title="assessment.show.problems"
-                            onclick="toggle(${currentclass})"
-                            id="toggle_image${currentclass}" />
-                    <jsp:text> </jsp:text>
-                    <mm:field name="name" node="currentclass" />
-                  </th>
-                  <c:forEach begin="1" end="${fn:length(learnblocks)}">
-                    <th class="listHeader">&amp;nbsp;</th>
-                  </c:forEach>
-                </tr>
-              </mm:first>
-
-              <tr class="toggle_div${currentclass}" id="toggle_div${currentclass}_${_node}">
-                <td class="listItem">
-                  <mm:node>
-                    <mm:link referids="currentclass@class">
-                      <mm:param name="subsub">coach_student_overview</mm:param>
-                      <mm:param name="subsub_back">coach</mm:param>
-                      <mm:param name="student_id">${_node}</mm:param>
-                      <a href="${_}"><mm:field name="firstname"/></a>
-                    </mm:link>
-                  </mm:node>
-                </td>
-                <mm:relatednodes referid="learnblocks" id="learnblock">
-                  <td class="listItem">
-
-                    <mm:node number="$student">
-                      <di:copybook>
-                        <mm:node id="copybookNo" />
-                      </di:copybook>
-                    </mm:node>
-                    <mm:node number="$student">
-                      <mm:relatednodescontainer type="shouts">
-                        <mm:constraint field="reference" value="${learnblock}" />
-                        <mm:link page="/c/shoutbox/index/" referids="learnblock@reference">
-                          <mm:param name="source">${_node}</mm:param>
-                          (<a href="${_}" name=""><mm:size /></a>)
-                        </mm:link>
-                      </mm:relatednodescontainer>
-                    </mm:node>
-                  </td>
-                </mm:relatednodes>
-                  <td>
-                    <mm:node number="$student">
-                      <mm:link page="/c/shoutbox/index/">
-                        <mm:param name="source">${_node}</mm:param>
-                        <a href="${_}" name=""><di:translate key="assessment.messages"/></a>
-                      </mm:link>
-                    </mm:node>
-                  </td>
-              </tr>
-            </mm:relatednodes>
-          </mm:relatednodescontainer>
+        <mm:include page="coach/lessons.thead.jspx" />
+        <mm:relatednodes type="classes" path="classrel,classes">
+          <mm:include page="coach/students_for_class.tbody.jspx" attributes="learnblocks" />
         </mm:relatednodes>
       </table>
     </div>
