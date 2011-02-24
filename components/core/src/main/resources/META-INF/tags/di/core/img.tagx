@@ -10,6 +10,7 @@
   <jsp:directive.attribute name="onclick"    />
   <jsp:directive.attribute name="id"    />
   <jsp:directive.attribute name="style"    />
+  <jsp:directive.attribute name="class"    />
 
   <img
       src="${mm:treelink(src, includePath)}"
@@ -19,6 +20,7 @@
       onclick="${onclick}"
       id="${id}"
       style="${style}"
+      class="${class}"
       />
 
 </jsp:root>
