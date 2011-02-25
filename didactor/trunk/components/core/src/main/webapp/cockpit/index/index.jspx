@@ -2,10 +2,9 @@
     xmlns:c="http://java.sun.com/jsp/jstl/core"
     xmlns:mm="http://www.mmbase.org/mmbase-taglib-2.0"
     xmlns:jsp="http://java.sun.com/JSP/Page"
-    xmlns:dit="urn:jsptagdir:/WEB-INF/tags/di/core"
     xmlns:di="http://www.didactor.nl/ditaglib_1.0"
     version="2.0">
-  <dit:html
+  <di:html
       description="User Cockpit, shows providers, educations, and previews of components to logged in users"
       title_key="core.cockpit"
       expires="0"
@@ -51,5 +50,5 @@
         <di:include page="/cockpit/index/users.jspx" />
       </div>
     </div>
-  </dit:html>
+  </di:html>
 </jsp:root>
