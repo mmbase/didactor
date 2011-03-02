@@ -48,11 +48,11 @@
           <mm:import id="subject">
             <di:translate key="assessment.give_feedback_subj" write="true">
               <mm:param name="0"><di:person /></mm:param>
-              <mm:param name="1"><mm:node number="$class"><mm:nodeinfo type="gui" /></mm:node></mm:param>
+              <mm:param name="1"><mm:node number="${classNode}"><mm:nodeinfo type="gui" /></mm:node></mm:param>
             </di:translate>
           </mm:import>
 
-          <mm:node number="$class">
+          <mm:node number="${classNode}">
             <mm:nodelistfunction id="teacher" name="teachers">
               <mm:createnode type="emails">
                 <mm:setfield name="from"><mm:write referid="from"/></mm:setfield>
@@ -61,7 +61,7 @@
                 <mm:setfield name="body">
                   <di:translate key="assessment.give_feedback_body" write="true">
                     <mm:param name="0"><mm:node number="$user"><di:person /></mm:node></mm:param>
-                    <mm:param name="1"><mm:node number="$class"><mm:nodeinfo type="gui" /></mm:node></mm:param>
+                    <mm:param name="1"><mm:node number="${classNode}"><mm:nodeinfo type="gui" /></mm:node></mm:param>
                     <!-- hmm -->
                     <mm:param name="2">
                       <mm:url page="/homework" referids="class,user@student_id" absolute="true" escapeamps="false">
