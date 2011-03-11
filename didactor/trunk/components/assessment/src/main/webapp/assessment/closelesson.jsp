@@ -64,7 +64,7 @@
                     <mm:param name="1"><mm:node number="${classNode}"><mm:nodeinfo type="gui" /></mm:node></mm:param>
                     <!-- hmm -->
                     <mm:param name="2">
-                      <mm:url page="/homework" referids="class,user@student_id" absolute="true" escapeamps="false">
+                      <mm:url page="/homework" referids="classNode@class,user@student_id" absolute="true" escapeamps="false">
                         <mm:param name="sub">assessment</mm:param>
                         <mm:param name="subsub">coach_student_overview</mm:param>
                       </mm:url>
