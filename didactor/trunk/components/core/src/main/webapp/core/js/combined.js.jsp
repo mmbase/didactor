@@ -2,7 +2,7 @@
 %><%@ taglib uri="http://www.opensymphony.com/oscache" prefix="os"
 %><jsp:directive.page session="false" />
 *///<mm:content type="text/javascript" expires="604800" postprocessor="none"><os:cache key="combinedjs" refresh="${param.refresh eq 'true' ? 'true' : 'false'}" time="3600"><mm:escape escape="javascript-compress">
-  <jsp:directive.include file="/mmbase/jquery/jquery-1.5.1.min.js" />
+  <jsp:directive.include file="/mmbase/jquery/jquery-1.6.1.min.js" />
   <jsp:directive.include file="/mmbase/jquery/jquery.form.js" />
   <jsp:directive.include file="/mmbase/validation/validation.js.jsp" />
   <jsp:directive.include file="/mmbase/jquery/jquery.timer.js" />
