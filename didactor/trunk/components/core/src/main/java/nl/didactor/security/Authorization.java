@@ -3,6 +3,9 @@ package nl.didactor.security;
 import java.util.*;
 import nl.didactor.builders.DidactorBuilder;
 import nl.didactor.builders.DidactorRel;
+import nl.didactor.builders.PeopleBuilder;
+import nl.didactor.functions.PeopleClassFunction;
+import org.mmbase.bridge.util.Queries;
 import org.mmbase.security.SecurityException;
 import org.mmbase.security.*;
 import org.mmbase.bridge.*;
@@ -69,7 +72,26 @@ public class Authorization extends org.mmbase.security.Authorization {
                     (operation.equals(Operation.WRITE) && uc.getUserNumber() != nodeid) ||
                     (operation.equals(Operation.READ) && privateTypes.contains(objectBuilder.getTableName()))) {
                     String context = getContext(user, nodeid);
-                    boolean access = context.equals(ownerField);
+                    boolean ownNode = context.equals(ownerField);
+                    boolean access;
+                    if (! ownNode) {
+                        Set<String> myRoles = uc.getRoles();
+                        if (myRoles.contains("teacher") || myRoles.contains("coach")) {
+                            Cloud cloud = ContextProvider.getDefaultCloudContext().getCloud("mmbase", user);
+                            NodeQuery q = Queries.createRelatedNodesQuery(cloud.getNode(uc.getUserNumber()), cloud.getNodeManager("classes"), "classes", "destination");
+
+                            PeopleClassFunction function = new PeopleClassFunction();
+                            function.setNode()
+                            PeopleBuilder people = (PeopleBuilder) MMBase.getMMBase().getBuilder("people");
+                            MMObjectNode owner = people.getUser(context);
+                            boolean studentsNode = true;
+                            access = studentsNode;
+                        } else {
+                            access = false;
+                        }
+                    } else {
+                        access = true;
+                    }
                     if (! access && node.getBuilder() instanceof InsRel) {
                         // for relations we grant access if you have access to at least one of the end points.
                         String sourceContext = getContext(user, node.getIntValue("snumber"));

@@ -109,7 +109,7 @@ public class ClassRoom extends FunctionProvider {
                 klass.getStringValue("number"),
                 "classes,classrel,people",
                 "people.number,classrel.number",
-                "people.number="+student.getNumber(),
+                "people.number=" + student.getNumber(),
                 null,
                 null,
                 null,
