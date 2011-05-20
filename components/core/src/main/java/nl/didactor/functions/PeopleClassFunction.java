@@ -53,7 +53,9 @@ public class PeopleClassFunction {
         RelationStep step = query.addRelationStep(cloud.getNodeManager("educations"), null, null);
         Queries.addConstraint(query, query.createConstraint(query.createStepField(step.getNext(),"number"), education.getNumber()));
         NodeList foundClasses = classes.getList(query);
-        log.debug("Classes " + foundClasses + " found with " + query.toSql());
+        if (log.isDebugEnabled()) {
+            log.debug("Classes " + foundClasses + " found with " + query.toSql());
+        }
         return foundClasses;
     }
 
@@ -110,7 +112,10 @@ public class PeopleClassFunction {
         NodeList coaches = (NodeList) claz.getFunctionValue("coaches", null).get();
         return coaches;
     }
+    public boolean isTeacherOrCoachOf(Node teacher, Node student) {
 
+        NodeList classes
+    }
 
 
 

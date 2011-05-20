@@ -114,7 +114,8 @@ public class PeopleBuilder extends DidactorBuilder {
      * @param originalValue The original value of the field.
      * @return boolean indicating this set was allowed
      */
-    @Override public boolean setValue(MMObjectNode node, String fieldname, Object originalValue) {
+    @Override
+    public boolean setValue(MMObjectNode node, String fieldname, Object originalValue) {
         if (fieldname.equals("username")) {
             Object newValue = node.getValues().get(fieldname);
 
@@ -145,7 +146,8 @@ public class PeopleBuilder extends DidactorBuilder {
      * @param field Name of the field.
      * @return an object containing the value.
      */
-    @Override public Object getValue(MMObjectNode node, String field) {
+    @Override
+    public Object getValue(MMObjectNode node, String field) {
         FieldDefs fd = getField(field);
         if (fd != null) {
             return super.getValue(node, field);
@@ -185,7 +187,8 @@ public class PeopleBuilder extends DidactorBuilder {
         return super.getValue(node, field);
     }
 
-    @Override public int insert(String owner, MMObjectNode node) {
+    @Override
+    public int insert(String owner, MMObjectNode node) {
         // forbid setting a username to an existing one
 
         String newValue = (String) node.getValues().get("username");
