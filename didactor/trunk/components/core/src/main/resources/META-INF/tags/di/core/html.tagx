@@ -3,8 +3,7 @@
     xmlns:mm="http://www.mmbase.org/mmbase-taglib-2.0"
     xmlns:jsp="http://java.sun.com/JSP/Page"
     xmlns:di="http://www.didactor.nl/ditaglib_1.0"
-          xmlns:dit="urn:jsptagdir:/WEB-INF/tags/di/core"
-    version="2.0">
+   version="2.0">
   <jsp:directive.tag
       description="Didactor template, put your component in its's body. Like so, you don't need to explicitly use ugly header and footer includes yourself."
       />
@@ -30,7 +29,7 @@
               doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN"
               doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"/>
   <mm:content postprocessor="${empty postprocessor ? 'reducespace' : postprocessor}"
-              type="${empty type ? 'text/html' : type}"
+              type="${empty type ?application/xhtml+xml' : type}"
               unacceptable="CRIPPLE"
               language="${requestScope.language}" expires="${expires}">
     <mm:cloud
@@ -49,7 +48,7 @@
           </c:when>
           <c:otherwise>
             <c:if test="${! empty description}">&lt;!-- ${description} --&gt;</c:if>
-            <dit:head>
+            <di:head>
               <title>
                 <c:forTokens items="${title_nodeparams}" delims="," var="title_nodeparam">
                   <c:if test="${! empty title_nodeparam and ! empty param[title_nodeparam]}">
@@ -109,7 +108,7 @@
                 </mm:node>
               </c:if>
               <jsp:invoke fragment="head" />
-            </dit:head>
+            </di:head>
             <body class="${styleClass}">
 
               <div class="componentBody">

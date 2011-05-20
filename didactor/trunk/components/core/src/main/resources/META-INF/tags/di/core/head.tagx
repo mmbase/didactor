@@ -8,14 +8,15 @@
   <head>
 
     <link rel="stylesheet" type="text/css" href="${mm:link('/css/combined.css.jsp')}" />
+    <!--
     <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
-
+    -->
     <mm:treefile page="/css/print.css.jsp"  objectlist="$includePath" write="false">
       <link href="${_}" rel="alternate stylesheet" title="Printer friendly" type="text/css" media="screen" />
       <link href="${_}" rel="stylesheet" type="text/css"  media="print"/>
     </mm:treefile>
 
-   <di:script src="/core/js/combined.js.jsp" />
+    <di:script src="/core/js/combined.js.jsp" />
     <mm:write request="org.mmbase.validation" value="yes" />
     <mm:write request="org.mmbase.jquery" value="yes" />
     <mm:write request="org.mmbase.jquery.form" value="yes" />
