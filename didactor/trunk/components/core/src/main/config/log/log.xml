@@ -8,5 +8,5 @@
    <configuration>stdout,info</configuration>
 -->
    <class>org.mmbase.util.logging.log4j.Log4jImpl</class>
-   <configuration>log4j.xml</configuration>
+   <configuration>console.xml</configuration>
 </logging>

@@ -49,6 +49,7 @@ public class Authorization extends org.mmbase.security.Authorization {
     public void update(org.mmbase.security.UserContext user, int nodeid) {
     }
 
+
     /**
      */
     @Override
@@ -77,15 +78,21 @@ public class Authorization extends org.mmbase.security.Authorization {
                     if (! ownNode) {
                         Set<String> myRoles = uc.getRoles();
                         if (myRoles.contains("teacher") || myRoles.contains("coach")) {
-                            Cloud cloud = ContextProvider.getDefaultCloudContext().getCloud("mmbase", user);
-                            NodeQuery q = Queries.createRelatedNodesQuery(cloud.getNode(uc.getUserNumber()), cloud.getNodeManager("classes"), "classes", "destination");
+                            try {
+                                Cloud cloud = ContextProvider.getDefaultCloudContext().getCloud("mmbase", user);
+                                NodeQuery q = Queries.createRelatedNodesQuery(cloud.getNode(uc.getUserNumber()), cloud.getNodeManager("classes"), "classes", "destination");
 
-                            PeopleClassFunction function = new PeopleClassFunction();
-                            function.setNode()
-                            PeopleBuilder people = (PeopleBuilder) MMBase.getMMBase().getBuilder("people");
-                            MMObjectNode owner = people.getUser(context);
-                            boolean studentsNode = true;
-                            access = studentsNode;
+                                PeopleClassFunction function = new PeopleClassFunction();
+                                function.setNode(cloud.getNode(((UserContext) user).getUserNumber()));
+
+                                PeopleBuilder people = (PeopleBuilder) MMBase.getMMBase().getBuilder("people");
+                                MMObjectNode owner = people.getUser(context);
+                                boolean studentsNode = function.isTeacherOrCoach(cloud.getNode(owner.getNumber()));
+                                access = studentsNode;
+                            } catch (Exception e) {
+                                log.warn(e);
+                                access = false;
+                            }
                         } else {
                             access = false;
                         }

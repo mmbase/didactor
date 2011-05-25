@@ -431,7 +431,6 @@ public class Authentication extends org.mmbase.security.Authentication {
     }
 
     /**
-     * @deprecated
      */
     public static Node getCurrentUserNode(Cloud cloud){
         return getUserNode(cloud, cloud.getUser().getIdentifier());
