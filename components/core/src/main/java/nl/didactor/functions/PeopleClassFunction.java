@@ -3,6 +3,7 @@ package nl.didactor.functions;
 import org.mmbase.bridge.*;
 import org.mmbase.storage.search.*;
 import org.mmbase.bridge.util.Queries;
+import org.mmbase.util.ChainedList;
 import org.mmbase.util.logging.*;
 import org.mmbase.util.Casting;
 import java.util.*;
@@ -95,28 +96,30 @@ public class PeopleClassFunction {
     }
 
     public NodeList peopleTeachers() {
-        Node claz = peopleClass();
-
-        if (claz == null) {
-            return node.getCloud().createNodeList();
+        NodeList result = node.getCloud().createNodeList();
+        for (Node claz : peopleClasses()) {
+            NodeList teachers = (NodeList) claz.getFunctionValue("teachers", null).get();
+            for (Node teacher : teachers) {
+                if (! result.contains(teacher)) {
+                    result.add(teacher);
+                }
+            }
         }
-        NodeList teachers = (NodeList) claz.getFunctionValue("teachers", null).get();
-        return teachers;
+        return result;
     }
     public NodeList peopleCoaches() {
-        Node claz = peopleClass();
-
-        if (claz == null) {
-            return node.getCloud().createNodeList();
+        NodeList result = node.getCloud().createNodeList();
+        for (Node claz : peopleClasses()) {
+            NodeList teachers = (NodeList) claz.getFunctionValue("coaches", null).get();
+            for (Node teacher : teachers) {
+                if (! result.contains(teacher)) {
+                    result.add(teacher);
+                }
+            }
         }
-        NodeList coaches = (NodeList) claz.getFunctionValue("coaches", null).get();
-        return coaches;
+        return result;
     }
-    public boolean isTeacherOrCoachOf(Node teacher, Node student) {
-
-        NodeList classes
+    public boolean isTeacherOrCoach(Node teacher) {
+        return peopleTeachers().contains(teacher) || peopleCoaches().contains(teacher);
     }
-
-
-
 }
