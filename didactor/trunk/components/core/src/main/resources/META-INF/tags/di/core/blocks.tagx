@@ -9,6 +9,7 @@
 
   <jsp:directive.attribute name="classification"    required="true" />
   <jsp:directive.attribute name="styleClass"   />
+  <jsp:directive.attribute name="debug"   />
   <jsp:directive.attribute name="surrounding_div"   type="java.lang.Boolean" />
   <jsp:directive.attribute name="separator"         fragment="true" />
   <jsp:directive.attribute name="beforefirst"       fragment="true" />
@@ -18,7 +19,8 @@
     <c:if test="${empty surrounding_div or surrounding_div}">
       <jsp:text>&lt;div  class="mmbase_fw_blocks ${classification} ${styleClass} "&gt;</jsp:text>
     </c:if>
-    <mm:functioncontainer>
+
+   <mm:functioncontainer>
       <mm:param name="id">didactor.${classification}</mm:param>
 
       <c:set var="count" value="0" />
@@ -53,11 +55,11 @@
               <mm:hassetting component="${_.component.name}" name="didactor_nodeprovider">
                 <mm:setting id="np" component="${_.component.name}" name="didactor_nodeprovider" write="false" />
                 <mm:node number="${requestScope[np]}">
-                  <mm:component name="${_.component.name}" block="${_.name}" />
+                 <mm:component name="${_.component.name}" block="${_.name}"  debug="${debug}" />
                 </mm:node>
               </mm:hassetting>
               <mm:hassetting component="${_.component.name}" name="didactor_nodeprovider" inverse="true">
-                <mm:component name="${_.component.name}" block="${_.name}" />
+               <mm:component name="${_.component.name}" block="${_.name}"  debug="${debug}" />
               </mm:hassetting>
             </span>
           </mm:present>
