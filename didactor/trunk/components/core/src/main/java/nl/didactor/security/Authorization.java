@@ -1,19 +1,18 @@
 package nl.didactor.security;
 
-import java.util.*;
-import nl.didactor.builders.DidactorBuilder;
-import nl.didactor.builders.DidactorRel;
-import nl.didactor.builders.PeopleBuilder;
+import nl.didactor.builders.*;
 import nl.didactor.functions.PeopleClassFunction;
-import org.mmbase.bridge.util.Queries;
-import org.mmbase.security.SecurityException;
-import org.mmbase.security.*;
 import org.mmbase.bridge.*;
+import org.mmbase.bridge.util.Queries;
+import org.mmbase.module.core.*;
+import org.mmbase.module.corebuilders.InsRel;
+import org.mmbase.security.*;
+import org.mmbase.security.SecurityException;
 import org.mmbase.storage.search.Step;
 import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
-import org.mmbase.module.core.*;
-import org.mmbase.module.corebuilders.InsRel;
+
+import java.util.*;
 
 
 /**
@@ -80,8 +79,6 @@ public class Authorization extends org.mmbase.security.Authorization {
                         if (myRoles.contains("teacher") || myRoles.contains("coach")) {
                             try {
                                 Cloud cloud = ContextProvider.getDefaultCloudContext().getCloud("mmbase", user);
-                                NodeQuery q = Queries.createRelatedNodesQuery(cloud.getNode(uc.getUserNumber()), cloud.getNodeManager("classes"), "classes", "destination");
-
                                 PeopleClassFunction function = new PeopleClassFunction();
                                 function.setNode(cloud.getNode(((UserContext) user).getUserNumber()));
 
@@ -106,7 +103,7 @@ public class Authorization extends org.mmbase.security.Authorization {
                         access = sourceContext.equals(ownerField) || destinationContext.equals(ownerField);
                     }
                     if (! access) {
-                        log.warn("Access denied to " + user + " (" + user.getOwnerField() + ") for " + operation + " on " + node + " (" + context + ")");
+                        log.debug("Access denied to " + user + " (" + user.getOwnerField() + ") for " + operation + " on " + node + " (" + context + ")");
                     }
                     return access;
                 }

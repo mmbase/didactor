@@ -34,9 +34,7 @@ public class UserName extends StringDataType implements NodeEventListener {
     protected void fillSet() {
         disallowed.clear();
         Cloud cloud = ContextProvider.getDefaultCloudContext().getCloud("mmbase", "class", null);
-        NodeIterator i = cloud.getNodeManager("disallowedusernames").getList(null).nodeIterator();
-        while (i.hasNext()) {
-            Node n = i.nextNode();
+        for (Node n : cloud.getNodeManager("disallowedusernames").getList(null)) {
             disallowed.add(Pattern.compile(n.getStringValue("username")));
         }
         filled = true;
@@ -53,9 +51,13 @@ public class UserName extends StringDataType implements NodeEventListener {
     @Override
     protected Collection validateCastValue(Collection errors, Object castValue, Object value, Node node, Field field) {
         if (! filled) fillSet();
-        log.debug("Validating " + castValue);
+        if (log.isDebugEnabled()) {
+            log.debug("Validating " + castValue);
+        }
         errors = super.validateCastValue(errors, castValue, value,  node, field);
-        if (errors == VALID) errors = new ArrayList();
+        if (errors == VALID) {
+            errors = new ArrayList();
+        }
         for (Pattern p : disallowed) {
             if (p.matcher("" + castValue).matches()) {
                 errors.add(new LocalizedString("Dit is geen acceptabele " + field.getGUIName()));
