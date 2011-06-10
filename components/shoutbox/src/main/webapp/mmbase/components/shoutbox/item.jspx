@@ -22,11 +22,19 @@
               <label for="${_}"><mm:fieldinfo type="guiname"/>:</label>
             </mm:fieldinfo>
             <div class="value">
-              <mm:fieldinfo type="${empty newNode ?  'guivalue' : 'input'}"
-                            escape="${ empty newNode ? 'pp,links' : 'none'}"
-                            />
+              <mm:maywrite>
+                <mm:fieldinfo type="${empty newNode ?  'guivalue' : 'input'}"
+                              escape="${ empty newNode ? 'pp,links' : 'none'}"
+                              />
+                <mm:fieldinfo type="errors"/>
+              </mm:maywrite>
+              <mm:maywrite inverse="true">
+                <mm:fieldinfo type="guivalue"
+                              escape="pp,links"
+                              />
+              </mm:maywrite>
             </div>
-            <mm:fieldinfo type="errors"/>
+
           </li>
         </mm:fieldlist>
         <c:if test="${! empty newNode}" >
