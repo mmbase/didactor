@@ -12,7 +12,7 @@
   <jsp:directive.attribute name="referrer"       type="java.lang.String"   required="true" />
   <jsp:directive.variable  name-given="_" />
 
-  <mm-r:kupulink
+ <mm-r:kupulink
       wizard="${wizard}"
       node="${node}"
       referrer="${referrer}">
@@ -49,21 +49,20 @@
       <mm:write request="kupulink_seq" value="${kupulink_seq + 1}" />
     </c:if>
 
-    <!-- support for background -->
+   <!-- support for background -->
     <c:if test="${! empty _node }">
 
-      <mm:notpresent referid="sourcemanager">
+     <mm:notpresent referid="sourcemanager">
         <mm:node referid="node" id="sourcemanager" />
       </mm:notpresent>
 
       <mm:hasrelationmanager sourcemanager="$sourcemanager"
                              destinationmanager="images"
                              role="background">
-
-        <mm:param name="repositoryjsp">/education/wizards/repository/background.jspx?node=${node}</mm:param>
+        <mm:param name="repositoryjsp">/education/wizards/repository/background.jspx</mm:param>
         <mm:param name="currentTitle"><di:translate key="rich.backgroundimage" /></mm:param>
         <mm:param name="tools">searchrelate</mm:param>
-      </mm:hasrelationmanager>
+    </mm:hasrelationmanager>
     </c:if>
     <mm:write value="${pageScope['org.mmbase.richtext.kupulink']}" escape="none">
       <jsp:doBody />
