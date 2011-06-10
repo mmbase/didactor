@@ -5,13 +5,13 @@
     xmlns:fn="http://java.sun.com/jsp/jstl/functions"
     version="2.0">
   <mm:cloud method="asis">
-    <mm:import externid="node" required="true" />
+    <mm:import id="node" externid="objectnumber" required="true" />
     <mm:node number="${node}">
       <mm:relatednodescontainer id="current" type="images" role="background">
         <mm:maxnumber value="1" />
       </mm:relatednodescontainer>
       <mm:listnodescontainer id="repository" type="images" />
-      <mm:write request="current" referid="current" />
+      <mm:write request="current"      referid="current" />
       <mm:write request="repository" referid="repository" />
     </mm:node>
   </mm:cloud>
