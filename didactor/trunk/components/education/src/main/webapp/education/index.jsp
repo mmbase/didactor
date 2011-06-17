@@ -5,13 +5,14 @@
           xmlns:os="http://www.opensymphony.com/oscache"
           xmlns:di="http://www.didactor.nl/ditaglib_1.0"
           >
-  <di:html
+ <di:html
       styleClass="education"
       type="application/xhtml+xml"
       title_key="education.learnenvironmenttitle"
       expires="0"
       component="education">
-    <os:cache>
+    <os:cache scope="application">
+      <os:addgroup group="index" />
 
       <!-- wtf -->
       <mm:hasnode number="component.drm">
