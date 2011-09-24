@@ -7,7 +7,7 @@
   <groupId>nl.didactor</groupId>
   <artifactId>didactor-pom</artifactId>
   <packaging>pom</packaging>
-  <version>2.3-SNAPSHOT</version>
+  <version>2.3.beta.2011-week38</version>
   <name>Didactor</name>
   <url>http://www.mmbase.org</url>
 
