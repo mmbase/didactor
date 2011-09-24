@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>nl.didactor</groupId>
+    <artifactId>didactor-components</artifactId>
+    <version>2.3-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>didactor-drm</artifactId>
+  <name>Didactor DRM</name>
+  <packaging>war</packaging>
+
+
+  <dependencies>
+
+  </dependencies>
+
+</project>

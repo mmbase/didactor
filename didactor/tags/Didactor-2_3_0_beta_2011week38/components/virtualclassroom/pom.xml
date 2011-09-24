@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>nl.didactor</groupId>
+    <artifactId>didactor-components</artifactId>
+    <version>2.3-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>didactor-virtualclassroom</artifactId>
+  <name>Didactor Virtual Class Room</name>
+  <packaging>war</packaging>
+
+
+  <dependencies>
+    <dependency>
+      <groupId>nl.didactor</groupId>
+      <artifactId>didactor-core</artifactId>
+      <version>${didactor.version}</version>
+      <classifier>classes</classifier>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>nl.didactor</groupId>
+      <artifactId>didactor-workspace</artifactId>
+      <version>${didactor.version}</version>
+      <classifier>classes</classifier>
+      <scope>provided</scope>
+    </dependency>
+
+
+
+  </dependencies>
+
+</project>

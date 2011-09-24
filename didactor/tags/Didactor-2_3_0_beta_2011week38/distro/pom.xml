@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>nl.didactor</groupId>
+  <artifactId>didactor-distro</artifactId>
+  <packaging>war</packaging>
+  <name>Didactor Demo Distro</name>
+  <version>2.3-SNAPSHOT</version>
+
+  <properties>
+    <didactor.version>${project.version}</didactor.version>
+    <mmbase.version.number>1.9</mmbase.version.number>
+    <mmbase.version.postfix>-SNAPSHOT</mmbase.version.postfix>
+    <mmbase.version>${mmbase.version.number}${mmbase.version.postfix}</mmbase.version>
+    <my.postfix>-servlet25${mmbase.version.postfix}</my.postfix>
+    <base.version>${mmbase.version.number}${my.postfix}</base.version>
+    <mmbase.repos>scp://mmbase.org/home/tomcat/downloads/</mmbase.repos>
+  </properties>
+
+  <build>
+    <defaultGoal>install</defaultGoal>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>2.1-beta-2-SNAPSHOT</version>
+        <configuration>
+          <useDefaultExcludes>false</useDefaultExcludes>
+        </configuration>
+      </plugin>
+      <!--
+      <plugin>
+        <groupId>org.codehaus.cargo</groupId>
+        <artifactId>cargo-maven2-plugin</artifactId>
+        <extensions>true</extensions>
+        <configuration>
+          <descriptor>src/assemble/merge.xml</descriptor>
+        </configuration>
+      </plugin>
+      -->
+      <!-- needing something like this
+      <plugin>
+        <groupId>org.mmbase.maven</groupId>
+        <artifactId>maven-mmbase-plugin</artifactId>
+        <version>1.9-SNAPSHOT</version>
+        <executions>
+          <execution>
+            <id>merge-webxml</id>
+            <goals>
+              <goal>merge-web.xml</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <extraWebXml>${basedir}/src/main/webapp/WEB-INF/web-extra.xml</extraWebXml>
+        </configuration>
+      </plugin>
+      -->
+      <plugin>
+        <groupId>org.mortbay.jetty</groupId>
+        <artifactId>maven-jetty-plugin</artifactId>
+        <version>6.1.19</version> <!-- need fix for http://jira.codehaus.org/browse/JETTY-1028 -->
+        <configuration>
+          <jettyEnvXml>${basedir}/jetty-env.xml</jettyEnvXml>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>nl.didactor</groupId>
+      <artifactId>didactor-core</artifactId>
+      <version>${didactor.version}</version>
+      <type>war</type>
+    </dependency>
+
+    <dependency>
+      <groupId>nl.didactor</groupId>
+      <artifactId>didactor-education</artifactId>
+      <version>${didactor.version}</version>
+      <type>war</type>
+    </dependency>
+    <dependency>
+      <groupId>nl.didactor</groupId>
+      <artifactId>didactor-portalpages</artifactId>
+      <version>${didactor.version}</version>
+      <type>war</type>
+    </dependency>
+    <dependency>
+      <groupId>nl.didactor</groupId>
+      <artifactId>didactor-richtext</artifactId>
+      <version>${didactor.version}</version>
+      <type>war</type>
+    </dependency>
+    <dependency>
+      <groupId>nl.didactor</groupId>
+      <artifactId>didactor-email</artifactId>
+      <version>${didactor.version}</version>
+      <type>war</type>
+    </dependency>
+    <dependency>
+      <groupId>nl.didactor</groupId>
+      <artifactId>didactor-assessment</artifactId>
+      <version>${didactor.version}</version>
+      <type>war</type>
+    </dependency>
+
+    <dependency>
+      <groupId>nl.didactor</groupId>
+      <artifactId>didactor-links</artifactId>
+      <version>${didactor.version}</version>
+      <type>war</type>
+    </dependency>
+    <dependency>
+      <groupId>nl.didactor</groupId>
+      <artifactId>didactor-register</artifactId>
+      <version>${didactor.version}</version>
+      <type>war</type>
+    </dependency>
+    <dependency>
+      <groupId>nl.didactor</groupId>
+      <artifactId>didactor-faq</artifactId>
+      <version>${didactor.version}</version>
+      <type>war</type>
+    </dependency>
+
+    <dependency>
+      <groupId>nl.didactor</groupId>
+      <artifactId>didactor-agenda</artifactId>
+      <version>${didactor.version}</version>
+      <type>war</type>
+    </dependency>
+
+    <dependency>
+      <groupId>nl.didactor</groupId>
+      <artifactId>didactor-news</artifactId>
+      <version>${didactor.version}</version>
+      <type>war</type>
+    </dependency>
+
+
+    <dependency>
+      <groupId>org.mmbase.editwizards</groupId>
+      <artifactId>htmlarea</artifactId>
+      <version>3.0-rc1-mm19</version>
+      <type>war</type>
+    </dependency>
+
+
+    <!--
+        These jars are needed by jetty-env.xml
+        which is used on mvn jetty:run
+    -->
+
+    <dependency>
+      <groupId>c3p0</groupId>
+      <artifactId>c3p0</artifactId>
+      <version>0.9.1.2</version>
+      <scope>runtime</scope>
+    </dependency>
+
+
+    <dependency>
+      <groupId>hsqldb</groupId>
+      <artifactId>hsqldb</artifactId>
+      <version>1.8.0.7</version>
+      <scope>runtime</scope>
+    </dependency>
+
+
+
+  </dependencies>
+
+
+  <repositories>
+    <repository>
+      <id>mmbase</id>
+      <url>http://www.mmbase.org/maven2</url>
+    </repository>
+    <repository>
+      <id>snapshots</id>
+      <url>http://www.mmbase.org/snapshots</url>
+    </repository>
+  </repositories>
+
+  <distributionManagement>
+    <repository>
+      <id>mmbase</id>
+      <name>MMBase maven 2 repository</name>
+      <url>${mmbase.repos}maven2</url>
+    </repository>
+    <snapshotRepository>
+      <id>mmbase-snapshots</id>
+      <name>MMBase Maven2 Snapshot Repository</name>
+      <url>${mmbase.repos}snapshots</url>
+      <uniqueVersion>false</uniqueVersion>
+    </snapshotRepository>
+  </distributionManagement>
+
+</project>
+

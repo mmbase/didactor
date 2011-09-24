@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>nl.didactor</groupId>
+    <artifactId>didactor-components</artifactId>
+    <version>2.3-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>didactor-richtext</artifactId>
+  <name>Didactor Richtext</name>
+  <packaging>war</packaging>
+
+
+  <dependencies>
+    <dependency>
+      <groupId>nl.didactor</groupId>
+      <artifactId>didactor-core</artifactId>
+      <version>${didactor.version}</version>
+      <classifier>classes</classifier>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mmbase</groupId>
+      <artifactId>mmbase-richtext</artifactId>
+      <version>${mmbase.version}</version>
+      <type>war</type>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mmbase</groupId>
+      <artifactId>mmbase-richtext-content</artifactId>
+      <version>${mmbase.version}</version>
+      <type>war</type>
+    </dependency>
+
+  </dependencies>
+
+</project>

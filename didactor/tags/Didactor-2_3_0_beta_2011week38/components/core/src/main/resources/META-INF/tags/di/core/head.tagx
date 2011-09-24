@@ -1,0 +1,82 @@
+<jsp:root
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:mm="http://www.mmbase.org/mmbase-taglib-2.0"
+    xmlns:jsp="http://java.sun.com/JSP/Page"
+    xmlns:di="http://www.didactor.nl/ditaglib_1.0"
+    version="2.0">
+  <jsp:directive.tag description="Didactor head" />
+  <head>
+
+    <link rel="stylesheet" type="text/css" href="${mm:link('/css/combined.css.jsp')}" />
+    <!--
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+    -->
+    <mm:treefile page="/css/print.css.jsp"  objectlist="$includePath" write="false">
+      <link href="${_}" rel="alternate stylesheet" title="Printer friendly" type="text/css" media="screen" />
+      <link href="${_}" rel="stylesheet" type="text/css"  media="print"/>
+    </mm:treefile>
+
+    <di:script src="/core/js/combined.js.jsp" />
+    <mm:write request="org.mmbase.validation" value="yes" />
+    <mm:write request="org.mmbase.jquery" value="yes" />
+    <mm:write request="org.mmbase.jquery.form" value="yes" />
+
+    <!--
+    <jsp:directive.include file="/mmbase/validation/javascript.jspxf" />
+    <di:script src="/mmbase/jquery/jquery.timer.js" />
+    <di:script src="/core/js/utils.js" />
+    <di:script src="/core/js/jquery.query.js" />
+    <di:script src="/core/js/Didactor.js" />
+    <di:script src="/content/js/open.jsp" />
+   <mm:treefile page="/core/js/specific.js"
+                 objectlist="$includePath" write="false">
+      <script type="text/javascript" src="${_}">
+        <jsp:text></jsp:text>
+      </script>
+    </mm:treefile>
+    -->
+
+    <meta name="Didactor-Provider"     content="${provider}" />
+    <meta name="Didactor-Education"    content="${education}" />
+    <meta name="Didactor-User"         content="${user}" />
+    <meta name="Didactor-MayOpenFuture" content="${di:setting('core', 'may_open_future')}" />
+    <di:hasrole role="coach">
+      <meta name="Didactor-Role-Teacher"    content="yes" />
+    </di:hasrole>
+    <di:hasrole role="systemadministrator">
+      <meta name="Didactor-Role-SystemAdministrator"    content="yes" />
+    </di:hasrole>
+    <di:hasrole role="coache">
+      <meta name="Didactor-Role-Coach"    content="yes" />
+    </di:hasrole>
+    <meta name="Didactor-PageReporter" content="${di:setting('core', 'pagereporter')}" />
+
+    <!-- The page marked as 'lastpage'
+         (todo: does this work?)
+    -->
+    <mm:listnodescontainer type="classrel">
+      <mm:constraint field="snumber" value="${user}" />
+      <mm:composite operator="or">
+        <mm:constraint field="dnumber" value="${classNode}" />
+        <mm:constraint field="dnumber" value="${education}" />
+      </mm:composite>
+      <mm:listnodes>
+        <meta name="Didactor-LastPage" content="${_node.lastpage}" />
+      </mm:listnodes>
+    </mm:listnodescontainer>
+
+    <c:if test="${di:setting('core', 'pagereporter') eq 'true'}">
+      <meta name="Didactor-PageReporterInterval" content="${di:setting('core', 'pagereporter_interval')}" />
+    </c:if>
+    <meta name="Didactor-Root"         content="${mm:link('/')}" />
+    <mm:link absolute="context">
+      <meta name="Didactor-URL" content="${_}" />
+    </mm:link>
+    <mm:treefile page="/shared/onlineReporter.jsp" objectlist="$includePath" write="false">
+      <meta name="Didactor-OnlineReporter" content="${_}" />
+    </mm:treefile>
+
+    <jsp:doBody />
+  </head>
+</jsp:root>
+

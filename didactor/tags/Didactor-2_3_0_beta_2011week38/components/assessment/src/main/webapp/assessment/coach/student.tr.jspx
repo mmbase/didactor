@@ -1,0 +1,44 @@
+<jsp:root
+    version="2.0"
+    xmlns:jsp="http://java.sun.com/JSP/Page"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:mm="http://www.mmbase.org/mmbase-taglib-2.0"
+    xmlns:di="http://www.didactor.nl/ditaglib_1.0"
+    xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+    >
+  <jsp:output omit-xml-declaration="true" />
+  <mm:import externid="currentclass" from="request" required="true" />
+  <mm:import externid="learnblocks" from="request" required="true" />
+  <mm:node id="student">
+    <tr id="toggle_div${currentclass}_${_node}">
+      <td class="listItem">
+        <mm:link referids="currentclass@class,_node@student_id">
+          <mm:param name="subsub">coach_student_overview</mm:param>
+          <mm:param name="subsub_back">coach</mm:param>
+          <a href="${_}"><di:person /></a>
+        </mm:link>
+      </td>
+      <mm:relatednodes referid="learnblocks" id="learnblock">
+        <td class="listItem">
+          <mm:node node="student">
+            <di:copybook>
+              <mm:node id="copybookNo" />
+            </di:copybook>
+            <mm:relatednodescontainer type="shouts">
+              <mm:constraint field="reference" value="${learnblock}" />
+              <mm:link page="/c/shoutbox/index/" referids="learnblock@reference">
+                <mm:param name="source">${_node}</mm:param>
+                (<a href="${_}" name=""><mm:size /></a>)
+              </mm:link>
+            </mm:relatednodescontainer>
+          </mm:node>
+        </td>
+      </mm:relatednodes>
+      <td>
+        <mm:link page="/c/shoutbox/index/" referids="_node@source">
+          <a href="${_}" name=""><di:translate key="assessment.messages"/></a>
+        </mm:link>
+      </td>
+    </tr>
+  </mm:node>
+</jsp:root>

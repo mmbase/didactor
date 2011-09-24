@@ -1,0 +1,14 @@
+<jsp:root
+    xmlns:jsp="http://java.sun.com/JSP/Page"
+    xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
+    xmlns:mm="http://www.mmbase.org/mmbase-taglib-2.0"
+    xmlns:di="http://www.didactor.nl/ditaglib_1.0"
+    version="2.0">
+  <span
+      class="mm_c c_portfolio b_menuitem">
+      <mm:treefile page="/portfolio/index.jsp?edit=true" objectlist="$includePath" referids="$referids" write="false">
+        <a title="${di:translate('core.configuration')}"
+           href="${_}" class="menubar"><di:translate key="core.configuration" /></a>
+      </mm:treefile>
+  </span>
+</jsp:root>

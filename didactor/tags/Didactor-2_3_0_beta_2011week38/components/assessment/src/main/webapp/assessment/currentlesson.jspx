@@ -1,0 +1,59 @@
+<jsp:root version="2.0"
+    xmlns:jsp="http://java.sun.com/JSP/Page"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:mm="http://www.mmbase.org/mmbase-taglib-2.0"
+    xmlns:di="http://www.didactor.nl/ditaglib_1.0"
+    >
+
+  <c:if test="${empty currentlesson}">
+    <!-- No current lesson, find it now -->
+    <mm:node id="education" number="${education}">
+      <mm:nodelistfunction id="learnBlock" name="lessons">
+        <!-- last lesson with a link to user is the 'last closed lesson -->
+        <mm:listrelationscontainer type="learnblocks" role="posrel">
+          <mm:listrelations>
+            <mm:relation  from="${learnBlock}" to="${user}" role="classrel">
+              <mm:remove referid="lastclosedlesson" />
+              <mm:node node="learnBlock" id="lastclosedlesson" />
+            </mm:relation>
+          </mm:listrelations>
+        </mm:listrelationscontainer>
+
+        <!-- first lesson after that is the 'current lesson' -->
+        <mm:relation to="${user}" notfound="null">
+          <c:if test="${empty currentlesson}"> <!-- no currentlesson found yet -->
+            <c:if test="${empty _node}"> <!-- no relation to user -->
+              <!-- So, this is the current lesson ! -->
+              <mm:node node="learnBlock" id="currentlesson">
+                <mm:function id="reached" name="sequence" write="false" />
+              </mm:node>
+            </c:if>
+          </c:if>
+        </mm:relation>
+
+        <mm:last>
+          <c:if test="${empty currentlesson}">
+            <!-- arrived at last possible lesson, it might be possible that there are following learnblocks -->
+            <mm:node node="learnBlock">
+              <mm:function id="reached" name="sequence" write="false" />
+            </mm:node>
+            <mm:nodelistfunction node="education" name="learnblocks">
+              <c:if test="${empty currentlearnblock}">
+                <mm:function name="sequence" write="false">
+                  <c:if test="${_ gt reached}">
+                    <mm:node id="currentlearnblock" />
+                  </c:if>
+                </mm:function>
+              </c:if>
+            </mm:nodelistfunction>
+          </c:if>
+        </mm:last>
+
+      </mm:nodelistfunction>
+    </mm:node>
+
+    <mm:write session="lastlesson_${user}_${education}"    value="${lastclosedlesson}" />
+    <mm:write session="currentlesson_${user}_${education}" value="${currentlesson}" />
+    <mm:write session="currentlearnblock_${user}_${education}" value="${empty currentlearnblock ? currentlesson : currentlearnblock}" />
+  </c:if>
+</jsp:root>

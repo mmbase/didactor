@@ -1,0 +1,67 @@
+<div
+    xmlns:jsp="http://java.sun.com/JSP/Page"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:mm="http://www.mmbase.org/mmbase-taglib-2.0"
+    xmlns:di="http://www.didactor.nl/ditaglib_1.0"
+    xmlns:mm-sr="http://www.mmbase.org/tags/mm/searchrelate"
+    class="problems stage5">
+  <jsp:output omit-xml-declaration="true" />
+  <!--
+
+    xmlns:mm-sr="urn:jsptagdir:/WEB-INF/tags/mm/searchrelate/"
+
+  -->
+  <mm:import externid="problem" required="true" />
+  <mm:import externid="test"    required="true" />
+  <mm:import externid="class"    required="true" />
+  <mm:import externid="sub" />
+  <mm:import externid="student_id" required="true"/>
+
+
+  <h3><mm:node number="${student_id}"><mm:field id="studentname" name="firstname"/></mm:node></h3>
+
+  <p>
+    <jsp:text>Voor de klas</jsp:text>
+    <mm:node number="${classNode}">
+      <mm:field name="name" />
+      <jsp:text> (</jsp:text>
+      <mm:node element="education"><mm:field name="name" /></mm:node>
+      <jsp:text>).</jsp:text>
+    </mm:node>
+  </p>
+
+
+  <mm:node referid="problem">
+    <h4><mm:field name="name" /></h4>
+    <p>
+      <mm:link page="/homework/" referids="sub">
+        <mm:param name="sub">assessment_coach</mm:param>
+        <a href="${_}">&amp;lt;&amp;lt; <di:translate key="assessment.back_to_overview_students" /></a>
+      </mm:link>
+    </p>
+    <p>
+      <mm:link page="/homework/" referids="sub,class">
+        <mm:param name="subsub">coach_student_overview</mm:param>
+        <mm:param name="student_id">${student_id}</mm:param>
+        <a href="${_}">&amp;lt; <di:translate key="assessment.problemlist_back" arg0="${studentname}" /></a>
+      </mm:link>
+    </p>
+
+
+    <div id="contentFrame" style="clear: both;">
+      <mm:include page="/education/tests/viewanswers.jsp"
+                  referids="test@learnobject,test@testNo,student_id@userNo" />
+    </div>
+
+    <!-- This is not a form, so it does not need commit
+    <mm:link page="/assessment/stage5.js.jsp">
+      <script type="text/javascript" src="${_}">
+        <jsp:text> </jsp:text>
+      </script>
+    </mm:link>
+    -->
+
+  </mm:node>
+
+
+</div>
