@@ -11,8 +11,8 @@
 
   <properties>
     <didactor.version>${project.version}</didactor.version>
-    <mmbase.version.number>1.9</mmbase.version.number>
-    <mmbase.version.postfix>-SNAPSHOT</mmbase.version.postfix>
+    <mmbase.version.number>1.9.6.rc1</mmbase.version.number>
+    <mmbase.version.postfix></mmbase.version.postfix>
     <mmbase.version>${mmbase.version.number}${mmbase.version.postfix}</mmbase.version>
     <my.postfix>-servlet25${mmbase.version.postfix}</my.postfix>
     <base.version>${mmbase.version.number}${my.postfix}</base.version>
