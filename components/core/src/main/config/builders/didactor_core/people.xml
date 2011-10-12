@@ -140,8 +140,7 @@
       </editor>
       <datatype base="didactor_people_lastname"
                 xmlns="http://www.mmbase.org/xmlns/datatypes" />
-      <db><type notnull="true" /></db>
-    </field>
+   </field>
 
     <field name="address">
       <descriptions>
